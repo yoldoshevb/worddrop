@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <clipPath id="dropClip">
+      <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"/>
+    </clipPath>
+    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5B8CFF"/>
+      <stop offset="100%" stop-color="#1B4FCB"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Drop shape -->
+  <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"
+        fill="url(#dropGrad)" stroke="#1B4FCB" stroke-width="0.6"/>
+
+  <!-- Shadow half (gives depth) -->
+  <g clip-path="url(#dropClip)">
+    <ellipse cx="16" cy="17" rx="7" ry="9" fill="#1B4FCB" transform="rotate(12 16 17)"/>
+  </g>
+
+  <!-- Highlight (glass reflection) -->
+  <ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#FFFFFF" opacity="0.85"
+           transform="rotate(-18 9 8.5)"/>
+</svg>
