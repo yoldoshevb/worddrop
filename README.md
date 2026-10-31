@@ -1,115 +1,55 @@
 <div align="center">
 
-# 🎯 WordDrop
+<img src="docs/assets/logo.svg" alt="WordDrop Logo" width="120" height="120" />
 
-### Ingliz tilini o'yin kabi o'rganing — bepul, o'zbek tilida, AI bilan
+# WordDrop
 
-[![Website](https://img.shields.io/badge/🌐_Website-worddrop--app.uz-6200EE?style=for-the-badge)](https://www.worddrop-app.uz)
-[![Made in Uzbekistan](https://img.shields.io/badge/🇺🇿_Made_in-Uzbekistan-1e90ff?style=for-the-badge)](https://uzbekistan.uz)
-[![MIT License](https://img.shields.io/badge/📄_License-MIT-00C853?style=for-the-badge)](LICENSE)
+**A free English learning platform for Uzbek speakers.**
 
-[![GitHub stars](https://img.shields.io/github/stars/bexruzyoldoshev/worddrop?style=social)](https://github.com/bexruzyoldoshev/worddrop/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/bexruzyoldoshev/worddrop?style=social)](https://github.com/bexruzyoldoshev/worddrop/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/bexruzyoldoshev/worddrop)](https://github.com/bexruzyoldoshev/worddrop/issues)
+Grammar checking, pronunciation coaching, IELTS mock exams, and competitive duels — all in one place.
 
-<br />
+[![Website](https://img.shields.io/badge/website-worddrop--app.uz-6200EE?style=flat-square&logo=googlechrome&logoColor=white)](https://www.worddrop-app.uz)
+[![License](https://img.shields.io/badge/license-MIT-00C853?style=flat-square)](LICENSE)
+[![Status](https://img.shields.io/badge/status-active-00C853?style=flat-square)](https://www.worddrop-app.uz)
+[![Made in Uzbekistan](https://img.shields.io/badge/made%20in-Uzbekistan-1e90ff?style=flat-square)](https://uzbekistan.uz)
 
-<img src="docs/screenshots/hero.png" alt="WordDrop Preview" width="800" />
-
-<br />
-
-> **"So'z yodlash oson emas. Ishlatish esa qiyinroq. Ikkalasini ham o'rgatamiz."**
+[![GitHub stars](https://img.shields.io/github/stars/bexruzyoldoshev/worddrop?style=flat-square&logo=github)](https://github.com/bexruzyoldoshev/worddrop/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/bexruzyoldoshev/worddrop?style=flat-square&logo=github)](https://github.com/bexruzyoldoshev/worddrop/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/bexruzyoldoshev/worddrop?style=flat-square&logo=github)](https://github.com/bexruzyoldoshev/worddrop/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/bexruzyoldoshev/worddrop?style=flat-square&logo=github)](https://github.com/bexruzyoldoshev/worddrop/commits/main)
 
 </div>
 
 ---
 
-## 📖 Loyiha haqida
+## Overview
 
-**WordDrop** — ingliz tilini o'rganish uchun **bepul veb-ilova**. 
-So'z yodlash, grammatika, talaffuz, tinglash va IELTS Mock — hammasi **bir joyda**, **o'yin** formatida.
+WordDrop is a web-based English learning platform built specifically for Uzbek speakers. It combines spaced repetition, AI-powered grammar correction, pronunciation analysis, and IELTS exam simulation into a single, gamified experience.
 
-Loyiha **O'zbekistonda** mustaqil ravishda, **15 yoshli dasturchi** tomonidan yaratilgan. 
-Maqsad oddiy: **o'rganishni imtihon yukidan o'yin va kunlik odatga aylantirish**.
-
-<div align="center">
-
-### ✨ Nega WordDrop?
-
-| 🎮 O'yin kabi | 🤖 AI bilan | 🇺🇿 O'zbek tilida | 💯 100% Bepul |
-|:---:|:---:|:---:|:---:|
-| Streak, tanga, darajalar | Grammatika va talaffuz | Har bir tugma tushunarli | Reklamasiz, to'lovsiz |
-
-</div>
-
----
-
-## 🚀 Asosiy xususiyatlar
+The platform is designed around one core observation: **most learners do not fail because they lack materials — they fail because they cannot retain and apply what they have learned.** WordDrop addresses this by reinforcing vocabulary through multiple techniques, checking real-world usage with AI, and building a daily habit through streaks, levels, and competitive play.
 
 <table>
 <tr>
-<td width="50%">
+<td width="50%" valign="top">
 
-### 📚 120 bosqichli yo'l
-A1 dan C2 gacha. Har bir quti — yangi so'zlar to'plami. 
-Har kun keyingi qadam **aniq** — sakrashlar yo'q.
+**Core principles**
 
-</td>
-<td width="50%">
-
-### 🎯 60+ shablon
-Advanced so'z birikmalari: 
-*Just because... doesn't mean...*, 
-*The more..., the more...*, 
-*Had I known..., I would have...*
+- Free forever, no paywalls
+- Native Uzbek interface
+- AI-first feedback loop
+- Gamification as a retention tool
+- Privacy-respecting by design
 
 </td>
-</tr>
-<tr>
-<td width="50%">
+<td width="50%" valign="top">
 
-### 🤖 AI grammatika
-Yozgan gaplaringizni **real vaqtda** tekshiradi. 
-Xatolarni **aniq** ko'rsatadi, **tushuntiradi**.
+**At a glance**
 
-</td>
-<td width="50%">
-
-### 🎤 AI talaffuz
-Mikrofonga gapirasiz — AI **o'zbekcha** maslahat beradi. 
-IELTS Speaking uchun **tayyorgarlik**.
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### ⚔️ Duel — 1v1
-Boshqa o'rganuvchi bilan **real vaqtda** bellashuv. 
-4 xil rejim: so'zlar, tinglash, grammatika, shablonlar.
-
-</td>
-<td width="50%">
-
-### 📝 IELTS Mock
-To'liq simulyatsiya: **Reading, Listening, Writing, Speaking**. 
-Real vaqt taymer, avtomat baholash, AI tahlil.
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 🏠 3D Virtual xona
-O'z **shaxsiy makoningiz**. 
-WordCoin bilan jihoz sotib oling, xonangizni bezang.
-
-</td>
-<td width="50%">
-
-### 💰 WordCoin tizimi
-Har to'g'ri javob — tanga. 
-Mystery box, charxpalak, 3D jihozlar uchun sarflang.
+- 120 structured levels (A1 → C2)
+- 60+ advanced grammar templates
+- 4 duel modes
+- Full IELTS mock simulation
+- 3D virtual study room
 
 </td>
 </tr>
@@ -117,61 +57,154 @@ Mystery box, charxpalak, 3D jihozlar uchun sarflang.
 
 ---
 
-## 🛠 Texnologiyalar
+## Features
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### Learning
+
+- **120-level roadmap** — structured progression from A1 to C2
+- **60+ grammar templates** — advanced structures with full explanations
+- **Spaced repetition** — vocabulary reinforced through multiple techniques
+- **Contextual usage** — every word must be used in a sentence
+- **Personal dictionary** — all learned words collected in one place
+
+</td>
+<td width="50%" valign="top">
+
+### AI-powered
+
+- **Grammar checking** — real-time analysis of user-written sentences
+- **Pronunciation coaching** — microphone input, phoneme-level feedback in Uzbek
+- **Adaptive difficulty** — content adjusts to user performance
+- **IELTS band estimation** — AI-scored writing and speaking
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### Competitive
+
+- **1v1 duels** — real-time matches against other learners
+- **4 duel modes** — vocabulary, listening, grammar, templates
+- **League system** — ranked competition with seasonal resets
+- **Streaks** — daily habit tracking with visual rewards
+
+</td>
+<td width="50%" valign="top">
+
+### IELTS preparation
+
+- **Reading** — 3 sections, 40 questions, 60 minutes
+- **Listening** — 4 audio tracks, 40 questions, 30 minutes
+- **Writing** — 2 tasks, 60 minutes, AI band scoring
+- **Speaking** — 3 parts, 15 minutes, AI pronunciation analysis
+
+</td>
+</tr>
+</table>
+
+---
+
+## Tech Stack
+
+<table>
+<tr>
+<td width="33%" valign="top" align="center">
+
+**Frontend**
+
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" /><br/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" /><br/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+
+</td>
+<td width="33%" valign="top" align="center">
+
+**Backend**
+
+<img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" /><br/>
+<img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" /><br/>
+<img src="https://img.shields.io/badge/Google_OAuth-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+
+</td>
+<td width="33%" valign="top" align="center">
+
+**Infrastructure**
+
+<img src="https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" /><br/>
+<img src="https://img.shields.io/badge/AI_Powered-412991?style=for-the-badge&logo=openai&logoColor=white" /><br/>
+<img src="https://img.shields.io/badge/3D_Rendering-FF6B6B?style=for-the-badge&logo=three.js&logoColor=white" />
+
+</td>
+</tr>
+</table>
+
+---
+
+## Screenshots
 
 <div align="center">
 
-### Frontend
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-
-### Backend & Infrastructure
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![Google OAuth](https://img.shields.io/badge/Google_OAuth-4285F4?style=for-the-badge&logo=google&logoColor=white)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
-
-### AI & Integrations
-![OpenAI](https://img.shields.io/badge/AI_Powered-412991?style=for-the-badge&logo=openai&logoColor=white)
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="docs/screenshots/home.png" alt="Landing page" width="100%" />
+<br />
+<sub><b>Landing page</b> — value proposition and feature overview</sub>
+</td>
+<td align="center" width="50%">
+<img src="docs/screenshots/app.png" alt="Learning dashboard" width="100%" />
+<br />
+<sub><b>Learning dashboard</b> — daily tasks, roadmap, and progress</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="docs/screenshots/duel.png" alt="Duel mode" width="100%" />
+<br />
+<sub><b>Duel mode</b> — real-time 1v1 vocabulary battles</sub>
+</td>
+<td align="center" width="50%">
+<img src="docs/screenshots/ielts.png" alt="IELTS mock" width="100%" />
+<br />
+<sub><b>IELTS mock</b> — full exam simulation with timer</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="docs/screenshots/pronunciation.png" alt="Pronunciation" width="100%" />
+<br />
+<sub><b>Pronunciation</b> — AI phoneme-level feedback</sub>
+</td>
+<td align="center" width="50%">
+<img src="docs/screenshots/3d-room.png" alt="3D room" width="100%" />
+<br />
+<sub><b>3D virtual room</b> — personal study space</sub>
+</td>
+</tr>
+</table>
 
 </div>
 
 ---
 
-## 📸 Skrinshotlar
+## Getting Started
 
-<div align="center">
+### Prerequisites
 
-### 🏠 Bosh sahifa
-<img src="docs/screenshots/home.png" alt="Bosh sahifa" width="700" />
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| Modern browser | Latest | Chrome, Safari, Firefox, or Edge |
+| Git | Any | [Download](https://git-scm.com/downloads) |
+| Node.js | 18+ | Optional — only for local build tooling |
 
-### ⚔️ Duel rejimi
-<img src="docs/screenshots/duel.png" alt="Duel" width="350" />
-<img src="docs/screenshots/pronunciation.png" alt="Talaffuz" width="350" />
+### Installation
 
-### 📝 IELTS Mock
-<img src="docs/screenshots/ielts.png" alt="IELTS Mock" width="700" />
-
-### 🗺 120 bosqichli yo'l
-<img src="docs/screenshots/roadmap.png" alt="Roadmap" width="700" />
-
-</div>
-
-> **Eslatma:** Skrinshotlar `docs/screenshots/` papkasida bo'lishi kerak. 
-> Agar hali qo'shmagan bo'lsangiz — **hozir** qo'shing. Bu README'ni **10x** chiroyli qiladi.
-
----
-
-## 🚀 O'rnatish va ishga tushirish
-
-### 📋 Talablar
-
-- **Brauzer:** Chrome, Safari, Firefox, Edge (zamonaviy versiya)
-- **Git:** [Yuklab olish](https://git-scm.com/downloads)
-- **Ixtiyoriy:** Node.js 18+ (agar build kerak bo'lsa)
-
-### 1️⃣ Repozitoriyni klonlash
+**1. Clone the repository**
 
 ```bash
 git clone https://github.com/bexruzyoldoshev/worddrop.git
