@@ -1,0 +1,278 @@
+# ============================================================================
+# SECRETS & CREDENTIALS (ENG MUHIM!)
+# ============================================================================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+secrets.json
+secrets.yaml
+secrets.yml
+credentials.json
+config.local.*
+*.secret
+
+
+# ============================================================================
+# SUPABASE
+# ============================================================================
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+supabase/config.toml
+.supabase/
+
+
+# ============================================================================
+# NODE.JS (agar kelajakda ishlatsangiz)
+# ============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm
+.yarn/
+.pnpm/
+.pnp.*
+.yarn-integrity
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+
+# ============================================================================
+# BUILD & DIST (kompilyatsiya natijalari)
+# ============================================================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+.turbo/
+*.tsbuildinfo
+.svelte-kit/
+.output/
+.vercel/
+.netlify/
+
+
+# ============================================================================
+# TESTING & COVERAGE
+# ============================================================================
+coverage/
+.nyc_output/
+*.lcov
+junit.xml
+test-results/
+playwright-report/
+.cypress/
+cypress/videos/
+cypress/screenshots/
+
+
+# ============================================================================
+# LOGS (xatoliklar tarixi)
+# ============================================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log.*
+!logs/.gitkeep
+
+
+# ============================================================================
+# EDITOR & IDE (shaxsiy sozlamalar)
+# ============================================================================
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+.fleet/
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+*~
+.netrwhist
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Atom
+.atom/
+
+
+# ============================================================================
+# OPERATING SYSTEMS (OS yaratadigan keraksiz fayllar)
+# ============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon\r
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+
+# ============================================================================
+# TEMPORARY FILES (vaqtinchalik fayllar)
+# ============================================================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.swp
+*~
+.cache/
+.tmp/
+temp/
+tmp/
+
+
+# ============================================================================
+# DATABASES (mahalliy bazalar)
+# ============================================================================
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.s3db
+*.sl3db
+*.mdb
+*.accdb
+*.dbf
+*.frm
+*.ibd
+*.myd
+*.myi
+*.db-wal
+*.db-shm
+
+
+# ============================================================================
+# DOCUMENTATION & NOTES (shaxsiy eslatmalar)
+# ============================================================================
+notes/
+personal/
+scratch/
+TODO.md
+NOTES.md
+*.local.md
+
+
+# ============================================================================
+# SCREENSHOTS & ASSETS (vaqtinchalik rasmlar)
+# ============================================================================
+screenshots-temp/
+tmp-screenshots/
+*.tmp.png
+*.tmp.jpg
+
+
+# ============================================================================
+# AI & ML (kelajakda model qo'shsangiz)
+# ============================================================================
+*.h5
+*.pkl
+*.pickle
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+checkpoints/
+models/
+training-data/
+datasets/
+
+
+# ============================================================================
+# WORDDROP SPECIFIC
+# ============================================================================
+# Maxsus muhit fayllari
+.env.local
+.env.development
+.env.production
+.env.staging
+*.local
+
+# Zaxira nusxalari
+*.backup.*
+*.bak.*
+
+# Katta media fayllar (Git LFS ishlatish tavsiya etiladi)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.mp3
+*.wav
+*.flac
+*.aac
+
+# Siqilgan fayllar
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.gz
+*.bz2
+*.xz
+
+
+# ============================================================================
+# KEEP THESE FILES (majburiy saqlanadigan fayllar)
+# ============================================================================
+!.env.example
+!README.md
+!LICENSE
+!.gitignore
+!docs/
+!docs/**
