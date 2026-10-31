@@ -1,0 +1,15 @@
+# ============================================================================
+# WordDrop — robots.txt
+# ============================================================================
+# Qidiruv botlariga ruxsat berish
+# ============================================================================
+
+User-agent: *
+Allow: /
+
+# Vaqtinchalik yopiq bo'lishi kerak bo'lgan sahifalar (agar kerak bo'lsa)
+Disallow: /verify.html
+Disallow: /404.html
+
+# Sitemap manzili (qidiruv botlari uchun)
+Sitemap: https://www.worddrop-app.uz/sitemap.xml
