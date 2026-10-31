@@ -1,0 +1,74 @@
+{
+  "name": "WordDrop — Ingliz tilini o'yin kabi o'rganing",
+  "short_name": "WordDrop",
+  "description": "Ingliz tilini o'yin kabi o'rganing. 120 bosqich, AI grammatika va talaffuz, IELTS Mock, duel va 3D xona. Har doim bepul.",
+  "start_url": "/app.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F8FC",
+  "theme_color": "#2F6FED",
+  "lang": "uz",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "games"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Bosh sahifa"
+    },
+    {
+      "src": "/screenshots/duel.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Duel rejimi"
+    },
+    {
+      "src": "/screenshots/ielts.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "IELTS Mock imtihon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Kunlik topshiriqlar",
+      "short_name": "Topshiriqlar",
+      "description": "Bugungi 3 ta topshiriqni bajaring",
+      "url": "/app.html#home",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Jonli Duel",
+      "short_name": "Duel",
+      "description": "Boshqa o'rganuvchi bilan 1v1 bellashing",
+      "url": "/app.html#duel",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}
