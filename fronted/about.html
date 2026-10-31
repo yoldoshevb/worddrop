@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Biz haqimizda — WordDrop</title>
+<meta name="description" content="WordDrop haqida — g'oyaning tug'ilishidan bugungi kungacha bo'lgan yo'l, jamoa, qadriyatlar va kelajakdagi rejalar."/>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#2F6FED">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WordDrop">
+<meta property="og:title" content="Biz haqimizda — WordDrop">
+<meta property="og:description" content="WordDrop haqida — g'oyaning tug'ilishidan bugungi kungacha bo'lgan yo'l va kelajak.">
+<meta property="og:image" content="https://worddrop-app.uz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://worddrop-app.uz/about.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Biz haqimizda — WordDrop">
+<meta name="twitter:description" content="WordDrop haqida — g'oyaning tug'ilishidan bugungi kungacha bo'lgan yo'l.">
+<meta name="twitter:image" content="https://worddrop-app.uz/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#08183A;--ink2:#54628A;--surface:#EEF4FF;--blue:#2F6FED;--blue-d:#123FB8;--blue-l:#5B8CFF;--deep:#061A46;--line:#DCE6F7;--soft:#F5F9FF;--gold:#F5B62E;--font:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;--disp:"Bricolage Grotesque",var(--font)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--ink);background:var(--surface);-webkit-font-smoothing:antialiased;line-height:1.62}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(238,244,255,.75);box-shadow:0 1px 0 var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;font-size:21px;letter-spacing:-.6px;color:var(--ink)}
+.brand .mark{width:22px;height:22px;flex:none}
+.nav-cta{display:inline-flex;align-items:center;background:var(--ink);color:#fff !important;font-weight:600;font-size:14px;padding:10px 20px;border-radius:14px 14px 14px 5px;transition:background-color .2s, transform .1s}
+.nav-cta:hover{text-decoration:none;background:var(--blue)}
+
+.actions{display:flex;align-items:center;gap:8px}
+.menu-btn{width:44px;height:44px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:11px;transition:background .2s}
+.menu-btn:hover{background:rgba(47,111,237,.1)}
+.menu-btn span{display:block;width:23px;height:2.4px;border-radius:2px;background:var(--ink)}
+
+/* HERO */
+.hero{padding:60px 24px 40px;max-width:900px;margin:0 auto;text-align:center;position:relative}
+.hero .kicker{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);background:rgba(47,111,237,.1);padding:7px 14px;border-radius:20px;margin-bottom:22px}
+.hero h1{font-family:var(--disp);font-weight:800;font-size:clamp(38px,8vw,72px);letter-spacing:-2.2px;line-height:.98;color:var(--ink)}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-l) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--blue)}
+.hero .lead{margin-top:22px;font-size:19px;color:var(--ink2);max-width:640px;margin-left:auto;margin-right:auto;line-height:1.55}
+
+/* STATS */
+.stats{max-width:1000px;margin:44px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{background:#fff;border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 1px 0 var(--line),inset 0 0 0 1px var(--line);transition:transform .2s,box-shadow .2s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 8px 24px -10px rgba(20,50,120,.16),inset 0 0 0 1px #B4C7EA}
+.stat b{display:block;font-family:var(--disp);font-weight:800;font-size:clamp(24px,3.4vw,34px);letter-spacing:-1px;color:var(--blue);line-height:1}
+.stat span{display:block;margin-top:6px;font-size:13px;color:var(--ink2);font-weight:600}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* SECTION HEAD */
+.section{max-width:900px;margin:80px auto 0;padding:0 24px}
+.section-kicker{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.section h2{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5vw,42px);letter-spacing:-1.4px;line-height:1.06;color:var(--ink)}
+.section .sub{margin-top:12px;font-size:16.5px;color:var(--ink2);max-width:600px}
+
+/* STORY */
+.story{margin-top:28px;background:#fff;border-radius:20px;padding:32px 34px;box-shadow:inset 0 0 0 1px var(--line);position:relative;overflow:hidden}
+.story::before{content:"";position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(47,111,237,.08),transparent 60%);border-radius:50%;pointer-events:none}
+.story p{font-size:16px;color:#26324F;margin:0 0 14px;position:relative}
+.story p:last-child{margin:0}
+.story strong{color:var(--ink)}
+
+/* VALUES */
+.values{margin-top:30px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.value{background:#fff;border-radius:16px;padding:24px 22px;box-shadow:inset 0 0 0 1px var(--line);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.value:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px #B4C7EA,0 6px 20px -10px rgba(20,50,120,.15)}
+.value .v-ic{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.value .v-ic svg{width:22px;height:22px}
+.value h3{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:-.4px;color:var(--ink);margin-bottom:6px}
+.value p{font-size:14.5px;color:var(--ink2);line-height:1.55;margin:0}
+@media(max-width:640px){.values{grid-template-columns:1fr}}
+
+/* TIMELINE */
+.timeline{margin-top:30px;position:relative;padding-left:36px}
+.timeline::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--blue),var(--blue-l) 40%,rgba(91,140,255,.3))}
+.tl-item{position:relative;padding:0 0 30px 12px}
+.tl-item:last-child{padding-bottom:8px}
+.tl-item::before{content:"";position:absolute;left:-32px;top:6px;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--blue);box-shadow:0 0 0 4px rgba(47,111,237,.12)}
+.tl-item.current::before{background:var(--blue);animation:tlPulse 2s ease-out infinite}
+@keyframes tlPulse{0%{box-shadow:0 0 0 0 rgba(47,111,237,.55)}70%{box-shadow:0 0 0 12px rgba(47,111,237,0)}100%{box-shadow:0 0 0 0 rgba(47,111,237,0)}}
+.tl-item.future::before{background:#fff;border-color:#B4C7EA;box-shadow:0 0 0 4px rgba(47,111,237,.05)}
+.tl-date{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);background:rgba(47,111,237,.09);padding:5px 12px;border-radius:14px;margin-bottom:8px}
+.tl-item.current .tl-date{background:var(--blue);color:#fff}
+.tl-item.future .tl-date{color:var(--ink2);background:var(--surface)}
+.tl-item h4{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.5px;color:var(--ink);margin-bottom:6px}
+.tl-item p{font-size:15px;color:#26324F;margin:0;line-height:1.62}
+.tl-item p + p{margin-top:8px}
+.tl-tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.tl-tag{font-size:11.5px;font-weight:600;color:var(--ink2);background:var(--soft);border:1px solid var(--line);padding:3px 10px;border-radius:12px}
+
+/* MAKER (About the developer) */
+.maker{margin-top:30px;background:linear-gradient(135deg,#0E2F86 0%,#0A2264 60%,#061A46 100%);color:#fff;border-radius:24px;padding:36px 34px;position:relative;overflow:hidden}
+.maker::before{content:"";position:absolute;top:-80px;right:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(91,140,255,.28),transparent 65%);border-radius:50%}
+.maker::after{content:"";position:absolute;bottom:-100px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(245,182,46,.18),transparent 65%);border-radius:50%}
+.maker-inner{position:relative;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.maker-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--blue-l),var(--blue-d));display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:42px;color:#fff;flex:none;box-shadow:0 8px 24px -6px rgba(0,0,0,.35),inset 0 -3px 0 rgba(0,0,0,.15)}
+.maker-info{flex:1;min-width:240px}
+.maker-info .lbl{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:6px}
+.maker-info h3{font-family:var(--disp);font-weight:800;font-size:26px;letter-spacing:-.6px;margin-bottom:4px}
+.maker-info .role{font-size:14.5px;color:rgba(255,255,255,.75);margin-bottom:14px}
+.maker-info p{font-size:15px;color:rgba(255,255,255,.88);line-height:1.6;margin:0 0 12px}
+.maker-info p:last-child{margin:0}
+.maker-links{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.maker-link{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.13);color:#fff;font-size:13.5px;font-weight:600;padding:9px 15px;border-radius:11px;backdrop-filter:blur(8px);transition:background-color .18s,transform .12s}
+.maker-link:hover{background:rgba(255,255,255,.22);text-decoration:none;color:#fff;transform:translateY(-1px)}
+.maker-link svg{width:15px;height:15px}
+
+/* CTA */
+.cta{margin:80px auto 60px;max-width:900px;padding:0 24px}
+.cta-box{background:var(--blue);color:#fff;border-radius:24px;padding:48px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{
+  content:"";position:absolute;top:-15%;right:-8%;width:420px;height:340px;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(255,255,255,.3) 1.4px, transparent 1.4px);
+  background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(60% 60% at 70% 25%, #000 0%, transparent 72%);
+  mask-image:radial-gradient(60% 60% at 70% 25%, #000 0%, transparent 72%);
+}
+.cta-box h3{position:relative;font-family:var(--disp);font-weight:800;font-size:clamp(28px,4.5vw,38px);letter-spacing:-1px;line-height:1.08;margin-bottom:12px}
+.cta-box p{position:relative;font-size:16px;opacity:.9;max-width:520px;margin:0 auto 26px}
+.cta-btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--blue-d);font-weight:800;font-size:16.5px;padding:16px 30px;border-radius:14px 14px 14px 5px;transition:transform .12s,box-shadow .2s}
+.cta-btn:hover{text-decoration:none;color:var(--blue-d);transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(0,0,0,.35)}
+
+/* Back link */
+.back{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:6px}
+.back:hover{color:var(--blue);text-decoration:none}
+.top-back{max-width:900px;margin:16px auto -20px;padding:0 24px}
+
+footer{background:var(--deep);color:#fff;padding:34px 0}
+.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:13.5px;color:#8A97B6}
+.foot a{color:#C4CFE6}
+.foot b{color:#C4CFE6;font-weight:600}
+
+/* Menu overlay (same as other pages) */
+.menu-overlay{position:fixed;inset:0;z-index:200;background:radial-gradient(120% 85% at 84% 6%,#1747C9 0%,#0A2870 44%,var(--deep) 100%);opacity:0;visibility:hidden;transition:opacity .38s ease,visibility .38s;overflow-y:auto}
+body.menu-open .menu-overlay{opacity:1;visibility:visible}
+body.menu-open{overflow:hidden}
+.menu-inner{min-height:100%;max-width:1040px;margin:0 auto;padding:0 24px 34px;display:flex;flex-direction:column}
+.menu-top{height:70px;display:flex;align-items:center;justify-content:space-between;flex:none}
+.menu-top .brand{color:#fff}
+.menu-close{width:44px;height:44px;border:none;background:rgba(255,255,255,.09);color:#fff;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .3s}
+.menu-close:hover{background:rgba(255,255,255,.17);transform:rotate(90deg)}
+.menu-list{flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 0;min-height:0}
+.menu-list a{display:flex;align-items:center;gap:18px;padding:17px 6px;border-bottom:1px solid rgba(255,255,255,.1);color:#fff;text-decoration:none;opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.menu-list a:first-child{border-top:1px solid rgba(255,255,255,.1)}
+body.menu-open .menu-list a{opacity:1;transform:none}
+body.menu-open .menu-list a:nth-child(1){transition-delay:.05s}
+body.menu-open .menu-list a:nth-child(2){transition-delay:.10s}
+body.menu-open .menu-list a:nth-child(3){transition-delay:.15s}
+body.menu-open .menu-list a:nth-child(4){transition-delay:.20s}
+body.menu-open .menu-list a:nth-child(5){transition-delay:.25s}
+.menu-list .num{font-weight:600;font-size:13px;color:#6B8AD6;width:24px;flex:none;letter-spacing:.5px}
+.menu-list .lbl{font-family:var(--disp);font-weight:700;font-size:clamp(25px,5.4vw,38px);letter-spacing:-1px;line-height:1.12}
+.menu-list .arw{margin-left:auto;color:rgba(255,255,255,.3);transition:transform .25s,color .25s;display:flex}
+.menu-list a:hover .lbl{color:#8FBAFF}
+.menu-list a:hover .arw{color:#8FBAFF;transform:translateX(6px)}
+.menu-bottom{flex:none;display:flex;flex-direction:column;gap:16px;padding-top:6px}
+.menu-cta{
+  position:relative;display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
+  font-weight:700;font-size:16.5px;color:#fff;
+  background:linear-gradient(150deg,var(--blue-l) 0%,var(--blue) 45%,var(--blue-d) 100%);
+  padding:15px 28px 15px 38px;border-radius:18px 18px 18px 6px;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.35),
+    0 3px 6px -2px rgba(15,45,120,.5),
+    0 16px 28px -12px rgba(15,45,120,.5);
+  transition:transform .16s,box-shadow .18s;
+}
+.menu-cta::before{
+  content:"";position:absolute;top:50%;left:16px;width:8px;height:8px;
+  background:radial-gradient(circle at 32% 28%,#fff 0%,var(--blue-l) 45%,var(--blue-d) 100%);
+  border-radius:50%;transform:translateY(-50%);
+  box-shadow:0 0 0 4px rgba(255,255,255,.22);
+}
+.menu-cta:hover{
+  text-decoration:none;color:#fff;transform:translateY(-2px);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.4),
+    0 4px 8px -2px rgba(15,45,120,.55),
+    0 20px 34px -12px rgba(15,45,120,.6);
+}
+.menu-cta:active{transform:translateY(0) scale(.98)}
+.menu-meta{font-size:13.5px;color:#8FA0C8}
+.menu-meta a{color:#B7C6E8}
+@media(prefers-reduced-motion:reduce){.menu-list a{transition:opacity .25s;transform:none}.menu-close:hover{transform:none}.tl-item.current::before{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="mark"><svg viewBox="0 0 24 24"><defs><clipPath id="dropClipNav"><path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"/></clipPath></defs><path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z" fill="#2F6FED" stroke="#1B4FCB" stroke-width="0.6"/><g clip-path="url(#dropClipNav)"><ellipse cx="16" cy="17" rx="7" ry="9" fill="#1B4FCB" transform="rotate(12 16 17)"/><ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#fff" opacity=".85" transform="rotate(-18 9 8.5)"/></g></svg></span>WordDrop</a>
+    <div class="actions">
+      <a class="nav-cta" href="app.html">Ilovaga kirish</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menyu" aria-expanded="false" aria-controls="menuOverlay"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+  <div class="menu-inner">
+    <div class="menu-top">
+      <a class="brand" href="index.html"><span class="mark"><svg viewBox="0 0 24 24"><defs><clipPath id="dropClipMenu"><path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"/></clipPath></defs><path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z" fill="#5B8CFF" stroke="#2F6FED" stroke-width="0.6"/><g clip-path="url(#dropClipMenu)"><ellipse cx="16" cy="17" rx="7" ry="9" fill="#2F6FED" transform="rotate(12 16 17)"/><ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#fff" opacity=".85" transform="rotate(-18 9 8.5)"/></g></svg></span>WordDrop</a>
+      <button class="menu-close" id="menuClose" aria-label="Yopish"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <nav class="menu-list">
+      <a href="index.html"><span class="num">01</span><span class="lbl">Bosh sahifa</span><span class="arw"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a href="about.html"><span class="num">02</span><span class="lbl">Biz haqimizda</span><span class="arw"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a href="faq.html"><span class="num">03</span><span class="lbl">FAQ / Yordam</span><span class="arw"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a href="privacy.html"><span class="num">04</span><span class="lbl">Maxfiylik siyosati</span><span class="arw"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a href="terms.html"><span class="num">05</span><span class="lbl">Foydalanish shartlari</span><span class="arw"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    </nav>
+    <div class="menu-bottom">
+      <a class="menu-cta" href="app.html">Ilovaga kirish
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <div class="menu-meta">© 2026 WordDrop · <a href="mailto:bexruzyoldoshev@yahoo.com">bexruzyoldoshev@yahoo.com</a> · <a href="https://t.me/worddrop_uz">Telegram</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="top-back"><a class="back" href="index.html"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg>Bosh sahifa</a></div>
+
+<section class="hero">
+  <span class="kicker">Biz haqimizda</span>
+  <h1>Bir <em>tomchidan</em> dengiz boshlanadi</h1>
+  <p class="lead">WordDrop — O'zbekistonda mustaqil qurilgan ingliz tili ilovasi. Maqsadimiz oddiy: o'rganishni imtihon yukidan o'yin va kunlik odatga aylantirish.</p>
+</section>
+
+<div class="stats">
+  <div class="stat">
+    <b>2026</b>
+    <span>Fevral — boshlanish</span>
+  </div>
+  <div class="stat">
+    <b>7</b>
+    <span>Faol o'yin rejimi</span>
+  </div>
+  <div class="stat">
+    <b>3D</b>
+    <span>Virtual xona tizimi</span>
+  </div>
+  <div class="stat">
+    <b>100%</b>
+    <span>Bepul va reklamasiz</span>
+  </div>
+</div>
+
+<section class="section">
+  <span class="section-kicker">Bizning hikoyamiz</span>
+  <h2>Nega WordDrop?</h2>
+  <div class="story">
+    <p>Ko'plar uchun ingliz tili zerikarli tayyorgarlikka aylanib qolgan — quruq testlar, yodlash mashqlari, ko'rinmas natija. Biz boshqa yo'lni tanladik: <strong>har kuni bir oz, o'yin kabi, ko'ngil bilan</strong>.</p>
+    <p>WordDrop'da so'zlar mystery box'dan tushadi, siz gap tuzasiz, boshqa o'rganuvchilar bilan duelda bellashasiz, o'z 3D xonangizni bezaysiz. O'rganish sezilmay, tabiiy o'tadi — xuddi har kuni bir tomchi tomgandek, oxirida esa dengiz bo'ladi.</p>
+    <p>Va bu — hech kimga sotilmagan, reklamasiz, halol qilingan mahsulot. Bir ishlab chiquvchi, bir jamoa, bir kunlik ish natijasi. <strong>Har kuni.</strong></p>
+  </div>
+</section>
+
+<section class="section">
+  <span class="section-kicker">Qadriyatlar</span>
+  <h2>Nimaga ishonamiz</h2>
+  <div class="values">
+
+    <div class="value">
+      <div class="v-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 12l2 2 4-4"/>
+          <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.86 0 3.6.56 5.05 1.53"/>
+          <path d="M22 4 12 14.01l-3-3"/>
+        </svg>
+      </div>
+      <h3>Reallik</h3>
+      <p>Soxta ekran, soxta raqam, soxta AI yo'q. Haqiqiy sun'iy intellekt, haqiqiy progress, haqiqiy natija.</p>
+    </div>
+
+    <div class="value">
+      <div class="v-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+      <h3>Har doim bepul</h3>
+      <p>Hamma narsa bepul. Reklama yo'q, yashirin to'lov yo'q, "premium majburiy" yo'q. Sotib olishga hech narsa yo'q.</p>
+    </div>
+
+    <div class="value">
+      <div class="v-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.28 1.28L3 12l5.82 1.9a2 2 0 0 1 1.28 1.28L12 21l1.9-5.82a2 2 0 0 1 1.28-1.28L21 12l-5.82-1.9a2 2 0 0 1-1.28-1.28Z"/>
+          <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+        </svg>
+      </div>
+      <h3>Zamonaviy</h3>
+      <p>2015-yilgi uslub emas — bugungi dizayn, 3D dunyo, silliq animatsiyalar, mobil-birinchi yondashuv.</p>
+    </div>
+
+    <div class="value">
+      <div class="v-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <h3>O'zbek tilida</h3>
+      <p>Mahalliy o'rganuvchilar uchun, tushunarli til bilan. Har bir tushuntirish, har bir tugma — o'zbekcha.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <span class="section-kicker">Yo'l xaritamiz</span>
+  <h2>WordDrop yo'li</h2>
+  <p class="sub">G'oyaning tug'ilishidan bugungi kungacha bo'lgan qadamlar — 2026-yil fevralida bir tomchi bo'lib boshlangan loyiha yozning oxirida chinakam dengiz bo'ldi.</p>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <span class="tl-date">2026 · Fevral</span>
+      <h4>Ilk versiya — g'oyaning tug'ilishi</h4>
+      <p>WordDrop'ning birinchi, eng oddiy versiyasi ishga tushdi. Asosiy g'oya — <strong>ingliz tilini zerikarli emas, o'yin kabi o'rgatish</strong>. Bir necha oddiy shablon, so'z yodlash, minimalist dizayn.</p>
+      <div class="tl-tags">
+        <span class="tl-tag">MVP</span>
+        <span class="tl-tag">Asosiy o'yin</span>
+        <span class="tl-tag">Ilk foydalanuvchilar</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <span class="tl-date">2026 · Aprel</span>
+      <h4>3D tizimning kelishi</h4>
+      <p>Ilova <strong>tekis 2D interfeys</strong>dan <strong>3D dunyo</strong>ga o'tdi. Foydalanuvchilar o'z virtual xonalarini olishlari, jihoz sotib olishlari va bezashlari mumkin bo'ldi. Bu — o'rganishga uzoq muddatli motivatsiya beruvchi qadam.</p>
+      <div class="tl-tags">
+        <span class="tl-tag">3D xona</span>
+        <span class="tl-tag">Jihoz do'koni</span>
+        <span class="tl-tag">Vizual dizayn</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <span class="tl-date">2026 · May</span>
+      <h4>Yangi o'yin rejimlari</h4>
+      <p>Bir necha yangi mashg'ulot rejimi qo'shildi — grammatika mashqlari, kontekstli so'z ishlatish, tinglash mashqlari. Har bir rejim boshqa ko'nikmani mustahkamladi.</p>
+      <div class="tl-tags">
+        <span class="tl-tag">Grammatika</span>
+        <span class="tl-tag">Kontekst</span>
+        <span class="tl-tag">Ko'nikma tizimi</span>
+      </div>
+    </div>
+
+    <div class="tl-item current">
+      <span class="tl-date">2026 · Iyun–Avgust</span>
+      <h4>Katta yozgi yangilanish</h4>
+      <p>Yoz oyi WordDrop uchun eng katta bosqich bo'ldi. Bir necha yirik yangilik bir vaqtda kirdi:</p>
+      <p><strong>Duel rejimi</strong> — boshqa o'rganuvchilar bilan real vaqtda bellashuv. <strong>Do'kon mexanizmi</strong> qayta ishlangan — tanlash oson va tez. <strong>WordCoin</strong> valyuta tizimi mustahkamlangan. Kirish oynasi, profil va menyular <strong>butunlay yangi dizayn</strong> oldi. Yuzlab xatoliklar tuzatildi.</p>
+      <div class="tl-tags">
+        <span class="tl-tag">Duel</span>
+        <span class="tl-tag">WordCoin</span>
+        <span class="tl-tag">Yangi dizayn</span>
+        <span class="tl-tag">Do'kon 2.0</span>
+        <span class="tl-tag">Xatoliklar tuzatildi</span>
+      </div>
+    </div>
+
+    <div class="tl-item future">
+      <span class="tl-date">Yaqin kelajakda</span>
+      <h4>Keyingi qadamlar</h4>
+      <p>Bizga hozir eng ko'p so'raladigan xususiyatlar ustida ishlab turibmiz:</p>
+      <p><strong>Google bilan kirish</strong> — bir bosishda hisob ochish. <strong>Mobil ilova</strong> — App Store va Play Market'da. <strong>Offline rejim</strong> — internetsiz ham darslar. <strong>Ovoz tanish</strong> — talaffuz mashqlari. Har biri ustida ishlamoqdamiz.</p>
+      <div class="tl-tags">
+        <span class="tl-tag">Google OAuth</span>
+        <span class="tl-tag">Mobil ilova</span>
+        <span class="tl-tag">Offline</span>
+        <span class="tl-tag">Ovoz</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <span class="section-kicker">Kim quryapti</span>
+  <h2>WordDrop Studio</h2>
+
+  <div class="maker">
+    <div class="maker-inner">
+      <div class="maker-avatar">BY</div>
+      <div class="maker-info">
+        <div class="lbl">Muallif</div>
+        <h3>B. Yo'ldoshev</h3>
+        <div class="role">Asoschi · Dizayner · Ishlab chiquvchi</div>
+        <p>WordDrop — katta jamoa yoki investor tomonidan qurilgan mahsulot emas. Bu — bir kishining <strong>mustaqil ishi</strong>: g'oyadan tortib dizayn, kod va sarlavhagacha.</p>
+        <p>Har kuni bir oz yaxshilanadi. Har fikringiz — muhim. Har xatolik — imkoniyat. Agar sizda takliflar bo'lsa yoki xatolikni topsangiz — <strong>bemalol yozing</strong>.</p>
+        <div class="maker-links">
+          <a class="maker-link" href="mailto:bexruzyoldoshev@yahoo.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            Email
+          </a>
+          <a class="maker-link" href="https://t.me/worddrop_uz" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.05 3.03c-.35-.29-.85-.35-1.26-.15L2.75 10.4c-.5.23-.79.74-.72 1.28.07.55.5.98 1.05 1.05l4.35.55 1.68 6c.11.4.4.72.79.85.14.05.29.07.44.07.24 0 .48-.07.68-.2l3.34-2.24 4.09 3.31c.24.2.55.31.86.31.15 0 .3-.02.44-.08.44-.16.77-.55.85-1.01l2.6-14.9c.09-.53-.14-1.05-.55-1.36ZM9.62 14.14 8.55 17.5l-1.17-4.13 8.6-5.42-6.36 6.19Z"/></svg>
+            Telegram
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta">
+  <div class="cta-box">
+    <h3>Bugun boshlang</h3>
+    <p>Ingliz tilini o'yin kabi o'rganishni sinab ko'ring. Ro'yxatdan o'tish shart emas — bir bosishda tayyor.</p>
+    <a class="cta-btn" href="app.html">
+      Ilovaga kirish
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 WordDrop · <a href="faq.html">FAQ / Yordam</a> · <a href="privacy.html">Maxfiylik</a> · <a href="https://t.me/worddrop_uz">Telegram</a></span>
+    <span>Muallif: <b>B. Yo'ldoshev</b> · WordDrop Studio</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('menuBtn'), ov=document.getElementById('menuOverlay'), c=document.getElementById('menuClose');
+  if(!b||!ov)return;
+  function set(open){
+    document.body.classList.toggle('menu-open',open);
+    b.setAttribute('aria-expanded',open?'true':'false');
+    ov.setAttribute('aria-hidden',open?'false':'true');
+  }
+  b.addEventListener('click',function(){set(true)});
+  if(c)c.addEventListener('click',function(){set(false)});
+  ov.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a'):null;if(a)set(false)});
+  addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+})();
+</script>
+<!-- WordDrop cookieless analytics -->
+<script>(function(){try{var r='';try{r=document.referrer?new URL(document.referrer).hostname:'';}catch(e){}fetch('https://jgeycbyaoiybpudakgmk.supabase.co/rest/v1/rpc/track_pageview',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_b_6vafUIGzOO9xJmFv2t9g_sQD3kQ1J','Authorization':'Bearer sb_publishable_b_6vafUIGzOO9xJmFv2t9g_sQD3kQ1J'},body:JSON.stringify({p:location.pathname,r:r})}).catch(function(){});}catch(e){}})();</script>
+</body>
+</html>

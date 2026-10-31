@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>WordDrop — Ingliz tilini har kuni mashq qiling</title>
+<meta name="description" content="WordDrop — so'z boyligingizni mustahkamlaydigan, grammatikangizni AI orqali tekshiradigan, tinglash va talaffuzni mashq qildiradigan ilova. 120 bosqichli yo'l xaritasi, IELTS mock imtihon. Har doim bepul."/>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#0A0E27">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WordDrop">
+<meta property="og:title" content="WordDrop — Ingliz tilini har kuni mashq qiling">
+<meta property="og:description" content="So'z yodlash, grammatika, tinglash va talaffuz — bittasida. AI o'zbekcha tuzatadi.">
+<meta property="og:image" content="https://worddrop-app.uz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://worddrop-app.uz">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Fraunces:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ========== TOKENS ========== */
+:root{
+  /* Brand core */
+  --ink:#08183A;              /* deep navy — brand ink */
+  --ink-2:#0F1B3D;
+  --ink-3:#54628A;
+  --ink-4:#8492B4;
+
+  /* Blue surface palette (about/faq bilan bir xil) */
+  --surface:#EEF4FF;
+  --surface-2:#E4EDFB;
+  --surface-3:#DCE6F7;
+  --soft:#F5F9FF;
+
+  --line:#DCE6F7;
+  --line-2:#E4EDFB;
+
+  /* Brand blue */
+  --blue:#2F6FED;
+  --blue-d:#1B4FCB;
+  --blue-l:#5B8CFF;
+  --blue-tint:#E8F0FE;
+
+  /* Accents (terracotta o'rniga yumshoq to'ldiruvchi) */
+  --accent:#0E8F60;           /* muted green — success/emphasis */
+  --gold:#F5B62E;             /* achievement/gold */
+  --deep:#061A46;             /* footer deep navy */
+
+  /* Typography — 2 shrift kifoya, serif olib tashlangan */
+  --disp:"Bricolage Grotesque","Plus Jakarta Sans",system-ui,sans-serif;
+  --sans:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --serif:"Fraunces",ui-serif,Georgia,serif;
+
+  --ease:cubic-bezier(.22,.7,.2,1);
+  --dur:280ms;
+}
+
+/* ========== BASE ========== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--ink);background:var(--surface);
+  -webkit-font-smoothing:antialiased;line-height:1.62;
+  overflow-x:hidden;
+}
+a{color:var(--blue);text-decoration:none;transition:color .18s}
+a:hover{color:var(--blue-d)}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ========== NAV ========== */
+.nav{
+  position:sticky;top:0;z-index:80;
+  background:rgba(238,244,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transition:box-shadow .25s, background-color .25s;
+}
+.nav.on{box-shadow:0 1px 0 var(--line-2), 0 8px 24px -12px rgba(6,26,70,.10);background:rgba(238,244,255,.88)}
+.nav-row{display:flex;align-items:center;justify-content:space-between;height:70px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;font-size:22px;letter-spacing:-.6px;color:var(--ink)}
+.brand:hover{color:var(--ink)}
+.brand .mark{width:24px;height:24px;flex:none}
+.brand .label em{font-style:normal;color:var(--blue)}
+.nav-links{display:flex;gap:6px}
+.nav-links a{color:var(--ink-3);font-size:14.5px;font-weight:600;padding:8px 14px;border-radius:10px;transition:color .18s, background-color .18s}
+.nav-links a:hover{color:var(--ink);background:rgba(47,111,237,.08)}
+.nav-cta{display:inline-flex;align-items:center;background:var(--ink);color:#fff !important;font-weight:600;font-size:14px;padding:10px 20px;border-radius:14px 14px 14px 5px;transition:background-color .2s, transform .1s}
+.nav-cta:hover{background:var(--blue);color:#fff}
+.nav-cta:active{transform:translateY(1px)}
+@media(max-width:720px){.nav-links{display:none}}
+
+/* ========== HERO ========== */
+.hero{position:relative;padding:56px 0 40px;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle, rgba(27,79,203,.22) 1.4px, transparent 1.4px);
+  background-size:28px 28px;
+  -webkit-mask-image:radial-gradient(55% 48% at 80% 12%, #000 0%, transparent 72%);
+  mask-image:radial-gradient(55% 48% at 80% 12%, #000 0%, transparent 72%);
+}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding-top:20px}
+.hero-copy{position:relative}
+/* Hero badge — minimal, informativ chip */
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0;flex-wrap:wrap;
+  padding:6px;margin-bottom:24px;
+  background:rgba(255,255,255,.6);
+  border:1px solid var(--line);
+  border-radius:100px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  font-size:13px;font-weight:600;
+  transition:background-color .2s var(--ease), border-color .2s var(--ease);
+}
+.hero-badge:hover{background:rgba(255,255,255,.85);border-color:#B4C7EA}
+.hero-badge .hb-label{
+  background:var(--ink);color:#fff;
+  padding:6px 12px;border-radius:100px;
+  font-size:12px;font-weight:700;letter-spacing:-.1px;
+}
+.hero-badge .hb-item{
+  padding:6px 14px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+  border-left:1px solid var(--line);
+}
+.hero-badge .hb-item:first-of-type{border-left:none;padding-left:14px}
+.hero-badge .hb-arrow{color:var(--blue);margin:0 1px;display:inline-flex;align-items:center}
+.hero-badge .hb-arrow svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:520px){
+  .hero-badge{padding:5px}
+  .hero-badge .hb-label{font-size:11px;padding:5px 10px}
+  .hero-badge .hb-item{font-size:12px;padding:5px 10px}
+  .hero-badge .hb-item:first-of-type{padding-left:10px}
+}
+h1{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(34px,5.8vw,58px);letter-spacing:-1.6px;line-height:1.05;color:var(--ink);
+}
+h1 .l1{display:block;color:var(--ink)}
+h1 .l2{
+  display:block;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:500;
+  font-size:1.05em;
+  letter-spacing:-.5px;
+  color:var(--ink-3);
+  line-height:1.15;
+  padding:6px 0 4px;
+}
+h1 .l3{
+  display:block;
+  color:var(--blue);
+  letter-spacing:-1.8px;
+}
+.sub{margin-top:22px;font-size:17.5px;color:var(--ink-3);line-height:1.6;max-width:540px}
+.hero-cta{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--sans);font-weight:700;font-size:15px;letter-spacing:-.1px;
+  padding:15px 26px;border-radius:13px;border:none;cursor:pointer;
+  transition:transform .16s var(--ease), box-shadow .2s var(--ease), background-color .18s, color .18s;
+}
+.btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .22s var(--ease)}
+
+/* PRIMARY — "og'ir" tugma: qatlamli soya (yaqin + uzoq) + yuqori nozik yorug'lik chizig'i + bosilganda botadi */
+.btn.primary{
+  position:relative;
+  background:linear-gradient(150deg,var(--blue-l) 0%,var(--blue) 45%,var(--blue-d) 100%);
+  color:#fff;
+  border-radius:18px 18px 18px 6px;
+  padding-left:34px;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.35),
+    0 3px 6px -2px rgba(15,45,120,.5),
+    0 16px 28px -12px rgba(15,45,120,.5);
+}
+.btn.primary::before{
+  content:"";position:absolute;top:50%;left:15px;width:8px;height:8px;
+  background:radial-gradient(circle at 32% 28%,#fff 0%,var(--blue-l) 45%,var(--blue-d) 100%);
+  border-radius:50%;transform:translateY(-50%);
+  box-shadow:0 0 0 4px rgba(255,255,255,.22);
+  transition:box-shadow .25s var(--ease), transform .25s var(--ease);
+}
+.btn.primary:hover{
+  color:#fff;transform:translateY(-2px);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.4),
+    0 4px 8px -2px rgba(15,45,120,.55),
+    0 20px 34px -12px rgba(15,45,120,.6);
+}
+.btn.primary:hover::before{box-shadow:0 0 0 6px rgba(255,255,255,.3);transform:translateY(-50%) scale(1.1)}
+.btn.primary:hover svg{transform:translateX(3px)}
+.btn.primary:active{
+  transform:translateY(0) scale(.98);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.3),
+    0 1px 2px -1px rgba(15,45,120,.5),
+    0 6px 12px -8px rgba(15,45,120,.5);
+}
+
+/* GHOST — pastroq "og'irlik", bosilganda mos ravishda botadi */
+.btn.ghost{
+  background:transparent;
+  color:var(--ink);
+  border:2px solid var(--ink);
+  border-radius:6px 18px 18px 18px;
+  padding:13px 24px;
+}
+.btn.ghost:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px);box-shadow:0 10px 20px -10px rgba(8,24,58,.35)}
+.btn.ghost:active{transform:translateY(0) scale(.98);box-shadow:none}
+.hero-note{margin-top:20px;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-3)}
+.hero-note svg{width:14px;height:14px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.hero-note b{color:var(--ink);font-weight:700}
+
+/* PHONES (parallax) */
+.phones{position:relative;height:520px;perspective:1200px}
+.phone{
+  position:absolute;width:250px;height:500px;border-radius:36px;
+  background:linear-gradient(160deg,#08183A 0%,#0F1B3D 60%,#061A46 100%);
+  padding:12px;
+  box-shadow:
+    0 40px 80px -20px rgba(6,26,70,.35),
+    0 12px 28px -10px rgba(6,26,70,.28),
+    inset 0 0 0 1px rgba(255,255,255,.06);
+  transition:transform .5s var(--ease);
+}
+.phone.p-1{top:20px;left:0;transform:rotate(-8deg) translateY(0);animation:phoneInLeft .9s var(--ease) .1s both}
+.phone.p-2{top:0;left:50%;transform:translateX(-50%) rotate(0deg);z-index:3;animation:phoneInCenter .9s var(--ease) 0s both}
+.phone.p-3{top:20px;right:0;transform:rotate(8deg) translateY(0);animation:phoneInRight .9s var(--ease) .2s both}
+@keyframes phoneInLeft{from{opacity:0;transform:rotate(-8deg) translateY(36px) scale(.96)}to{opacity:1;transform:rotate(-8deg) translateY(0) scale(1)}}
+@keyframes phoneInCenter{from{opacity:0;transform:translateX(-50%) translateY(46px) scale(.94)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@keyframes phoneInRight{from{opacity:0;transform:rotate(8deg) translateY(36px) scale(.96)}to{opacity:1;transform:rotate(8deg) translateY(0) scale(1)}}
+.phones:hover .phone.p-1{transform:rotate(-8deg) translateY(-8px)}
+.phones:hover .phone.p-2{transform:translateX(-50%) translateY(-4px)}
+.phones:hover .phone.p-3{transform:rotate(8deg) translateY(-8px)}
+.screen{width:100%;height:100%;border-radius:26px;background:#fff;overflow:hidden;position:relative;padding:10px 12px 14px}
+.mock-h{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 8px;font-size:11px;font-weight:700;color:var(--ink)}
+.mock-h .rgt{display:flex;gap:3px;align-items:center}
+.mock-h svg{width:12px;height:12px;fill:currentColor;color:var(--ink)}
+.statusicons{display:flex;gap:3px}
+
+/* MOCK: Pronunciation */
+.m-pron{background:linear-gradient(180deg,#F5F9FF 0%,#EEF4FF 100%)}
+.m-pron .title{font-family:var(--disp);font-weight:700;font-size:15px;margin-top:8px;color:var(--ink)}
+.m-pron .sub-t{font-size:11px;color:var(--ink-3);margin:2px 0 14px}
+.m-pron .word{display:flex;align-items:baseline;gap:8px;background:#fff;border-radius:12px;padding:12px 14px;box-shadow:inset 0 0 0 1px var(--line-2)}
+.m-pron .word b{font-family:var(--disp);font-weight:800;font-size:22px;color:var(--ink);letter-spacing:-.5px}
+.m-pron .ipa{font-size:12px;color:var(--ink-3);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.m-pron .mic{margin:18px auto 10px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-d));display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 20px -4px rgba(47,111,237,.55)}
+.m-pron .mic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.m-pron .wave{display:flex;gap:3px;align-items:end;justify-content:center;height:28px;margin-bottom:12px}
+.m-pron .wave i{display:block;width:3px;background:var(--blue);border-radius:2px;opacity:.7;animation:wavePulse 1.4s ease-in-out infinite}
+.m-pron .wave i:nth-child(2){animation-delay:.1s}
+.m-pron .wave i:nth-child(3){animation-delay:.2s}
+.m-pron .wave i:nth-child(4){animation-delay:.3s}
+.m-pron .wave i:nth-child(5){animation-delay:.4s}
+.m-pron .wave i:nth-child(6){animation-delay:.5s}
+.m-pron .wave i:nth-child(7){animation-delay:.6s}
+.m-pron .wave i:nth-child(8){animation-delay:.7s}
+@keyframes wavePulse{0%,100%{transform:scaleY(.6);opacity:.5}50%{transform:scaleY(1);opacity:1}}
+.m-pron .fb{display:flex;flex-direction:column;gap:6px}
+.m-pron .fb .row{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:6px 10px;border-radius:8px}
+.m-pron .fb .row.ok{background:rgba(14,143,96,.10);color:var(--accent)}
+.m-pron .fb .row.bad{background:rgba(228,72,78,.10);color:#D6272C}
+.m-pron .fb svg{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* MOCK: Duel */
+.m-duel{background:linear-gradient(180deg,#EEF4FF 0%,#DCE6F7 100%)}
+.versus{display:flex;justify-content:space-between;align-items:center;padding:10px 6px 12px}
+.player{display:flex;flex-direction:column;align-items:center;gap:2px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:16px}
+.player.b .avatar{background:linear-gradient(135deg,var(--accent),#0A6D48)}
+.nm{font-family:var(--disp);font-weight:700;font-size:11px;color:var(--ink);margin-top:2px}
+.rat{font-size:9.5px;color:var(--ink-3);font-weight:600}
+.vs{font-family:var(--disp);font-weight:800;color:var(--ink-4);font-size:12px;letter-spacing:.05em}
+.timer{margin:0 auto 10px;width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:16px;color:var(--blue);box-shadow:inset 0 0 0 2.5px var(--blue),0 4px 10px -2px rgba(47,111,237,.25)}
+.m-duel .q{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:inset 0 0 0 1px var(--line-2)}
+.m-duel .q b{display:block;font-family:var(--disp);font-weight:800;font-size:16px;color:var(--ink);margin-bottom:2px}
+.m-duel .q small{font-size:11px;color:var(--ink-3)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.op{background:#fff;border-radius:9px;padding:9px;text-align:center;font-size:11.5px;font-weight:600;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2);transition:all .18s}
+.op.ok,.op.on{background:linear-gradient(135deg,var(--accent),#0A6D48);color:#fff;box-shadow:0 4px 10px -2px rgba(14,143,96,.35)}
+
+/* MOCK: IELTS */
+.m-ielts{background:linear-gradient(180deg,#F5F9FF 0%,#E4EDFB 100%)}
+.m-ielts .head{display:flex;justify-content:space-between;align-items:center;padding:6px 4px 10px}
+.m-ielts .part{font-family:var(--disp);font-weight:700;font-size:13px;color:var(--ink);display:flex;flex-direction:column}
+.m-ielts .part small{font-size:9.5px;color:var(--ink-3);font-weight:500;margin-top:2px}
+.m-ielts .head .timer{margin:0;width:auto;height:auto;background:transparent;color:var(--blue);font-size:14px;box-shadow:none;padding:4px 10px;border-radius:8px;background:rgba(47,111,237,.10)}
+.m-ielts .progress{height:3px;background:var(--line-2);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.m-ielts .progress i{display:block;height:100%;width:40%;background:linear-gradient(90deg,var(--blue),var(--blue-l));border-radius:3px}
+.m-ielts .qn{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.05em;margin-bottom:6px}
+.m-ielts .qtext{font-size:12.5px;color:var(--ink);line-height:1.42;background:#fff;border-radius:11px;padding:10px 12px;margin-bottom:10px;box-shadow:inset 0 0 0 1px var(--line-2)}
+.m-ielts .qtext .u{color:var(--blue);border-bottom:1.5px solid var(--blue-l)}
+.m-ielts .a{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#fff;border-radius:9px;margin-bottom:5px;font-size:11.5px;color:var(--ink);font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2);transition:all .18s}
+.m-ielts .a .r{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);flex:none}
+.m-ielts .a.on{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;box-shadow:0 4px 10px -2px rgba(47,111,237,.4)}
+.m-ielts .a.on .r{border-color:#fff;background:radial-gradient(circle at center,#fff 35%,var(--blue-d) 40%)}
+.m-ielts .a-lbl{background:rgba(255,255,255,.24);padding:2px 6px;border-radius:5px;font-weight:800;font-size:10.5px}
+.m-ielts .a:not(.on) .a-lbl{background:var(--surface);color:var(--blue)}
+
+/* MOCK: Map */
+.m-map{background:linear-gradient(180deg,#EEF4FF 0%,#DCE6F7 100%)}
+.map-head{display:flex;flex-direction:column;padding:4px 4px 10px}
+.h-title{font-family:var(--disp);font-weight:700;font-size:14px;color:var(--ink)}
+.h-sub{font-size:11px;color:var(--ink-3);margin-top:2px}
+.h-sub b{color:var(--blue);font-weight:800}
+.map-svg{position:relative;background:#fff;border-radius:14px;padding:12px;box-shadow:inset 0 0 0 1px var(--line-2);margin-bottom:10px;height:200px}
+.map-svg svg{width:100%;height:100%}
+.now-lbl{position:absolute;background:var(--blue);color:#fff;font-family:var(--disp);font-weight:700;font-size:9px;padding:3px 8px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 4px 10px -2px rgba(47,111,237,.4)}
+.m-map .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.m-map .stat{background:#fff;border-radius:10px;padding:9px 6px;text-align:center;box-shadow:inset 0 0 0 1px var(--line-2)}
+.m-map .stat b{display:block;font-family:var(--disp);font-weight:800;font-size:15px;color:var(--blue)}
+.m-map .stat small{font-size:9.5px;color:var(--ink-3);font-weight:600}
+
+/* MOCK: Streak */
+.m-streak{background:linear-gradient(180deg,#FFF9EC 0%,#FCEFD5 100%)}
+.s-head{padding:4px 4px 10px}
+.s-title{font-family:var(--disp);font-weight:700;font-size:13px;color:var(--ink)}
+.s-sub{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.big{background:#fff;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:inset 0 0 0 1px rgba(245,182,46,.35),0 4px 12px -4px rgba(245,182,46,.25);margin-bottom:10px}
+.big .n{font-family:var(--disp);font-weight:800;font-size:36px;color:var(--gold);letter-spacing:-1px;line-height:1}
+.big .l{font-size:10px;color:var(--ink-3);font-weight:600;margin-top:4px}
+.week-lbl{font-size:10px;color:var(--ink-3);font-weight:700;margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:10px}
+.d{background:#fff;border-radius:8px;padding:6px 0;text-align:center;font-size:9.5px;font-weight:700;color:var(--ink-4);box-shadow:inset 0 0 0 1px rgba(245,182,46,.2)}
+.d.on{background:linear-gradient(135deg,var(--gold),#D69A24);color:#fff}
+.d.now{background:#fff;color:var(--gold);box-shadow:inset 0 0 0 2px var(--gold)}
+.chart-wrap{background:#fff;border-radius:10px;padding:8px 10px;margin-bottom:8px;box-shadow:inset 0 0 0 1px var(--line-2)}
+.chart-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.chart-h b{font-family:var(--disp);font-weight:700;font-size:11px;color:var(--ink)}
+.chart-h small{font-size:9.5px;color:var(--accent);font-weight:600}
+.m-streak .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.st{background:#fff;border-radius:9px;padding:8px 4px;text-align:center;box-shadow:inset 0 0 0 1px var(--line-2)}
+.st b{display:block;font-family:var(--disp);font-weight:800;font-size:13px;color:var(--gold);letter-spacing:-.3px}
+.st small{font-size:9px;color:var(--ink-3);font-weight:600}
+
+/* ========== SECTION HEADS ========== */
+.sec-eye{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.sec-h2{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5.5vw,52px);letter-spacing:-1.7px;line-height:1.03;color:var(--ink)}
+.sec-h2 .italic,.italic{font-family:var(--serif);font-style:italic;font-weight:500;color:var(--blue);letter-spacing:-.3px}
+.sec-h2 .em,.italic-inline,.em{color:var(--blue);font-style:normal;font-weight:800}
+.sec-sub{margin-top:16px;font-size:17px;color:var(--ink-3);max-width:620px;line-height:1.55}
+
+/* ========== PROBLEMS ========== */
+.problems{padding:100px 0 40px;position:relative}
+.prob-grid{margin-top:48px;display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.prob-item{background:#fff;border-radius:20px;padding:28px 26px;box-shadow:inset 0 0 0 1px var(--line);transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s}
+.prob-item:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px #B4C7EA, 0 12px 32px -12px rgba(20,50,120,.18)}
+.prob-item .n{font-family:var(--disp);font-weight:800;font-size:32px;color:var(--blue);letter-spacing:-1px;line-height:1;margin-bottom:14px}
+.prob-t{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.5px;color:var(--ink);line-height:1.2;margin-bottom:12px}
+.prob-t .italic-inline{color:var(--blue);font-weight:800}
+.prob-item p{font-size:15px;color:var(--ink-3);line-height:1.62;margin-bottom:16px}
+.prob-item p b{color:var(--ink);font-weight:600}
+.arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--blue);padding:8px 0;transition:transform .18s var(--ease)}
+.arrow:hover{color:var(--blue-d);transform:translate(2px,-2px)}
+.arrow svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transform:rotate(-45deg)}
+@media(max-width:720px){.prob-grid{grid-template-columns:1fr;gap:14px}}
+
+/* ========== STATS BAND (yangi) ========== */
+.stats-band{margin:44px 0 20px;padding:36px 24px;background:linear-gradient(135deg,var(--ink) 0%,var(--deep) 100%);color:#fff;border-radius:24px;position:relative;overflow:hidden}
+.stats-band::before{content:"";position:absolute;top:-80px;right:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(91,140,255,.28),transparent 65%);border-radius:50%;pointer-events:none}
+.stats-band-inner{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat-num{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5vw,44px);letter-spacing:-1.2px;color:#fff;line-height:1}
+.stat-num em{font-style:normal;color:var(--blue-l)}
+.stat-lbl{margin-top:8px;font-size:13px;color:rgba(255,255,255,.75);font-weight:600}
+@media(max-width:720px){.stats-band-inner{grid-template-columns:repeat(2,1fr);gap:24px}}
+
+/* ========== DEMO ========== */
+.demo{padding:80px 0 60px;overflow:hidden}
+.demo-head{max-width:800px;margin:0 auto 44px;padding:0 24px;text-align:center}
+.demo-track{position:relative}
+.demo-scroll{display:flex;gap:36px;padding:20px 24px 30px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none}
+.demo-scroll::-webkit-scrollbar{display:none}
+.demo-step{flex:none;width:min(340px,80vw);scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:22px}
+.demo-step .phone{position:relative;width:250px;height:500px;border-radius:36px;background:linear-gradient(160deg,#08183A,#0F1B3D,#061A46);padding:12px;box-shadow:0 40px 80px -20px rgba(6,26,70,.35),0 12px 28px -10px rgba(6,26,70,.28),inset 0 0 0 1px rgba(255,255,255,.06);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.demo-step:hover .phone{transform:translateY(-6px);box-shadow:0 50px 90px -20px rgba(6,26,70,.42),0 20px 40px -10px rgba(6,26,70,.28),inset 0 0 0 1px rgba(255,255,255,.06)}
+.cap{text-align:center;max-width:280px}
+.step-n{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);background:rgba(47,111,237,.10);padding:5px 12px;border-radius:12px;margin-bottom:10px}
+.cap h3{font-family:var(--disp);font-weight:800;font-size:22px;letter-spacing:-.6px;color:var(--ink);margin-bottom:6px}
+.cap p{font-size:14px;color:var(--ink-3);line-height:1.55}
+.demo-nav{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:20px}
+.demo-nav button{width:44px;height:44px;border-radius:50%;border:none;background:#fff;color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -4px rgba(20,50,120,.2),inset 0 0 0 1px var(--line);transition:transform .12s,color .18s,background-color .18s}
+.demo-nav button:hover:not(:disabled){background:var(--blue);color:#fff;transform:translateY(-1px)}
+.demo-nav button:disabled{opacity:.4;cursor:not-allowed}
+.demo-nav button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dots{display:flex;gap:8px;align-items:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:all .25s var(--ease);cursor:pointer}
+.dots i.on{background:var(--blue);width:24px;border-radius:4px}
+
+/* ========== IELTS DETAIL (yangi) ========== */
+.ielts{padding:80px 0 60px}
+.ielts-head{max-width:800px;margin:0 auto 44px;padding:0 24px;text-align:center}
+.ielts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:0}
+.ielts-card{background:#fff;border-radius:20px;padding:26px 22px;box-shadow:inset 0 0 0 1px var(--line);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+.ielts-card:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px #B4C7EA,0 10px 28px -12px rgba(20,50,120,.18)}
+.ielts-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)}
+.ielts-card .i-ic{width:44px;height:44px;border-radius:14px 14px 14px 5px;background:var(--surface);color:var(--blue);box-shadow:inset 0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ielts-card .i-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ielts-card h4{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:-.4px;color:var(--ink);margin-bottom:6px}
+.ielts-card p{font-size:14px;color:var(--ink-3);line-height:1.55}
+.ielts-info{margin-top:26px;background:linear-gradient(135deg,var(--blue-tint),#F5F9FF);border-radius:20px;padding:26px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.ielts-info-ic{width:52px;height:52px;border-radius:16px 16px 16px 6px;background:#fff;color:var(--blue);box-shadow:inset 0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;flex:none}
+.ielts-info-ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ielts-info-txt{flex:1;min-width:240px}
+.ielts-info-txt b{display:block;font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ink);margin-bottom:4px}
+.ielts-info-txt span{font-size:14.5px;color:var(--ink-3);line-height:1.55}
+@media(max-width:900px){.ielts-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.ielts-grid{grid-template-columns:1fr}}
+
+/* ========== KELAYOTGAN (yangi) ========== */
+.coming{padding:80px 0 60px}
+.coming-head{max-width:800px;margin:0 auto 44px;padding:0 24px;text-align:center}
+.coming-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.come-card{background:#fff;border:1px dashed #B4C7EA;border-radius:18px;padding:22px 20px;position:relative;transition:transform .25s,border-color .25s,box-shadow .25s}
+.come-card:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 12px 30px -14px rgba(20,50,120,.2)}
+.come-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--blue-tint);padding:4px 10px;border-radius:10px;margin-bottom:14px}
+.come-badge.soon{color:var(--accent);background:rgba(14,143,96,.10)}
+.come-card .c-ic{width:40px;height:40px;border-radius:12px 12px 12px 4px;background:var(--surface);color:var(--blue);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.come-card .c-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.come-card h4{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ink);margin-bottom:6px;letter-spacing:-.3px}
+.come-card p{font-size:13.5px;color:var(--ink-3);line-height:1.5;margin:0}
+@media(max-width:900px){.coming-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.coming-grid{grid-template-columns:1fr}}
+
+/* ========== FINAL CTA ========== */
+.final{padding:100px 0 120px;text-align:center;position:relative;overflow:hidden}
+.final::before{
+  content:"";position:absolute;top:8%;left:50%;transform:translateX(-50%);width:1000px;height:600px;
+  background-image:radial-gradient(circle, rgba(27,79,203,.2) 1.4px, transparent 1.4px);
+  background-size:28px 28px;
+  -webkit-mask-image:radial-gradient(60% 55% at 50% 30%, #000 0%, transparent 75%);
+  mask-image:radial-gradient(60% 55% at 50% 30%, #000 0%, transparent 75%);
+  pointer-events:none;z-index:0;
+}
+.final .wrap{position:relative;z-index:1}
+.final h2{font-family:var(--disp);font-weight:800;font-size:clamp(34px,6vw,56px);letter-spacing:-2px;line-height:1.02;color:var(--ink);max-width:800px;margin:0 auto}
+.final h2 .italic{font-family:var(--serif);font-style:italic;font-weight:500;color:var(--blue);letter-spacing:-.3px}
+.final p{margin-top:22px;font-size:17px;color:var(--ink-3);max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6}
+.cta-row{margin-top:34px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.foot-note{margin-top:32px;display:flex;justify-content:center;flex-wrap:wrap;gap:22px;font-size:13.5px;color:var(--ink-3);font-weight:600}
+.foot-note span{display:inline-flex;align-items:center;gap:7px}
+.foot-note svg{width:16px;height:16px;fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ========== FOOTER ========== */
+footer{position:relative;overflow:hidden;background:var(--deep);color:rgba(255,255,255,.75);padding:52px 0 26px}
+footer::before{
+  content:"";position:absolute;top:-10%;right:-5%;width:640px;height:520px;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle, rgba(91,140,255,.28) 1.4px, transparent 1.4px);
+  background-size:28px 28px;
+  -webkit-mask-image:radial-gradient(55% 55% at 70% 20%, #000 0%, transparent 72%);
+  mask-image:radial-gradient(55% 55% at 70% 20%, #000 0%, transparent 72%);
+}
+footer .wrap{position:relative;z-index:1}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
+.foot-brand .brand{color:#fff}
+.foot-brand .brand em{color:var(--blue-l)}
+.foot-brand p{margin-top:12px;font-size:14px;color:rgba(255,255,255,.6);max-width:280px;line-height:1.55}
+.foot-col h4{font-family:var(--disp);font-weight:700;font-size:14px;color:#fff;margin-bottom:14px;letter-spacing:-.3px}
+.foot-col ul{list-style:none}
+.foot-col li{margin-bottom:9px}
+.foot-col a{color:rgba(255,255,255,.7);font-size:14px;font-weight:500;transition:color .18s}
+.foot-col a:hover{color:#fff}
+.foot-bot{position:relative;padding-top:22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.45)}
+.foot-bot::before{content:"";position:absolute;top:0;left:0;width:56px;height:2px;border-radius:2px 2px 2px 0;background:var(--blue-l)}
+.foot-bot b{color:rgba(255,255,255,.7);font-weight:600}
+@media(max-width:800px){.foot-grid{grid-template-columns:1fr 1fr;gap:26px}.foot-brand{grid-column:1 / -1}}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;gap:20px;padding-top:0}
+  .phones{height:440px;order:2;transform:scale(.88);margin-top:-20px}
+  .stats-band-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ========== REVEAL animation on scroll ========== */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease), transform .8s var(--ease)}
+.reveal.on{opacity:1;transform:none}
+.prob-item.reveal:nth-child(1){transition-delay:0s}
+.prob-item.reveal:nth-child(2){transition-delay:.08s}
+.prob-item.reveal:nth-child(3){transition-delay:.16s}
+.prob-item.reveal:nth-child(4){transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none}
+  .eyebrow .dot,.m-pron .wave i{animation:none}
+  .phone,.phones:hover .phone{transition:none;transform:none;animation:none}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-row">
+    <a href="#top" class="brand">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <clipPath id="dropClipNav">
+            <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"/>
+          </clipPath>
+        </defs>
+        <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z" fill="#2F6FED" stroke="#1B4FCB" stroke-width="0.6"/>
+        <g clip-path="url(#dropClipNav)">
+          <ellipse cx="16" cy="17" rx="7" ry="9" fill="#1B4FCB" transform="rotate(12 16 17)"/>
+          <ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#fff" opacity=".85" transform="rotate(-18 9 8.5)"/>
+        </g>
+      </svg>
+      <span class="label">Word<em>Drop</em></span>
+    </a>
+    <nav class="nav-links" aria-label="Asosiy">
+      <a href="#why">Nima uchun</a>
+      <a href="#how">Qanday ishlaydi</a>
+      <a href="#ielts">IELTS</a>
+      <a href="#coming">Kelayotgan</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">Biz haqimizda</a>
+    </nav>
+    <a class="nav-cta" href="app.html">
+      Boshlash
+    </a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <div class="hero-badge">
+        <span class="hb-label">Ingliz tili</span>
+        <span class="hb-item">A1 <span class="hb-arrow"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span> C2</span>
+        <span class="hb-item">120 bosqich</span>
+      </div>
+      <h1>
+        <span class="l1">So'z yodlash oson emas.</span>
+        <span class="l2">Ishlatish esa qiyinroq.</span>
+        <span class="l3">Ikkalasini ham o'rgatamiz.</span>
+      </h1>
+      <p class="sub">
+        WordDrop — yangi so'zlarni turli texnikalar bilan xotirada mustahkamlaydigan,
+        gaplaringizni AI orqali grammatik tekshiradigan, tinglash va talaffuz
+        mashqlari beradigan ilova. Hammasi o'yin kabi qiziqarli formatda —
+        tanga, darajalar va kichik mukofotlar bilan.
+      </p>
+      <div class="hero-cta">
+        <a class="btn primary" href="app.html">
+          <span>Bugun boshlash</span>
+        </a>
+        <a class="btn ghost" href="#how">Ichini ko'rish</a>
+      </div>
+      <div class="hero-note">
+        <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
+        <b>Har doim bepul.</b>&nbsp;Kredit karta shart emas.
+      </div>
+    </div>
+
+    <!-- 3 PHONE PARALLAX -->
+    <div class="phones" aria-hidden="true">
+      <!-- Phone 1: Talaffuz (chapda, orqa) -->
+      <div class="phone p-1">
+        <div class="screen mock m-pron">
+          <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+          <div class="title">Talaffuz mashqi</div>
+          <div class="sub-t">AI o'zbekcha maslahat beradi</div>
+          <div class="word"><b>through</b><span class="ipa">/θruː/</span></div>
+          <div class="mic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <rect x="9" y="4" width="6" height="12" rx="3"/>
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>
+            </svg>
+          </div>
+          <div class="wave">
+            <i style="height:6px"></i><i style="height:14px"></i><i style="height:20px"></i>
+            <i style="height:12px"></i><i style="height:22px"></i><i style="height:16px"></i>
+            <i style="height:8px"></i><i style="height:18px"></i>
+          </div>
+          <div class="fb">
+            <div class="row ok"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>“th” yaxshi</div>
+            <div class="row bad"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>“r” tilingiz yumshoq</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 2: Duel (o'rtada, oldida) -->
+      <div class="phone p-2">
+        <div class="screen mock m-duel">
+          <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+          <div class="versus">
+            <div class="player">
+              <div class="avatar">A</div>
+              <div class="nm">Aziz</div>
+              <div class="rat">1240 ★</div>
+            </div>
+            <div class="vs">vs.</div>
+            <div class="player b">
+              <div class="avatar">D</div>
+              <div class="nm">Dilnoza</div>
+              <div class="rat">1198 ★</div>
+            </div>
+          </div>
+          <div class="timer">14</div>
+          <div class="q">
+            <b>“Achievement”</b>
+            <small>O'zbekchada nima?</small>
+          </div>
+          <div class="opts">
+            <div class="op">Rejalashtirish</div>
+            <div class="op ok">Yutuq</div>
+            <div class="op">Xatolik</div>
+            <div class="op">Sabab</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 3: Yo'l xaritasi (o'ngda, orqa) -->
+      <div class="phone p-3">
+        <div class="screen mock m-map">
+          <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+          <div class="map-head">
+            <div class="h-title">Yo'l xaritangiz</div>
+            <div class="h-sub"><b>17</b> / 120 bosqich · Daraja B1</div>
+          </div>
+          <div class="map-svg">
+            <svg viewBox="0 0 200 260" preserveAspectRatio="xMidYMid meet">
+              <path d="M30 240 C 60 240, 60 195, 100 195 S 150 155, 100 130 S 40 80, 90 55 S 160 40, 170 20" stroke="#DED9CC" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="1 6" opacity=".7"/>
+              <path d="M30 240 C 60 240, 60 195, 100 195 S 150 155, 100 130" stroke="#2F6FED" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <g><circle cx="30" cy="240" r="12" fill="#0E8F60"/><path d="M24 240 l4 4 8-8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <g><circle cx="70" cy="220" r="11" fill="#0E8F60"/><path d="M65 220 l4 4 7-7" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <g><circle cx="100" cy="195" r="11" fill="#0E8F60"/><path d="M95 195 l4 4 7-7" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <circle cx="100" cy="130" r="20" fill="none" stroke="#2F6FED" stroke-width="1.5" opacity=".3"/>
+              <circle cx="100" cy="130" r="15" fill="#fff" stroke="#2F6FED" stroke-width="3"/>
+              <path d="M100 122 l2.5 5 5.5.8 -4 4 1 5.5 -5-2.6 -5 2.6 1-5.5 -4-4 5.5-.8z" fill="#2F6FED"/>
+              <g opacity=".65"><circle cx="90" cy="55" r="10" fill="#fff" stroke="#B7BFD3" stroke-width="1.8"/><rect x="87" y="53" width="6" height="5" rx="1" fill="#8791AF"/><path d="M88.5 53 v-1.5 a1.5 1.5 0 0 1 3 0 v1.5" stroke="#8791AF" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>
+              <g opacity=".55"><circle cx="150" cy="35" r="10" fill="#fff" stroke="#B7BFD3" stroke-width="1.8"/><rect x="147" y="33" width="6" height="5" rx="1" fill="#8791AF"/><path d="M148.5 33 v-1.5 a1.5 1.5 0 0 1 3 0 v1.5" stroke="#8791AF" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>
+              <g><line x1="170" y1="20" x2="170" y2="3" stroke="#0F1B3D" stroke-width="1.8" stroke-linecap="round"/><path d="M170 3 h16 l-3.5 5.5 3.5 5.5 h-16z" fill="#C99A3B"/><circle cx="170" cy="20" r="4" fill="#0F1B3D"/></g>
+            </svg>
+            <div class="now-lbl" style="top:44%;right:14%">Joriy</div>
+          </div>
+          <div class="stats">
+            <div class="stat"><b>B1</b><small>Daraja</small></div>
+            <div class="stat"><b>17</b><small>Streak</small></div>
+            <div class="stat"><b>1 240</b><small>XP</small></div>
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NIMA UCHUN (MUAMMO/YECHIM) ============ -->
+<section class="problems" id="why">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="sec-eye">Nima uchun WordDrop</span>
+      <h2 class="sec-h2">
+        Yangi so'zni <span class="italic">o'rganamiz</span>.
+        <br/>Bir hafta o'tib <span class="em">unutamiz.</span>
+      </h2>
+      <p class="sec-sub">
+        Muammo qoidani bilmaslikda emas — bilganingizni esda saqlab, real vaziyatda
+        ishlata olmaslikda. WordDrop so'zlarni bir necha texnika bilan mustahkamlaydi,
+        gaplaringizni tekshiradi, tinglash va talaffuzni mashq qildiradi.
+      </p>
+    </div>
+
+    <div class="prob-grid">
+      <div class="prob-item reveal">
+        <div class="n">01</div>
+        <div class="prob-t">Yangi so'zni o'rganamiz, <span class="italic-inline">ertasiga unutamiz</span></div>
+        <p>Miya yangi so'zni bir marta ko'rgani bilan xotirada saqlamaydi.
+          <b>WordDropda har bir so'z bir necha xil texnika bilan — takrorlash,
+          duel, mashqlar orqali — qayta-qayta mustahkamlanadi</b>, toki
+          haqiqatan yodda qolguncha.</p>
+        <a class="arrow" href="#how">So'z boyligi<svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div class="prob-item reveal">
+        <div class="n">02</div>
+        <div class="prob-t">Kichik xatolar sezilmay, doim takrorlanaveradi</div>
+        <p>Ko'p qilinadigan xatolarni o'zimiz payqamaymiz.
+          <b>AI yozgan gaplaringizni — ayniqsa yangi o'rgangan so'zlar bilan
+          tuzgan gaplarni — tekshirib</b>, tez-tez uchraydigan grammatik
+          xatolarni aniq ko'rsatib beradi.</p>
+        <a class="arrow" href="#how">Grammatika tekshiruvi<svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div class="prob-item reveal">
+        <div class="n">03</div>
+        <div class="prob-t">Real ingliz nutqini tinglash kam uchraydi</div>
+        <p>Darslik matnlari va jonli nutq boshqacha eshitiladi.
+          120 bosqichli yo'lning har 10-tasida — jami 12 marta —
+          <b>rasmiy manbalardan olingan tinglash materiallari</b> bilan
+          mashq qilasiz: tinglab, tushib qolgan so'zlarni joyiga qo'yasiz.</p>
+        <a class="arrow" href="#how">Tinglash mashqi<svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div class="prob-item reveal">
+        <div class="n">04</div>
+        <div class="prob-t">Talaffuz va IELTS speaking uchun tayyorgarlik yetishmaydi</div>
+        <p>To'g'ri talaffuz qilishga ishonch kam bo'ladi.
+          <b>Mikrofonga gapirasiz, AI tovushlaringizni o'zbek tilida
+          tushuntiradi</b> — bu IELTS mock speaking qismiga tayyorlanishga
+          ham yordam beradi.</p>
+        <a class="arrow" href="#how">Talaffuz mashqi<svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QANDAY ISHLAYDI (video demo sekvens) ============ -->
+<section class="demo" id="how">
+  <div class="demo-head">
+    <span class="sec-eye reveal">5 ta ekranda</span>
+    <h2 class="sec-h2 reveal">
+      Bu <span class="italic em">shunday</span> ko'rinadi.
+    </h2>
+    <p class="sec-sub reveal">
+      Har kuni WordDrop ochsangiz ko'radigan 5 ta asosiy ekran.
+      O'ngga suring — hammasini ko'ring.
+    </p>
+  </div>
+
+  <div class="demo-track">
+    <div class="demo-scroll" id="demoScroll">
+
+      <!-- Step 1: Duel -->
+      <div class="demo-step" data-i="0">
+        <div class="phone">
+          <div class="screen mock m-duel">
+            <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+            <div class="versus">
+              <div class="player">
+                <div class="avatar">A</div>
+                <div class="nm">Aziz</div>
+                <div class="rat">1240 ★</div>
+              </div>
+              <div class="vs">vs.</div>
+              <div class="player b">
+                <div class="avatar">S</div>
+                <div class="nm">Sardor</div>
+                <div class="rat">1305 ★</div>
+              </div>
+            </div>
+            <div class="timer">08</div>
+            <div class="q">
+              <b>“Reliable”</b>
+              <small>O'zbekchada nima?</small>
+            </div>
+            <div class="opts">
+              <div class="op">Xatarli</div>
+              <div class="op on">Ishonchli</div>
+              <div class="op">Yumshoq</div>
+              <div class="op">Qattiq</div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <span class="step-n">01 — Duel</span>
+          <h3>Jonli 1v1 kurash</h3>
+          <p>Boshqa foydalanuvchi bilan real vaqtda. Tez javob — ko'p ball.</p>
+        </div>
+      </div>
+
+      <!-- Step 2: Talaffuz -->
+      <div class="demo-step" data-i="1">
+        <div class="phone">
+          <div class="screen mock m-pron">
+            <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+            <div class="title">Talaffuz mashqi</div>
+          <div class="sub-t">AI o'zbekcha maslahat beradi</div>
+          <div class="word"><b>because</b><span class="ipa">/bɪˈkɒz/</span></div>
+            <div class="mic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="9" y="4" width="6" height="12" rx="3"/>
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>
+              </svg>
+            </div>
+            <div class="wave">
+              <i style="height:8px"></i><i style="height:16px"></i><i style="height:22px"></i>
+              <i style="height:14px"></i><i style="height:20px"></i><i style="height:18px"></i>
+              <i style="height:10px"></i><i style="height:14px"></i>
+            </div>
+            <div class="fb">
+              <div class="row ok"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>Bosim to'g'ri</div>
+              <div class="row bad"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>“z” tovushi kuchsiz</div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <span class="step-n">02 — Talaffuz</span>
+          <h3>AI o'zbekcha maslahat</h3>
+          <p>Mikrofonga gapiring. Qaysi tovush noto'g'ri — aniq aytadi.</p>
+        </div>
+      </div>
+
+      <!-- Step 3: IELTS -->
+      <div class="demo-step" data-i="2">
+        <div class="phone">
+          <div class="screen mock m-ielts">
+            <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+            <div class="head">
+              <div class="part">Reading<small>Part 2 · Mock #3</small></div>
+              <div class="timer">34:12</div>
+            </div>
+            <div class="progress"><i></i></div>
+            <div class="qn">Savol 4</div>
+            <div class="qtext">The author suggests <span class="u">that language is a tool</span> — is this idea supported?</div>
+            <div class="a"><span class="r"></span><span class="a-lbl">A</span>Yes, fully</div>
+            <div class="a on"><span class="r"></span><span class="a-lbl">B</span>Yes, partly</div>
+            <div class="a"><span class="r"></span><span class="a-lbl">C</span>No, opposed</div>
+            <div class="a"><span class="r"></span><span class="a-lbl">D</span>Not mentioned</div>
+          </div>
+        </div>
+        <div class="cap">
+          <span class="step-n">03 — IELTS</span>
+          <h3>Mock imtihon</h3>
+          <p>Reading, Listening, Writing, Speaking — 4 qism, real vaqt taymer.</p>
+        </div>
+      </div>
+
+      <!-- Step 4: Yo'l xaritasi -->
+      <div class="demo-step" data-i="3">
+        <div class="phone">
+          <div class="screen mock m-map">
+            <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+            <div class="map-head">
+              <div class="h-title">Yo'l xaritangiz</div>
+              <div class="h-sub"><b>17</b> / 120 bosqich · Daraja B1</div>
+            </div>
+            <div class="map-svg">
+              <svg viewBox="0 0 200 260" preserveAspectRatio="xMidYMid meet">
+                <path d="M30 240 C 60 240, 60 195, 100 195 S 150 155, 100 130 S 40 80, 90 55 S 160 40, 170 20" stroke="#DED9CC" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="1 6" opacity=".7"/>
+                <path d="M30 240 C 60 240, 60 195, 100 195 S 150 155, 100 130" stroke="#2F6FED" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <g><circle cx="30" cy="240" r="12" fill="#0E8F60"/><path d="M24 240 l4 4 8-8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g><circle cx="70" cy="220" r="11" fill="#0E8F60"/><path d="M65 220 l4 4 7-7" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g><circle cx="100" cy="195" r="11" fill="#0E8F60"/><path d="M95 195 l4 4 7-7" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <circle cx="100" cy="130" r="20" fill="none" stroke="#2F6FED" stroke-width="1.5" opacity=".3"/>
+                <circle cx="100" cy="130" r="15" fill="#fff" stroke="#2F6FED" stroke-width="3"/>
+                <path d="M100 122 l2.5 5 5.5.8 -4 4 1 5.5 -5-2.6 -5 2.6 1-5.5 -4-4 5.5-.8z" fill="#2F6FED"/>
+                <g opacity=".65"><circle cx="90" cy="55" r="10" fill="#fff" stroke="#B7BFD3" stroke-width="1.8"/><rect x="87" y="53" width="6" height="5" rx="1" fill="#8791AF"/><path d="M88.5 53 v-1.5 a1.5 1.5 0 0 1 3 0 v1.5" stroke="#8791AF" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>
+                <g opacity=".55"><circle cx="150" cy="35" r="10" fill="#fff" stroke="#B7BFD3" stroke-width="1.8"/><rect x="147" y="33" width="6" height="5" rx="1" fill="#8791AF"/><path d="M148.5 33 v-1.5 a1.5 1.5 0 0 1 3 0 v1.5" stroke="#8791AF" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>
+                <g><line x1="170" y1="20" x2="170" y2="3" stroke="#0F1B3D" stroke-width="1.8" stroke-linecap="round"/><path d="M170 3 h16 l-3.5 5.5 3.5 5.5 h-16z" fill="#C99A3B"/><circle cx="170" cy="20" r="4" fill="#0F1B3D"/></g>
+              </svg>
+              <div class="now-lbl" style="top:44%;right:14%">Joriy</div>
+            </div>
+            <div class="stats">
+              <div class="stat"><b>B1</b><small>Daraja</small></div>
+              <div class="stat"><b>17</b><small>Streak</small></div>
+              <div class="stat"><b>1 240</b><small>XP</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <span class="step-n">04 — Xarita</span>
+          <h3>120 bosqichli yo'l</h3>
+          <p>A1 dan C2 gacha. Har kun keyingi qadam aniq — sakrashlar yo'q.</p>
+        </div>
+      </div>
+
+      <!-- Step 5: Streak -->
+      <div class="demo-step" data-i="4">
+        <div class="phone">
+          <div class="screen mock m-streak">
+            <div class="mock-h"><span class="lft">9:41</span><span class="rgt"><span class="statusicons"><svg viewBox="0 0 16 11" width="13" height="9" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.6"/><rect x="4.3" y="4" width="2.6" height="7" rx="0.6"/><rect x="8.6" y="2" width="2.6" height="9" rx="0.6"/><rect x="12.9" y="0" width="2.6" height="11" rx="0.6"/></svg><svg viewBox="0 0 16 12" width="13" height="10" fill="none"><path d="M2 4.6C4.5 2.1 11.5 2.1 14 4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 7.1c2-1.9 5.4-1.9 7.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor"/></svg><svg viewBox="0 0 25 12" width="21" height="10" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="2.5" stroke="currentColor" stroke-width="1" opacity=".5"/><rect x="2.3" y="2.3" width="17.4" height="7.4" rx="1.4" fill="currentColor"/><rect x="22.3" y="4" width="1.6" height="4" rx="0.8" fill="currentColor" opacity=".5"/></svg></span></span></div>
+            <div class="s-head">
+              <div class="s-title">Streak — har kun kichik g'alaba</div>
+              <div class="s-sub">Bir kun ham qoldirmadingiz</div>
+            </div>
+            <div class="big">
+              <div class="n">27</div>
+              <div class="l">kun ketma-ket · qat'iyat qanotlari</div>
+            </div>
+            <div class="week-lbl">Bu hafta</div>
+            <div class="week">
+              <div class="d on">Du</div>
+              <div class="d on">Se</div>
+              <div class="d on">Ch</div>
+              <div class="d on">Pa</div>
+              <div class="d on">Ju</div>
+              <div class="d now">Sh</div>
+              <div class="d">Ya</div>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-h">
+                <b>Kunlik XP</b>
+                <small>+240 bugun</small>
+              </div>
+              <div class="chart">
+                <svg viewBox="0 0 200 44" width="100%" height="44" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="stkGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#D97756" stop-opacity=".28"/>
+                      <stop offset="1" stop-color="#D97756" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0 36 L25 32 L50 24 L75 28 L100 18 L125 14 L150 20 L175 10 L200 8 L200 44 L0 44 Z" fill="url(#stkGrad)"/>
+                  <path d="M0 36 L25 32 L50 24 L75 28 L100 18 L125 14 L150 20 L175 10 L200 8" stroke="#D97756" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="200" cy="8" r="3.5" fill="#D97756"/>
+                  <circle cx="200" cy="8" r="7" fill="none" stroke="#D97756" stroke-width="1" opacity=".35"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="st"><b>3 240</b><small>Coins</small></div>
+              <div class="st"><b>1 240</b><small>XP</small></div>
+              <div class="st"><b>B1</b><small>Level</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <span class="step-n">05 — Streak</span>
+          <h3>Har kun ozgina</h3>
+          <p>Streakni yo'qotmang. 10 daqiqa ham hisoblanadi.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="demo-nav">
+      <button id="demoPrev" aria-label="Oldingi">
+        <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <div class="dots" id="demoDots">
+        <i class="on"></i><i></i><i></i><i></i><i></i>
+      </div>
+      <button id="demoNext" aria-label="Keyingi">
+        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ============ STATISTIKA BAND (yangi) ============ -->
+<section style="padding:0 24px">
+  <div class="wrap reveal">
+    <div class="stats-band">
+      <div class="stats-band-inner">
+        <div>
+          <div class="stat-num"><em>120</em></div>
+          <div class="stat-lbl">Bosqichli yo'l xaritasi</div>
+        </div>
+        <div>
+          <div class="stat-num"><em>4</em></div>
+          <div class="stat-lbl">Duel rejimi</div>
+        </div>
+        <div>
+          <div class="stat-num"><em>3D</em></div>
+          <div class="stat-lbl">Virtual xona tizimi</div>
+        </div>
+        <div>
+          <div class="stat-num"><em>100%</em></div>
+          <div class="stat-lbl">Bepul va reklamasiz</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ IELTS MOCK BATAFSIL (yangi) ============ -->
+<section class="ielts" id="ielts">
+  <div class="wrap">
+    <div class="ielts-head reveal">
+      <span class="sec-eye">IELTS Mock imtihon</span>
+      <h2 class="sec-h2">Real imtihonga <span class="italic">tayyor</span> boʻling.</h2>
+      <p class="sec-sub" style="margin-left:auto;margin-right:auto">To'liq IELTS imtihon simulyatsiyasi — 4 asosiy qism, real vaqt taymer, avtomat baholash va AI orqali maslahat.</p>
+    </div>
+
+    <div class="ielts-grid reveal">
+      <div class="ielts-card">
+        <div class="i-ic">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h4>Reading</h4>
+        <p>3 ta bo'lim, 40 savol, 60 daqiqa. Haqiqiy IELTS formatidagi matnlar.</p>
+      </div>
+
+      <div class="ielts-card">
+        <div class="i-ic">
+          <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/></svg>
+        </div>
+        <h4>Listening</h4>
+        <p>4 ta audio, 40 savol, 30 daqiqa. Aksentli haqiqiy suhbatlar.</p>
+      </div>
+
+      <div class="ielts-card">
+        <div class="i-ic">
+          <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+        </div>
+        <h4>Writing</h4>
+        <p>2 ta topshiriq, 60 daqiqa. AI band-score va maslahat beradi.</p>
+      </div>
+
+      <div class="ielts-card">
+        <div class="i-ic">
+          <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/><path d="M8 22h8"/></svg>
+        </div>
+        <h4>Speaking</h4>
+        <p>3 qism, 15 daqiqa. Mikrofonga gapirasiz — AI tovushingizni baholaydi.</p>
+      </div>
+    </div>
+
+    <div class="ielts-info reveal">
+      <div class="ielts-info-ic">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="ielts-info-txt">
+        <b>Cheksiz urinishlar · Har hafta yangi mocklar</b>
+        <span>Har bir mock imtihon oxirida band-score, kuchli va zaif tomonlar bo'yicha AI tahlil olasiz. Bepul, cheklovsiz — imtihon kunigacha bir necha marta o'zingizni sinovdan o'tkazing.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KELAYOTGAN FUNKSIYALAR (yangi) ============ -->
+<section class="coming" id="coming">
+  <div class="wrap">
+    <div class="coming-head reveal">
+      <span class="sec-eye">Yo'l xaritasi</span>
+      <h2 class="sec-h2">Kelajakdagi <span class="italic">yangilanishlar</span>.</h2>
+      <p class="sec-sub" style="margin-left:auto;margin-right:auto">Ustida ishlayotgan va tez orada qo'shiladigan narsalar. Ba'zilariga soatlab, ba'zilariga oylab qoldi.</p>
+    </div>
+
+    <div class="coming-grid reveal">
+
+      <div class="come-card">
+        <span class="come-badge soon">Yaqin orada</span>
+        <div class="c-ic">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,24,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+        </div>
+        <h4>Google bilan kirish</h4>
+        <p>Bir bosishda hisob ochish yoki kirish — email va parol shart emas.</p>
+      </div>
+
+      <div class="come-card">
+        <span class="come-badge">Rejalashtirilgan</span>
+        <div class="c-ic">
+          <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2.5"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+        </div>
+        <h4>Mobil ilova</h4>
+        <p>App Store va Play Market'da native ilova — tezroq, chiroyliroq.</p>
+      </div>
+
+      <div class="come-card">
+        <span class="come-badge">Rejalashtirilgan</span>
+        <div class="c-ic">
+          <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12" y2="20"/></svg>
+        </div>
+        <h4>Offline rejim</h4>
+        <p>Internet ulanmasa ham darslar — metroda, samolyotda, qishloqda.</p>
+      </div>
+
+      <div class="come-card">
+        <span class="come-badge">Rejalashtirilgan</span>
+        <div class="c-ic">
+          <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        </div>
+        <h4>Ovoz tanish</h4>
+        <p>Kengaytirilgan talaffuz — jumla darajasidagi tovush tahlili.</p>
+      </div>
+
+      <div class="come-card">
+        <span class="come-badge">Rejalashtirilgan</span>
+        <div class="c-ic">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h4>Klub va guruhlar</h4>
+        <p>Do'stlaringiz bilan xususiy guruh — birgalikda o'rganish.</p>
+      </div>
+
+      <div class="come-card">
+        <span class="come-badge">Rejalashtirilgan</span>
+        <div class="c-ic">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>
+        </div>
+        <h4>Boshqa tillar</h4>
+        <p>Rus, koreys, xitoy va boshqa tillar. WordDrop dunyoga chiqadi.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <div class="wrap reveal">
+    <h2>
+      Ozgina qat'iyat, <span class="italic em">ko'p natija.</span>
+    </h2>
+    <p>
+      Ro'yxatdan o'ting, darajangizni belgilang va bugun mashq qilishni boshlang.
+      Bir soniyada.
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="app.html">
+        <span>Bugun boshlash</span>
+      </a>
+    </div>
+    <div class="foot-note">
+      <span><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>Har doim bepul</span>
+      <span><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>O'zbek tilida</span>
+      <span><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>Bir soniyada boshlanadi</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top">
+          <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+            <defs>
+              <clipPath id="dropClipFoot">
+                <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"/>
+              </clipPath>
+            </defs>
+            <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z" fill="#2F6FED" stroke="#1B4FCB" stroke-width="0.6"/>
+            <g clip-path="url(#dropClipFoot)">
+              <ellipse cx="16" cy="17" rx="7" ry="9" fill="#1B4FCB" transform="rotate(12 16 17)"/>
+              <ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#fff" opacity=".85" transform="rotate(-18 9 8.5)"/>
+            </g>
+          </svg>
+          <span class="label">Word<em>Drop</em></span>
+        </a>
+        <p>Ingliz tilini o'rganish va mashq qilish ilovasi. Har doim bepul, o'zbek tilida.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Ilova</h4>
+        <ul>
+          <li><a href="app.html">Kirish</a></li>
+          <li><a href="#how">Qanday ishlaydi</a></li>
+          <li><a href="#why">Nima uchun</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>WordDrop</h4>
+        <ul>
+          <li><a href="about.html">Biz haqimizda</a></li>
+          <li><a href="faq.html">FAQ / Yordam</a></li>
+          <li><a href="https://t.me/worddrop_uz">Telegram kanal</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Huquqiy</h4>
+        <ul>
+          <li><a href="privacy.html">Maxfiylik</a></li>
+          <li><a href="terms.html">Foydalanish shartlari</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#e280879a9097989b8d8e868d918a8794a29b838a8d8dcc818d8f"><span class="__cf_email__" data-cfemail="2446415c56515e5d4b48404b574c4152645d454c4b4b0a474b49">[email&#160;protected]</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 WordDrop. Barcha huquqlar himoyalangan.</span>
+      <span>Muallif: <b>B. Yo'ldoshev</b> · WordDrop Studio</span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* Nav border on scroll */
+const nav = document.getElementById('nav');
+addEventListener('scroll', ()=>{
+  if(scrollY > 20) nav.classList.add('on'); else nav.classList.remove('on');
+});
+
+/* Reveal on scroll — safe fallback:
+   Agar element sahifaga yuklanish paytida allaqachon ekran ichida yoki
+   yuqorida (scroll qilib berilgan) bo'lsa — darrov yoqamiz. */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); }
+  });
+},{threshold:.05, rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>{
+  io.observe(el);
+  // Safe fallback: sahifa yuklanganda ekran ichida bo'lganlarni darrov yoqamiz
+  const r = el.getBoundingClientRect();
+  if(r.top < window.innerHeight){ el.classList.add('on'); }
+});
+// Yakuniy fallback: 3s ichida hali on bo'lmagan reveallarni yoqamiz
+setTimeout(()=>{
+  document.querySelectorAll('.reveal:not(.on)').forEach(el=>el.classList.add('on'));
+}, 3000);
+
+/* Demo horizontal scroll nav */
+const demoScroll = document.getElementById('demoScroll');
+const demoDots = document.querySelectorAll('#demoDots i');
+const demoPrev = document.getElementById('demoPrev');
+const demoNext = document.getElementById('demoNext');
+const steps = document.querySelectorAll('.demo-step');
+
+let curStep = 0;
+function goStep(i){
+  curStep = Math.max(0, Math.min(steps.length-1, i));
+  const step = steps[curStep];
+  const rect = step.getBoundingClientRect();
+  const containerRect = demoScroll.getBoundingClientRect();
+  const centerOffset = rect.left - containerRect.left - (containerRect.width - rect.width)/2;
+  demoScroll.scrollTo({ left: demoScroll.scrollLeft + centerOffset, behavior:'smooth' });
+  updateDots();
+}
+function updateDots(){
+  demoDots.forEach((d,i)=>d.classList.toggle('on', i===curStep));
+  demoPrev.disabled = curStep === 0;
+  demoNext.disabled = curStep === steps.length-1;
+}
+demoPrev.addEventListener('click', ()=>goStep(curStep-1));
+demoNext.addEventListener('click', ()=>goStep(curStep+1));
+
+/* On scroll — detect which step is centered */
+let scrollTimer;
+demoScroll.addEventListener('scroll', ()=>{
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(()=>{
+    const containerCenter = demoScroll.scrollLeft + demoScroll.getBoundingClientRect().width/2;
+    let closest = 0, closestDist = Infinity;
+    steps.forEach((s,i)=>{
+      const center = s.offsetLeft + s.offsetWidth/2;
+      const dist = Math.abs(center - containerCenter);
+      if(dist < closestDist){ closestDist = dist; closest = i; }
+    });
+    curStep = closest;
+    updateDots();
+  }, 60);
+});
+
+/* Keyboard nav */
+addEventListener('keydown', e=>{
+  const inDemo = window.scrollY > document.getElementById('how').offsetTop - 200 &&
+                 window.scrollY < document.getElementById('how').offsetTop + document.getElementById('how').offsetHeight - 200;
+  if(!inDemo) return;
+  if(e.key === 'ArrowRight'){ e.preventDefault(); goStep(curStep+1); }
+  if(e.key === 'ArrowLeft'){  e.preventDefault(); goStep(curStep-1); }
+});
+
+updateDots();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+</body>
+</html>
