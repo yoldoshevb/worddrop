@@ -13,12 +13,13 @@
   <path d="M12 3 C16 8 19 12 19 15.5 C19 19.5 15.5 22 12 22 C8.5 22 5 19.5 5 15.5 C5 12 8 8 12 3 Z"
         fill="url(#dropGrad)" stroke="#1B4FCB" stroke-width="0.6"/>
 
-  <!-- Shadow half (gives depth) -->
+  <!-- Ichki qism (clip-path bilan cheklangan) -->
   <g clip-path="url(#dropClip)">
+    <!-- Shadow half -->
     <ellipse cx="16" cy="17" rx="7" ry="9" fill="#1B4FCB" transform="rotate(12 16 17)"/>
+    
+    <!-- Highlight (glass reflection) — ENDI CLIP ICHIDA -->
+    <ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#FFFFFF" opacity="0.85"
+             transform="rotate(-18 9 8.5)"/>
   </g>
-
-  <!-- Highlight (glass reflection) -->
-  <ellipse cx="9" cy="8.5" rx="1.9" ry="2.8" fill="#FFFFFF" opacity="0.85"
-           transform="rotate(-18 9 8.5)"/>
 </svg>
