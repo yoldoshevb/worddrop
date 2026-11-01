@@ -1,5 +1,5 @@
 # ============================================================================
-# WORDDROP — PROFESSIONAL SECURITY & CACHE HEADERS
+# WORDDROP — HEADERS (CSP vaqtincha o'chirilgan, modellar erkin yuklanadi)
 # ============================================================================
 
 /*
@@ -8,15 +8,9 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  
-  # ==========================================================================
-  # CONTENT SECURITY POLICY (CSP)
-  # Bu qoida barcha tashqi resurslarga (Supabase, YouTube, CDN) ruxsat beradi
-  # ==========================================================================
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://jgeycbyaoiybpudakgmk.supabase.co https://*.supabase.co https://*.googleusercontent.com https://*.githubusercontent.com; media-src 'self' blob: data: https://jgeycbyaoiybpudakgmk.supabase.co https://*.supabase.co; connect-src 'self' https://jgeycbyaoiybpudakgmk.supabase.co wss://jgeycbyaoiybpudakgmk.supabase.co https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://youtube.com https://player.vimeo.com; worker-src 'self' blob:;
 
 # ============================================================================
-# HTML FAYLLAR UCHUN (Keshni o'chirish - har doim yangi versiya yuklansin)
+# HTML FAYLLAR (Keshni o'chirish)
 # ============================================================================
 /*.html
   Cache-Control: no-cache, no-store, must-revalidate
@@ -25,7 +19,7 @@
   Cache-Control: no-cache, no-store, must-revalidate
 
 # ============================================================================
-# PWA UCHUN (Service Worker va Manifest keshda qolmasin)
+# PWA (Service Worker va Manifest)
 # ============================================================================
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
@@ -35,38 +29,30 @@
   Content-Type: application/manifest+json
 
 # ============================================================================
-# ADMIN PANEL UCHUN (Qidiruv botlari va keshni bloklash)
+# ADMIN PANEL
 # ============================================================================
 /admin.html
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store, no-cache, must-revalidate
 
 # ============================================================================
-# STATIK FAYLLAR UCHUN (Tezlik va kesh - 1 yil)
+# STATIK FAYLLAR (Kesh - 1 yil)
 # ============================================================================
 /*.css
   Cache-Control: public, max-age=31536000, immutable
-
 /*.js
   Cache-Control: public, max-age=31536000, immutable
-
 /*.png
   Cache-Control: public, max-age=31536000, immutable
-
 /*.jpg
   Cache-Control: public, max-age=31536000, immutable
-
 /*.svg
   Cache-Control: public, max-age=31536000, immutable
-
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
-
 /*.mp3
   Cache-Control: public, max-age=31536000, immutable
-
 /*.mp4
   Cache-Control: public, max-age=31536000, immutable
-
 /*.glb
   Cache-Control: public, max-age=31536000, immutable
