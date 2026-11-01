@@ -2,7 +2,7 @@
   "name": "WordDrop — Ingliz tilini o'yin kabi o'rganing",
   "short_name": "WordDrop",
   "description": "Ingliz tilini o'yin kabi o'rganing. 120 bosqich, AI grammatika va talaffuz, IELTS Mock, duel va 3D xona.",
-  "start_url": "/app.html",
+  "start_url": "/app.html?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
