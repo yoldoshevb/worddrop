@@ -1,24 +1,11 @@
-# ============================================================
-# WORDDROP — CLOUDFLARE PAGES REDIRECTS
-# ============================================================
-# Status 200 = URL o'zgarmaydi (SPA fallback)
-# Status 302 = vaqtinchalik yo'naltirish
-# Status 404 = sahifa topilmadi
-# ============================================================
+# Cloudflare Pages redirects — /verify/* URL'ni verify.html sahifasiga yo'naltirish
+# Status 200 = URL o'zgarmaydi, faqat verify.html serverdan xizmat qiladi (SPA fallback)
+# Bu esa verify.html'ga URL dan serialni JS bilan olib chizishga imkon beradi
 
-# --- Sertifikat tekshiruvi ---
-# /verify/ABC123 → verify.html (URL saqlanadi, JS serialni o'qiydi)
-/verify/*         /verify.html    200
+/verify/*    /verify.html    200
 
-# --- Admin panelni yashirish ---
-# Agar admin.html yuklangan bo'lsa — bosh sahifaga yo'naltirish
-/admin.html       /               302
-/admin/*          /               302
+# Jamoa taklif havolalari: /g/KOD -> community.html (URL o'zgarmaydi, kod JS orqali o'qiladi)
+/g/*    /community.html    200
 
-# --- Eski URL'lar uchun (agar kerak bo'lsa) ---
-# /term.html → /terms.html (eski havolalar uchun)
-/term.html        /terms.html     301
-
-# --- SPA fallback ---
-# Noma'lum URL'lar 404 sahifasiga
-/*                /404.html       404
+# SPA fallback — noma'lum URL'lar bosh sahifaga yo'naltirilsin (ixtiyoriy)
+# /*    /index.html    200
