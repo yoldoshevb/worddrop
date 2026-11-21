@@ -4634,6 +4634,54 @@ body.dark .tgl-ic{background:#12324A}
 #qxView .qx-tiers li.open .qc-svg path{stroke:#fff;fill:rgba(255,255,255,.2)}
 #qxView .qx-tiers .qx-tier-mark{color:#9CF0C6}
 
+
+/* =====================================================================
+   v96 — Bot boshqaruvi
+   ===================================================================== */
+.ba-warn{background:#FFF6E0;border:1px solid #F2D58A;color:#6B4E00;border-radius:14px;padding:12px 14px;font-size:13.5px;line-height:1.5;margin:4px 0 14px}
+.ba-warn b{display:block;color:#4A3600;margin-bottom:2px}
+body.dark .ba-warn{background:#3A2F12;border-color:#5C4A1A;color:#F2DDA0}
+body.dark .ba-warn b{color:#FFE9A8}
+.ba-list{background:var(--sur);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ba-g,.ba-p{display:flex;width:100%;border:none;background:none;font-family:inherit;text-align:left;cursor:pointer;padding:14px 16px;color:inherit}
+.ba-g{flex-direction:column;gap:4px}
+.ba-g+.ba-g,.ba-p+.ba-p{border-top:1px solid var(--line)}
+.ba-g:active,.ba-p:active{background:var(--bg)}
+.ba-g-t{display:flex;align-items:center;gap:10px;width:100%}
+.ba-g-t b{flex:1;min-width:0;font-size:15px;font-weight:700;color:var(--i9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ba-g-m{font-size:12.5px;color:var(--i5)}
+.ba-st{font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:7px;background:var(--bg);color:var(--i7);flex-shrink:0}
+.ba-st.ok{background:var(--ok-bg);color:var(--ok)}
+.ba-st.wait{background:#FFF1CC;color:#8A6400}
+.ba-empty{padding:22px 18px;text-align:center}
+.ba-empty b{display:block;font-size:15px;color:var(--i9);margin-bottom:6px}
+.ba-empty p{font-size:13.5px;color:var(--i5);line-height:1.5}
+.ba-row{display:flex;align-items:center;gap:8px;margin:14px 0 10px;font-size:14px;color:var(--i7)}
+.ba-row span{margin-right:auto;font-weight:600}
+.ba-row i{font-style:normal;color:var(--i5)}
+.ba-sel{border:1px solid var(--line);background:var(--sur);color:var(--i9);border-radius:10px;padding:8px 10px;font-family:inherit;font-size:14px}
+.ba-cnt{font-size:12px;font-weight:700;color:var(--i5);background:var(--bg);border-radius:8px;padding:2px 7px;margin-left:4px;vertical-align:2px}
+.ba-p{align-items:center;gap:12px;padding:11px 14px}
+.ba-av{width:36px;height:36px;border-radius:50%;background:var(--wd-ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
+.ba-p-b{flex:1;min-width:0}
+.ba-p-b b{display:block;font-size:14.5px;font-weight:600;color:var(--i9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ba-p-b em{display:block;font-style:normal;font-size:12px;color:var(--i5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ba-tags{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.ba-tags i{font-style:normal;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:6px}
+.t-ig{background:var(--bad-bg);color:var(--bad)}
+.t-oo{background:var(--bg);color:var(--i5)}
+.t-nt{background:var(--b1);color:var(--wd-el)}
+.ba-imp{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:12px}
+.ba-imp i{display:block;height:100%;background:var(--wd-el);transition:width .4s}
+.ba-danger{display:flex;justify-content:space-between;margin:22px 0 30px}
+.ba-danger .rv-link{padding:0}
+.ba-ps h2{font-size:21px;font-weight:700;color:var(--i9);margin:6px 0 4px}
+.ba-bio{font-size:14px;color:var(--i7);background:var(--bg);border-radius:12px;padding:10px 12px;margin:0 0 12px;line-height:1.45}
+.ba-ps .bk-lbl{margin-top:14px}
+.ba-ps .rv-go{margin-top:16px;justify-content:center}
+.ba-ps .rv-go span{flex:none}
+#tgGroup .xs-ghost{margin-top:4px}
+#tgGroup .xs-main{margin-top:12px}
 </style>
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
@@ -5006,7 +5054,7 @@ body.dark .tgl-ic{background:#12324A}
 <script>
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v95';
+window.__wdVer='v96';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -8620,13 +8668,15 @@ function view(id,cls){
   return el;
 }
 function closeView(id){ const el=document.getElementById(id); if(!el) return; el.classList.remove('on'); setTimeout(()=>el.remove(),300); }
+window.__wdTgApi=tgApi; window.__wdTgView=view; window.__wdTgCloseView=closeView;
 
 /* ==================== Profil: Telegram bloki ==================== */
 function profileBlock(){
   return `<div class="slbl" style="margin-left:20px">Telegram</div>
   <div class="card settings-block">
     <div class="srow" id="rTg"><div class="icw tg-ic">${ITG}</div><div class="slabel">Telegram bot</div><div class="sval" id="rTgVal">@WordDropUzBot</div><div class="schev">${IC.chevR}</div></div>
-    ${isAdmin()?`<div class="srow" id="rChan"><div class="icw tg-ic">${IMEGA}</div><div class="slabel">Kanal studiyasi</div><div class="sval">admin</div><div class="schev">${IC.chevR}</div></div>`:''}
+    ${isAdmin()?`<div class="srow" id="rChan"><div class="icw tg-ic">${IMEGA}</div><div class="slabel">Kanal studiyasi</div><div class="sval">admin</div><div class="schev">${IC.chevR}</div></div>
+    <div class="srow" id="rBot"><div class="icw tg-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="4"/><path d="M12 8V4M9 13h.01M15 13h.01M9.5 17h5"/></svg></div><div class="slabel">Bot boshqaruvi</div><div class="sval">guruhlar</div><div class="schev">${IC.chevR}</div></div>`:''}
   </div>`;
 }
 window.__wdTgProfileBlock=profileBlock;
@@ -8869,6 +8919,215 @@ async function makeMnemonic(it){
   return it.mn||null;
 }
 window.__wdMakeMnemonic=makeMnemonic;
+})();
+
+</script>
+<script>
+/* ==================================================================
+   v96: BOT BOSHQARUVI (admin) — guruhlar, a'zolar, shaxsiy chat siyosati
+   ------------------------------------------------------------------
+   Server: tg-bot (adminApi). Xuddi shu sozlamalar botdagi /admin
+   panelida ham bor — ikkalasi bitta bazani o'zgartiradi.
+   ================================================================== */
+(function(){
+const api=(a,x,t)=>window.__wdTgApi(a,x,t);
+const view=(id)=>window.__wdTgView(id);
+const closeView=id=>window.__wdTgCloseView(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const IBACK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+const MODES=[['mention','Chaqirganda',"Faqat @WordDropUzBot deb yozilganda yoki xabariga javob berilganda gapiradi"],['smart','Aqlli',"Chaqirilganda va o'rni kelganda o'zi ham qo'shiladi — ingliz tili haqidagi gaplarga ayniqsa"],['active','Faol',"Suhbatda tez-tez qatnashadi, hazillashadi, savollarga javob beradi"]];
+const HUMOR=["Jiddiy","O'rtacha","Sho'x"];
+const ST={on:['Faol','ok'],off:["O'chirilgan",'off'],pending:['Ruxsat kutmoqda','wait']};
+let B={tab:'groups',groups:null,cfg:null,can_read:true,bot:'WordDropUzBot'};
+
+function head(title,backId){ return `<div class="xm-head"><button class="xm-ib" id="${backId}" aria-label="Orqaga">${IBACK}</button><div class="xm-ht"><b>${esc(title)}</b></div></div>`; }
+function chips(id,list,cur){ return `<div class="xc-chips" id="${id}">${list.map(([v,n])=>`<button data-v="${esc(v)}" class="${String(cur)===String(v)?'on':''}">${esc(n)}</button>`).join('')}</div>`; }
+function bindChips(root,id,fn){ root.querySelectorAll(`#${id} button`).forEach(b=>b.onclick=()=>{ root.querySelectorAll(`#${id} button`).forEach(x=>x.classList.toggle('on',x===b)); fn(b.dataset.v); }); }
+const privacyNote=()=>B.can_read?'':`<div class="ba-warn"><b>Bot guruhda faqat buyruqlarni ko'ryapti.</b> @BotFather → /setprivacy → @${esc(B.bot)} → Disable. Keyin botni guruhdan chiqarib, qayta qo'shing.</div>`;
+
+/* ==================== Asosiy oyna ==================== */
+function openBot(){
+  view('tgBot'); renderBot();
+}
+window.__wdOpenBotAdmin=openBot;
+async function renderBot(){
+  const el=document.getElementById('tgBot'); if(!el) return;
+  el.innerHTML=head('Bot boshqaruvi','baBack')+`<div class="qx-tabs" role="tablist">${[['groups','Guruhlar'],['general','Umumiy']].map(([k,n])=>`<button data-t="${k}" class="${B.tab===k?'on':''}">${n}</button>`).join('')}</div><div class="xm-scroll" id="baBody"><div class="bk-busy"><b>Yuklanmoqda</b></div></div>`;
+  el.querySelector('#baBack').onclick=()=>closeView('tgBot');
+  el.querySelectorAll('.qx-tabs button').forEach(b=>b.onclick=()=>{ B.tab=b.dataset.t; renderBot(); });
+  if(B.tab==='groups') renderGroups(); else renderGeneral();
+}
+async function renderGroups(){
+  const b=document.getElementById('baBody');
+  const r=await api('groups'); if(!document.getElementById('baBody')) return;
+  if(r.__error){ b.innerHTML=`<div class="bk-busy"><b>${esc(r.msg||r.error)}</b></div>`; return; }
+  B.groups=r.groups; B.can_read=r.can_read; B.bot=r.bot||B.bot;
+  const day=new Date(Date.now()+5*3600e3).toISOString().slice(0,10);
+  b.innerHTML=privacyNote()+(r.groups.length?`<div class="ba-list">${r.groups.map(g=>{ const s=ST[g.status]||[g.status,'off']; const used=g.used_day===day?g.used:0;
+      return `<button class="ba-g" data-g="${g.chat_id}"><div class="ba-g-t"><b>${esc(g.title||'Guruh')}</b><span class="ba-st ${s[1]}">${s[0]}</span></div>
+        <div class="ba-g-m">${MODES.find(m=>m[0]===g.mode)?.[1]||g.mode} · ${HUMOR[g.humor]||''} hazil · bugun ${used}/${g.daily_limit} javob${g.learned_at?'':' · hali o\'rganilmagan'}</div></button>`; }).join('')}</div>`
+    :`<div class="ba-empty"><b>Bot hali guruhda emas</b><p>Telegram'da guruh sozlamalari → A'zo qo'shish → @${esc(B.bot)}. Guruh shu yerda paydo bo'ladi, siz ruxsat berasiz.</p></div>`)+
+    `<p class="rv-note">Botning o'zida ham boshqarish mumkin: @${esc(B.bot)} ga <b>/admin</b> deb yozing.</p>`;
+  b.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>openGroup(Number(x.dataset.g)));
+}
+async function renderGeneral(){
+  const b=document.getElementById('baBody');
+  const r=await api('bot_cfg'); if(!document.getElementById('baBody')) return;
+  if(r.__error){ b.innerHTML=`<div class="bk-busy"><b>${esc(r.msg||r.error)}</b></div>`; return; }
+  const c=r.cfg; B.can_read=r.can_read; B.bot=r.bot||B.bot;
+  b.innerHTML=privacyNote()+`
+    <h3 class="qx-h">Shaxsiy xabarlarga kim javob oladi</h3>
+    ${chips('baDm',[['all','Hammaga'],['linked','Ulanganlarga'],['none','Hech kimga']],c.dm)}
+    <p class="rv-note top">"Ulanganlarga" — faqat WordDrop hisobini botga ulaganlar Drop AI bilan suhbatlasha oladi. Kun so'zi va viktorina hammaga ishlaydi.</p>
+    <div class="xc xc-row"><div><b>Yangi guruhlarni men tasdiqlayman</b><span>Bot guruhga qo'shilsa, siz ruxsat bermaguncha jim turadi</span></div><button class="xc-tg ${c.approve_groups?'on':''}" id="baAp"><i></i></button></div>
+    <h3 class="qx-h">Yangi guruhlar uchun hazil darajasi</h3>
+    ${chips('baHu',HUMOR.map((n,i)=>[i,n]),c.humor)}
+    <h3 class="qx-h">Guruh a'zolari himoyasi</h3>
+    <p class="rv-note top">Drop tashqi ko'rinish, din, millat, oila, sog'liq va siyosat haqida hazillashmaydi. Yashirin eslatmalar guruhda hech qachon aytilmaydi. Har kim guruhda <b>/unut</b> deb yozib, Drop u haqida eslab qolganlarini o'chira oladi.</p>`;
+  bindChips(b,'baDm',v=>api('bot_cfg_set',{dm:v}));
+  bindChips(b,'baHu',v=>api('bot_cfg_set',{humor:Number(v)}));
+  b.querySelector('#baAp').onclick=e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); api('bot_cfg_set',{approve_groups:on}); };
+}
+
+/* ==================== Guruh ==================== */
+let G=null;
+async function openGroup(gid){
+  view('tgGroup');
+  const el=document.getElementById('tgGroup');
+  el.innerHTML=head('Guruh','bgBack')+`<div class="xm-scroll" id="bgBody"><div class="bk-busy"><b>Yuklanmoqda</b></div></div>`;
+  el.querySelector('#bgBack').onclick=()=>{ closeView('tgGroup'); if(document.getElementById('tgBot')) renderBot(); };
+  const r=await api('group_get',{chat_id:gid}); if(!document.getElementById('bgBody')) return;
+  if(r.__error){ el.querySelector('#bgBody').innerHTML=`<div class="bk-busy"><b>${esc(r.msg||r.error)}</b></div>`; return; }
+  G=r; renderGroup();
+  if(r.import&&r.import.state==='run') pollImport();
+}
+function renderGroup(){
+  const el=document.getElementById('tgGroup'); if(!el||!G) return;
+  const g=G.group; const set=p=>{ Object.assign(g,p); return api('group_set',{chat_id:g.chat_id,patch:p}); };
+  el.querySelector('.xm-ht b').textContent=g.title||'Guruh';
+  const muted=g.muted_until&&Date.parse(g.muted_until)>Date.now();
+  const hrs=[['','—']].concat(Array.from({length:24},(_,h)=>[h,String(h).padStart(2,'0')+':00']));
+  const sel=(id,v)=>`<select id="${id}" class="ba-sel">${hrs.map(([k,n])=>`<option value="${k}" ${String(v??'')===String(k)?'selected':''}>${n}</option>`).join('')}</select>`;
+  const imp=G.import;
+  el.querySelector('#bgBody').innerHTML=`
+    ${g.status==='pending'?`<div class="ba-warn"><b>Bu guruh ruxsat kutmoqda.</b> Yoqsangiz, Drop guruhda salomlashadi va ishlay boshlaydi.</div>`:''}
+    <div class="xc xc-row"><div><b>Drop shu guruhda gapiradi</b><span>${g.total_msgs} ta xabar ko'rdi</span></div><button class="xc-tg ${g.status==='on'?'on':''}" id="bgOn"><i></i></button></div>
+    <h3 class="qx-h">Qachon gapiradi</h3>
+    ${chips('bgMode',MODES.map(m=>[m[0],m[1]]),g.mode)}
+    <p class="rv-note top" id="bgModeN">${MODES.find(m=>m[0]===g.mode)?.[2]||''}</p>
+    <h3 class="qx-h">Hazil</h3>
+    ${chips('bgHu',HUMOR.map((n,i)=>[i,n]),g.humor)}
+    <h3 class="qx-h">Kuniga ko'pi bilan</h3>
+    ${chips('bgLim',[[20,'20'],[50,'50'],[100,'100'],[200,'200']],g.daily_limit)}
+    <div class="ba-row"><span>Jim soatlar</span>${sel('bgQf',g.quiet_from)}<i>—</i>${sel('bgQt',g.quiet_to)}</div>
+    <button class="xs-ghost" id="bgMute">${muted?'Yana gapirsin':'1 soat jim tursin'}</button>
+
+    <h3 class="qx-h">Drop guruhni qanday tushunadi</h3>
+    <textarea class="bk-ta" id="bgVibe" rows="5" placeholder="Drop hali o'rganmagan. Guruhda yozishmalar bo'lgach yoki tarixni yuklasangiz, shu yerda paydo bo'ladi.">${esc(g.vibe||'')}</textarea>
+    <div class="xs-row2"><button class="xs-ghost" id="bgLearn">Hozir o'rgansin</button><button class="xs-ghost" id="bgImp">Tarixni yuklash</button></div>
+    <input type="file" id="bgFile" accept=".json,application/json" hidden>
+    <div id="bgImpSt">${imp&&imp.state==='run'?impLine(imp):''}</div>
+    <p class="rv-note top">Telegram botlarga eski xabarlarni ko'rsatmaydi. Tarixni berish uchun Telegram Desktop'da: guruh → ⋮ → Export chat history → format <b>JSON</b>, faqat matn. Hosil bo'lgan result.json faylini shu yerga yuklang.</p>
+
+    <h3 class="qx-h">Drop uchun ko'rsatma</h3>
+    <textarea class="bk-ta" id="bgRules" rows="3" placeholder="Masalan: hammaga sen deb murojaat qil, futbol haqida ko'proq hazillash, har ertalab bitta ibora o'rgat">${esc(g.rules||'')}</textarea>
+    <h3 class="qx-h">Ichki hazillar</h3>
+    <textarea class="bk-ta" id="bgJokes" rows="3" placeholder="Guruhda hammaga ma'lum laqablar va voqealar — Drop hazilida ishlatadi">${esc(g.jokes||'')}</textarea>
+    <button class="xs-main" id="bgSave">Matnlarni saqlash</button>
+
+    <h3 class="qx-h">A'zolar <span class="ba-cnt">${G.members.length}</span></h3>
+    <div class="ba-list">${G.members.length?G.members.map(p=>`<button class="ba-p" data-p="${p.user_id}">
+        <span class="ba-av">${esc((p.first_name||p.username||'?').slice(0,1).toUpperCase())}</span>
+        <span class="ba-p-b"><b>${esc([p.first_name,p.last_name].filter(Boolean).join(' ')||'@'+(p.username||'—'))}</b><em>${p.username?'@'+esc(p.username)+' · ':''}${p.msg_count_group||0} xabar${p.ai_notes?' · kuzatilgan':''}</em></span>
+        <span class="ba-tags">${p.ignore?'<i class="t-ig">javob bermaydi</i>':''}${p.optout?'<i class="t-oo">/unut</i>':''}${p.secret_notes||p.public_notes?'<i class="t-nt">eslatma</i>':''}</span></button>`).join(''):`<div class="ba-empty"><p>A'zolar guruhda yozishgach shu yerda paydo bo'ladi.</p></div>`}</div>
+
+    <div class="ba-danger"><button class="rv-link" id="bgForget">Guruh xotirasini tozalash</button><button class="rv-link danger" id="bgLeave">Guruhdan chiqish</button></div>`;
+  const b=el.querySelector('#bgBody');
+  b.querySelector('#bgOn').onclick=e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); set({status:on?'on':'off'}).then(()=>showToast(on?"Drop guruhda yoqildi":"Drop guruhda o'chirildi",IC.info)); };
+  bindChips(b,'bgMode',v=>{ set({mode:v}); b.querySelector('#bgModeN').textContent=MODES.find(m=>m[0]===v)[2]; });
+  bindChips(b,'bgHu',v=>set({humor:Number(v)}));
+  bindChips(b,'bgLim',v=>set({daily_limit:Number(v)}));
+  b.querySelector('#bgQf').onchange=e=>set({quiet_from:e.target.value===''?null:Number(e.target.value)});
+  b.querySelector('#bgQt').onchange=e=>set({quiet_to:e.target.value===''?null:Number(e.target.value)});
+  b.querySelector('#bgMute').onclick=async()=>{ const m=g.muted_until&&Date.parse(g.muted_until)>Date.now(); await set({muted_until:m?null:new Date(Date.now()+3600e3).toISOString()}); renderGroup(); };
+  b.querySelector('#bgSave').onclick=async e=>{ e.currentTarget.disabled=true; const r=await set({vibe:b.querySelector('#bgVibe').value.trim(),rules:b.querySelector('#bgRules').value.trim(),jokes:b.querySelector('#bgJokes').value.trim()}); e.currentTarget.disabled=false; showToast(r.__error?r.msg:"Saqlandi",IC.info); };
+  b.querySelector('#bgLearn').onclick=async e=>{ const x=e.currentTarget; x.disabled=true; x.textContent="O'rganmoqda…"; const r=await api('group_learn',{chat_id:g.chat_id},90000); if(r.__error){ x.disabled=false; x.textContent="Hozir o'rgansin"; showToast(r.msg,IC.info); return; } openGroup(g.chat_id); showToast("Drop guruhni qayta o'rgandi",IC.info); };
+  b.querySelector('#bgImp').onclick=()=>b.querySelector('#bgFile').click();
+  b.querySelector('#bgFile').onchange=e=>{ const f=e.target.files&&e.target.files[0]; if(f) importFile(f); e.target.value=''; };
+  b.querySelector('#bgForget').onclick=async()=>{ if(!confirm("Drop bu guruh haqidagi umumiy xulosa va saqlangan xabarlarni unutadi. A'zolar haqidagi eslatmalar qoladi. Davom etaymi?")) return; await api('group_forget',{chat_id:g.chat_id}); openGroup(g.chat_id); };
+  b.querySelector('#bgLeave').onclick=async()=>{ if(!confirm("Drop guruhdan chiqadi. Qaytarish uchun uni guruhga qayta qo'shasiz. Chiqsinmi?")) return; await api('group_leave',{chat_id:g.chat_id}); closeView('tgGroup'); showToast("Drop guruhdan chiqdi",IC.info); if(document.getElementById('tgBot')) renderBot(); };
+  b.querySelectorAll('[data-p]').forEach(x=>x.onclick=()=>openPerson(Number(x.dataset.p)));
+}
+const impLine=s=>`<div class="ba-imp"><i style="width:${Math.round(100*(s.done||0)/Math.max(1,s.total||1))}%"></i></div><p class="rv-note">Drop tarixni o'qiyapti: ${s.done||0}/${s.total||'…'} qism</p>`;
+
+/* Telegram Desktop eksporti (result.json) → qisqa qatorlar */
+function parseExport(j){
+  const msgs=Array.isArray(j&&j.messages)?j.messages:[];
+  const flat=t=>Array.isArray(t)?t.map(x=>typeof x==='string'?x:(x&&x.text)||'').join(''):String(t||'');
+  const out=[];
+  for(const m of msgs){
+    if(m.type!=='message') continue;
+    const uid=Number(String(m.from_id||'').replace(/^user/,''))||0;
+    let text=flat(m.text).trim();
+    if(!text&&m.media_type==='voice_message') text='[ovozli xabar]';
+    if(!text||!uid) continue;
+    out.push({uid,name:String(m.from||'—').slice(0,64),text:text.slice(0,400)});
+  }
+  return {title:j&&j.name, lines:out.slice(-3000)};
+}
+async function importFile(f){
+  if(f.size>60e6){ showToast("Fayl juda katta (60 MB dan oshmasin)",IC.info); return; }
+  let j; try{ j=JSON.parse(await f.text()); }catch(e){ showToast("Bu JSON fayl emas. Eksportda JSON formatini tanlang",IC.info); return; }
+  const p=parseExport(j);
+  if(p.lines.length<5){ showToast("Faylda matnli xabarlar topilmadi",IC.info); return; }
+  if(p.title&&G.group.title&&p.title!==G.group.title&&!confirm(`Fayl "${p.title}" guruhiga tegishli. Baribir "${G.group.title}" uchun yuklaymi?`)) return;
+  const st=document.getElementById('bgImpSt'); if(st) st.innerHTML=impLine({done:0,total:0});
+  const r=await api('group_import',{chat_id:G.group.chat_id,lines:p.lines},60000);
+  if(r.__error){ showToast(r.msg,IC.info); if(st) st.innerHTML=''; return; }
+  showToast(`${r.lines} ta xabar yuborildi — Drop o'qiyapti`,IC.info);
+  pollImport();
+}
+function pollImport(){
+  const gid=G&&G.group.chat_id; let n=0;
+  const iv=setInterval(async()=>{
+    n++; const st=document.getElementById('bgImpSt');
+    if(!st||n>60){ clearInterval(iv); return; }
+    const r=await api('group_get',{chat_id:gid}); if(r.__error) return;
+    const s=r.import||{};
+    if(s.state==='done'){ clearInterval(iv); G=r; renderGroup(); showToast("Drop guruh tarixini o'rganib chiqdi",IC.info); return; }
+    st.innerHTML=impLine(s);
+  },5000);
+}
+
+/* ==================== A'zo ==================== */
+function openPerson(uid){
+  const p=G.members.find(x=>Number(x.user_id)===uid); if(!p) return;
+  const name=[p.first_name,p.last_name].filter(Boolean).join(' ')||'@'+(p.username||'—');
+  const l=openSheet(`<div class="ba-ps">
+    <h2>${esc(name)}</h2><p class="tgl-who">${p.username?'@'+esc(p.username)+' · ':''}${p.msg_count_group||0} xabar${p.optout?' · <b>/unut qilgan</b>':''}</p>
+    ${p.bio?`<p class="ba-bio">${esc(p.bio)}</p>`:''}
+    <div class="xc xc-row"><div><b>Drop bu odamga javob bermasin</b><span>Guruhda ham, shaxsiy chatda ham</span></div><button class="xc-tg ${p.ignore?'on':''}" id="bpIg"><i></i></button></div>
+    <label class="bk-lbl">Drop kuzatuvi</label>
+    <textarea class="bk-ta" id="bpAi" rows="3" placeholder="Drop hali bu odam haqida xulosa qilmagan">${esc(p.ai_notes||'')}</textarea>
+    <label class="bk-lbl">Yashirin eslatma <i style="font-weight:400;color:var(--i5)">— faqat Drop tushunishi uchun, guruhda aytilmaydi</i></label>
+    <textarea class="bk-ta" id="bpSec" rows="3" placeholder="Masalan: imtihondan yiqilgan, shu mavzuda hazil qilmasin">${esc(p.secret_notes||'')}</textarea>
+    <label class="bk-lbl">Ochiq hazil <i style="font-weight:400;color:var(--i5)">— guruhga ma'lum narsa, Drop ishlatishi mumkin</i></label>
+    <textarea class="bk-ta" id="bpPub" rows="2" placeholder="Masalan: laqabi 'Professor', doim kechikadi">${esc(p.public_notes||'')}</textarea>
+    <button class="rv-go" id="bpSave"><span>Saqlash</span></button></div>`);
+  if(p.optout){ ['bpAi','bpSec','bpPub'].forEach(id=>{ const t=l.querySelector('#'+id); t.disabled=true; }); l.querySelector('#bpSave').insertAdjacentHTML('beforebegin','<p class="rv-note">Bu odam /unut buyrug\'ini bergan — u haqida eslatma yozib bo\'lmaydi.</p>'); }
+  l.querySelector('#bpIg').onclick=async e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); p.ignore=on; await api('person_set',{user_id:uid,patch:{ignore:on}}); };
+  l.querySelector('#bpSave').onclick=async()=>{
+    if(p.optout){ closeSheet(); return; }
+    const patch={ai_notes:l.querySelector('#bpAi').value.trim(),secret_notes:l.querySelector('#bpSec').value.trim(),public_notes:l.querySelector('#bpPub').value.trim()};
+    const r=await api('person_set',{user_id:uid,patch}); if(r.__error){ showToast(r.msg,IC.info); return; }
+    Object.assign(p,patch); closeSheet(); showToast("Saqlandi",IC.info); renderGroup();
+  };
+}
+
+document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#rBot')) openBot(); });
+// Botdagi "Ilovada boshqarish" tugmasi: app.html#bot
+function autoOpen(){ try{ if(/(^#|[#&])bot(&|$)/.test(location.hash||'')){ let n=0; const iv=setInterval(()=>{ n++; if(window.__wdIsSignedIn&&window.__wdIsSignedIn()){ clearInterval(iv); openBot(); } else if(n>40) clearInterval(iv); },500); } }catch(e){} }
+if(document.readyState==='complete') autoOpen(); else window.addEventListener('load',autoOpen);
 })();
 
 </script>
@@ -23242,6 +23501,31 @@ try{
   window.__sb = sb;
   window.__sbStatus = 'kirish tekshirilmoqda';
   let { data:{ session } } = await sb.auth.getSession();
+  /* v96: TELEGRAM MINI APP — Telegram ichida ochilsa, hisob Telegram orqali o'zi kiradi.
+     initData imzosini server (tg-bot) bot kaliti bilan tekshiradi va bir martalik kirish beradi. */
+  try{
+    let tgInit=null;
+    try{ const h=new URLSearchParams((location.hash||'').slice(1)); tgInit=h.get('tgWebAppData'); if(tgInit) sessionStorage.setItem('wd_tg_init',tgInit); else tgInit=sessionStorage.getItem('wd_tg_init'); }catch(_){}
+    if(tgInit){
+      window.__wdInTelegram=true; document.documentElement.classList.add('in-tg');
+      const sc=document.createElement('script'); sc.src='https://telegram.org/js/telegram-web-app.js';
+      sc.onload=()=>{ try{ const W=window.Telegram&&window.Telegram.WebApp; if(W){ W.ready(); W.expand(); try{ W.setHeaderColor('#0F1B3D'); }catch(_){} } }catch(_){} };
+      document.head.appendChild(sc);
+      let tgId=''; try{ tgId=String(JSON.parse(new URLSearchParams(tgInit).get('user')||'{}').id||''); }catch(_){}
+      let bind=''; try{ bind=localStorage.getItem('wd_tg_bind')||''; }catch(_){}
+      if(tgId && !(session && bind===tgId+':'+session.user.id)){
+        window.__sbStatus='Telegram orqali kirilmoqda';
+        const r=await fetch(SB_URL+'/functions/v1/tg-bot',{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},body:JSON.stringify({action:'tg_login',init:tgInit})});
+        const j=await r.json().catch(()=>null);
+        if(j&&j.token_hash){
+          if(session){ try{ await sb.auth.signOut({scope:'local'}); }catch(_){} }
+          const v=await sb.auth.verifyOtp({token_hash:j.token_hash,type:'magiclink'});
+          if(v&&v.data&&v.data.session){ session=v.data.session; try{ localStorage.setItem('wd_tg_bind',tgId+':'+session.user.id); }catch(_){} }
+          else { const g=await sb.auth.getSession(); session=g.data.session; }
+        }
+      }
+    }
+  }catch(e){ console.warn('[WordDrop] Telegram kirish:',e); }
   if(!session){
     const { data, error } = await sb.auth.signInAnonymously();
     if(error){
