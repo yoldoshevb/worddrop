@@ -9,7 +9,7 @@
 // Testlar originaldir (real imtihon savollari ko'chirilmaydi). Natijalar taxminiy.
 
 type Groq = (apiKey: string, models: any[], messages: unknown[], maxTokens: number, temperature: number) => Promise<any | Response>;
-type Ctx = { apiKey: string; groqJson: Groq; SB: any; json: (b: unknown, s?: number) => Response; clip: (v: unknown, n: number) => string; req: Request; body: any };
+type Ctx = { apiKey: string; groqJson: Groq; SB: any; json: (b: unknown, s?: number) => Response; clip: (v: unknown, n: number) => string; req: Request; body: any; deadline: number };
 
 const GEN_MODELS = [
   { id: "openai/gpt-oss-120b", extra: { include_reasoning: false, reasoning_effort: "low" } },
@@ -143,9 +143,10 @@ function makeGaps(title: string, text: string, rep: string[]) {
 
 /* ═════════ Test tuzish: har qism alohida, o'z tekshiruvi va 3 tagacha qayta urinish bilan ═════════ */
 async function part<T>(c: Ctx, spec: string, maxTok: number, build: (p: any) => T, check: (x: T) => string): Promise<T | string> {
-  let why = "";
+  let why = String(c.body?.why || "").slice(0, 300);   // ilova oldingi urinishning sababini qaytarib yuborishi mumkin
   for (let i = 0; i < 3; i++) {
-    const p = await slot(() => c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: `${BASE}\n${spec}` }, { role: "user", content: `Original content please. ${why ? "Previous attempt was rejected: " + why + ". Fix it." : ""} Seed ${crypto.randomUUID().slice(0, 8)}` }], maxTok + 2500, 0.8));
+    if (i > 0 && c.deadline - Date.now() < 50_000) break;   // yana bir urinishga vaqt yetmaydi — ilova qayta chaqiradi
+    const p = await slot(() => c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: `${BASE}\n${spec}` }, { role: "user", content: `Original content please. ${why ? "Previous attempt was rejected: " + why + ". Fix it." : ""} Seed ${crypto.randomUUID().slice(0, 8)}` }], maxTok + 1200, 0.8));
     if (p instanceof Response) { why = "invalid JSON"; continue; }
     const x = build(p); why = check(x);
     if (!why) return x;
@@ -418,7 +419,7 @@ export async function mlHandle(mode: string, c: Ctx): Promise<Response> {
     const part = String(c.body.part || "");
     if ((sec === "listening" || sec === "reading") && part) {
       const x = sec === "listening" ? await listeningPart(c, part) : await readingPart(c, part);
-      return typeof x === "string" ? c.json({ error: `${sec} ${part}: ${x}` }, 502) : c.json({ data: x });
+      return typeof x === "string" ? c.json({ error: `${sec} ${part}: ${x}`, why: x, retry: true }, 502) : c.json({ data: x });
     }
     const r: any = sec === "writing" ? await genWriting(c) : sec === "speaking" ? await genSpeaking(c) : c.json({ error: "section/part?" }, 400);
     if (r instanceof Response) return r;

@@ -805,14 +805,26 @@ async function generate(box){
   const btn=document.getElementById('mlNew'); if(btn) btn.disabled=true;
   try{
     st('txt','on');
-    const res={listening:{},reading:{}}; let Wr=null, SpS=null;
-    const jobs=[...['p1','p2','p3','p4','p5','p6'].map(p=>['listening',p]),...['p1','p2','p3','p4','p5'].map(p=>['reading',p]),['writing'],['speaking']];
-    let jd=0; const total=jobs.length;
-    const runJob=async([sec,p])=>{ for(let k=0;k<3;k++){ const j=await mlApi(p?{mode:'ml_gen',section:sec,part:p}:{mode:'ml_gen',section:sec},150000);
-        if(!j.__error){ if(p) res[sec][p]=j.data; else if(sec==='writing') Wr=j.W; else SpS=j.S; jd++; st('txt','on',`Matnlar: ${jd} / ${total} qism tayyor`); $(box,'#mlPg').style.width=Math.round(jd/total*100)+'%'; return true; }
-        log(`${SECN[sec]} ${p||''}: ${j.msg} — qayta urinish`); await sleep(3000); } return false; };
-    const pool=async(list,n)=>{ const q=list.slice(); let ok=true; await Promise.all(Array.from({length:n},async()=>{ while(q.length){ if(!(await runJob(q.shift()))) ok=false; } })); return ok; };
-    if(!(await pool(jobs,2))){ st('txt','err',"Ba'zi qismlar tuzilmadi — qayta urinib ko'ring"); return; }
+    // Tayyor qismlar brauzerda saqlanadi: xato bo'lsa, keyingi safar boshidan emas, qolgan joydan davom etadi
+    const GK='wd_ml_gen_v1';
+    let saved=null; try{ saved=JSON.parse(localStorage.getItem(GK)||'null'); }catch(e){}
+    if(saved&&Date.now()-(saved.at||0)>3*864e5) saved=null;
+    const res=saved&&saved.res||{listening:{},reading:{}}; let Wr=saved&&saved.Wr||null, SpS=saved&&saved.SpS||null;
+    const persist=()=>{ try{ localStorage.setItem(GK,JSON.stringify({at:Date.now(),res,Wr,SpS})); }catch(e){} };
+    const allJobs=[...['p1','p2','p3','p4','p5','p6'].map(p=>['listening',p]),...['p1','p2','p3','p4','p5'].map(p=>['reading',p]),['writing'],['speaking']];
+    const isDone=([sec,p])=>p?!!res[sec][p]:sec==='writing'?!!Wr:!!SpS;
+    const jobs=allJobs.filter(j=>!isDone(j));
+    let jd=allJobs.length-jobs.length; const total=allJobs.length;
+    const prog=()=>{ st('txt','on',`Matnlar: ${jd} / ${total} qism tayyor`); $(box,'#mlPg').style.width=Math.round(jd/total*100)+'%'; };
+    if(jd) log(`Avvalgi urinishdan ${jd} ta qism saqlangan — davom ettirilmoqda.`);
+    prog();
+    const runJob=async([sec,p],force)=>{ let why='';
+      for(let k=0;k<5;k++){ const j=await mlApi(Object.assign({mode:'ml_gen',section:sec},p?{part:p}:{},why?{why}:{}),145000);
+        if(!j.__error){ if(p) res[sec][p]=j.data; else if(sec==='writing') Wr=j.W; else SpS=j.S; persist(); if(!force) jd++; prog(); return true; }
+        why=j.why||''; log(`${SECN[sec]} ${p||''}: ${j.msg} — ${k<4?'qayta urinilmoqda ('+(k+2)+'/5)':"to'xtadi"}`); await sleep(4000*(k+1)); }
+      return false; };
+    const pool=async(list,n,force)=>{ const q=list.slice(); let ok=true; await Promise.all(Array.from({length:n},async()=>{ while(q.length){ if(!(await runJob(q.shift(),force))) ok=false; } })); return ok; };
+    if(!(await pool(jobs,2))){ st('txt','err',`${jd} / ${total} qism tayyor va saqlandi. Qolganlari tuzilmadi — «Yangi test yaratish» ni qayta bosing, tayyorlari qayta tuzilmaydi.`); return; }
     // Mustaqil yechuvchi bilan tekshiruv; mos kelmagan qismlar bir marta qayta tuziladi
     const PARTQ={listening:[['p1',1,8],['p3',15,18],['p5',24,29]],reading:[['p2',7,14],['p3',15,20],['p4',21,29]]};
     const checks={};
@@ -824,7 +836,7 @@ async function generate(box){
         const bad=PARTQ[sec].filter(([p,a,b])=>c.mism.some(n=>n>=a&&n<=b)).map(([p])=>[sec,p]);
         if(round===1||!bad.length) break;
         log(`${SECN[sec]}: ${c.mism.join(', ')}-savollar shubhali — ${bad.map(x=>x[1]).join(', ')} qayta tuzilmoqda`);
-        await pool(bad,2);
+        await pool(bad,2,true);
       }
     }
     const L={L:res.listening}, R={R:res.reading};
@@ -839,6 +851,7 @@ async function generate(box){
     const n=S.tests.length+1; const title=`Multilevel sinov #${n} — ${L.L.p4.title||''}`.slice(0,80);
     const {data,error}=await sb().from('wd_ml_tests').insert({title,status:'draft',listening:L.L,reading:R.R,writing:Wr.W,speaking:S2,created_by:await uid()}).select('*').single();
     if(error||!data){ st('save','err','Saqlanmadi: '+(error&&error.message)); return; }
+    try{ localStorage.removeItem(GK); }catch(e){}
     st('save','ok');
     st('aud','on'); const okA=await buildAudio(data,box,(d,t)=>{ $(box,'#mlPg').style.width=Math.round(d/t*100)+'%'; st('aud','on',`Audio yozuvlar: ${d} / ${t}`); });
     if(!okA){ st('aud','err',"Audio to'liq tayyorlanmadi — test qoralama sifatida saqlandi, «Audio tayyorlash» bilan davom ettiring"); return; }

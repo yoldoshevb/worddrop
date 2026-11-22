@@ -859,8 +859,9 @@ function startRec(){
   const r=new SR(); r.lang='en-US'; r.interimResults=true; r.continuous=true; r.maxAlternatives=1;
   let finalT='';
   const live=document.getElementById('rpLive'); if(live){ live.hidden=false; live.textContent='…'; }
-  r.onresult=ev=>{ let inter=''; for(let i=ev.resultIndex;i<ev.results.length;i++){ const t=ev.results[i][0].transcript; if(ev.results[i].isFinal) finalT+=t+' '; else inter+=t; }
-    if(live) live.textContent=(finalT+inter).trim()||'…'; RP._said=(finalT+inter).trim(); };
+  r.onresult=ev=>{ // v101b: Android har natijada oldingi gapni ham qaytaradi — qo'shmaymiz, birlashtiramiz
+    let t=window.__wdSRText?window.__wdSRText(ev.results):''; if(window.__wdDedupeSpeech) t=window.__wdDedupeSpeech(t);
+    if(live) live.textContent=t||'…'; RP._said=t; };
   r.onerror=e=>{ if(e.error==='not-allowed'){ showToast("Mikrofonga ruxsat bering yoki yozib javob bering",IC.info); RP.typed=true; } stopRec(); };
   r.onend=()=>{ if(RP&&RP.listening&&RP._autoSend!==false){ stopRec(true); } };
   RP.rec=r; RP.listening=true; RP._said=''; RP._autoSend=true;

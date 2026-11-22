@@ -161,6 +161,49 @@
 .inv-meter{margin-top:16px}.inv-meter-t{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px}
 .inv-bar{height:8px;border-radius:5px;background:var(--line,#E5E9F2);overflow:hidden}.inv-bar i{display:block;height:100%;background:#1FAE6B;border-radius:5px}
 </style>
+<script>
+/* v101b: Nutq natijalarini to'g'ri birlashtirish.
+   Android (Chrome, Brave, Samsung) uzluksiz rejimda har yangi natijada OLDINGI gapni ham qaytaradi:
+   "I" → "I would" → "I would like to order a coffee". Ularni ketma-ket qo'shsak, gap ko'payib ketadi.
+   Bu yerda har bo'lak oldingisi bilan solishtiriladi: davomi bo'lsa — almashtiriladi,
+   takror bo'lsa — tashlanadi, qisman ustma-ust tushsa — faqat yangi qismi qo'shiladi. */
+(function(){
+  var key=function(w){ return String(w).toLowerCase().replace(/[^a-z0-9']/g,''); };
+  var split=function(s){ return String(s||'').replace(/\s+/g,' ').trim().split(' ').filter(Boolean); };
+  function merge(acc,seg){
+    var A=split(acc), S=split(seg);
+    if(!S.length) return A.join(' ');
+    if(!A.length) return S.join(' ');
+    var a=A.map(key), s=S.map(key), i, k;
+    // 1) yangi bo'lak eskisini to'liq o'z ichiga oladi (boshidan) — almashtiramiz
+    if(s.length>=a.length){ for(i=0;i<a.length&&a[i]===s[i];i++); if(i===a.length) return S.join(' '); }
+    // 2) yangi bo'lak eskisining ichida bor — tashlaymiz
+    var as=' '+a.join(' ')+' ', ss=' '+s.join(' ')+' ';
+    if(as.indexOf(ss)>=0) return A.join(' ');
+    // 3) yangi bo'lak eskisining OXIRGI gapini davom ettiradi (Android har pauzadan keyin gapni boshidan qaytaradi)
+    for(k=Math.min(a.length,s.length);k>=2;k--){
+      var ok=true; for(i=0;i<k;i++){ if(a[a.length-k+i]!==s[i]){ ok=false; break; } }
+      if(ok) return A.concat(S.slice(k)).join(' ');
+    }
+    // 4) eski matn oxiridagi bo'lak yangi bo'lakning boshlanishi (masalan "I would" + "I would like to")
+    for(k=a.length-1;k>=1;k--){
+      var tail=a.slice(k); if(tail.length>s.length) continue;
+      var same=true; for(i=0;i<tail.length;i++){ if(tail[i]!==s[i]){ same=false; break; } }
+      if(same && tail.length>=2) return A.slice(0,k).concat(S).join(' ');
+    }
+    return A.concat(S).join(' ');
+  }
+  function join(parts){ var acc=''; for(var i=0;i<parts.length;i++){ if(parts[i]) acc=merge(acc,parts[i]); } return acc.trim(); }
+  /* SpeechRecognition event.results dan to'liq matn: barcha final + oxirgi oraliq natija */
+  function fromResults(results){
+    var fin=[], inter='';
+    for(var i=0;i<results.length;i++){ var r=results[i]; var t=r&&r[0]?r[0].transcript:''; if(r.isFinal) fin.push(t); else inter=t; }
+    return join(fin.concat(inter?[inter]:[]));
+  }
+  window.__wdSRMerge=merge; window.__wdSRJoin=join; window.__wdSRText=fromResults;
+})();
+
+</script>
 </head>
 <body>
 <!-- SPLASH -->
@@ -494,8 +537,8 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.ecfcc87f.js"></script>
-<script src="app.kitobcha-studiyasi-v94.bd43e034.js"></script>
+<script src="app.svg-ikonkalar.c54ae6f4.js"></script>
+<script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
 <script>
 /* ==================================================================
    v96: BOT BOSHQARUVI (admin) — guruhlar, a'zolar, shaxsiy chat siyosati
@@ -1318,7 +1361,7 @@ renderWords();
     let finals=[], interim='', gotAny=false;
     recTxt='';
     const alive=()=>my===recSeq && rec===r;
-    const curTxt=()=>finals.filter(Boolean).join(' ').trim();
+    const curTxt=()=>(window.__wdSRJoin?window.__wdSRJoin(finals.filter(Boolean)):finals.filter(Boolean).join(' ')).trim();
 
     r.onresult=(ev)=>{
       if(!alive()||!ST||!ST.cur) return;
@@ -1792,7 +1835,7 @@ function downloadVaultWord(){
 <script type="module" src="app.3d-fizika-oyini.f1f192b5.js"></script>
 <script type="module" src="app.soz-devori.815e8d92.js"></script>
 
-<script type="module" src="app.ielts-mock-test-markazi.e5531c1a.js"></script>
+<script type="module" src="app.ielts-mock-test-markazi.e856e77a.js"></script>
 
 
 <script type="module">

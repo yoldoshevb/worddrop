@@ -1495,7 +1495,8 @@ function startRec(onText,onDone,maxSec,onTick){
   let interim='';
   let restarts=0;
 
-  const fullTxt=()=>dedupeSpeech([baseTxt, finals.filter(Boolean).join(' '), interim].filter(Boolean).join(' '));
+  const joinF=()=>window.__wdSRJoin?window.__wdSRJoin(finals.filter(Boolean)):finals.filter(Boolean).join(' ');
+  const fullTxt=()=>dedupeSpeech(window.__wdSRJoin?window.__wdSRJoin([baseTxt, joinF(), interim]):[baseTxt, joinF(), interim].filter(Boolean).join(' '));
   const alive=()=>!ended && mySess===recSess;
 
   const finish=()=>{
@@ -1542,8 +1543,8 @@ function startRec(onText,onDone,maxSec,onTick){
     r.onend=()=>{
       if(!alive() || recObj!==r) return;
       // Joriy seansda yig'ilganini bazaga ko'chiramiz va indekslarni tozalaymiz
-      const chunk=finals.filter(Boolean).join(' ').trim();
-      if(chunk) baseTxt=dedupeSpeech((baseTxt+' '+chunk).trim());
+      const chunk=joinF().trim();
+      if(chunk) baseTxt=dedupeSpeech(window.__wdSRJoin?window.__wdSRJoin([baseTxt,chunk]):(baseTxt+' '+chunk).trim());
       finals=[]; interim='';
       recObj=null;
       // Vaqt bormi? — mikrofonni qayta yoqamiz (Chrome sukunatda o'zi to'xtatadi)
