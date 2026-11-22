@@ -1,8 +1,9 @@
 import { createMcpHandler, McpServer } from '@modelcontextprotocol/server';
 import { z } from 'zod';
+import { registerPractice } from './practice.js';
 
 const appUrl = 'https://www.worddrop-app.uz/app.html';
-const version = '0.2.0';
+const version = '0.3.0';
 const catalog = WORDDROP_LISTENING_CATALOG;
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const dictionarySources = [
@@ -144,7 +145,7 @@ function createServer(env) {
         : 'intervyu suhbat talabalar maktab';
       return (!level || lesson.suggestedLevel === level) &&
         (!topic || `${lesson.title} ${lesson.collection} ${keywords}`.toLowerCase().includes(topic));
-    }).slice(0, limit).map(lesson => ({ ...lesson, appUrl }));
+    }).slice(0, limit).map(({ id, questions, ...lesson }) => ({ ...lesson, appUrl }));
     return formatResult({
       lessons,
       navigation: 'Boshi sahifasidagi xaritada mapLevel raqamidan keyingi Tinglash belgisini oching. Belgi qulflangan bo‘lsa, o‘sha bosqichni tugating.',
@@ -152,6 +153,7 @@ function createServer(env) {
     });
   });
 
+  registerPractice(server, env.PRACTICE_DB, catalog, formatResult);
   return server;
 }
 
