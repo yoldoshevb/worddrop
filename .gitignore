@@ -252,6 +252,8 @@ datasets/
 *.mkv
 *.webm
 *.mp3
+# Multilevel imtihon yozuvlari saytda xizmat qiladi (tools/ml_audio.py)
+!fronted/ml-audio/**/*.mp3
 *.wav
 *.flac
 *.aac
