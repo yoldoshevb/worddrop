@@ -4761,6 +4761,37 @@ body.dark .pv-plan.on .pv-radio{border-color:#FFC845;background:transparent}
 .pv-pad>.pv-cta{justify-content:center}
 body.dark .pv-cta{background:#FFC845;color:#3A2700}body.dark .pv-cta b{color:#3A2700}body.dark .pv-cta b svg{color:#3A2700}
 .drop-pro-btn{margin-top:8px;border:none;background:var(--wd-ink);color:#FFC845;font-family:inherit;font-weight:700;font-size:13px;padding:8px 12px;border-radius:10px;cursor:pointer}
+
+/* =====================================================================
+   v98 — Pro imkoniyatlari: kitobcha Pro, ramka, Pro sahifasi
+   ===================================================================== */
+.fr-ring.fr-pro{background:conic-gradient(from 200deg,#0F1B3D,#2F6FED,#0F1B3D,#FFC845,#0F1B3D);box-shadow:0 0 0 1px rgba(15,27,61,.4),0 8px 22px rgba(255,200,69,.35)}
+.fr-ring.fr-pro::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1.5px solid rgba(255,200,69,.7);pointer-events:none}
+.pv-feats{display:flex;flex-direction:column;background:var(--sur);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.pv-feat{display:flex;gap:12px;padding:14px}
+.pv-feat+.pv-feat{border-top:1px solid var(--line)}
+.pv-fi{flex-shrink:0;width:36px;height:36px;border-radius:11px;background:#0F1B3D;color:#FFC845;display:flex;align-items:center;justify-content:center}
+.pv-fi svg{width:19px;height:19px}
+.pv-feat b{display:block;font-size:14.5px;font-weight:700;color:var(--i9)}
+.pv-feat p{font-size:12.5px;line-height:1.45;color:var(--i5);margin-top:3px}
+.bk-pro{display:block;width:100%;text-align:left;font-family:inherit;border:1.5px solid var(--line);background:var(--sur);border-radius:16px;padding:12px 14px;margin:0 0 14px;color:var(--i9)}
+.bk-pro.on{border-color:#0F1B3D;box-shadow:0 0 0 1px #0F1B3D inset}
+body.dark .bk-pro.on{border-color:#FFC845;box-shadow:0 0 0 1px #FFC845 inset}
+.bk-pro-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.bk-pro-h b{font-size:15px;font-weight:700}
+.bk-pro-h em{font-style:normal;font-size:10.5px;font-weight:800;background:#FFC845;color:#3A2700;padding:2px 7px;border-radius:6px}
+.bk-pro ul{list-style:none;margin-top:6px}
+.bk-pro li{position:relative;font-size:12.5px;line-height:1.45;color:var(--i7);padding:3px 0 3px 16px}
+.bk-pro li::before{content:'';position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:50%;background:#F2B400}
+.bk-pro:not(.on) ul{opacity:.55}
+.bk-pro.lock{cursor:pointer}
+.bk-pro.lock span{display:block;font-size:12.5px;line-height:1.45;color:var(--i5);margin-top:4px}
+.bk-week{display:block;width:100%;text-align:left;font-family:inherit;border:none;border-radius:16px;background:#0F1B3D;color:#fff;padding:14px 16px;margin:0 0 14px;cursor:pointer}
+.bk-week b{display:block;font-size:15px;font-weight:700;color:#FFC845}
+.bk-week span{display:block;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.75);margin-top:3px}
+.bk-cov2 sup{font-size:8px;font-weight:800;color:#B57B00;margin-left:2px}
+.bk-cov2 button.on sup{color:#FFC845}
+.bk-cov2 button.lk{opacity:.55}
 </style>
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
@@ -5133,7 +5164,7 @@ body.dark .pv-cta{background:#FFC845;color:#3A2700}body.dark .pv-cta b{color:#3A
 <script>
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v97';
+window.__wdVer='v98';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -8070,8 +8101,10 @@ const md = s => esc(s).replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/~~([^~]+
 /* ---------- Umumiy so'rov (Drop AI limiti bilan) ---------- */
 async function dpRequest(payload, timeoutMs){
   const ctrl = new AbortController(); const t = setTimeout(()=>ctrl.abort(), timeoutMs||60000);
+  let auth=SUPABASE_PUBLISHABLE_KEY;
+  if(payload&&payload.pro){ try{ const { data } = await window.__sb.auth.getSession(); if(data&&data.session) auth=data.session.access_token; }catch(e){} }
   try{
-    const r = await fetch(DP_URL,{method:'POST',signal:ctrl.signal,headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY},
+    const r = await fetch(DP_URL,{method:'POST',signal:ctrl.signal,headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+auth},
       body:JSON.stringify(Object.assign({cefr:window.__wdCEFR||'B1'},payload))});
     clearTimeout(t);
     const txt = await r.text(); let j=null; try{ j=JSON.parse(txt); }catch(e){}
@@ -8171,6 +8204,60 @@ const BK_CSS = `
 .bk-cov-badge{position:absolute;right:34px;bottom:120px;width:118px;height:118px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:20px;line-height:1.05;padding:12px;transform:rotate(-8deg)}
 .bk-cov-mark{display:flex;align-items:center;gap:6px;font-weight:700;font-size:9px;color:var(--mu)}
 .bk-cov-mark svg{width:12px;height:12px}
+/* v98: Pro bloklar */
+.bk-kp{margin:10px 0 12px;background:var(--ik);color:var(--pp);border-radius:8px;padding:10px 12px 8px}
+.bk-kp .t{display:block;font-size:10.5px;color:var(--pp);opacity:.75;margin-bottom:4px;letter-spacing:.02em}
+.bk-kp ol{list-style:none;counter-reset:k}
+.bk-kp li{position:relative;padding:4px 0 4px 22px;border-top:.8px solid rgba(255,255,255,.14)}
+.bk-kp li:first-child{border-top:none}
+.bk-kp li::before{counter-increment:k;content:counter(k);position:absolute;left:0;top:3px;font-weight:800;color:var(--sc);font-size:11px;filter:brightness(1.35)}
+.bk-mis{margin:8px 0 12px}
+.bk-mis .t{display:block;font-size:10.5px;color:var(--ac);margin-bottom:4px}
+.bk-mis .r{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;padding:6px 0;border-bottom:.8px solid var(--rule)}
+.bk-mis .w{color:var(--mu);text-decoration:line-through;text-decoration-color:var(--ac)}
+.bk-mis .k{font-weight:700;color:var(--ik)}
+.bk-mis i{font-style:normal;font-weight:800;margin-right:5px;text-decoration:none;display:inline-block}
+.bk-mis .w i{color:var(--ac)} .bk-mis .k i{color:var(--sc)}
+.bk-mis .u{grid-column:1/-1;font-size:9px;color:var(--mu)}
+/* v98: Pro muqovalar */
+.bk-cov.poster{padding:0;background:var(--pr);color:#fff}
+.bk-cov.poster .in{position:absolute;inset:44px 74px 40px 40px;display:flex;flex-direction:column}
+.bk-cov.poster .bk-cov-t{color:#fff;font-size:60px;line-height:.95;letter-spacing:-.02em;margin-top:auto}
+.bk-cov.poster .bk-cov-s{color:rgba(255,255,255,.85)}
+.bk-cov.poster .stripes{position:absolute;top:0;right:0;bottom:0;width:44px;display:flex;flex-direction:column;gap:3px}
+.bk-cov.poster .stripes i{flex:1}
+.bk-cov-meta{display:flex;gap:16px;margin-top:22px;font-size:9px;font-weight:700;letter-spacing:.02em}
+.bk-cov-meta b{display:block;font-size:22px;line-height:1;margin-bottom:2px}
+.bk-cov.poster .bk-cov-meta{color:rgba(255,255,255,.85)}
+.bk-cov.poster .bk-cov-meta b{color:#fff}
+.bk-cov.split{padding:0}
+.bk-cov.split .top{position:relative;height:60%;padding:44px 40px 0}
+.bk-cov.split .big{position:absolute;right:-30px;bottom:-24px;width:260px;opacity:.95}
+.bk-cov.split .bk-cov-t{font-size:44px;color:var(--ik);max-width:72%;margin-top:40px;position:relative}
+.bk-cov.split .bot{position:absolute;left:0;right:0;bottom:0;height:40%;background:var(--ik);color:var(--pp);padding:30px 40px}
+.bk-cov.split .bk-cov-s{color:var(--pp);opacity:.85;margin-top:0}
+.bk-cov.split .bk-cov-meta{color:var(--pp);opacity:.8}
+.bk-cov.split .bk-cov-meta b{color:var(--pr);filter:brightness(1.3)}
+.bk-cov.editorial{padding:40px 40px}
+.bk-cov.editorial .hd{display:flex;justify-content:space-between;font-size:9px;font-weight:600;color:var(--mu);padding-bottom:10px;border-bottom:1.2px solid var(--ik)}
+.bk-cov.editorial .bk-cov-t{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:58px;line-height:.98;color:var(--ik);margin-top:46px}
+.bk-cov.editorial .bk-cov-s{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:17px;color:var(--pr)}
+.bk-cov.editorial .toc{margin-top:auto;border-top:.8px solid var(--rule)}
+.bk-cov.editorial .toc div{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:.8px solid var(--rule);font-size:10px;font-weight:600}
+.bk-cov.editorial .toc span{width:20px;height:20px;border-radius:5px;color:#fff;font-weight:800;font-size:9px;display:flex;align-items:center;justify-content:center}
+.bk-pro-mark{position:absolute;right:40px;bottom:20px;font-size:8px;font-weight:700;color:var(--mu);display:flex;align-items:center;gap:4px}
+.bk-pro-mark i{width:6px;height:6px;border-radius:50%;background:#F2B400}
+/* v98: bo'lim ochilish sahifasi (Pro) */
+.bk-open{position:absolute;inset:0;padding:52px 40px 44px;display:flex;flex-direction:column;background:var(--tint)}
+.bk-open .num{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:800;font-size:150px;line-height:.85;color:var(--sc);letter-spacing:-.04em}
+.bk-open .lb{font-size:11px;font-weight:800;color:var(--sc);margin-top:22px}
+.bk-open h2{font-size:34px;line-height:1.05;color:var(--ik);margin-top:6px;max-width:90%}
+.bk-page.f-serif .bk-open h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
+.bk-page.f-grotesk .bk-open h2{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700}
+.bk-open p{font-size:12px;line-height:1.5;color:var(--mu);margin-top:12px;max-width:85%}
+.bk-open .inc{margin-top:auto;border-top:1.5px solid var(--sc);padding-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bk-open .inc div{font-size:8.5px;color:var(--mu);font-weight:600}
+.bk-open .inc b{display:block;font-size:20px;color:var(--ik);font-weight:800;line-height:1.1}
 /* Kartochka varaqlari */
 .bk-cards{position:absolute;inset:30px 26px 36px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,1fr)}
 .bk-card{border:1px dashed #9AA3B5;margin:-.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;position:relative}
@@ -8184,7 +8271,7 @@ const BK_CSS = `
 function injectCss(){ if(document.getElementById('bkCss')) return; const st=document.createElement('style'); st.id='bkCss'; st.textContent=BK_CSS; document.head.appendChild(st); }
 
 /* ---------- Bloklar ---------- */
-const SPLIT = {vocab:'items', list:'items', exercise:'items', quiz:'items', table:'rows', dialog:'lines'};
+const SPLIT = {vocab:'items', list:'items', exercise:'items', quiz:'items', table:'rows', dialog:'lines', mistakes:'items'};
 function blockHtml(b, cont){
   const cTag = cont ? ' <span style="font-weight:400;color:var(--mu)">(davomi)</span>' : '';
   switch(b.type){
@@ -8200,10 +8287,20 @@ function blockHtml(b, cont){
       return `<div class="bk-ex bk-quiz">${b.title?`<div class="t"><i>Test</i>${esc(b.title)}${cTag}</div>`:''}${b.items.map((q,i)=>`<div class="q"><b>${start+i+1}</b><div>${md(q.q)}</div><span></span><div class="opt">${q.options.map((o,k)=>`<span>${'ABCD'[k]}) ${esc(o)}</span>`).join('')}</div></div>`).join('')}</div>`; }
     case 'lines': return `<div class="bk-lines">${b.label?`<div class="lb">${esc(b.label)}</div>`:''}${'<i></i>'.repeat(b.n)}</div>`;
     case 'tracker': return `<div class="bk-trk"><b>${esc(b.label||'Kuzatuv')}</b><div class="g">${Array.from({length:b.days},(_,i)=>`<span>${i+1}</span>`).join('')}</div></div>`;
+    case 'keypoints': return `<div class="bk-kp"><b class="t">${esc(b.title||'Esda tuting')}</b><ol>${b.items.map(x=>`<li>${md(x)}</li>`).join('')}</ol></div>`;
+    case 'mistakes': return `<div class="bk-mis"><b class="t">${esc(b.title||"Ko'p uchraydigan xatolar")}</b>${b.items.map(m=>`<div class="r"><div class="w"><i>✕</i>${esc(m.wrong)}</div><div class="k"><i>✓</i>${esc(m.right)}</div>${m.uz?`<div class="u">${esc(m.uz)}</div>`:''}</div>`).join('')}</div>`;
     case 'cards': return `<div class="bk-cardnote">${b.items.length} ta kartochka${b.title?`: ${esc(b.title)}`:''}. Kitobcha oxirida qirqib olinadigan varaqlarda.</div>`;
   }
   return '';
 }
+
+/* ---------- Statistika (muqova va bo'lim ochilishi uchun) ---------- */
+function secStats(sec){
+  let w=0,c=0,t=0,k=0; sec.blocks.forEach(b=>{ if(b.type==='vocab') w+=b.items.length; if(b.type==='cards') c+=b.items.length; if(b.type==='exercise'||b.type==='quiz') t+=b.items.length; if(b.type==='keypoints') k+=b.items.length; });
+  const out=[]; if(w) out.push([w,"yangi so'z"]); if(t) out.push([t,'savol va mashq']); if(c) out.push([c,'kartochka']); if(out.length<3&&k) out.push([k,'asosiy xulosa']);
+  if(!out.length) out.push([sec.blocks.length,'blok']); return out.slice(0,3);
+}
+function bkStats(doc){ let words=0,cards=0,tasks=0; doc.sections.forEach(s=>s.blocks.forEach(b=>{ if(b.type==='vocab') words+=b.items.length; if(b.type==='cards') cards+=b.items.length; if(b.type==='exercise'||b.type==='quiz') tasks+=b.items.length; })); return {words,cards,tasks}; }
 
 /* ---------- Sahifalash ---------- */
 function bkDeep(hex,ink){ // juda och rangni siyoh tomon aralashtirib to'qlashtiramiz
@@ -8237,7 +8334,17 @@ async function paginate(doc, stage){
   cov.innerHTML = cs==='band'
     ? `<div class="bk-cov band"><div class="top">${mark.replace('bk-cov-mark','bk-cov-mark" style="color:rgba(255,255,255,.8)')}<div style="height:36px"></div><h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}</div><div class="rest"><div class="bk-cov-a">${esc(doc.author||window.__wdName||'')}</div></div></div>`
     : `<div class="bk-cov ${cs}">${mark}<div style="height:${cs==='minimal'?0:60}px"></div><h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}<div class="bk-cov-a">${esc(doc.author||window.__wdName||'')}</div></div>`;
-  if(doc.cover.badge){ const bd=document.createElement('div'); bd.className='bk-cov-badge'; bd.textContent=doc.cover.badge; cov.appendChild(bd); }
+  const st=bkStats(doc);
+  const meta=`<div class="bk-cov-meta"><div><b>${doc.sections.length}</b>bo'lim</div>${st.words?`<div><b>${st.words}</b>so'z</div>`:''}${st.cards?`<div><b>${st.cards}</b>kartochka</div>`:''}${st.tasks?`<div><b>${st.tasks}</b>mashq</div>`:''}</div>`;
+  if(cs==='poster'){
+    cov.innerHTML=`<div class="bk-cov poster"><div class="stripes">${doc.sections.map((s,i)=>{ const c=s.color||doc.theme.accent; return `<i style="background:${c.toLowerCase()===doc.theme.primary.toLowerCase()?(i%2?'rgba(255,255,255,.12)':'rgba(255,255,255,.26)'):c}"></i>`; }).join('')}</div><div class="in">${mark.replace('bk-cov-mark','bk-cov-mark" style="color:rgba(255,255,255,.8)')}<h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}${meta}</div></div>`;
+  } else if(cs==='split'){
+    cov.innerHTML=`<div class="bk-cov split"><div class="top">${mark}<svg class="big" viewBox="0 0 64 70"><defs><clipPath id="bkcv"><path d="M32 4C32 4 9 30 9 43a23 23 0 0 0 46 0C55 30 32 4 32 4Z"/></clipPath></defs><path d="M32 4C32 4 9 30 9 43a23 23 0 0 0 46 0C55 30 32 4 32 4Z" fill="none" stroke="${doc.theme.primary}" stroke-width="1.6"/><g clip-path="url(#bkcv)"><path d="M0 30 Q16 27 32 30 T64 30 V72 H0Z" fill="${doc.theme.primary}"/></g></svg><h1 class="bk-cov-t">${esc(doc.title)}</h1></div><div class="bot">${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}${meta}</div></div>`;
+  } else if(cs==='editorial'){
+    const dt=new Date(); const MO=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+    cov.innerHTML=`<div class="bk-cov editorial"><div class="hd"><span>WordDrop kitobchasi</span><span>${MO[dt.getMonth()]} ${dt.getFullYear()}</span></div><h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}<div class="toc">${doc.sections.slice(0,8).map((s,i)=>`<div><span style="background:${s.color||doc.theme.primary}">${esc(s.code||String(i+1))}</span>${esc(s.title)}</div>`).join('')}</div></div>`;
+  }
+  if(doc.cover.badge && !['poster','split','editorial'].includes(cs)){ const bd=document.createElement('div'); bd.className='bk-cov-badge'; bd.textContent=doc.cover.badge; cov.appendChild(bd); }
   push(cov,'cover');
   // 2) Mundarija (keyin to'ldiriladi)
   const toc=push(newPage(doc,S),'toc');
@@ -8246,11 +8353,16 @@ async function paginate(doc, stage){
   let n=3;
   const mkContent=(sec)=>{
     const p=newPage(doc,S,{color:sec.color||doc.theme.primary});
-    p.innerHTML=`<div class="bk-run"><span>${esc(doc.title)}</span><span>${esc(sec.title)}</span></div><div class="bk-body"></div><div class="bk-foot"><i></i>${n}</div><div class="bk-tab">${esc(sec.code||'')}</div>`;
+    p.innerHTML=`<div class="bk-run"><span>${esc(doc.title)}</span><span>${esc(sec.title)}</span></div><div class="bk-body"></div><div class="bk-foot"><i></i>${n}</div><div class="bk-tab">${esc(sec.code||'')}</div>${doc.pro?'<div class="bk-pro-mark"><i></i>WordDrop Pro</div>':''}`;
     n++; return push(p,'content',sec);
   };
   const over=body=>body.scrollHeight>body.clientHeight+1;
   doc.sections.forEach((sec,si)=>{
+    if(doc.pro){
+      const o=newPage(doc,S,{color:sec.color||doc.theme.primary}); const c=secStats(sec);
+      o.innerHTML=`<div class="bk-open"><div class="num">${esc(sec.code||String(si+1))}</div><div class="lb">${si+1}-bo'lim</div><h2>${esc(sec.title)}</h2>${sec.intro?`<p>${esc(sec.intro)}</p>`:''}<div class="inc">${c.map(([n,l])=>`<div><b>${n}</b>${l}</div>`).join('')}</div></div><div class="bk-pro-mark"><i></i>WordDrop Pro</div>`;
+      push(o,'opener',sec); n++;
+    }
     let page=mkContent(sec); let body=page.querySelector('.bk-body');
     secStart.push(n-1);
     body.innerHTML=`<div class="bk-sec-head"><div class="bk-sec-code">${esc(sec.code||String(si+1))}</div><h2 class="bk-sec-t">${esc(sec.title)}</h2>${sec.intro?`<p class="bk-sec-i">${esc(sec.intro)}</p>`:''}</div>`;
@@ -8291,10 +8403,10 @@ async function paginate(doc, stage){
     cardStart=n;
     for(let i=0;i<cards.length;i+=8){
       const chunk=cards.slice(i,i+8);
-      const fr=newPage(doc,S); fr.innerHTML=`<div class="bk-cards-cap"><span>Kartochkalar, old tomoni. Ikki tomonlama chop eting va chiziq bo'yicha qirqing.</span><span>${n}</span></div><div class="bk-cards">${Array.from({length:8},(_,k)=>{ const c=chunk[k]; if(!c) return '<div class="bk-card"></div>';
+      const fr=newPage(doc,S); fr.innerHTML=`<div class="bk-cards-cap"><span>Kartochkalar · old tomoni</span><span>${n}</span></div><div class="bk-cards">${Array.from({length:8},(_,k)=>{ const c=chunk[k]; if(!c) return '<div class="bk-card"></div>';
         return `<div class="bk-card" style="--sc:${c.sec.color||doc.theme.primary}"><span class="k">${i+k+1}</span><span class="s"></span><div class="f">${esc(c.front)}</div></div>`; }).join('')}</div>`;
       push(fr,'cards'); n++;
-      const bk=newPage(doc,S); bk.innerHTML=`<div class="bk-cards-cap"><span>Kartochkalar, orqa tomoni</span><span>${n}</span></div><div class="bk-cards">${Array.from({length:8},(_,k)=>{ const m=k%2===0?k+1:k-1; const c=chunk[m]; if(!c) return '<div class="bk-card"></div>';
+      const bk=newPage(doc,S); bk.innerHTML=`<div class="bk-cards-cap"><span>Kartochkalar · orqa tomoni</span><span>${n}</span></div><div class="bk-cards">${Array.from({length:8},(_,k)=>{ const m=k%2===0?k+1:k-1; const c=chunk[m]; if(!c) return '<div class="bk-card"></div>';
         return `<div class="bk-card" style="--sc:${c.sec.color||doc.theme.primary}"><span class="k">${i+m+1}</span><div class="b">${esc(c.back)}</div>${c.hint?`<div class="h">${esc(c.hint)}</div>`:''}</div>`; }).join('')}</div>`;
       push(bk,'cards'); n++;
     }
@@ -8325,11 +8437,14 @@ async function exportPdf(doc, pages, onProg){
   for(let i=0;i<pages.length;i++){
     onProg&&onProg(i+1,pages.length);
     const c=pages[i].el.cloneNode(true); c.style.transform='none'; c.style.margin='0'; off.innerHTML=''; off.appendChild(c);
-    const cv=await html2canvas(c,{scale:2.4,backgroundColor:doc.theme.paper,useCORS:true,logging:false});
+    // Pro: ~350 dpi va yuqori JPEG sifati (bosmaxona uchun aniq matn); oddiy: ~210 dpi
+    const hq=!!doc.pro && !!window.__wdIsPro;
+    const cv=await html2canvas(c,{scale:hq?(S.w>700?3:3.6):2.4,backgroundColor:doc.theme.paper,useCORS:true,logging:false});
     if(i) pdf.addPage(S.mm,'portrait');
-    pdf.addImage(cv.toDataURL('image/jpeg',0.9),'JPEG',0,0,S.mm[0],S.mm[1]);
+    pdf.addImage(cv.toDataURL('image/jpeg',hq?0.96:0.9),'JPEG',0,0,S.mm[0],S.mm[1],undefined,hq?'SLOW':'FAST');
   }
   } finally { off.remove(); }
+  try{ pdf.setProperties({title:doc.title||'Kitobcha',subject:doc.subtitle||'',author:doc.author||'WordDrop',creator:'WordDrop'+(doc.pro?' Pro':''),keywords:'WordDrop, ingliz tili'}); }catch(e){}
   const name=(doc.title||'kitobcha').replace(/[^\wЀ-ӿ' -]+/g,'').trim().replace(/\s+/g,'-').slice(0,40)||'kitobcha';
   pdf.save(name+'.pdf');
 }
@@ -8371,6 +8486,10 @@ function renderStart(brief){
         <div><span class="bk-lbl">Ranglar</span><div class="bk-pal" id="bkPal"><button data-i="-1" class="on" title="Drop tanlasin"><i style="background:conic-gradient(#2F6FED 0 25%,#F0461E 0 50%,#0E8F60 0 75%,#6D3FE0 0)"></i>Drop tanlasin</button>${PALETTES.map((p,i)=>`<button data-i="${i}" title="${p.n}"><i style="background:linear-gradient(135deg,${p.primary} 50%,${p.accent} 50%)"></i>${p.n}</button>`).join('')}</div></div>
         ${srsN?`<label class="bk-chk"><input type="checkbox" id="bkMine"> Lug'atimdagi so'zlardan foydalanish <span>(${srsN} ta)</span></label>`:''}
       </div>
+      ${window.__wdIsPro?`<div class="bk-pro on" id="bkProBox"><div class="bk-pro-h"><b>Pro sifat</b><button class="xc-tg on" id="bkPro" aria-label="Pro sifat"><i></i></button></div>
+          <ul><li>Chuqurroq fikrlovchi AI va muharrir tekshiruvi (imlo, grammatika, javoblar)</li><li>Pro muqovalar, har bo'lim uchun ochilish sahifasi, "Esda tuting" va "Ko'p uchraydigan xatolar"</li><li>8 tagacha bo'lim va ~350 dpi bosmaxona sifatidagi PDF</li></ul></div>
+        ${srsN?`<button class="bk-week" id="bkWeek"><b>Mening haftalik kitobcham</b><span>Drop zaif so'zlaringiz va xatolaringizdan shaxsiy takror kitobchasi tuzadi</span></button>`:''}`
+      :`<button class="bk-pro lock" data-open-pro><div class="bk-pro-h"><b>Pro kitobcha</b><em>Pro</em></div><span>Muharrir tekshiruvi, Pro muqovalar, bo'lim sahifalari va bosmaxona sifatidagi PDF</span></button>`}
       <button class="rv-go" id="bkGo"><span>Kitobcha yaratish</span><em>1 so'rov</em></button>
       ${list.length?`<h3 class="qx-h">Mening kitobchalarim</h3><div class="qx-box">${list.map(b=>`<div class="bk-item"><button data-open="${b.id}"><b>${esc(b.doc.title)}</b><span>${b.doc.sections.length} bo'lim, ${b.doc.size}. ${new Date(b.updated).toLocaleDateString()}</span></button><button class="del" data-del="${b.id}" aria-label="O'chirish">×</button></div>`).join('')}</div>`:''}
     </div>`;
@@ -8382,6 +8501,16 @@ function renderStart(brief){
   el.querySelectorAll('#bkPal button').forEach(b=>b.onclick=()=>{ pal=Number(b.dataset.i); el.querySelectorAll('#bkPal button').forEach(x=>x.classList.toggle('on',x===b)); });
   el.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{ const it=bkAll().find(x=>x.id===b.dataset.open); if(it){ ST={doc:it.doc,id:it.id,undo:[],log:it.log||[],pages:[],busy:false}; renderStudio(); } });
   el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ bkSaveAll(bkAll().filter(x=>x.id!==b.dataset.del)); renderStart(ta.value); });
+  let useProQ=!!window.__wdIsPro;
+  const pt=el.querySelector('#bkPro'); if(pt) pt.onclick=()=>{ useProQ=!useProQ; pt.classList.toggle('on',useProQ); el.querySelector('#bkProBox').classList.toggle('on',useProQ); };
+  const wk=el.querySelector('#bkWeek'); if(wk) wk.onclick=()=>{
+    const all=(typeof srsAll==='function')?srsAll():[];
+    const weak=all.filter(w=>(typeof srsIsLeech==='function'&&srsIsLeech(w))||(w.lapses||0)>=1||(w.bad||0)>=2).slice(0,30);
+    const pick=(weak.length>=8?weak:all.slice().sort((a,b)=>(srsRetNow(a)||0)-(srsRetNow(b)||0)).slice(0,30));
+    ta.value=`Mening shaxsiy haftalik takror kitobcham: 7 kunlik reja. Har kuni 4-5 ta so'z (quyidagi zaif so'zlarimdan), har biriga eslab qolish usuli, misol, kichik mashq va kartochkalar. Oxirida "Ko'p uchraydigan xatolar" va umumiy test. So'zlarim: ${pick.map(w=>w.t+' = '+w.tr).join('; ')}`;
+    const mine=el.querySelector('#bkMine'); if(mine) mine.checked=false;
+    ta.scrollIntoView({block:'center',behavior:'smooth'}); showToast("So'rov tayyor — «Kitobcha yaratish»ni bosing",IC.info);
+  };
   el.querySelector('#bkGo').onclick=async()=>{
     let brief=ta.value.trim();
     if(brief.length<8){ showToast("Kitobcha nima haqida ekanini batafsilroq yozing",IC.info); ta.focus(); return; }
@@ -8393,13 +8522,14 @@ function renderStart(brief){
     if(mine&&mine.checked&&typeof srsAll==='function'){
       words=srsAll().slice().sort((a,b)=>(srsRetNow(a)||0)-(srsRetNow(b)||0)).slice(0,40).map(w=>({t:w.t,tr:w.tr}));
     }
-    busyScreen("Drop kitobchani tuzmoqda","Bo'limlar, mashqlar va kartochkalar tayyorlanmoqda. Odatda 20–40 soniya.");
-    const r=await dpRequest({mode:'booklet',brief:brief+'\n'+extra.join(' '),words},120000);
+    const pq=useProQ&&!!window.__wdIsPro;
+    busyScreen(pq?"Drop Pro kitobcha tuzmoqda":"Drop kitobchani tuzmoqda", pq?"Avval mazmun tuziladi, keyin muharrir imlo, grammatika va javoblarni tekshiradi. Odatda 1–2 daqiqa.":"Bo'limlar, mashqlar va kartochkalar tayyorlanmoqda. Odatda 20–40 soniya.");
+    const r=await dpRequest({mode:'booklet',brief:brief+'\n'+extra.join(' '),words,pro:pq},pq?200000:120000);
     if(r.__error||!r.doc){ renderStart(brief); showToast(r.msg||"Kitobcha tuzilmadi",IC.info); return; }
     if(pal>=0) Object.assign(r.doc.theme,{primary:PALETTES[pal].primary,accent:PALETTES[pal].accent,paper:PALETTES[pal].paper,ink:PALETTES[pal].ink});
     r.doc.size=size;
     await dpBump();
-    ST={doc:r.doc,id:'bk'+Date.now().toString(36),undo:[],log:[{who:'me',t:brief},{who:'drop',t:r.note_uz||"Kitobcha tayyor."}],pages:[],busy:false};
+    ST={doc:r.doc,id:'bk'+Date.now().toString(36),undo:[],log:[{who:'me',t:brief},{who:'drop',t:(r.note_uz||"Kitobcha tayyor.")+(r.reviewed?" Muharrir tekshiruvidan o'tdi.":"")}],pages:[],busy:false};
     persist(); renderStudio();
   };
 }
@@ -8420,6 +8550,7 @@ async function renderStudio(){
     <div class="bk-tools">
       <div class="bk-pal sm" id="bkPal2">${PALETTES.map((p,i)=>`<button data-i="${i}" title="${p.n}" class="${p.primary===d.theme.primary?'on':''}"><i style="background:linear-gradient(135deg,${p.primary} 50%,${p.accent} 50%)"></i></button>`).join('')}</div>
       <div class="xc-chips sm" id="bkSize2">${['A5','B5','A4'].map(s=>`<button data-v="${s}" class="${d.size===s?'on':''}">${s}</button>`).join('')}</div>
+      <div class="xc-chips sm bk-cov2" id="bkCov2">${[['big-title','Klassik'],['band','Lenta'],['minimal','Sodda'],['poster','Poster',1],['split','Tomchi',1],['editorial','Jurnal',1]].map(([k,n,pro])=>`<button data-v="${k}" class="${d.cover.style===k?'on':''} ${pro&&!window.__wdIsPro?'lk':''}">${n}${pro?'<sup>Pro</sup>':''}</button>`).join('')}</div>
       <div class="xc-chips sm" id="bkFont2">${[['grotesk','Aa'],['serif','Ss'],['rounded','Rr']].map(([k,n])=>`<button data-v="${k}" class="${d.theme.font===k?'on':''}" title="${k}" style="font-family:${k==='serif'?"'Instrument Serif',serif":k==='grotesk'?"'Bricolage Grotesque'":'Inter'}">${n}</button>`).join('')}</div>
     </div>
     <div class="bk-prev" id="bkPrev"><div class="bk-stage" id="bkStage"></div></div>
@@ -8434,13 +8565,15 @@ async function renderStudio(){
   el.querySelectorAll('#bkPal2 button').forEach(b=>b.onclick=()=>local(dd=>{ const p=PALETTES[+b.dataset.i]; Object.assign(dd.theme,{primary:p.primary,accent:p.accent,paper:p.paper,ink:p.ink}); dd.sections.forEach(s=>s.color=''); }));
   el.querySelectorAll('#bkSize2 button').forEach(b=>b.onclick=()=>local(dd=>{ dd.size=b.dataset.v; }));
   el.querySelectorAll('#bkFont2 button').forEach(b=>b.onclick=()=>local(dd=>{ dd.theme.font=b.dataset.v; }));
+  el.querySelectorAll('#bkCov2 button').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')){ if(window.__wdOpenPro) window.__wdOpenPro(); return; } local(dd=>{ dd.cover.style=b.dataset.v; if(['poster','split','editorial'].includes(b.dataset.v)) dd.pro=true; }); });
   const ask=el.querySelector('#bkAsk');
   const go=async()=>{
     const t=ask.value.trim(); if(!t||ST.busy) return;
     if(!dpQuotaOk()) return;
     ST.busy=true; ask.value=''; ask.disabled=true;
     ST.log.push({who:'me',t}); const lg=el.querySelector('#bkLog'); lg.innerHTML=`<p class="me">${esc(t)}</p><p class="drop wait"><b>Drop:</b> tahrirlayapman…</p>`;
-    const r=await dpRequest({mode:'booklet_edit',doc:ST.doc,instruction:t},120000);
+    const pq=!!(ST.doc.pro&&window.__wdIsPro);
+    const r=await dpRequest({mode:'booklet_edit',doc:ST.doc,instruction:t,pro:pq},pq?200000:120000);
     ST.busy=false;
     if(r.__error||!r.doc){ ST.log.push({who:'drop',t:r.msg||"Bu tahrirni bajara olmadim."}); renderStudio(); return; }
     await dpBump();
@@ -8466,7 +8599,6 @@ async function renderStudio(){
   const pc=document.createElement('p'); pc.className='bk-count'; pc.textContent=`${ST.pages.length} sahifa`; prev.appendChild(pc);
 }
 })();
-
 /* ==================================================================
    SUHBAT SHERIGI + RASMDAN SO'Z (v94)
    ------------------------------------------------------------------
@@ -9232,6 +9364,8 @@ let P=null, pick='m1';
 function apply(){
   const pro=!!(P&&P.pro);
   window.__wdIsPro=pro;
+  // Seriya himoyasi: har oy 2 ta streak muzlatgich (jami 4 tadan oshmaydi)
+  try{ const R=window.__wdRoom; if(pro&&R){ R.inv=R.inv||{}; const m=new Date().toISOString().slice(0,7); if(R.proFreeze!==m){ R.inv.freeze=Math.min(4,(R.inv.freeze||0)+2); R.proFreeze=m; saveState(); showToast("Pro: bu oy uchun 2 ta streak muzlatgich qo'shildi",IC.info); } } }catch(e){}
   try{ if(window.__wdSetDropMax) window.__wdSetDropMax(pro?100:20); }catch(e){}
   document.documentElement.classList.toggle('is-pro',pro);
 }
@@ -9260,7 +9394,16 @@ function drop(level,cls){ const id='pvd'+(++dropN), y=8+(1-level)*52;
     <path d="${DROP}" class="pv-d-bg"/><g clip-path="url(#${id})"><path class="pv-d-w" style="--y:${y}px" d="M0 ${y} Q16 ${y-3} 32 ${y} T64 ${y} V72 H0Z"/></g><path d="${DROP}" class="pv-d-ln"/></svg>`; }
 const MONTHS={m1:1,m3:3,y1:12};
 const PLAN_NOTE={m1:"Har 30 kunda yangilanadi, istalgan vaqt bekor qilasiz",m3:"Bir martalik to'lov, avtomatik yechilmaydi",y1:"Bir martalik to'lov, avtomatik yechilmaydi"};
-const ROWS=[["Darslar, so'zlar, takrorlash","Cheksiz","Cheksiz"],["Drop AI savollari","20 / kun","100 / kun"],["Ovozli Speaking mashqi","limit ichida","limit ichida"],["PDF kitobchalar","limit ichida","limit ichida"],["Profilda Pro belgisi","—","✓"]];
+const ROWS=[["Darslar, so'zlar, takrorlash","Cheksiz","Cheksiz"],["Drop AI savollari","20 / kun","100 / kun"],["PDF kitobchalar","Oddiy","Pro sifat"],["Haftalik shaxsiy kitobcha","—","✓"],["Streak muzlatgich","Do'kondan","2 ta har oy"],["Ramka va ism rangi","Do'kondan","Hammasi + Pro ramka"],["Profilda Pro belgisi","—","✓"]];
+const FEATS=[
+  ['book',"Pro kitobchalar","Chuqurroq AI tuzadi, muharrir imlo, grammatika va javoblarni tekshiradi. Poster, Tomchi va Jurnal muqovalari, har bo'lim uchun ochilish sahifasi va bosmaxona sifatidagi (~350 dpi) PDF."],
+  ['week',"Haftalik shaxsiy kitobcha","Bir bosishda Drop eng zaif so'zlaringizdan 7 kunlik takror kitobchasini tuzadi: eslab qolish usullari, mashqlar va kartochkalar bilan."],
+  ['ice',"Seriya himoyasi","Har oy 2 ta streak muzlatgich — bir-ikki kun kira olmasangiz ham seriyangiz saqlanadi."],
+  ['ring',"Pro ramka va ranglar","Faqat Pro'dagilarga «Pro tomchi» ramkasi, shuningdek barcha ramka va ism ranglari."]];
+const FIC={book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 8h6"/></svg>',
+  week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M8 15l2 2 4-4"/></svg>',
+  ice:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>',
+  ring:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/></svg>'};
 const IBK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
 async function openPro(){
   window.__wdTgView('proView');
@@ -9289,11 +9432,13 @@ function draw(){
   const hero=P.pro
     ? `<section class="pv-hero on"><div class="pv-one">${drop(1,'gold')}</div><span class="pv-chip">Pro faol</span><h1>${fmtDay(P.until)} gacha</h1>
         <p>${left} kun qoldi${P.sub_active?" · oylik obuna o'zi yangilanadi":''}. Drop AI kuniga 100 ta savolga javob beradi.</p></section>`
-    : `<section class="pv-hero">${heroDrops()}<h1>Drop bilan kuniga 100 ta savol</h1><p>Ko'proq gapiring, yozing va so'rang — kun o'rtasida to'xtab qolmasdan.</p></section>`;
+    : `<section class="pv-hero">${heroDrops()}<h1>Drop bilan kuniga 100 ta savol</h1><p>Ko'proq so'rang, bosmaxona sifatidagi kitobchalar yarating va seriyangizni himoya qiling.</p></section>`;
   b.innerHTML=`${hero}
     <div class="pv-pad">
       <table class="pv-cmp"><thead><tr><th></th><th>Bepul</th><th class="pro">Pro</th></tr></thead>
         <tbody>${ROWS.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td class="pro">${esc(r[2])}</td></tr>`).join('')}</tbody></table>
+      <h3 class="pv-h">Faqat Pro'da</h3>
+      <div class="pv-feats">${FEATS.map(([i,t,d])=>`<div class="pv-feat"><span class="pv-fi">${FIC[i]}</span><div><b>${t}</b><p>${d}</p></div></div>`).join('')}</div>
       <h3 class="pv-h">${P.pro?'Muddatni uzaytirish':'Tarifni tanlang'}</h3>
       <div class="pv-plans" role="radiogroup" aria-label="Tarif">${plans.map(p=>{ const m=MONTHS[p.id]||1, per=Math.round(p.stars/m), save=p.id==='m1'?0:Math.round((1-p.stars/(plans[0].stars*m))*100);
         return `<button role="radio" aria-checked="${p.id===pick}" class="pv-plan ${p.id===pick?'on':''}" data-p="${p.id}">
@@ -17012,11 +17157,11 @@ function renderProfileInner(){
   if(ttBtn) ttBtn.addEventListener('click',openTitlePicker);
   const frRow=sec.querySelector('#rFrame');
   if(frRow) frRow.addEventListener('click',()=>{
-    if(!premOwn('frames')){ showToast("Do'kondan 'Profil ramkalari'ni oling (15 WC)",IC.info); return; }
+    if(!premOwn('frames')&&!window.__wdIsPro){ showToast("Do'kondan 'Profil ramkalari'ni oling (15 WC) yoki Pro'ga o'ting",IC.info); return; }
     const cur=window.__wdFrame||'';
     const layer=openSheet(`<h2>Profil ramkasi</h2>
       <div class="fr-grid">
-        ${[['','Yo\'q'],['gold','Oltin'],['fire','Olov'],['neon','Neon'],['aqua','Suv'],['royal','Shohona']].map(([v,n])=>`
+        ${[['','Yo\'q'],['gold','Oltin'],['fire','Olov'],['neon','Neon'],['aqua','Suv'],['royal','Shohona']].concat(window.__wdIsPro?[['pro','Pro tomchi']]:[]).map(([v,n])=>`
           <button class="fr-opt ${cur===v?'on':''}" data-v="${v}">
             <div class="fr-ring fr-${v||'none'}"><div class="fr-demo"></div></div><span>${n}</span>
           </button>`).join('')}
@@ -17029,7 +17174,7 @@ function renderProfileInner(){
   });
   const ncRow=sec.querySelector('#rNameColor');
   if(ncRow) ncRow.addEventListener('click',()=>{
-    if(!premOwn('namecolor')){ showToast("Do'kondan 'Ism rangi'ni oling (120 WC)",IC.info); return; }
+    if(!premOwn('namecolor')&&!window.__wdIsPro){ showToast("Do'kondan 'Ism rangi'ni oling (120 WC)",IC.info); return; }
     const cur=window.__wdNameColor||'';
     const layer=openSheet(`<h2>Ism rangi</h2>
       <p class="desc">Reytingda ismingiz shu rangda ko'rinadi.</p>

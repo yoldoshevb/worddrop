@@ -1,5 +1,5 @@
 // Supabase Edge Function: drop-pro
-// Drop AI'ning kengaytirilgan imkoniyatlari (WordDrop v94).
+// Drop AI'ning kengaytirilgan imkoniyatlari (WordDrop v94; v98 — Pro kitobchalar).
 // Mavjud check-sentence funksiyasiga tegmaydi — alohida ishlaydi.
 // GROQ_API_KEY — loyiha Secrets'idan (check-sentence bilan bir xil kalit).
 //
@@ -10,6 +10,10 @@
 //   booklet        — kitobcha (PDF) uchun tuzilgan JSON hujjat yaratish
 //   booklet_edit   — mavjud kitobcha hujjatini ko'rsatma bo'yicha tahrirlash
 //   mnemonic       — o'zbekcha eslab qolish usuli (tovush o'xshashligi + tasvir), 6 tagacha so'z
+//
+// v98: booklet / booklet_edit + {pro:true} — faqat Pro hisob (JWT + wd_is_pro). Kengroq hajm (8 bo'limgacha),
+//      qo'shimcha bloklar (keypoints, mistakes), Pro muqovalar, chuqurroq fikrlovchi model va ikkinchi
+//      "muharrir" bosqichi: o'zbekcha imlo, inglizcha to'g'rilik va javoblar kalitini tekshiradi.
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,6 +25,17 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 }
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { createClient } from "npm:@supabase/supabase-js@2";
+const SB = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+/* So'rov egasi Pro'mi? (foydalanuvchi JWT + wd_is_pro) */
+async function isProReq(req: Request): Promise<boolean> {
+  const tok = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  if (!tok || tok.startsWith("sb_")) return false;
+  try {
+    const { data } = await SB.auth.getUser(tok); const uid = data?.user?.id; if (!uid) return false;
+    const { data: ok } = await SB.rpc("wd_is_pro", { uid }); return !!ok;
+  } catch { return false; }
+}
 const clip = (v: unknown, n: number) => String(v ?? "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "").slice(0, n).trim();
 
 type ModelCfg = { id: string; extra: Record<string, unknown> };
@@ -28,6 +43,11 @@ const TEXT_MODELS: ModelCfg[] = [
   { id: "openai/gpt-oss-120b", extra: { include_reasoning: false, reasoning_effort: "low" } },
   { id: "qwen/qwen3.8-27b", extra: { reasoning_effort: "none", reasoning_format: "hidden" } },
   { id: "openai/gpt-oss-20b", extra: { include_reasoning: false, reasoning_effort: "low" } },
+];
+// Pro kitobchalar: chuqurroq o'ylaydigan sozlama
+const PRO_MODELS: ModelCfg[] = [
+  { id: "openai/gpt-oss-120b", extra: { include_reasoning: false, reasoning_effort: "medium" } },
+  ...TEXT_MODELS,
 ];
 const VISION_MODELS: ModelCfg[] = [
   { id: "qwen/qwen3.8-27b", extra: { reasoning_effort: "none", reasoning_format: "hidden" } },
@@ -56,7 +76,7 @@ async function groqJson(apiKey: string, models: ModelCfg[], messages: unknown[],
           body: JSON.stringify({
             model: m.id,
             temperature: Math.max(0.01, Math.min(1.5, temperature)),
-            max_completion_tokens: Math.min(8000, maxTokens),
+            max_completion_tokens: Math.min(16000, maxTokens),
             response_format: { type: "json_object" },
             ...m.extra,
             messages,
@@ -114,8 +134,18 @@ QOIDALAR:
 - Ranglar: kontrasti yetarli bo'lsin (paper ochiq, ink to'q). Foydalanuvchi rang aytsa — aynan shuni ishlat.
 - Hajm: foydalanuvchi aytmasa 3-5 bo'lim, har bo'limda 3-6 blok, jami 12-40 ta kartochka.
 `;
+const PRO_SCHEMA = `
+PRO KITOBCHA (shu hujjat Pro sifatda):
+- Muqova uslubi qo'shimcha: "poster" | "split" | "editorial" (ulardan birini tanla, mavzuga mos).
+- Qo'shimcha bloklar:
+ {"type":"keypoints","title":"Esda tuting","items":["3-5 ta eng muhim qisqa xulosa"]}
+ {"type":"mistakes","title":"Ko'p uchraydigan xatolar","items":[{"wrong":"noto'g'ri inglizcha","right":"to'g'ri inglizcha","uz":"nega — qisqa izoh"}]}
+- Hajm: so'ralmasa 4-6 bo'lim (eng ko'pi 8), har bo'limda 4-8 blok. Har bo'lim oxirida "keypoints"; kerakli joyda "mistakes".
+- Har bo'limda kamida bitta mashq yoki test va har birida javob ("a" yoki "answer") bo'lsin.
+- Sifat: o'zbekcha matn — adabiy, imlosi to'g'ri, tushunarli; inglizcha misollar — tabiiy, grammatik jihatdan benuqson; IPA to'g'ri.
+`;
 const HEX = /^#[0-9a-fA-F]{6}$/;
-const BLOCK_TYPES = new Set(["text", "callout", "list", "table", "vocab", "cards", "dialog", "exercise", "quiz", "lines", "tracker"]);
+const BLOCK_TYPES = new Set(["text", "callout", "list", "table", "vocab", "cards", "dialog", "exercise", "quiz", "lines", "tracker", "keypoints", "mistakes"]);
 function cleanDoc(d: any): any {
   if (!d || typeof d !== "object") return null;
   const th = d.theme && typeof d.theme === "object" ? d.theme : {};
@@ -132,10 +162,11 @@ function cleanDoc(d: any): any {
       font: ["grotesk", "serif", "rounded"].includes(th.font) ? th.font : "grotesk",
     },
     cover: {
-      style: ["big-title", "band", "minimal"].includes(d?.cover?.style) ? d.cover.style : "big-title",
+      style: ["big-title", "band", "minimal", "poster", "split", "editorial"].includes(d?.cover?.style) ? d.cover.style : "big-title",
       badge: clip(d?.cover?.badge, 24),
     },
     sections: [],
+    ...(d.pro ? { pro: true } : {}),
   };
   for (const s of arr(d.sections, 12)) {
     if (!s || typeof s !== "object") continue;
@@ -154,6 +185,8 @@ function cleanDoc(d: any): any {
       if (t === "quiz") { o.title = clip(b.title, 100); o.items = arr(b.items, 12).map((x: any) => { const opts = arr(x?.options, 4).map((y: unknown) => clip(y, 100)); const a = Number(x?.answer); return { q: clip(x?.q, 240), options: opts, answer: a >= 0 && a < opts.length ? a : 0 }; }).filter((x: any) => x.q && x.options.length >= 2); }
       if (t === "lines") { o.label = clip(b.label, 100); o.n = Math.max(1, Math.min(20, Number(b.n) || 5)); }
       if (t === "tracker") { o.label = clip(b.label, 100); o.days = Math.max(3, Math.min(31, Number(b.days) || 7)); }
+      if (t === "keypoints") { o.title = clip(b.title, 80) || "Esda tuting"; o.items = arr(b.items, 8).map((x: unknown) => clip(x, 220)).filter(Boolean); if (!o.items.length) continue; }
+      if (t === "mistakes") { o.title = clip(b.title, 80) || "Ko'p uchraydigan xatolar"; o.items = arr(b.items, 10).map((x: any) => ({ wrong: clip(x?.wrong, 160), right: clip(x?.right, 160), uz: clip(x?.uz, 200) })).filter((x: any) => x.wrong && x.right); if (!o.items.length) continue; }
       sec.blocks.push(o);
     }
     if (sec.title) out.sections.push(sec);
@@ -280,6 +313,9 @@ Faqat JSON: {"items":[{"t":"so'z","mn_uz":"eslab qolish usuli","hook":"tovush bo
     }
 
     /* ═══ KITOBCHA ═══ */
+    const pro = body.pro === true && (await isProReq(req));
+    if (body.pro === true && !pro && (mode === "booklet" || mode === "booklet_edit")) return json({ error: "Pro kitobcha faqat WordDrop Pro'da. Oddiy kitobcha uchun Pro belgisini o'chiring." }, 403);
+
     if (mode === "booklet") {
       const brief = clip(body.brief, 1500);
       if (!brief) return json({ error: "Kitobcha nima haqida ekanini yozing" }, 400);
@@ -289,15 +325,34 @@ Faqat JSON: {"items":[{"t":"so'z","mn_uz":"eslab qolish usuli","hook":"tovush bo
 `Sen "Drop" — WordDrop'ning kitobcha dizayneri va ingliz tili o'qituvchisisan. O'quvchi darajasi: ${level}.
 Vazifang: o'quvchi so'roviga ko'ra chop etiladigan kichik o'quv kitobchasi uchun TUZILGAN HUJJAT (JSON) yaratish. Dizaynni dastur o'zi chizadi — sen faqat mazmun, tuzilish va ranglarni berasan.
 Kitobcha xuddi tajribali o'qituvchi tuzgandek bo'lsin: mantiqiy ketma-ketlik (tushuntirish → misol → mashq → takror), esda qolish uchun kartochkalar, qisqa qoidalar.
-${BOOKLET_SCHEMA}
+${BOOKLET_SCHEMA}${pro ? PRO_SCHEMA : ""}
 ${UZ}
 Faqat JSON qaytar: {"doc": HUJJAT, "note_uz": "o'quvchiga 1 jumla: nima tayyorlading"}`;
       const user = `So'rov: ${brief}${words.length ? `\nO'quvchining o'z so'zlari (kerak bo'lsa ishlat): ${words.join("; ")}` : ""}`;
-      const p = await groqJson(apiKey, TEXT_MODELS, [{ role: "system", content: system }, { role: "user", content: user }], 7500, 0.6);
+      const t0 = Date.now();
+      const p = await groqJson(apiKey, pro ? PRO_MODELS : TEXT_MODELS, [{ role: "system", content: system }, { role: "user", content: user }], pro ? 14000 : 7500, 0.6);
       if (p instanceof Response) return p;
-      const doc = cleanDoc(p.doc || p);
+      let doc = cleanDoc(p.doc || p);
       if (!doc) return json({ error: "Kitobcha tuzilmadi, so'rovni aniqroq yozing" }, 502);
-      return json({ doc, note_uz: clip(p.note_uz, 300) });
+      let reviewed = false;
+      if (pro) {
+        doc.pro = true;
+        // Ikkinchi bosqich: muharrir tekshiruvi (vaqt yetsa)
+        if (Date.now() - t0 < 70_000) {
+          const r = await groqJson(apiKey, TEXT_MODELS, [{ role: "system", content:
+`Sen tajribali muharrir va ingliz tili metodistisan. Senga o'quv kitobchasi hujjati (JSON) beriladi. Uni sinchiklab tekshir va TUZATILGAN TO'LIQ hujjatni qaytar:
+- O'zbekcha matnlar: imlo (o', g', sh, ch), grammatika, tabiiylik; sheva yoki g'aliz tarjima bo'lsa — tuzat.
+- Inglizcha: grammatika, tabiiylik, IPA; tarjimalar aniqligi.
+- Mashq va testlar: har savolda bitta aniq to'g'ri javob, "a"/"answer" haqiqatan to'g'ri bo'lsin; bo'sh joy (____) to'g'ri qo'yilgan bo'lsin.
+- Kartochkalar: front inglizcha, back o'zbekcha, takrorlanmasin.
+Tuzilma, ranglar, bloklar soni va tartibini O'ZGARTIRMA — faqat mazmun xatolarini tuzat.
+${BOOKLET_SCHEMA}${PRO_SCHEMA}
+${UZ}
+Faqat JSON: {"doc": TUZATILGAN_HUJJAT, "fixes": son}` }, { role: "user", content: JSON.stringify(doc) }], 14000, 0.2);
+          if (!(r instanceof Response)) { const d2 = cleanDoc(r.doc || r); if (d2 && d2.sections.length >= doc.sections.length) { doc = { ...d2, pro: true }; reviewed = true; } }
+        }
+      }
+      return json({ doc, note_uz: clip(p.note_uz, 300), reviewed });
     }
 
     if (mode === "booklet_edit") {
@@ -307,14 +362,15 @@ Faqat JSON qaytar: {"doc": HUJJAT, "note_uz": "o'quvchiga 1 jumla: nima tayyorla
       const system =
 `Sen "Drop" — kitobcha muharririsan. Senga mavjud kitobcha hujjati (JSON) va o'quvchining ko'rsatmasi beriladi.
 Ko'rsatmani aniq bajar: faqat so'ralgan narsani o'zgartir, qolganini AYNAN saqla. Rang so'ralsa theme yoki bo'lim rangini o'zgartir; "qisqartir" — matnni qisqartir; "qo'sh" — yangi blok/bo'lim qo'sh.
-${BOOKLET_SCHEMA}
+${BOOKLET_SCHEMA}${pro ? PRO_SCHEMA : ""}
 ${UZ}
 Faqat JSON qaytar: {"doc": YANGI_TO'LIQ_HUJJAT, "note_uz": "nimani o'zgartirganing, 1 jumla"}`;
       const user = `Ko'rsatma: ${instr}\n\nJoriy hujjat:\n${JSON.stringify(cur)}`;
-      const p = await groqJson(apiKey, TEXT_MODELS, [{ role: "system", content: system }, { role: "user", content: user }], 7500, 0.3);
+      const p = await groqJson(apiKey, pro ? PRO_MODELS : TEXT_MODELS, [{ role: "system", content: system }, { role: "user", content: user }], pro ? 14000 : 7500, 0.3);
       if (p instanceof Response) return p;
       const doc = cleanDoc(p.doc || p);
       if (!doc) return json({ error: "Tahrir bajarilmadi, boshqacha yozib ko'ring" }, 502);
+      if (pro || cur.pro) doc.pro = true;
       return json({ doc, note_uz: clip(p.note_uz, 300) });
     }
 
