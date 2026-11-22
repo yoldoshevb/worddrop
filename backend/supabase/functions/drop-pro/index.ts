@@ -1,4 +1,4 @@
-// Supabase Edge Function: drop-pro
+// Supabase Edge Function: drop-pro (v100: stt)
 // Drop AI'ning kengaytirilgan imkoniyatlari (WordDrop v94; v98 — Pro kitobchalar).
 // Mavjud check-sentence funksiyasiga tegmaydi — alohida ishlaydi.
 // GROQ_API_KEY — loyiha Secrets'idan (check-sentence bilan bir xil kalit).
@@ -15,8 +15,8 @@
 //      qo'shimcha bloklar (keypoints, mistakes), Pro muqovalar, chuqurroq fikrlovchi model va ikkinchi
 //      "muharrir" bosqichi: o'zbekcha imlo, inglizcha to'g'rilik va javoblar kalitini tekshiradi.
 // v99: barcha kitobchalarda muharrir bosqichi; so'z tarjimalari tasdiqlangan lug'atdan (word_translations)
-//      tekshiriladi; illyustratsiya kalitlari (Fluent Emoji Flat, MIT) — bo'lim, muqova, so'z va kartochkalar uchun;
-//      boyroq mazmun talablari.
+//      tekshiriladi; boyroq mazmun talablari.
+// v100: illyustratsiyalar o'rniga "level" (CEFR) maydoni; stt — Telegram WebView uchun ovozni matnga o'girish (Whisper).
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -111,11 +111,12 @@ HUJJAT SXEMASI (faqat shu maydonlar; boshqa maydon qo'shma):
  "title": "qisqa sarlavha (o'zbekcha)",
  "subtitle": "bir jumla",
  "author": "ixtiyoriy",
+ "level": "A1" | "A2" | "B1" | "B2" | "C1" | "C2" (o'quvchi darajasi),
  "size": "A5" | "B5" | "A4",
  "theme": { "primary": "#RRGGBB", "accent": "#RRGGBB", "paper": "#RRGGBB", "ink": "#RRGGBB", "font": "grotesk" | "serif" | "rounded" },
- "cover": { "style": "big-title" | "band" | "minimal", "badge": "ixtiyoriy qisqa yozuv, masalan '7 kun'", "icons": ["mavzuga mos 3 ta illyustratsiya nomi"] },
+ "cover": { "style": "big-title" | "band" | "minimal", "badge": "ixtiyoriy qisqa yozuv, masalan '7 kun'" },
  "sections": [
-   { "code": "1" (qisqa belgi: raqam yoki 1-2 harf), "title": "...", "color": "#RRGGBB (har bo'limga boshqa yorqin rang)", "icon": "illyustratsiya nomi", "intro": "1-2 jumla",
+   { "code": "1" (qisqa belgi: raqam yoki 1-2 harf), "title": "...", "color": "#RRGGBB (har bo'limga boshqa yorqin rang)", "intro": "1-2 jumla",
      "blocks": [ BLOK, ... ] }
  ]
 }
@@ -124,8 +125,8 @@ BLOK turlari:
  {"type":"callout","tone":"tip"|"rule"|"warn","title":"...","text":"..."}
  {"type":"list","style":"bullet"|"number"|"check","items":["..."]}
  {"type":"table","head":["..",".."],"rows":[["..",".."]]}
- {"type":"vocab","items":[{"en":"word","ipa":"/.../","uz":"tarjima","ex":"English example sentence.","icon":"ixtiyoriy illyustratsiya (aniq narsa bo'lsa)"}]}
- {"type":"cards","title":"...","items":[{"front":"inglizcha so'z yoki savol","back":"o'zbekcha javob","hint":"ixtiyoriy","icon":"ixtiyoriy"}]}
+ {"type":"vocab","items":[{"en":"word","ipa":"/.../","uz":"tarjima","ex":"English example sentence."}]}
+ {"type":"cards","title":"...","items":[{"front":"inglizcha so'z yoki savol","back":"o'zbekcha javob","hint":"ixtiyoriy"}]}
  {"type":"dialog","lines":[{"who":"A","en":"...","uz":"..."}]}
  {"type":"exercise","title":"...","kind":"fill"|"translate"|"write"|"match","items":[{"q":"savol, bo'sh joy ____ bilan","a":"to'g'ri javob"}]}
  {"type":"quiz","title":"...","items":[{"q":"...","options":["a","b","c"],"answer":0}]}
@@ -150,10 +151,8 @@ PRO KITOBCHA (shu hujjat Pro sifatda):
 - Har bo'limda kamida bitta mashq yoki test va har birida javob ("a" yoki "answer") bo'lsin.
 - Sifat: o'zbekcha matn — adabiy, imlosi to'g'ri, tushunarli; inglizcha misollar — tabiiy, grammatik jihatdan benuqson; IPA to'g'ri.
 `;
-/* Illyustratsiyalar: Microsoft Fluent Emoji (Flat), MIT litsenziya — ilova Iconify orqali SVG ko'rinishida chizadi */
-const ICONS = new Set(["books", "open-book", "notebook", "memo", "pencil", "writing-hand", "graduation-cap", "school", "teacher", "woman-teacher", "man-student", "woman-student", "brain", "light-bulb", "speech-balloon", "thought-balloon", "left-speech-bubble", "speaking-head", "ear", "eyes", "microphone", "headphone", "loudspeaker", "bell", "star", "glowing-star", "sparkles", "trophy", "1st-place-medal", "sports-medal", "party-popper", "confetti-ball", "fire", "rocket", "chart-increasing", "bar-chart", "hourglass-done", "alarm-clock", "stopwatch", "calendar", "spiral-calendar", "check-mark-button", "cross-mark", "warning", "red-question-mark", "key", "locked", "unlocked", "link", "pushpin", "round-pushpin", "magnifying-glass-tilted-left", "gear", "hammer-and-wrench", "puzzle-piece", "house", "house-with-garden", "office-building", "hospital", "bank", "hotel", "classical-building", "stadium", "shopping-cart", "shopping-bags", "convenience-store", "department-store", "airplane", "airplane-departure", "train", "bus", "automobile", "taxi", "bicycle", "ship", "world-map", "globe-showing-europe-africa", "globe-with-meridians", "compass", "luggage", "passport-control", "ticket", "hot-beverage", "teacup-without-handle", "bubble-tea", "fork-and-knife-with-plate", "fork-and-knife", "pizza", "hamburger", "red-apple", "green-apple", "banana", "grapes", "bread", "croissant", "birthday-cake", "cookie", "ice-cream", "cooking", "pot-of-food", "green-salad", "steaming-bowl", "spaghetti", "sushi", "taco", "watermelon", "carrot", "cheese-wedge", "egg", "dog", "cat", "cat-face", "dog-face", "rabbit-face", "panda", "bear", "lion", "tiger-face", "fox", "monkey", "owl", "penguin", "butterfly", "fish", "dolphin", "elephant", "horse", "unicorn", "sun", "sun-with-face", "cloud", "umbrella", "snowflake", "rainbow", "cloud-with-rain", "high-voltage", "tornado", "water-wave", "seedling", "deciduous-tree", "evergreen-tree", "palm-tree", "cactus", "tulip", "rose", "sunflower", "herb", "four-leaf-clover", "maple-leaf", "red-heart", "orange-heart", "yellow-heart", "green-heart", "blue-heart", "purple-heart", "sparkling-heart", "smiling-face-with-smiling-eyes", "grinning-face", "face-with-tears-of-joy", "thinking-face", "star-struck", "partying-face", "smiling-face-with-sunglasses", "nerd-face", "sleeping-face", "worried-face", "pleading-face", "angry-face", "face-with-monocle", "hugging-face", "winking-face", "thumbs-up", "clapping-hands", "waving-hand", "handshake", "raising-hands", "flexed-biceps", "folded-hands", "ok-hand", "victory-hand", "mobile-phone", "laptop", "desktop-computer", "keyboard", "camera", "camera-with-flash", "television", "radio", "video-game", "joystick", "robot", "battery", "electric-plug", "money-bag", "dollar-banknote", "credit-card", "coin", "gem-stone", "wrapped-gift", "briefcase", "soccer-ball", "basketball", "tennis", "volleyball", "running-shoe", "person-running", "man-running", "woman-running", "person-swimming", "guitar", "musical-note", "musical-notes", "artist-palette", "framed-picture", "performing-arts", "clapper-board", "movie-camera", "popcorn", "man-health-worker", "woman-health-worker", "police-officer", "man-cook", "woman-cook", "man-farmer", "woman-scientist", "man-technologist", "woman-technologist", "firefighter", "pilot", "astronaut", "detective", "people-hugging", "baby", "bed", "couch-and-lamp", "door", "window", "toilet", "shower", "bathtub", "broom", "basket", "soap", "toothbrush", "jeans", "dress", "t-shirt", "crown", "top-hat", "glasses", "sunglasses", "envelope", "incoming-envelope", "package", "newspaper", "scroll", "page-facing-up", "clipboard", "card-index", "bookmark", "label", "paperclip", "scissors", "straight-ruler", "triangular-ruler", "first-quarter-moon", "crescent-moon", "new-moon-face", "full-moon-face", "night-with-stars", "sunrise", "cityscape", "milky-way"]);
-const ICON_HINT = `ILLYUSTRATSIYALAR: "icon" maydonlari uchun FAQAT shu ro'yxatdagi nomlardan birini yoz (mos kelmasa — bo'sh qoldir): ${[...ICONS].join(" ")}`;
-const icon = (v: unknown) => { const x = String(v ?? "").trim().toLowerCase(); return ICONS.has(x) ? x : ""; };
+/* v100: illyustratsiyalar olib tashlandi — kitobchada ma'lumot grafikasi (daraja shkalasi, tarkib diagrammasi) chiziladi */
+const icon = (_v: unknown) => "";
 const HEX = /^#[0-9a-fA-F]{6}$/;
 const BLOCK_TYPES = new Set(["text", "callout", "list", "table", "vocab", "cards", "dialog", "exercise", "quiz", "lines", "tracker", "keypoints", "mistakes"]);
 function cleanDoc(d: any): any {
@@ -165,6 +164,7 @@ function cleanDoc(d: any): any {
     title: clip(d.title, 90) || "Kitobcha",
     subtitle: clip(d.subtitle, 200),
     author: clip(d.author, 60),
+    level: ["A1", "A2", "B1", "B2", "C1", "C2"].includes(String(d.level || "").toUpperCase()) ? String(d.level).toUpperCase() : "",
     size: ["A5", "B5", "A4"].includes(d.size) ? d.size : "A5",
     theme: {
       primary: col(th.primary, "#2F6FED"), accent: col(th.accent, "#E8374A"),
@@ -265,7 +265,7 @@ const EDITOR_SYS = (pro: boolean) =>
 - Mashq va testlar: har savolda bitta aniq to'g'ri javob, "a"/"answer" haqiqatan to'g'ri bo'lsin; bo'sh joy (____) to'g'ri qo'yilgan bo'lsin.
 - Kartochkalar: front inglizcha, back o'zbekcha, takrorlanmasin.
 - Agar bo'limda mazmun juda kam bo'lsa (masalan 3 tadan kam so'z yoki 4 tadan kam savol) — shu bo'limga mos misol va savollar qo'shib boyit.
-Tuzilma, ranglar, illyustratsiya nomlari va bloklar tartibini O'ZGARTIRMA.
+Tuzilma, ranglar, daraja va bloklar tartibini O'ZGARTIRMA.
 ${BOOKLET_SCHEMA}${pro ? PRO_SCHEMA : ""}
 ${UZ}
 Faqat JSON: {"doc": TUZATILGAN_HUJJAT, "fixes": son}`;
@@ -279,6 +279,35 @@ Deno.serve(async (req: Request) => {
     const apiKey = Deno.env.get("GROQ_API_KEY");
     if (!apiKey) return json({ error: "Server xatosi" }, 500);
     const level = clip(body.cefr, 4) || "B1";
+
+    /* ═══ OVOZ → MATN (v100) ═══
+       Telegram WebView va SpeechRecognition yo'q brauzerlar uchun: ilova yozgan ovozni Whisper bilan matnga o'giramiz. */
+    if (mode === "stt") {
+      const tok = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+      const { data: ud } = tok && !tok.startsWith("sb_") ? await SB.auth.getUser(tok) : { data: null as any };
+      const uid = ud?.user?.id; if (!uid) return json({ error: "Ovozli javob uchun WordDrop hisobingizga kiring" }, 401);
+      const b64 = String(body.audio || "");
+      if (!b64 || b64.length > 4_000_000) return json({ error: "Ovoz juda uzun yoki bo'sh" }, 400);
+      const key = `stt:${uid}:${new Date().toISOString().slice(0, 10)}`;
+      const { data: kvr } = await SB.from("wd_tg_kv").select("val").eq("key", key).maybeSingle();
+      const used = Number(kvr?.val) || 0; if (used >= 400) return json({ error: "Bugungi ovoz limiti tugadi" }, 429);
+      const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const mime = String(body.mime || "audio/webm").split(";")[0];
+      const ext = mime.includes("mp4") ? "m4a" : mime.includes("ogg") ? "ogg" : "webm";
+      const lang = /^[a-z]{2}$/.test(String(body.lang)) ? String(body.lang) : "en";
+      for (const model of ["whisper-large-v3-turbo", "whisper-large-v3"]) {
+        const fd = new FormData();
+        fd.append("file", new Blob([bin], { type: mime }), "speech." + ext);
+        fd.append("model", model); fd.append("language", lang); fd.append("response_format", "json"); fd.append("temperature", "0");
+        const r = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", { method: "POST", headers: { Authorization: `Bearer ${apiKey}` }, body: fd });
+        if (!r.ok) { console.error("[stt]", model, r.status, (await r.text()).slice(0, 200)); continue; }
+        const j = await r.json();
+        await SB.from("wd_tg_kv").upsert({ key, val: used + 1, updated_at: new Date().toISOString() });
+        if (Math.random() < 0.03) await SB.from("wd_tg_kv").delete().like("key", "stt:%").lt("updated_at", new Date(Date.now() - 2 * 86400_000).toISOString());
+        return json({ text: clip(j.text, 2000) });
+      }
+      return json({ error: "Ovozni tanib bo'lmadi" }, 502);
+    }
 
     /* ═══ JONLI SUHBAT ═══ */
     if (mode === "roleplay") {
@@ -402,7 +431,6 @@ Faqat JSON: {"items":[{"t":"so'z","mn_uz":"eslab qolish usuli","hook":"tovush bo
 Vazifang: o'quvchi so'roviga ko'ra chop etiladigan kichik o'quv kitobchasi uchun TUZILGAN HUJJAT (JSON) yaratish. Dizaynni dastur o'zi chizadi — sen faqat mazmun, tuzilish va ranglarni berasan.
 Kitobcha xuddi tajribali o'qituvchi tuzgandek bo'lsin: mantiqiy ketma-ketlik (tushuntirish → misol → mashq → takror), esda qolish uchun kartochkalar, qisqa qoidalar.
 ${BOOKLET_SCHEMA}${pro ? PRO_SCHEMA : ""}
-${ICON_HINT}
 ${UZ}
 Faqat JSON qaytar: {"doc": HUJJAT, "note_uz": "o'quvchiga 1 jumla: nima tayyorlading"}`;
       const user = `So'rov: ${brief}${words.length ? `\nO'quvchining o'z so'zlari (kerak bo'lsa ishlat): ${words.join("; ")}` : ""}`;
@@ -431,7 +459,6 @@ Faqat JSON qaytar: {"doc": HUJJAT, "note_uz": "o'quvchiga 1 jumla: nima tayyorla
 `Sen "Drop" — kitobcha muharririsan. Senga mavjud kitobcha hujjati (JSON) va o'quvchining ko'rsatmasi beriladi.
 Ko'rsatmani aniq bajar: faqat so'ralgan narsani o'zgartir, qolganini AYNAN saqla. Rang so'ralsa theme yoki bo'lim rangini o'zgartir; "qisqartir" — matnni qisqartir; "qo'sh" — yangi blok/bo'lim qo'sh.
 ${BOOKLET_SCHEMA}${pro ? PRO_SCHEMA : ""}
-${ICON_HINT}
 ${UZ}
 Faqat JSON qaytar: {"doc": YANGI_TO'LIQ_HUJJAT, "note_uz": "nimani o'zgartirganing, 1 jumla"}`;
       const user = `Ko'rsatma: ${instr}\n\nJoriy hujjat:\n${JSON.stringify(cur)}`;
