@@ -53,22 +53,96 @@ function chime(){ const a=ac(); if(!a) return; const t=a.currentTime; [[880,0],[
 let CUR=null, VOL=1;
 function stopAudio(){ if(CUR){ try{ CUR.pause(); }catch(e){} CUR=null; } try{ speechSynthesis.cancel(); }catch(e){} }
 function playUrl(url){ return new Promise(res=>{ stopAudio(); const a=new Audio(url); a.volume=VOL; CUR=a; a.onended=()=>{ CUR=null; res(true); }; a.onerror=()=>{ CUR=null; res(false); }; a.play().catch(()=>res(false)); }); }
-/* Audio bo'lmasa (qoralama test) — jonli TTS, eng oxirida brauzer ovozi */
+/* ── Qurilma ovozi (Web Speech) ──
+   Testda tayyor MP3 bo'lmasa, yozuvlar qurilmaning o'z ovozida o'qiladi. Server TTS (Groq Orpheus)
+   bepul tarifda kuniga ~3600 token bilan cheklangan — bitta Listening'ga ham yetmaydi, shuning uchun
+   imtihon paytida serverga murojaat qilinmaydi. Har spikerga alohida ovoz/ohang beriladi. */
+const SS=('speechSynthesis' in window)?window.speechSynthesis:null;
+const FEM=/female|woman|samantha|victoria|karen|serena|moira|tessa|fiona|susan|hazel|libby|sonia|jenny|aria|zira|kate|emma|amy|olivia|natasha|catherine/i;
+const MAL=/\bmale\b|man\b|daniel|arthur|george|ryan|guy|alex\b|fred|oliver|thomas|david|mark|james|william|rishi|gordon|aaron|lee\b/i;
+const VF=['autumn','diana','hannah'], VM=['austin','daniel','troy'];
+let VOX=null;
+function loadVoices(){ return new Promise(res=>{ if(!SS) return res([]); let v=SS.getVoices(); if(v&&v.length) return res(v);
+  const t=setTimeout(()=>res(SS.getVoices()||[]),1800); SS.onvoiceschanged=()=>{ clearTimeout(t); res(SS.getVoices()||[]); }; }); }
+async function voicePlan(){
+  if(VOX) return VOX;
+  const all=(await loadVoices()).filter(v=>/^en([-_]|$)/i.test(v.lang));
+  const rank=v=>(/en[-_]GB/i.test(v.lang)?0:/en[-_]US/i.test(v.lang)?1:2)+(v.localService?0:.5);
+  const sorted=all.slice().sort((a,b)=>rank(a)-rank(b));
+  const fem=sorted.filter(v=>FEM.test(v.name)), mal=sorted.filter(v=>MAL.test(v.name)&&!FEM.test(v.name));
+  VOX={all:sorted,fem,mal};
+  return VOX;
+}
+/* Spiker nomidan (diana, troy...) qurilma ovozi + ohang */
+function pickVoice(P,name){
+  const f=VF.indexOf(name), m=VM.indexOf(name), female=f>=0||m<0, i=Math.max(f,m,0);
+  const pool=female?P.fem:P.mal;
+  let voice=pool.length?pool[i%pool.length]:(P.all.length?P.all[(female?0:1)%P.all.length]:null);
+  // jinsga ajratib bo'lmasa — ohang (pitch) bilan farqlaymiz
+  const pitch=pool.length?1:(female?[1.12,1.2,1.05][i]:[.82,.9,.76][i]);
+  return {voice,pitch};
+}
+function speakOne(text,name,P){
+  return new Promise(res=>{
+    if(!SS){ res(false); return; }
+    const u=new SpeechSynthesisUtterance(text); const {voice,pitch}=pickVoice(P,name);
+    if(voice) u.voice=voice; u.lang=voice?voice.lang:'en-GB'; u.rate=.93; u.pitch=pitch; u.volume=VOL;
+    let fin=false; const end=ok=>{ if(fin) return; fin=true; clearInterval(ka); clearTimeout(to); res(ok); };
+    u.onend=()=>end(true); u.onerror=e=>end(e&&e.error==='interrupted');
+    // Android'da onend ba'zan kelmaydi — matn uzunligiga qarab xavfsizlik muddati
+    const est=(text.split(/\s+/).length*0.48+3)*1000/u.rate;
+    const to=setTimeout(()=>end(true),est/(window.__mlSpeed||1));
+    // Chrome uzun o'qishda ~15 s dan keyin o'zi pauza qiladi — uyg'otib turamiz
+    const ka=setInterval(()=>{ try{ if(SS.paused) SS.resume(); }catch(e){} },4000);
+    try{ SS.speak(u); }catch(e){ end(false); }
+  });
+}
 async function playSegs(segs){
-  for(const s of segs||[]){
-    let ok=false;
-    if(window.__wdAI){ const d=await window.__wdAI({mode:'tts',text:s.t,voice:s.v}); if(d&&!d.__error&&d.audio){ const u=URL.createObjectURL(b64blob(d.audio,d.mime||'audio/wav')); ok=await playUrl(u); URL.revokeObjectURL(u); } }
-    if(!ok&&'speechSynthesis' in window){ await new Promise(r=>{ const u=new SpeechSynthesisUtterance(s.t); u.lang='en-GB'; u.rate=.95; u.onend=r; u.onerror=r; speechSynthesis.speak(u); }); }
-  }
+  const P=await voicePlan(); let ok=true;
+  for(const s of segs||[]){ if(ABORT) break; if(!(await speakOne(s.t,s.v,P))) ok=false; await sleep(250); }
+  return ok;
+}
+/* Foydalanuvchi bosganda (user activation) ovozni "ochib" qo'yamiz — mobil brauzerlar shuni talab qiladi */
+function unlockAudio(){ try{ ac(); }catch(e){} try{ if(SS){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; SS.speak(u); } }catch(e){} }
+const hasAudio=(T,keys)=>!!T&&!!T.audio&&keys.every(k=>T.audio[k]);
+/* Listening oldidan ovoz tekshiruvi */
+function soundCheck(T,host){
+  return new Promise(resolve=>{
+    const recorded=hasAudio(T,['l2','l6']);
+    const box=document.createElement('div'); box.className='mlx-snd';
+    box.innerHTML=`<div class="mlx-snd-in" role="dialog" aria-label="Ovoz tekshiruvi"><b>Ovozni tekshiring</b>
+      <p>${recorded?'Listening yozuvlari tayyor.':"Yozuvlar qurilmangiz ovozida o'qiladi."} Quloqchin taqing yoki ovozni balandlating, keyin «Eshittirish» ni bosing.</p>
+      <div class="mlx-snd-row"><button class="mlx-btn" id="sndPlay">▶ Eshittirish</button></div>
+      <div class="mlx-snd-row" id="sndAsk" hidden><button class="mlx-btn pri" id="sndOk">Eshitdim — boshlash</button><button class="mlx-btn" id="sndNo">Eshitmadim</button></div>
+      <p class="mlx-snd-tip" id="sndTip" hidden>Tekshiring: telefon ovozi (media) yoqilganmi, jim rejim o'chiqmi. Android'da: Sozlamalar → Matnni nutqqa aylantirish → «Google nutq xizmatlari» va English ovozi o'rnatilgan bo'lsin. Keyin «Eshittirish» ni qayta bosing.</p></div>`;
+    host.appendChild(box);
+    const q=sel=>box.querySelector(sel);
+    q('#sndPlay').onclick=async()=>{ unlockAudio(); q('#sndPlay').disabled=true; q('#sndPlay').textContent='Eshittirilmoqda…';
+      const segs=[{v:'diana',t:'Welcome to the Listening test. You will hear each recording twice.'},{v:'daniel',t:'If you can hear this clearly, press the green button.'}];
+      if(recorded) await playUrl(T.audio.l1_0||T.audio.l2); else await playSegs(segs);
+      q('#sndPlay').disabled=false; q('#sndPlay').textContent='▶ Qayta eshittirish'; q('#sndAsk').hidden=false; };
+    q('#sndOk').onclick=()=>{ unlockAudio(); box.remove(); resolve(true); };
+    q('#sndNo').onclick=()=>{ q('#sndTip').hidden=false; };
+  });
 }
 function b64blob(b64,type){ const bin=atob(b64), u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new Blob([u],{type}); }
-async function playClip(T,key,segs){ const u=T&&T.audio&&T.audio[key]; if(u) return playUrl(u); return playSegs(segs); }
+async function playClip(T,key,segs){ const u=T&&T.audio&&T.audio[key]; if(u){ const ok=await playUrl(u); if(ok) return true; } return playSegs(segs); }
 
 /* ---------- uslublar ---------- */
 const CSS=`
 .mlz{position:fixed;inset:0;z-index:3600;background:#F2F4F7;color:#141B24;font-family:'Inter',system-ui,sans-serif;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
 .mlz *{box-sizing:border-box}
 .mlz [hidden]{display:none!important}
+/* ovoz tekshiruvi */
+.mlx-snd{position:fixed;inset:0;z-index:5;background:rgba(20,27,36,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.mlx-snd-in{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.mlx-snd-in b{display:block;font-size:19px;margin-bottom:8px}
+.mlx-snd-in p{margin:0 0 14px;font-size:14.5px;line-height:1.5;color:#46505C}
+.mlx-snd-row{display:flex;gap:8px;margin-top:10px}
+.mlx-btn{flex:1;border:1.5px solid #D9DFE6;background:#fff;color:#141B24;border-radius:12px;padding:13px 14px;font-size:15px;font-weight:700;cursor:pointer}
+.mlx-btn.pri{background:#1F2A37;border-color:#1F2A37;color:#fff}
+.mlx-btn:disabled{opacity:.6}
+.mlx-snd-tip{background:#FFF7E6;border-radius:10px;padding:10px 12px;font-size:13.5px!important}
 .mlz button{font-family:inherit}
 .mlz :focus-visible{outline:2px solid #2F6FED;outline-offset:2px}
 /* lobby */
@@ -413,7 +487,7 @@ function intro(T,r,sec){
     const vol=$(sh.body,'#mlVol'); if(vol) vol.oninput=()=>{ VOL=Number(vol.value); if(CUR) CUR.volume=VOL; };
     const mic=$(sh.body,'#mlMic'); if(mic) mic.onclick=async()=>{ const st=await getMic(); if(!st){ toast("Mikrofonga ruxsat berilmadi"); return; } const lv=$(sh.body,'#mlMicL'); const a=ac(); const an=a.createAnalyser(); a.createMediaStreamSource(st).connect(an); const buf=new Uint8Array(512); const t0=Date.now(); (function loop(){ an.getByteTimeDomainData(buf); let s=0; for(const v of buf){ const d=(v-128)/128; s+=d*d; } lv.style.width=Math.min(100,Math.sqrt(s/buf.length)*400)+'%'; if(Date.now()-t0<6000&&document.body.contains(lv)) requestAnimationFrame(loop); })(); };
     $(sh.body,'#mlStart').onclick=async()=>{
-      ac();
+      ac(); unlockAudio();
       if(sec==='speaking'){ const st=await getMic(); if(!st){ toast("Speaking uchun mikrofon kerak. Brauzer sozlamalarida ruxsat bering."); return; } }
       sh.body.innerHTML=`<div class="mlx-center"><div class="mlx-count" id="mlC">3</div><p>${SECN[sec]} boshlanmoqda</p></div>`;
       for(let k=3;k>0;k--){ $(sh.body,'#mlC').textContent=k; await sleep(800); }
@@ -491,6 +565,7 @@ async function runListening(T,r){
   const wait=async(sec,label)=>{ const end=Date.now()+sec*1000/(window.__mlSpeed||1); while(Date.now()<end&&!submitted&&!ABORT){ status(`${label} · ${fmt((end-Date.now())/1000)}`,false); await sleep(500); } };
   const twice=async(label,fn,gap)=>{ for(let k=1;k<=2&&!submitted&&!ABORT;k++){ status(`${label} · ${k}-eshittirish`,true); await fn(); if(k===1) await wait(gap||5,'Yana bir marta eshitasiz'); } };
   (async()=>{
+    await soundCheck(T,sh.body); if(submitted||ABORT) return;
     goPart('p1'); await wait(10,'Part 1 · savollarni o\'qing');
     for(let i=0;i<8&&!submitted&&!ABORT;i++){ const n=1+i; document.getElementById('q'+n)?.scrollIntoView({behavior:'smooth',block:'center'});
       for(let k=1;k<=2;k++){ status(`Part 1 · Savol ${n} · ${k}-eshittirish`,true); await playClip(T,'l1_'+i,L.p1[i].s); await sleep((k===1?1500:4000)/(window.__mlSpeed||1)); } }
@@ -854,8 +929,8 @@ async function generate(box){
     try{ localStorage.removeItem(GK); }catch(e){}
     st('save','ok');
     st('aud','on'); const okA=await buildAudio(data,box,(d,t)=>{ $(box,'#mlPg').style.width=Math.round(d/t*100)+'%'; st('aud','on',`Audio yozuvlar: ${d} / ${t}`); });
-    if(!okA){ st('aud','err',"Audio to'liq tayyorlanmadi — test qoralama sifatida saqlandi, «Audio tayyorlash» bilan davom ettiring"); return; }
-    st('aud','ok');
+    if(!okA) st('aud','err',"MP3 yozuvlar to'liq tayyorlanmadi (Groq bepul ovoz limiti: kuniga ~3600 token). Test qurilma ovozi bilan ishlaydi; «Audio tayyorlash» keyinroq yetishmaganlarini qo'shadi.");
+    else st('aud','ok');
     await sb().from('wd_ml_tests').update({status:'ready'}).eq('id',data.id); st('pub','ok','Nashr qilindi');
     log('Tayyor! Yangi variant foydalanuvchilarga ochildi.');
   }finally{ if(btn) btn.disabled=false; await refresh(); const keep=box.innerHTML; renderLobby(); const nb=document.getElementById('mlGen'); if(nb) nb.innerHTML=keep; }
@@ -878,7 +953,7 @@ function parseWav(buf){
   return {sr,pcm:data};
 }
 async function ttsSeg(s){
-  for(let k=0;k<4;k++){
+  for(let k=0;k<2;k++){
     const d=window.__wdAI?await window.__wdAI({mode:'tts',text:s.t,voice:s.v}):null;
     if(d&&!d.__error&&d.audio){ const bin=atob(d.audio), u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); const w=parseWav(u.buffer); if(w) return w; }
     await sleep(1500*(k+1));
@@ -900,10 +975,11 @@ async function buildAudio(T,box,prog){
   const clips=clipList(T).filter(([k])=>!(T.audio||{})[k]);
   const audio={...(T.audio||{})}; let done=0; const total=clips.length; const pg=prog||((d,t)=>{ const e=box&&box.querySelector('#mlPg'); if(e) e.style.width=Math.round(d/t*100)+'%'; });
   if(box&&!prog) box.innerHTML=`<p class="mll-note">Audio tayyorlanmoqda…</p><div class="mll-prog"><i id="mlPg"></i></div>`;
-  let fail=0;
+  let fail=0, streak=0, quota=false;
   const work=async([key,segs])=>{
+    if(quota){ fail++; return; }
     const parts=[]; let sr=24000, prev=null;
-    for(const s of segs){ const w=await ttsSeg(s); if(!w){ fail++; return; } sr=w.sr; if(prev!==null) parts.push(new Int16Array(Math.round(sr*(prev===s.v?.35:.7)))); parts.push(w.pcm); prev=s.v; }
+    for(const s of segs){ const w=await ttsSeg(s); if(!w){ fail++; if(++streak>=3) quota=true; return; } streak=0; sr=w.sr; if(prev!==null) parts.push(new Int16Array(Math.round(sr*(prev===s.v?.35:.7)))); parts.push(w.pcm); prev=s.v; }
     parts.unshift(new Int16Array(Math.round(sr*.3))); parts.push(new Int16Array(Math.round(sr*.3)));
     const len=parts.reduce((a,p)=>a+p.length,0), pcm=new Int16Array(len); let o=0; for(const p of parts){ pcm.set(p,o); o+=p.length; }
     let blob=await toMp3(pcm,sr), ext='mp3';
@@ -919,7 +995,7 @@ async function buildAudio(T,box,prog){
   await Promise.all(runners);
   await sb().from('wd_ml_tests').update({audio}).eq('id',T.id);
   T.audio=audio;
-  if(box&&!prog) box.innerHTML=`<p class="mll-note">${fail?`Audio: ${done}/${total} tayyor, ${fail} ta xato — «Audio tayyorlash»ni qayta bosing.`:'Audio tayyor. Endi «Nashr qilish» mumkin.'}</p>`;
+  if(box&&!prog) box.innerHTML=`<p class="mll-note">${quota?`Audio: ${done}/${total} tayyor. Groq bepul ovoz limiti tugadi (kuniga ~3600 token) — ertaga yana «Audio tayyorlash» ni bosing. Shu orada test qurilma ovozi bilan ishlaydi.`:fail?`Audio: ${done}/${total} tayyor, ${fail} ta xato — «Audio tayyorlash»ni qayta bosing.`:'Audio tayyor.'}</p>`;
   return !fail;
 }
 

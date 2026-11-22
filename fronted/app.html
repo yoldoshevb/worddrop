@@ -537,7 +537,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.c54ae6f4.js"></script>
+<script src="app.svg-ikonkalar.1eccf30f.js"></script>
 <script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
 <script>
 /* ==================================================================
@@ -2562,7 +2562,7 @@ try{
 <script>
 /* v101: Multilevel imtihoni alohida faylda — faqat ochilganda yuklanadi */
 (function(){
-  const SRC='ml.v101.js'; let p=null;
+  const SRC='ml.v101c.js'; let p=null;
   function load(){ if(window.WDML) return Promise.resolve(); if(p) return p;
     p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=SRC; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenML=async function(){ try{ await load(); window.WDML.open(); }catch(e){ try{ showToast("Imtihon moduli yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };

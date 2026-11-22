@@ -1,7 +1,7 @@
 
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v101b';
+window.__wdVer='v101c';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -2336,7 +2336,9 @@ function closeSheet(){
     if(u.is_anonymous === true) return false;
     return !!(u.email || u.phone || (u.app_metadata && u.app_metadata.provider !== 'anonymous'));
   };
-  const maxToday = () => isRegistered() ? DAILY_MAX_REG : DAILY_MAX_GUEST;
+  // v101b: admin uchun cheklovsiz (server wd_drop_today/bump "unlimited" qaytaradi; hisoblagich bazada o'smaydi)
+  const isUnlimited = () => state.unlimited===true || (typeof window.__wdAuthEmail==='function' && String(window.__wdAuthEmail()).toLowerCase()==='bexruzyoldoshev@yahoo.com');
+  const maxToday = () => isUnlimited() ? 9999 : isRegistered() ? DAILY_MAX_REG : DAILY_MAX_GUEST;
   const todayISO = () => new Date().toISOString().slice(0,10);
 
   /* ---------- Limit ---------- */
@@ -2345,6 +2347,7 @@ function closeSheet(){
       try{
         const r = await window.__sb.rpc('wd_drop_today');
         if(!r.error && r.data && typeof r.data.count === 'number'){
+          state.unlimited = r.data.unlimited === true;
           state.usage = { day: r.data.day || todayISO(), count: r.data.count };
           return;
         }
@@ -2362,6 +2365,7 @@ function closeSheet(){
       try{
         const r = await window.__sb.rpc('wd_drop_bump', { p_max: DAILY_MAX_REG });
         if(!r.error && r.data && typeof r.data.count === 'number'){
+          if(r.data.unlimited === true) state.unlimited = true;
           state.usage = { day: r.data.day || todayISO(), count: r.data.count };
           return;
         }
@@ -2377,14 +2381,15 @@ function closeSheet(){
   }
   function updateQuotaUI(){
     const r = remaining(), m = maxToday();
-    if(quotaN) quotaN.textContent = r + '/' + m;
+    if(quotaN) quotaN.textContent = isUnlimited() ? '∞' : (r + '/' + m);
     if(quota){
       quota.classList.toggle('out', r <= 0);
       quota.classList.toggle('low', r > 0 && r <= Math.ceil(m * 0.2));
-      quota.title = r > 0 ? ('Bugun yana ' + r + ' ta savol berishingiz mumkin') : 'Bugungi savollar tugadi';
+      quota.title = isUnlimited() ? 'Admin: cheklovsiz' : r > 0 ? ('Bugun yana ' + r + ' ta savol berishingiz mumkin') : 'Bugungi savollar tugadi';
     }
     if(fabDot){
-      if(r < m){ fabDot.style.display = 'grid'; fabDot.textContent = r; fabDot.classList.toggle('zero', r <= 0); }
+      if(isUnlimited()) fabDot.style.display = 'none';
+      else if(r < m){ fabDot.style.display = 'grid'; fabDot.textContent = r; fabDot.classList.toggle('zero', r <= 0); }
       else fabDot.style.display = 'none';
     }
     updateComposer();
