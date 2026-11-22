@@ -119,7 +119,8 @@ function soundCheck(T,host){
     const q=sel=>box.querySelector(sel);
     q('#sndPlay').onclick=async()=>{ unlockAudio(); q('#sndPlay').disabled=true; q('#sndPlay').textContent='Eshittirilmoqda…';
       const segs=[{v:'diana',t:'Welcome to the Listening test. You will hear each recording twice.'},{v:'daniel',t:'If you can hear this clearly, press the green button.'}];
-      if(recorded) await playUrl(T.audio.l1_0||T.audio.l2); else await playSegs(segs);
+      let ok=false; if(recorded) ok=await playUrl(T.audio.l1_0||T.audio.l2);
+      if(!ok) await playSegs(segs);   // MP3 ochilmasa — qurilma ovozi
       q('#sndPlay').disabled=false; q('#sndPlay').textContent='▶ Qayta eshittirish'; q('#sndAsk').hidden=false; };
     q('#sndOk').onclick=()=>{ unlockAudio(); box.remove(); resolve(true); };
     q('#sndNo').onclick=()=>{ q('#sndTip').hidden=false; };
