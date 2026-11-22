@@ -2562,7 +2562,7 @@ try{
 <script>
 /* v101: Multilevel imtihoni alohida faylda — faqat ochilganda yuklanadi */
 (function(){
-  const SRC='ml.v101d.js'; let p=null;
+  const SRC='ml.v101d.js?v=recorded-listening'; let p=null;
   function load(){ if(window.WDML) return Promise.resolve(); if(p) return p;
     p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=SRC; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenML=async function(){ try{ await load(); window.WDML.open(); }catch(e){ try{ showToast("Imtihon moduli yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };

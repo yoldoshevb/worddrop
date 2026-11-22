@@ -48,30 +48,70 @@ async function uid(){ try{ const {data}=await sb().auth.getUser(); return data&&
 
 /* ---------- ovoz ---------- */
 let AC=null;
-function ac(){ if(!AC){ const C=window.AudioContext||window.webkitAudioContext; AC=C?new C():null; } if(AC&&AC.state==='suspended') AC.resume(); return AC; }
+function ac(){ if(!AC){ const C=window.AudioContext||window.webkitAudioContext; AC=C?new C():null; } if(AC&&AC.state==='suspended') AC.resume().catch(()=>{}); return AC; }
 function chime(){ const a=ac(); if(!a) return; const t=a.currentTime; [[880,0],[1320,.16]].forEach(([f,d])=>{ const o=a.createOscillator(), g=a.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0,t+d); g.gain.linearRampToValueAtTime(.22,t+d+.02); g.gain.exponentialRampToValueAtTime(.001,t+d+.7); o.connect(g).connect(a.destination); o.start(t+d); o.stop(t+d+.75); }); }
-let CUR=null, VOL=1;
-function stopAudio(){ if(CUR){ try{ CUR.pause(); }catch(e){} CUR=null; } try{ speechSynthesis.cancel(); }catch(e){} }
-function playUrl(url){ return new Promise(res=>{ stopAudio(); const a=new Audio(url); a.volume=VOL; CUR=a; a.onended=()=>{ CUR=null; res(true); }; a.onerror=()=>{ CUR=null; res(false); }; a.play().catch(()=>res(false)); }); }
-/* ── Qurilma ovozi (Web Speech) ──
-   Testda tayyor MP3 bo'lmasa, yozuvlar qurilmaning o'z ovozida o'qiladi. Server TTS (Groq Orpheus)
-   bepul tarifda kuniga ~3600 token bilan cheklangan — bitta Listening'ga ham yetmaydi, shuning uchun
-   imtihon paytida serverga murojaat qilinmaydi. Har spikerga alohida ovoz/ohang beriladi. */
+let CUR=null, VOL=1, audioRun=0, cancelPlayback=null;
+function stopAudio(){
+  audioRun++;
+  if(cancelPlayback) cancelPlayback();
+  try{ if(SS) SS.cancel(); }catch(e){}
+}
+function playUrl(url,audio=new Audio()){
+  return new Promise(resolve=>{
+    let timeout;
+    const watch=()=>{
+      clearTimeout(timeout);
+      timeout=setTimeout(()=>finish(false),12000);
+    };
+    const finish=ok=>{
+      if(cancelPlayback!==cancel) return;
+      clearTimeout(timeout);
+      audio.onended=audio.onerror=audio.ontimeupdate=null;
+      CUR=null;
+      cancelPlayback=null;
+      if(!ok) audio.pause();
+      resolve(ok);
+    };
+    const cancel=()=>finish(false);
+    CUR=audio;
+    cancelPlayback=cancel;
+    audio.volume=VOL;
+    audio.onended=()=>finish(true);
+    audio.onerror=()=>finish(false);
+    audio.ontimeupdate=watch;
+    watch();
+    audio.src=url;
+    audio.play().catch(()=>finish(false));
+  });
+}
+/* Speaking savollari uchun qurilma ovozi. */
 const SS=('speechSynthesis' in window)?window.speechSynthesis:null;
 const FEM=/female|woman|samantha|victoria|karen|serena|moira|tessa|fiona|susan|hazel|libby|sonia|jenny|aria|zira|kate|emma|amy|olivia|natasha|catherine/i;
 const MAL=/\bmale\b|man\b|daniel|arthur|george|ryan|guy|alex\b|fred|oliver|thomas|david|mark|james|william|rishi|gordon|aaron|lee\b/i;
 const VF=['autumn','diana','hannah'], VM=['austin','daniel','troy'];
 let VOX=null;
-function loadVoices(){ return new Promise(res=>{ if(!SS) return res([]); let v=SS.getVoices(); if(v&&v.length) return res(v);
-  const t=setTimeout(()=>res(SS.getVoices()||[]),1800); SS.onvoiceschanged=()=>{ clearTimeout(t); res(SS.getVoices()||[]); }; }); }
-async function voicePlan(){
-  if(VOX) return VOX;
-  const all=(await loadVoices()).filter(v=>/^en([-_]|$)/i.test(v.lang));
+function loadVoices(){
+  if(!SS) return Promise.resolve([]);
+  const voices=SS.getVoices();
+  if(voices.length) return Promise.resolve(voices);
+  return new Promise(resolve=>{
+    const finish=()=>{
+      clearTimeout(timeout);
+      SS.removeEventListener('voiceschanged',finish);
+      resolve(SS.getVoices());
+    };
+    const timeout=setTimeout(finish,1800);
+    SS.addEventListener('voiceschanged',finish);
+  });
+}
+function voicePlan(voices){
+  const all=voices.filter(v=>/^en([-_]|$)/i.test(v.lang));
   const rank=v=>(/en[-_]GB/i.test(v.lang)?0:/en[-_]US/i.test(v.lang)?1:2)+(v.localService?0:.5);
   const sorted=all.slice().sort((a,b)=>rank(a)-rank(b));
   const fem=sorted.filter(v=>FEM.test(v.name)), mal=sorted.filter(v=>MAL.test(v.name)&&!FEM.test(v.name));
-  VOX={all:sorted,fem,mal};
-  return VOX;
+  const plan={all:sorted,fem,mal};
+  if(sorted.length) VOX=plan;
+  return plan;
 }
 /* Spiker nomidan (diana, troy...) qurilma ovozi + ohang */
 function pickVoice(P,name){
@@ -84,50 +124,92 @@ function pickVoice(P,name){
 }
 function speakOne(text,name,P){
   return new Promise(res=>{
-    if(!SS){ res(false); return; }
+    if(!SS||!window.SpeechSynthesisUtterance||!text){ res(false); return; }
     const u=new SpeechSynthesisUtterance(text); const {voice,pitch}=pickVoice(P,name);
     if(voice) u.voice=voice; u.lang=voice?voice.lang:'en-GB'; u.rate=.93; u.pitch=pitch; u.volume=VOL;
-    let fin=false; const end=ok=>{ if(fin) return; fin=true; clearInterval(ka); clearTimeout(to); res(ok); };
-    u.onend=()=>end(true); u.onerror=e=>end(e&&e.error==='interrupted');
+    let fin=false; const end=ok=>{ if(fin) return; fin=true; clearInterval(ka); clearTimeout(to); cancelPlayback=null; res(ok); };
+    let started=false;
+    u.onstart=()=>{ started=true; };
+    u.onend=()=>end(true); u.onerror=()=>end(false);
     // Android'da onend ba'zan kelmaydi — matn uzunligiga qarab xavfsizlik muddati
     const est=(text.split(/\s+/).length*0.48+3)*1000/u.rate;
-    const to=setTimeout(()=>end(true),est/(window.__mlSpeed||1));
+    const to=setTimeout(()=>{ end(started); SS.cancel(); },est/(window.__mlSpeed||1));
     // Chrome uzun o'qishda ~15 s dan keyin o'zi pauza qiladi — uyg'otib turamiz
     const ka=setInterval(()=>{ try{ if(SS.paused) SS.resume(); }catch(e){} },4000);
+    cancelPlayback=()=>end(false);
     try{ SS.speak(u); }catch(e){ end(false); }
   });
 }
-async function playSegs(segs){
-  const P=await voicePlan(); let ok=true;
-  for(const s of segs||[]){ if(ABORT) break; if(!(await speakOne(s.t,s.v,P))) ok=false; await sleep(250); }
-  return ok;
+async function playSegs(segs,run=audioRun){
+  if(!segs?.length) return false;
+  const P=VOX||voicePlan(SS?SS.getVoices():[]);
+  for(const [index,segment] of segs.entries()){
+    if(index) await sleep(250);
+    if(run!==audioRun||ABORT||!(await speakOne(segment.t,segment.v,P))) return false;
+  }
+  return run===audioRun;
 }
-/* Foydalanuvchi bosganda (user activation) ovozni "ochib" qo'yamiz — mobil brauzerlar shuni talab qiladi */
-function unlockAudio(){ try{ ac(); }catch(e){} try{ if(SS){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; SS.speak(u); } }catch(e){} }
-const hasAudio=(T,keys)=>!!T&&!!T.audio&&keys.every(k=>T.audio[k]);
-/* Listening oldidan ovoz tekshiruvi */
-function soundCheck(T,host){
+function unlockAudio(){
+  try{ ac(); }catch(e){}
+  if(SS&&!VOX) loadVoices().then(voicePlan).catch(()=>{});
+}
+/* Bitta audio elementi foydalanuvchi bosishidan keyin butun Listening bo'ylab ishlatiladi. */
+function listeningAudioPrompt(sh,signal,play,{sample=false}={}){
   return new Promise(resolve=>{
-    const recorded=hasAudio(T,['l2','l6']);
-    const box=document.createElement('div'); box.className='mlx-snd';
-    box.innerHTML=`<div class="mlx-snd-in" role="dialog" aria-label="Ovoz tekshiruvi"><b>Ovozni tekshiring</b>
-      <p>${recorded?'Listening yozuvlari tayyor.':"Yozuvlar qurilmangiz ovozida o'qiladi."} Quloqchin taqing yoki ovozni balandlating, keyin «Eshittirish» ni bosing.</p>
-      <div class="mlx-snd-row"><button class="mlx-btn" id="sndPlay">▶ Eshittirish</button></div>
+    const box=document.createElement('div');
+    box.className='mlx-snd';
+    box.innerHTML=`<div class="mlx-snd-in" role="dialog" aria-modal="true" aria-labelledby="sndTitle">
+      <b id="sndTitle">${sample?'Ovozni tekshiring':'Yozuvni qayta eshittiring'}</b>
+      <p>${sample?'Quloqchin taqing yoki ovozni balandlating, keyin namunani tinglang.':"Listening yozuvi ijro etilmadi. Shu yozuvni qayta boshlash uchun tugmani bosing."}</p>
+      <p role="status" id="sndStatus"></p>
+      <div class="mlx-snd-row"><button class="mlx-btn" id="sndPlay">${sample?'▶ Eshittirish':'▶ Qayta eshittirish'}</button><button class="mlx-btn" id="sndExit">Chiqish</button></div>
       <div class="mlx-snd-row" id="sndAsk" hidden><button class="mlx-btn pri" id="sndOk">Eshitdim — boshlash</button><button class="mlx-btn" id="sndNo">Eshitmadim</button></div>
-      <p class="mlx-snd-tip" id="sndTip" hidden>Tekshiring: telefon ovozi (media) yoqilganmi, jim rejim o'chiqmi. Android'da: Sozlamalar → Matnni nutqqa aylantirish → «Google nutq xizmatlari» va English ovozi o'rnatilgan bo'lsin. Keyin «Eshittirish» ni qayta bosing.</p></div>`;
-    host.appendChild(box);
-    const q=sel=>box.querySelector(sel);
-    q('#sndPlay').onclick=async()=>{ unlockAudio(); q('#sndPlay').disabled=true; q('#sndPlay').textContent='Eshittirilmoqda…';
-      const segs=[{v:'diana',t:'Welcome to the Listening test. You will hear each recording twice.'},{v:'daniel',t:'If you can hear this clearly, press the green button.'}];
-      let ok=false; if(recorded) ok=await playUrl(T.audio.l1_0||T.audio.l2);
-      if(!ok) await playSegs(segs);   // MP3 ochilmasa — qurilma ovozi
-      q('#sndPlay').disabled=false; q('#sndPlay').textContent='▶ Qayta eshittirish'; q('#sndAsk').hidden=false; };
-    q('#sndOk').onclick=()=>{ unlockAudio(); box.remove(); resolve(true); };
-    q('#sndNo').onclick=()=>{ q('#sndTip').hidden=false; };
+      </div>`;
+    const trigger=$(sh.x,'#mlxQ');
+    const close=ok=>{
+      signal.removeEventListener('abort',abort);
+      box.remove();
+      resolve(ok);
+    };
+    const abort=()=>close(false);
+    if(signal.aborted){ resolve(false); return; }
+    signal.addEventListener('abort',abort,{once:true});
+    sh.body.appendChild(box);
+    const button=$(box,'#sndPlay'), ask=$(box,'#sndAsk'), status=$(box,'#sndStatus');
+    button.disabled=!play;
+    if(!play) status.textContent="Bu variantning Listening audio fayllari hali to'liq tayyor emas.";
+    button.onclick=async()=>{
+      button.disabled=true;
+      ask.hidden=true;
+      status.textContent='Eshittirilmoqda…';
+      const ok=await play();
+      if(signal.aborted) return;
+      if(ok&&!sample){ close(true); return; }
+      button.disabled=false;
+      button.textContent='▶ Qayta eshittirish';
+      ask.hidden=!ok;
+      status.textContent=ok?'':"Yozuv ijro etilmadi. Internet aloqasini tekshirib, qayta urining.";
+      if(ok) $(box,'#sndOk').focus();
+    };
+    $(box,'#sndExit').onclick=()=>trigger.click();
+    $(box,'#sndOk').onclick=()=>close(true);
+    $(box,'#sndNo').onclick=()=>{
+      ask.hidden=true;
+      status.textContent="Qurilmaning media ovozi va audio chiqishini tekshirib, qayta eshittiring.";
+      button.focus();
+    };
+    (play?button:$(box,'#sndExit')).focus();
   });
 }
 function b64blob(b64,type){ const bin=atob(b64), u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new Blob([u],{type}); }
-async function playClip(T,key,segs){ const u=T&&T.audio&&T.audio[key]; if(u){ const ok=await playUrl(u); if(ok) return true; } return playSegs(segs); }
+async function playClip(T,key,segs){
+  if(ABORT) return false;
+  stopAudio();
+  const run=audioRun;
+  const url=T?.audio?.[key];
+  if(url&&await playUrl(url)) return run===audioRun;
+  return run===audioRun&&playSegs(segs,run);
+}
 
 /* ---------- uslublar ---------- */
 const CSS=`
@@ -143,6 +225,7 @@ const CSS=`
 .mlx-btn{flex:1;border:1.5px solid #D9DFE6;background:#fff;color:#141B24;border-radius:12px;padding:13px 14px;font-size:15px;font-weight:700;cursor:pointer}
 .mlx-btn.pri{background:#1F2A37;border-color:#1F2A37;color:#fff}
 .mlx-btn:disabled{opacity:.6}
+.mlx-snd-in p:empty{display:none}
 .mlx-snd-tip{background:#FFF7E6;border-radius:10px;padding:10px 12px;font-size:13.5px!important}
 .mlz button{font-family:inherit}
 .mlz :focus-visible{outline:2px solid #2F6FED;outline-offset:2px}
@@ -481,15 +564,13 @@ function intro(T,r,sec){
       speaking:['Mikrofonga ruxsat bering; tinch joyda bo\'ling.','Signaldan keyin gapira boshlang. Javob vaqti tugaganda yozib olish o\'zi to\'xtaydi.','Part 2 va Part 3 da 1 daqiqa tayyorlanish vaqti beriladi.'],
     }[sec];
     sh.body.innerHTML=`<div class="mlx-center"><h2>${SECN[sec]}</h2><p>Nomzod raqami: <b>${esc(r.cand)}</b></p><ul class="mlx-rules">${rules.map(x=>`<li>${x}</li>`).join('')}</ul>
-      ${sec==='listening'?`<p><button class="mll-btn" id="mlSnd">Ovozni sinash</button> <input type="range" min="0" max="1" step="0.05" value="${VOL}" id="mlVol" aria-label="Ovoz balandligi"></p>`:''}
+      ${sec==='listening'?`<p><input type="range" min="0" max="1" step="0.05" value="${VOL}" id="mlVol" aria-label="Ovoz balandligi"></p>`:''}
       ${sec==='speaking'?`<div class="mls-lvl" style="width:220px"><i id="mlMicL"></i></div><p style="margin-top:8px"><button class="mll-btn" id="mlMic">Mikrofonni sinash</button></p>`:''}
       <button class="mll-go" style="max-width:360px" id="mlStart">Boshlash</button></div>`;
-    const snd=$(sh.body,'#mlSnd'); if(snd) snd.onclick=()=>playSegs([{v:'diana',t:'This is a sound check. You should hear this clearly.'}]);
     const vol=$(sh.body,'#mlVol'); if(vol) vol.oninput=()=>{ VOL=Number(vol.value); if(CUR) CUR.volume=VOL; };
     const mic=$(sh.body,'#mlMic'); if(mic) mic.onclick=async()=>{ const st=await getMic(); if(!st){ toast("Mikrofonga ruxsat berilmadi"); return; } const lv=$(sh.body,'#mlMicL'); const a=ac(); const an=a.createAnalyser(); a.createMediaStreamSource(st).connect(an); const buf=new Uint8Array(512); const t0=Date.now(); (function loop(){ an.getByteTimeDomainData(buf); let s=0; for(const v of buf){ const d=(v-128)/128; s+=d*d; } lv.style.width=Math.min(100,Math.sqrt(s/buf.length)*400)+'%'; if(Date.now()-t0<6000&&document.body.contains(lv)) requestAnimationFrame(loop); })(); };
     $(sh.body,'#mlStart').onclick=async()=>{
-      ac(); unlockAudio();
-      if(sec==='speaking'){ const st=await getMic(); if(!st){ toast("Speaking uchun mikrofon kerak. Brauzer sozlamalarida ruxsat bering."); return; } }
+      if(sec==='speaking'){ unlockAudio(); const st=await getMic(); if(!st){ toast("Speaking uchun mikrofon kerak. Brauzer sozlamalarida ruxsat bering."); return; } }
       sh.body.innerHTML=`<div class="mlx-center"><div class="mlx-count" id="mlC">3</div><p>${SECN[sec]} boshlanmoqda</p></div>`;
       for(let k=3;k>0;k--){ $(sh.body,'#mlC').textContent=k; await sleep(800); }
       sh.close(); res(true);
@@ -559,26 +640,82 @@ async function runListening(T,r){
   bindAnswers(sh.body,A,persist);
   let submitted=false, resolve;
   const done=new Promise(res=>resolve=res);
-  const submit=(auto)=>{ if(submitted) return; if(!auto&&!confirm('Listening javoblarini topshirasizmi?')) return; submitted=true; sh.close(); resolve(true); };
+  const lifetime=new AbortController();
+  const close=sh.close.bind(sh);
+  sh.close=()=>{
+    lifetime.abort();
+    close();
+    resolve(submitted);
+  };
+  const active=()=>!lifetime.signal.aborted;
+  const submit=(auto)=>{ if(submitted) return; if(!auto&&!confirm('Listening javoblarini topshirasizmi?')) return; submitted=true; sh.close(); };
   palette(sh,A,Object.values(LQ),()=>submit(false),'Topshirish');
   const status=(txt,live)=>{ sh.strip.innerHTML=`<span class="dot ${live?'live':''}"></span><span class="grow">${txt}</span><label style="display:flex;align-items:center;gap:6px;font-size:12px">Ovoz <input type="range" min="0" max="1" step="0.05" value="${VOL}" id="mlxV"></label>`; const v=$(sh.strip,'#mlxV'); v.oninput=()=>{ VOL=Number(v.value); if(CUR) CUR.volume=VOL; }; };
   const goPart=id=>{ const s=document.getElementById('part-'+id); s&&s.scrollIntoView({behavior:'smooth',block:'start'}); };
-  const wait=async(sec,label)=>{ const end=Date.now()+sec*1000/(window.__mlSpeed||1); while(Date.now()<end&&!submitted&&!ABORT){ status(`${label} · ${fmt((end-Date.now())/1000)}`,false); await sleep(500); } };
-  const twice=async(label,fn,gap)=>{ for(let k=1;k<=2&&!submitted&&!ABORT;k++){ status(`${label} · ${k}-eshittirish`,true); await fn(); if(k===1) await wait(gap||5,'Yana bir marta eshitasiz'); } };
+  const audio=new Audio();
+  const available=key=>typeof T.audio?.[key]==='string'&&T.audio[key].trim()!=='';
+  const needed=[
+    ...L.p1.map((_,i)=>'l1_'+i),'l2',
+    ...L.p3.sp.map((_,i)=>'l3_'+i),'l4',
+    ...L.p5.map((_,i)=>'l5_'+i),'l6',
+  ];
+  const wait=async(sec,label)=>{
+    const end=Date.now()+sec*1000/(window.__mlSpeed||1);
+    while(active()&&Date.now()<end){
+      status(`${label} · ${fmt((end-Date.now())/1000)}`,false);
+      await sleep(500);
+    }
+  };
+  const record=async key=>{
+    if(!active()) return false;
+    const play=()=>playUrl(T.audio[key],audio);
+    if(await play()) return active();
+    if(!active()) return false;
+    return listeningAudioPrompt(sh,lifetime.signal,play);
+  };
+  const twice=async(label,keys,gap=5)=>{
+    for(let k=1;k<=2&&active();k++){
+      for(const key of keys){
+        if(!active()) return;
+        status(`${label} · ${k}-eshittirish`,true);
+        if(!await record(key)) return;
+        if(keys.length>1) await sleep(1500);
+      }
+      if(k===1) await wait(gap,'Yana bir marta eshitasiz');
+    }
+  };
   (async()=>{
-    await soundCheck(T,sh.body); if(submitted||ABORT) return;
-    goPart('p1'); await wait(10,'Part 1 · savollarni o\'qing');
-    for(let i=0;i<8&&!submitted&&!ABORT;i++){ const n=1+i; document.getElementById('q'+n)?.scrollIntoView({behavior:'smooth',block:'center'});
-      for(let k=1;k<=2;k++){ status(`Part 1 · Savol ${n} · ${k}-eshittirish`,true); await playClip(T,'l1_'+i,L.p1[i].s); await sleep((k===1?1500:4000)/(window.__mlSpeed||1)); } }
-    if(submitted||ABORT) return;
-    goPart('p2'); await wait(30,'Part 2 · savollarni o\'qing (30 s)'); await twice('Part 2',()=>playClip(T,'l2',L.p2.s)); await wait(8,'Part 2 · javoblarni tekshiring');
-    goPart('p3'); await wait(30,'Part 3 · variantlarni o\'qing (30 s)');
-    await twice('Part 3',async()=>{ for(let i=0;i<4&&!submitted&&!ABORT;i++){ status(`Part 3 · Speaker ${i+1}`,true); await playClip(T,'l3_'+i,L.p3.sp[i].s); await sleep(1500); } });
-    goPart('p4'); await wait(30,'Part 4 · xaritaga qarang (30 s)'); await twice('Part 4',()=>playClip(T,'l4',L.p4.s));
+    const sample=['s11i','l1_0','l2'].find(available);
+    const playSample=sample&&needed.every(available)?()=>playUrl(T.audio[sample],audio):null;
+    if(!await listeningAudioPrompt(sh,lifetime.signal,playSample,{sample:true})||!active()) return;
+    goPart('p1'); await wait(10,"Part 1 · savollarni o'qing");
+    for(let i=0;i<L.p1.length&&active();i++){
+      const n=1+i;
+      document.getElementById('q'+n)?.scrollIntoView({behavior:'smooth',block:'center'});
+      for(let k=1;k<=2&&active();k++){
+        status(`Part 1 · Savol ${n} · ${k}-eshittirish`,true);
+        if(!await record('l1_'+i)) return;
+        await sleep((k===1?1500:4000)/(window.__mlSpeed||1));
+      }
+    }
+    if(!active()) return;
+    goPart('p2'); await wait(30,"Part 2 · savollarni o'qing (30 s)");
+    await twice('Part 2',['l2']); await wait(8,'Part 2 · javoblarni tekshiring');
+    if(!active()) return;
+    goPart('p3'); await wait(30,"Part 3 · variantlarni o'qing (30 s)");
+    await twice('Part 3',L.p3.sp.map((_,i)=>'l3_'+i));
+    if(!active()) return;
+    goPart('p4'); await wait(30,'Part 4 · xaritaga qarang (30 s)'); await twice('Part 4',['l4']);
+    if(!active()) return;
     goPart('p5');
-    for(let e=0;e<3&&!submitted&&!ABORT;e++){ document.getElementById('q'+(24+e*2))?.scrollIntoView({behavior:'smooth',block:'center'}); await wait(20,`Part 5 · Extract ${e+1} · savollarni o'qing`); await twice(`Part 5 · Extract ${e+1}`,()=>playClip(T,'l5_'+e,L.p5[e].s)); }
-    goPart('p6'); await wait(40,'Part 6 · gaplarni o\'qing (40 s)'); await twice('Part 6',()=>playClip(T,'l6',L.p6.s));
-    if(submitted||ABORT) return;
+    for(let e=0;e<L.p5.length&&active();e++){
+      document.getElementById('q'+(24+e*2))?.scrollIntoView({behavior:'smooth',block:'center'});
+      await wait(20,`Part 5 · Extract ${e+1} · savollarni o'qing`);
+      await twice(`Part 5 · Extract ${e+1}`,['l5_'+e]);
+    }
+    if(!active()) return;
+    goPart('p6'); await wait(40,"Part 6 · gaplarni o'qing (40 s)"); await twice('Part 6',['l6']);
+    if(!active()) return;
     status('Yozuv tugadi. Javoblarni tekshirish uchun 10 daqiqa.',false);
     sh.timer(600,()=>submit(true));
   })();
