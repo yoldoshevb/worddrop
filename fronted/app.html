@@ -5164,7 +5164,7 @@ body.dark .bk-pro.on{border-color:#FFC845;box-shadow:0 0 0 1px #FFC845 inset}
 <script>
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v98';
+window.__wdVer='v99';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -8204,6 +8204,62 @@ const BK_CSS = `
 .bk-cov-badge{position:absolute;right:34px;bottom:120px;width:118px;height:118px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:20px;line-height:1.05;padding:12px;transform:rotate(-8deg)}
 .bk-cov-mark{display:flex;align-items:center;gap:6px;font-weight:700;font-size:9px;color:var(--mu)}
 .bk-cov-mark svg{width:12px;height:12px}
+/* v99: rangli, illyustratsiyali dizayn */
+.bk-ill{display:inline-flex;flex-shrink:0}
+.bk-ill svg{width:100%;height:100%;display:block}
+.bk-run{top:0;left:0;right:0;height:30px;padding:0 40px;align-items:center;background:var(--sc);color:rgba(255,255,255,.92);font-weight:700;font-size:8px;letter-spacing:0}
+.bk-body{top:46px}
+.bk-tab{top:40px;background:var(--acd)}
+.bk-foot{font-weight:700;color:var(--sc)}
+.bk-foot i{height:3px;border-radius:2px}
+.bk-sec-head{position:relative;background:var(--tint);border:none;border-radius:12px;padding:14px 74px 14px 14px;margin:0 0 14px;min-height:78px}
+.bk-sec-head .sh{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:56px;height:56px}
+.bk-call{display:flex;gap:9px;align-items:flex-start;border-left:none;border-radius:10px;padding:9px 11px;background:var(--tint)}
+.bk-call .ci{width:22px;height:22px;margin-top:1px}
+.bk-call.rule{background:var(--ptint)}
+.bk-call.rule b.t{color:var(--pr)}
+.bk-call.warn{background:var(--atint)}
+.bk-voc{display:grid;grid-template-columns:1fr 1fr;gap:6px;border-top:none;margin:8px 0 12px}
+.bk-voc .r{display:flex;gap:8px;align-items:flex-start;border:none;border-radius:9px;background:var(--tint);padding:7px 8px;grid-template-columns:none}
+.bk-voc .r.alt{background:var(--atint)}
+.bk-voc .vi{width:26px;height:26px;margin-top:1px}
+.bk-voc .vi.let{align-items:center;justify-content:center;border-radius:7px;background:var(--sc);color:#fff;font-weight:800;font-size:12px}
+.bk-voc .r.alt .vi.let{background:var(--acd)}
+.bk-voc .tx{min-width:0}
+.bk-voc .en{font-size:11px;line-height:1.2}
+.bk-voc .uz{font-size:10px;color:var(--sc);font-weight:700;margin-top:1px}
+.bk-voc .r.alt .uz{color:var(--acd)}
+.bk-voc .ex{font-size:8.5px;line-height:1.35;margin-top:2px}
+.bk-tbl{border-radius:8px;overflow:hidden}
+.bk-tbl tr:nth-child(even) td{background:var(--tint)}
+.bk-tbl td{border-bottom:none}
+.bk-dlg .l{display:flex;gap:7px;align-items:flex-start}
+.bk-dlg .l.b{flex-direction:row-reverse}
+.bk-dlg .bb{background:var(--tint);border-radius:10px 10px 10px 3px;padding:6px 9px;max-width:80%}
+.bk-dlg .l.b .bb{background:var(--atint);border-radius:10px 10px 3px 10px}
+.bk-dlg .l.b .w{background:var(--atint);color:var(--acd)}
+.bk-ex{border:none;box-shadow:inset 0 0 0 1px var(--rule);border-radius:10px;overflow:hidden;padding:0 11px 8px}
+.bk-ex .t{margin:0 -11px 8px;padding:7px 11px;background:var(--sc);color:#fff}
+.bk-ex .t i{background:rgba(255,255,255,.22)}
+.bk-ex .t .ti{width:16px;height:16px}
+.bk-ex .q b{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--tint);font-size:8.5px}
+.bk-quiz .opt span{border:1px solid var(--rule);border-radius:12px;padding:1px 8px}
+.bk-quiz .opt span::before{display:none}
+.bk-kp{position:relative;background:linear-gradient(135deg,var(--ik),var(--sc))}
+.bk-kp .ki{position:absolute;right:10px;top:8px;width:22px;height:22px}
+.bk-card .cd{width:34px;height:34px;margin-bottom:6px}
+.bk-card{background:linear-gradient(180deg,var(--tint),transparent 60%)}
+.bk-cov-ill{position:absolute;right:26px;bottom:70px;width:220px;height:200px;pointer-events:none}
+.bk-cov.big-title{background:radial-gradient(circle at 78% 82%,var(--ptint) 0 30%,transparent 30.3%)}
+.bk-cov.minimal{background:linear-gradient(180deg,transparent 62%,var(--ptint) 62%)}
+.bk-cov-ill .bk-ill{position:absolute}
+.bk-cov-ill .c0{width:150px;height:150px;right:0;bottom:0}
+.bk-cov-ill .c1{width:92px;height:92px;left:0;bottom:60px;transform:rotate(-10deg)}
+.bk-cov-ill .c2{width:74px;height:74px;right:120px;top:0;transform:rotate(8deg)}
+.bk-cov.band .bk-cov-ill{bottom:40px}
+.bk-cov-ill.poster{right:60px;top:70px;bottom:auto;width:170px;height:170px}
+.bk-cov-ill.poster .c0{width:170px;height:170px}
+.bk-open .oi{position:absolute;right:34px;top:48px;width:120px;height:120px}
 /* v98: Pro bloklar */
 .bk-kp{margin:10px 0 12px;background:var(--ik);color:var(--pp);border-radius:8px;padding:10px 12px 8px}
 .bk-kp .t{display:block;font-size:10.5px;color:var(--pp);opacity:.75;margin-bottom:4px;letter-spacing:.02em}
@@ -8224,7 +8280,7 @@ const BK_CSS = `
 .bk-cov.poster .in{position:absolute;inset:44px 74px 40px 40px;display:flex;flex-direction:column}
 .bk-cov.poster .bk-cov-t{color:#fff;font-size:60px;line-height:.95;letter-spacing:-.02em;margin-top:auto}
 .bk-cov.poster .bk-cov-s{color:rgba(255,255,255,.85)}
-.bk-cov.poster .stripes{position:absolute;top:0;right:0;bottom:0;width:44px;display:flex;flex-direction:column;gap:3px}
+.bk-cov.poster .stripes{position:absolute;top:0;right:0;bottom:0;width:44px;display:flex;flex-direction:column}
 .bk-cov.poster .stripes i{flex:1}
 .bk-cov-meta{display:flex;gap:16px;margin-top:22px;font-size:9px;font-weight:700;letter-spacing:.02em}
 .bk-cov-meta b{display:block;font-size:22px;line-height:1;margin-bottom:2px}
@@ -8276,23 +8332,40 @@ function blockHtml(b, cont){
   const cTag = cont ? ' <span style="font-weight:400;color:var(--mu)">(davomi)</span>' : '';
   switch(b.type){
     case 'text': return `<p class="bk-p">${md(b.text)}</p>`;
-    case 'callout': return `<div class="bk-call ${b.tone==='warn'?'warn':''}">${b.title?`<b class="t">${esc(b.title)}</b>`:''}${md(b.text)}</div>`;
+    case 'callout': return `<div class="bk-call ${b.tone||'tip'}">${ico(TONE_IC[b.tone]||'light-bulb','ci')}<div>${b.title?`<b class="t">${esc(b.title)}</b>`:''}${md(b.text)}</div></div>`;
     case 'list': return `<ul class="bk-list ${b.style}">${b.items.map(x=>`<li>${md(x)}</li>`).join('')}</ul>`;
     case 'table': return `<table class="bk-tbl">${b.head&&b.head.length?`<tr>${b.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>`:''}${b.rows.map(r=>`<tr>${r.map(c=>`<td>${md(c)}</td>`).join('')}</tr>`).join('')}</table>`;
-    case 'vocab': return `<div class="bk-voc">${b.items.map(v=>`<div class="r"><div class="en">${esc(v.en)}${v.ipa?` <span class="ipa">${esc(v.ipa)}</span>`:''}</div><div class="uz">${esc(v.uz)}</div>${v.ex?`<div class="ex">${esc(v.ex)}</div>`:''}</div>`).join('')}</div>`;
-    case 'dialog': return `<div class="bk-dlg">${b.lines.map(l=>`<div class="l"><span class="w">${esc((l.who||'?').slice(0,2))}</span><div>${esc(l.en)}${l.uz?`<div class="uz">${esc(l.uz)}</div>`:''}</div></div>`).join('')}</div>`;
+    case 'vocab': return `<div class="bk-voc">${b.items.map((v,i)=>`<div class="r ${((b._start||0)+i)%2?'alt':''}">${ico(v.icon,'vi')||`<span class="bk-ill vi let">${esc((v.en||'?').slice(0,1).toUpperCase())}</span>`}<div class="tx"><div class="en">${esc(v.en)}${v.ipa?` <span class="ipa">${esc(v.ipa)}</span>`:''}</div><div class="uz">${esc(v.uz)}</div>${v.ex?`<div class="ex">${esc(v.ex)}</div>`:''}</div></div>`).join('')}</div>`;
+    case 'dialog': { const who=[...new Set(b.lines.map(l=>l.who))]; return `<div class="bk-dlg">${b.lines.map(l=>`<div class="l ${who.indexOf(l.who)%2?'b':'a'}"><span class="w">${esc((l.who||'?').slice(0,2))}</span><div class="bb">${esc(l.en)}${l.uz?`<div class="uz">${esc(l.uz)}</div>`:''}</div></div>`).join('')}</div>`; }
     case 'exercise': { const start=b._start||0;
-      return `<div class="bk-ex">${b.title?`<div class="t"><i>Mashq</i>${esc(b.title)}${cTag}</div>`:''}${b.items.map((q,i)=>`<div class="q"><b>${start+i+1}</b><div>${md(q.q)}</div>${b.kind==='write'||b.kind==='translate'?'<span></span><div class="ln"></div>':''}</div>`).join('')}</div>`; }
+      return `<div class="bk-ex">${b.title?`<div class="t">${ico('pencil','ti')}<i>Mashq</i>${esc(b.title)}${cTag}</div>`:''}${b.items.map((q,i)=>`<div class="q"><b>${start+i+1}</b><div>${md(q.q)}</div>${b.kind==='write'||b.kind==='translate'?'<span></span><div class="ln"></div>':''}</div>`).join('')}</div>`; }
     case 'quiz': { const start=b._start||0;
-      return `<div class="bk-ex bk-quiz">${b.title?`<div class="t"><i>Test</i>${esc(b.title)}${cTag}</div>`:''}${b.items.map((q,i)=>`<div class="q"><b>${start+i+1}</b><div>${md(q.q)}</div><span></span><div class="opt">${q.options.map((o,k)=>`<span>${'ABCD'[k]}) ${esc(o)}</span>`).join('')}</div></div>`).join('')}</div>`; }
+      return `<div class="bk-ex bk-quiz">${b.title?`<div class="t">${ico('check-mark-button','ti')}<i>Test</i>${esc(b.title)}${cTag}</div>`:''}${b.items.map((q,i)=>`<div class="q"><b>${start+i+1}</b><div>${md(q.q)}</div><span></span><div class="opt">${q.options.map((o,k)=>`<span>${'ABCD'[k]}) ${esc(o)}</span>`).join('')}</div></div>`).join('')}</div>`; }
     case 'lines': return `<div class="bk-lines">${b.label?`<div class="lb">${esc(b.label)}</div>`:''}${'<i></i>'.repeat(b.n)}</div>`;
     case 'tracker': return `<div class="bk-trk"><b>${esc(b.label||'Kuzatuv')}</b><div class="g">${Array.from({length:b.days},(_,i)=>`<span>${i+1}</span>`).join('')}</div></div>`;
-    case 'keypoints': return `<div class="bk-kp"><b class="t">${esc(b.title||'Esda tuting')}</b><ol>${b.items.map(x=>`<li>${md(x)}</li>`).join('')}</ol></div>`;
+    case 'keypoints': return `<div class="bk-kp">${ico('star','ki')}<b class="t">${esc(b.title||'Esda tuting')}</b><ol>${b.items.map(x=>`<li>${md(x)}</li>`).join('')}</ol></div>`;
     case 'mistakes': return `<div class="bk-mis"><b class="t">${esc(b.title||"Ko'p uchraydigan xatolar")}</b>${b.items.map(m=>`<div class="r"><div class="w"><i>✕</i>${esc(m.wrong)}</div><div class="k"><i>✓</i>${esc(m.right)}</div>${m.uz?`<div class="u">${esc(m.uz)}</div>`:''}</div>`).join('')}</div>`;
     case 'cards': return `<div class="bk-cardnote">${b.items.length} ta kartochka${b.title?`: ${esc(b.title)}`:''}. Kitobcha oxirida qirqib olinadigan varaqlarda.</div>`;
   }
   return '';
 }
+
+/* ---------- Illyustratsiyalar: Microsoft Fluent Emoji Flat (MIT), Iconify API orqali SVG ----------
+   SVG matn ko'rinishida sahifaga joylanadi — shaffof, vektor, PDF'da tiniq chiqadi. */
+const IC_CACHE=new Map();
+async function loadIcons(names){
+  const need=[...new Set(names.filter(Boolean))].filter(n=>!IC_CACHE.has(n)&&/^[a-z0-9-]{2,40}$/.test(n));
+  await Promise.all(need.map(async n=>{
+    let svg=null; try{ svg=localStorage.getItem('wd_ic_'+n); }catch(e){}
+    if(!svg){ const c=new AbortController(); const t=setTimeout(()=>c.abort(),5000);
+      try{ const r=await fetch('https://api.iconify.design/fluent-emoji-flat/'+n+'.svg',{signal:c.signal}); if(r.ok){ svg=await r.text(); if(!/^<svg/.test(svg)) svg=null; else try{ localStorage.setItem('wd_ic_'+n,svg); }catch(e){} } }catch(e){}
+      clearTimeout(t); }
+    IC_CACHE.set(n,svg||'');
+  }));
+}
+const ico=(n,cls)=> (n&&IC_CACHE.get(n)) ? `<span class="bk-ill ${cls||''}">${IC_CACHE.get(n)}</span>` : '';
+const TONE_IC={tip:'light-bulb',rule:'pushpin',warn:'warning'};
+function docIcons(doc){ const a=[...((doc.cover&&doc.cover.icons)||[])]; doc.sections.forEach(s=>{ a.push(s.icon); s.blocks.forEach(b=>{ if(b.type==='vocab'||b.type==='cards') b.items.forEach(x=>a.push(x.icon)); }); }); a.push('light-bulb','pushpin','warning','speech-balloon','pencil','star','books','check-mark-button'); return a; }
 
 /* ---------- Statistika (muqova va bo'lim ochilishi uchun) ---------- */
 function secStats(sec){
@@ -8313,7 +8386,7 @@ function bkDeep(hex,ink){ // juda och rangni siyoh tomon aralashtirib to'qlashti
 function themeVars(doc, secColor){
   const t=doc.theme, sc=bkDeep(secColor||t.primary, t.ink);
   const hexA=(h,a)=>{ const n=parseInt(h.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
-  return `--pp:${t.paper};--ik:${t.ink};--pr:${bkDeep(t.primary,t.ink)};--ac:${t.accent};--sc:${sc};--mu:${hexA(t.ink,.58)};--rule:${hexA(t.ink,.16)};--tint:${hexA(sc,.08)};--atint:${hexA(t.accent,.08)}`;
+  return `--pp:${t.paper};--ik:${t.ink};--pr:${bkDeep(t.primary,t.ink)};--ac:${t.accent};--sc:${sc};--mu:${hexA(t.ink,.58)};--rule:${hexA(t.ink,.16)};--tint:${hexA(sc,.1)};--atint:${hexA(t.accent,.1)};--ptint:${hexA(t.primary,.1)};--acd:${bkDeep(t.accent,t.ink)}`;
 }
 function newPage(doc, S, opts){
   const p=document.createElement('div');
@@ -8325,6 +8398,7 @@ async function paginate(doc, stage){
   injectCss();
   try{ await Promise.race([document.fonts.ready, new Promise(r=>setTimeout(r,1500))]); }catch(e){}
   const S=SIZES[doc.size]||SIZES.A5;
+  try{ await loadIcons(docIcons(doc)); }catch(e){}
   stage.innerHTML='';
   const pages=[]; // {el, kind, sec}
   const push=(el,kind,sec)=>{ stage.appendChild(el); pages.push({el,kind,sec}); return el; };
@@ -8334,10 +8408,13 @@ async function paginate(doc, stage){
   cov.innerHTML = cs==='band'
     ? `<div class="bk-cov band"><div class="top">${mark.replace('bk-cov-mark','bk-cov-mark" style="color:rgba(255,255,255,.8)')}<div style="height:36px"></div><h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}</div><div class="rest"><div class="bk-cov-a">${esc(doc.author||window.__wdName||'')}</div></div></div>`
     : `<div class="bk-cov ${cs}">${mark}<div style="height:${cs==='minimal'?0:60}px"></div><h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}<div class="bk-cov-a">${esc(doc.author||window.__wdName||'')}</div></div>`;
+  const cIc=((doc.cover&&doc.cover.icons)||[]).filter(n=>IC_CACHE.get(n));
+  const cluster=cIc.length?`<div class="bk-cov-ill">${cIc.slice(0,3).map((n,i)=>ico(n,'c'+i)).join('')}</div>`:'';
+  if(!['poster','split','editorial'].includes(cs) && cluster) cov.firstElementChild.insertAdjacentHTML('beforeend',cluster);
   const st=bkStats(doc);
   const meta=`<div class="bk-cov-meta"><div><b>${doc.sections.length}</b>bo'lim</div>${st.words?`<div><b>${st.words}</b>so'z</div>`:''}${st.cards?`<div><b>${st.cards}</b>kartochka</div>`:''}${st.tasks?`<div><b>${st.tasks}</b>mashq</div>`:''}</div>`;
   if(cs==='poster'){
-    cov.innerHTML=`<div class="bk-cov poster"><div class="stripes">${doc.sections.map((s,i)=>{ const c=s.color||doc.theme.accent; return `<i style="background:${c.toLowerCase()===doc.theme.primary.toLowerCase()?(i%2?'rgba(255,255,255,.12)':'rgba(255,255,255,.26)'):c}"></i>`; }).join('')}</div><div class="in">${mark.replace('bk-cov-mark','bk-cov-mark" style="color:rgba(255,255,255,.8)')}<h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}${meta}</div></div>`;
+    cov.innerHTML=`<div class="bk-cov poster"><div class="stripes">${doc.sections.map((s,i)=>{ const c=s.color||doc.theme.accent; return `<i style="background:${c.toLowerCase()===doc.theme.primary.toLowerCase()?(i%2?'rgba(255,255,255,.12)':'rgba(255,255,255,.26)'):c}"></i>`; }).join('')}</div>${cIc[0]?`<div class="bk-cov-ill poster">${ico(cIc[0],'c0')}</div>`:''}<div class="in">${mark.replace('bk-cov-mark','bk-cov-mark" style="color:rgba(255,255,255,.8)')}<h1 class="bk-cov-t">${esc(doc.title)}</h1>${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}${meta}</div></div>`;
   } else if(cs==='split'){
     cov.innerHTML=`<div class="bk-cov split"><div class="top">${mark}<svg class="big" viewBox="0 0 64 70"><defs><clipPath id="bkcv"><path d="M32 4C32 4 9 30 9 43a23 23 0 0 0 46 0C55 30 32 4 32 4Z"/></clipPath></defs><path d="M32 4C32 4 9 30 9 43a23 23 0 0 0 46 0C55 30 32 4 32 4Z" fill="none" stroke="${doc.theme.primary}" stroke-width="1.6"/><g clip-path="url(#bkcv)"><path d="M0 30 Q16 27 32 30 T64 30 V72 H0Z" fill="${doc.theme.primary}"/></g></svg><h1 class="bk-cov-t">${esc(doc.title)}</h1></div><div class="bot">${doc.subtitle?`<p class="bk-cov-s">${esc(doc.subtitle)}</p>`:''}${meta}</div></div>`;
   } else if(cs==='editorial'){
@@ -8360,12 +8437,12 @@ async function paginate(doc, stage){
   doc.sections.forEach((sec,si)=>{
     if(doc.pro){
       const o=newPage(doc,S,{color:sec.color||doc.theme.primary}); const c=secStats(sec);
-      o.innerHTML=`<div class="bk-open"><div class="num">${esc(sec.code||String(si+1))}</div><div class="lb">${si+1}-bo'lim</div><h2>${esc(sec.title)}</h2>${sec.intro?`<p>${esc(sec.intro)}</p>`:''}<div class="inc">${c.map(([n,l])=>`<div><b>${n}</b>${l}</div>`).join('')}</div></div><div class="bk-pro-mark"><i></i>WordDrop Pro</div>`;
+      o.innerHTML=`<div class="bk-open">${ico(sec.icon,'oi')}<div class="num">${esc(sec.code||String(si+1))}</div><div class="lb">${si+1}-bo'lim</div><h2>${esc(sec.title)}</h2>${sec.intro?`<p>${esc(sec.intro)}</p>`:''}<div class="inc">${c.map(([n,l])=>`<div><b>${n}</b>${l}</div>`).join('')}</div></div><div class="bk-pro-mark"><i></i>WordDrop Pro</div>`;
       push(o,'opener',sec); n++;
     }
     let page=mkContent(sec); let body=page.querySelector('.bk-body');
     secStart.push(n-1);
-    body.innerHTML=`<div class="bk-sec-head"><div class="bk-sec-code">${esc(sec.code||String(si+1))}</div><h2 class="bk-sec-t">${esc(sec.title)}</h2>${sec.intro?`<p class="bk-sec-i">${esc(sec.intro)}</p>`:''}</div>`;
+    body.innerHTML=`<div class="bk-sec-head">${ico(sec.icon||'books','sh')}<div class="bk-sec-code">${esc(sec.code||String(si+1))}</div><h2 class="bk-sec-t">${esc(sec.title)}</h2>${sec.intro?`<p class="bk-sec-i">${esc(sec.intro)}</p>`:''}</div>`;
     sec.blocks.forEach(b=>{
       const add=(blk,cont)=>{ const w=document.createElement('div'); w.innerHTML=blockHtml(blk,cont); const el=w.firstElementChild; if(el) body.appendChild(el); return el; };
       let el=add(b,false);
@@ -8404,7 +8481,7 @@ async function paginate(doc, stage){
     for(let i=0;i<cards.length;i+=8){
       const chunk=cards.slice(i,i+8);
       const fr=newPage(doc,S); fr.innerHTML=`<div class="bk-cards-cap"><span>Kartochkalar · old tomoni</span><span>${n}</span></div><div class="bk-cards">${Array.from({length:8},(_,k)=>{ const c=chunk[k]; if(!c) return '<div class="bk-card"></div>';
-        return `<div class="bk-card" style="--sc:${c.sec.color||doc.theme.primary}"><span class="k">${i+k+1}</span><span class="s"></span><div class="f">${esc(c.front)}</div></div>`; }).join('')}</div>`;
+        return `<div class="bk-card" style="--sc:${c.sec.color||doc.theme.primary}"><span class="k">${i+k+1}</span><span class="s"></span>${ico(c.icon,'cd')}<div class="f">${esc(c.front)}</div></div>`; }).join('')}</div>`;
       push(fr,'cards'); n++;
       const bk=newPage(doc,S); bk.innerHTML=`<div class="bk-cards-cap"><span>Kartochkalar · orqa tomoni</span><span>${n}</span></div><div class="bk-cards">${Array.from({length:8},(_,k)=>{ const m=k%2===0?k+1:k-1; const c=chunk[m]; if(!c) return '<div class="bk-card"></div>';
         return `<div class="bk-card" style="--sc:${c.sec.color||doc.theme.primary}"><span class="k">${i+m+1}</span><div class="b">${esc(c.back)}</div>${c.hint?`<div class="h">${esc(c.hint)}</div>`:''}</div>`; }).join('')}</div>`;
@@ -8427,26 +8504,46 @@ async function paginate(doc, stage){
 }
 
 /* ---------- PDF va chop etish ---------- */
-async function exportPdf(doc, pages, onProg){
+async function buildPdf(doc, pages, onProg){
   const S=SIZES[doc.size]||SIZES.A5;
-  if(!(window.jspdf&&window.jspdf.jsPDF) || typeof html2canvas!=='function'){ printBook(doc,pages); return; }
+  if(!(window.jspdf&&window.jspdf.jsPDF) || typeof html2canvas!=='function') return null;
   const pdf=new window.jspdf.jsPDF({unit:'mm',format:S.mm,orientation:'portrait',compress:true});
   const off=document.createElement('div'); off.style.cssText='position:fixed;left:-20000px;top:0;z-index:-1';
   document.body.appendChild(off);
+  // Pro: ~300 dpi; oddiy: ~200 dpi. Yuqori sifat va tezlik o'rtasidagi muvozanat.
+  const hq=!!doc.pro && !!window.__wdIsPro;
+  const scale=hq?(S.w>700?2.6:3.1):(S.w>700?1.9:2.2);
   try{
   for(let i=0;i<pages.length;i++){
     onProg&&onProg(i+1,pages.length);
     const c=pages[i].el.cloneNode(true); c.style.transform='none'; c.style.margin='0'; off.innerHTML=''; off.appendChild(c);
-    // Pro: ~350 dpi va yuqori JPEG sifati (bosmaxona uchun aniq matn); oddiy: ~210 dpi
-    const hq=!!doc.pro && !!window.__wdIsPro;
-    const cv=await html2canvas(c,{scale:hq?(S.w>700?3:3.6):2.4,backgroundColor:doc.theme.paper,useCORS:true,logging:false});
+    const cv=await html2canvas(c,{scale,backgroundColor:doc.theme.paper,useCORS:true,logging:false,imageTimeout:0,removeContainer:true});
     if(i) pdf.addPage(S.mm,'portrait');
-    pdf.addImage(cv.toDataURL('image/jpeg',hq?0.96:0.9),'JPEG',0,0,S.mm[0],S.mm[1],undefined,hq?'SLOW':'FAST');
+    pdf.addImage(cv.toDataURL('image/jpeg',hq?0.92:0.88),'JPEG',0,0,S.mm[0],S.mm[1],undefined,'FAST');
+    cv.width=cv.height=0;
+    await new Promise(r=>setTimeout(r,0));   // interfeys qotib qolmasin
   }
   } finally { off.remove(); }
   try{ pdf.setProperties({title:doc.title||'Kitobcha',subject:doc.subtitle||'',author:doc.author||'WordDrop',creator:'WordDrop'+(doc.pro?' Pro':''),keywords:'WordDrop, ingliz tili'}); }catch(e){}
-  const name=(doc.title||'kitobcha').replace(/[^\wЀ-ӿ' -]+/g,'').trim().replace(/\s+/g,'-').slice(0,40)||'kitobcha';
-  pdf.save(name+'.pdf');
+  const name=(doc.title||'kitobcha').replace(/[^\wЀ-ӿ'ʻʼ -]+/g,'').trim().replace(/\s+/g,'-').slice(0,40)||'kitobcha';
+  return {pdf,name};
+}
+async function exportPdf(doc, pages, onProg){
+  const o=await buildPdf(doc,pages,onProg);
+  if(!o){ printBook(doc,pages); return; }
+  o.pdf.save(o.name+'.pdf');
+}
+/* Telegram'ga yuborish: PDF shaxsiy papkaga (Storage) yuklanadi, bot uni chatga hujjat qilib yuboradi */
+async function sendPdfTg(doc, pages, onProg){
+  if(!(window.__wdIsSignedIn&&window.__wdIsSignedIn())) throw new Error("Avval hisobingizga kiring");
+  const o=await buildPdf(doc,pages,onProg); if(!o) throw new Error("PDF kutubxonasi yuklanmadi");
+  const { data } = await window.__sb.auth.getSession(); const uid=data&&data.session&&data.session.user.id; if(!uid) throw new Error("Avval hisobingizga kiring");
+  const path=`${uid}/${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}.pdf`;
+  onProg&&onProg(-1);
+  const up=await window.__sb.storage.from('booklets').upload(path,o.pdf.output('blob'),{contentType:'application/pdf'});
+  if(up.error) throw new Error("Yuklab bo'lmadi: "+up.error.message);
+  const r=await window.__wdTgApi('send_pdf',{path,name:o.name,title:doc.title,pro:!!doc.pro},90000);
+  if(r.__error||r.ok===false) throw new Error(r.msg||r.error||"Bot yubora olmadi");
 }
 function printBook(doc,pages){
   const S=SIZES[doc.size]||SIZES.A5;
@@ -8557,7 +8654,8 @@ async function renderStudio(){
     <div class="bk-dock">
       <div class="bk-log" id="bkLog">${ST.log.slice(-2).map(m=>`<p class="${m.who}">${m.who==='drop'?'<b>Drop:</b> ':''}${esc(m.t)}</p>`).join('')}</div>
       <div class="bk-ask"><input id="bkAsk" maxlength="800" placeholder="Drop'ga ayting: 2-bo'limga 10 ta kartochka qo'sh" autocomplete="off"><button id="bkAskGo" aria-label="Yuborish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
-      <div class="xs-row2"><button class="xs-ghost" id="bkPrint">Chop etish</button><button class="xs-main" id="bkPdf">PDF yuklab olish</button></div>
+      <div class="xs-row2 bk-out">${window.__wdInTelegram?`<button class="xs-ghost" id="bkPdf">Yuklab olish</button><button class="xs-main" id="bkTg">Telegram'ga yuborish</button>`:`<button class="xs-ghost" id="bkTg">Telegram'ga yuborish</button><button class="xs-main" id="bkPdf">PDF yuklab olish</button>`}</div>
+      <button class="rv-link bk-printl" id="bkPrint">Chop etish</button>
     </div>`;
   el.querySelector('#bkBack').onclick=()=>{ renderStart(); };
   el.querySelector('#bkUndo').onclick=()=>{ if(!ST.undo.length) return; ST.doc=ST.undo.pop(); ST.log.push({who:'drop',t:"Oldingi holatga qaytarildi."}); persist(); renderStudio(); };
@@ -8588,6 +8686,12 @@ async function renderStudio(){
     b.disabled=false; b.textContent=o;
   };
   el.querySelector('#bkPrint').onclick=()=>printBook(ST.doc,ST.pages);
+  el.querySelector('#bkTg').onclick=async e=>{
+    const b=e.currentTarget; if(b.disabled) return; b.disabled=true; const o=b.textContent;
+    try{ await sendPdfTg(ST.doc,ST.pages,(i,n)=>{ b.textContent= i<0?'Botga yuborilmoqda…':`Tayyorlanmoqda ${i}/${n}`; }); showToast("Kitobcha Telegram chatingizga yuborildi",IC.check||IC.info); }
+    catch(err){ showToast(err&&err.message||"Yuborilmadi",IC.info); }
+    b.disabled=false; b.textContent=o;
+  };
   // Sahifalar
   const stage=el.querySelector('#bkStage'), prev=el.querySelector('#bkPrev');
   stage.classList.add('measuring');
@@ -8599,6 +8703,7 @@ async function renderStudio(){
   const pc=document.createElement('p'); pc.className='bk-count'; pc.textContent=`${ST.pages.length} sahifa`; prev.appendChild(pc);
 }
 })();
+
 /* ==================================================================
    SUHBAT SHERIGI + RASMDAN SO'Z (v94)
    ------------------------------------------------------------------
@@ -8958,8 +9063,23 @@ const FH='"Bricolage Grotesque","Inter",sans-serif', FB='"Inter",sans-serif';
 function fitF(c,txt,maxW,size,w,fam,min){ let s=size; do{ c.font=`${w} ${s}px ${fam}`; if(c.measureText(txt).width<=maxW) break; s-=6; }while(s>(min||30)); return s; }
 function wrap(c,txt,maxW){ const out=[]; let line=''; String(txt||'').split(/\s+/).forEach(w=>{ const t=(line?line+' ':'')+w; if(c.measureText(t).width>maxW&&line){ out.push(line); line=w; } else line=t; }); if(line) out.push(line); return out; }
 function dropAt(c,x,y,s,col){ const k=s/70; c.beginPath(); c.moveTo(x+32*k,y+4*k); c.bezierCurveTo(x+32*k,y+4*k,x+9*k,y+30*k,x+9*k,y+43*k); c.bezierCurveTo(x+9*k,y+56*k,x+19*k,y+66*k,x+32*k,y+66*k); c.bezierCurveTo(x+45*k,y+66*k,x+55*k,y+56*k,x+55*k,y+43*k); c.bezierCurveTo(x+55*k,y+30*k,x+32*k,y+4*k,x+32*k,y+4*k); c.closePath(); c.fillStyle=col; c.fill(); }
+/* Illyustratsiya (Fluent Emoji Flat, MIT) — SVG blob orqali chiziladi, canvas "ifloslanmaydi" */
+const PIC=new Map();
+async function postIcon(name){
+  if(!name||!/^[a-z0-9-]{2,40}$/.test(name)) return null;
+  if(PIC.has(name)) return PIC.get(name);
+  let svg=null; try{ svg=localStorage.getItem('wd_ic_'+name); }catch(e){}
+  if(!svg){ try{ const r=await fetch('https://api.iconify.design/fluent-emoji-flat/'+name+'.svg?height=512'); if(r.ok) svg=await r.text(); }catch(e){} }
+  if(!svg||!/^<svg/.test(svg)){ PIC.set(name,null); return null; }
+  svg=svg.replace(/width="[^"]*"/,'width="512"').replace(/height="[^"]*"/,'height="512"');
+  const img=await new Promise(res=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=()=>res(null); i.src=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})); });
+  PIC.set(name,img); return img;
+}
+window.__wdPostIcon=postIcon;
 async function renderPost(kind, card, theme){
   const T=PTHEMES[theme]||PTHEMES.ink; card=card||{};
+  const ill=await postIcon(card.icon);
+  const RW=ill?PW-PM*2-210:PW-PM*2;   // illyustratsiya bilan sarlavha torroq
   try{ await Promise.race([document.fonts.load(`700 120px "Bricolage Grotesque"`), new Promise(r=>setTimeout(r,1200))]); }catch(e){}
   const cv=document.createElement('canvas'); cv.width=PW; cv.height=PH; const c=cv.getContext('2d');
   c.fillStyle=T.bg; c.fillRect(0,0,PW,PH); c.textBaseline='alphabetic';
@@ -8967,8 +9087,8 @@ async function renderPost(kind, card, theme){
   c.font=`600 32px ${FB}`; c.fillStyle=T.acc; c.textAlign='right'; c.fillText(KIND_LBL[kind]||'WordDrop',PW-PM,126); c.textAlign='left';
   // Mazmunni sarlavha va pastki qator orasida vertikal markazlaymiz (avval o'lchab olamiz)
   const body=(c,y)=>{
-  if(card.title){ c.fillStyle=T.mute; c.font=`600 44px ${FB}`; wrap(c,card.title,PW-PM*2).slice(0,2).forEach(l=>{ c.fillText(l,PM,y); y+=56; }); y+=10; }
-  if(card.big){ const s=fitF(c,card.big,PW-PM*2,250,700,FH,80); c.font=`700 ${s}px ${FH}`; c.fillStyle=T.fg; y+=s*0.85; c.fillText(card.big,PM-6,y); y+=s*0.3; }
+  if(card.title){ c.fillStyle=T.mute; c.font=`600 44px ${FB}`; wrap(c,card.title,RW).slice(0,2).forEach(l=>{ c.fillText(l,PM,y); y+=56; }); y+=10; }
+  if(card.big){ const s=fitF(c,card.big,RW,250,700,FH,80); c.font=`700 ${s}px ${FH}`; c.fillStyle=T.fg; y+=s*0.85; c.fillText(card.big,PM-6,y); y+=s*0.3; }
   if(card.sub){ c.font=`500 42px ${FB}`; c.fillStyle=T.fg; wrap(c,card.sub,PW-PM*2).slice(0,3).forEach(l=>{ y+=56; c.fillText(l,PM,y); }); y+=30; }
   const lines=(card.lines||[]).filter(Boolean).slice(0,4);
   if(lines.length){ y+=20; c.strokeStyle=T.rule; c.lineWidth=2;
@@ -8978,6 +9098,8 @@ async function renderPost(kind, card, theme){
   const mc=document.createElement('canvas').getContext('2d');
   const top=200, bottom=PH-200, used=body(mc,top)-top;
   body(c, top+Math.max(0,Math.min(160,(bottom-top-used)/2)));
+  // illyustratsiya — o'ng yuqorida, matn ustiga chiqmasdan
+  if(ill){ c.save(); c.globalAlpha=1; c.drawImage(ill,PW-PM-190,170,190,190); c.restore(); }
   // pastki qator
   const by=PH-120; c.strokeStyle=T.rule; c.beginPath(); c.moveTo(PM,by-50); c.lineTo(PW-PM,by-50); c.stroke();
   c.font=`700 40px ${FH}`; c.fillStyle=T.fg; c.fillText(card.cta||"Bepul o'rganing",PM,by+10);
@@ -9193,12 +9315,18 @@ async function renderGeneral(){
     ${chips('baDm',[['all','Hammaga'],['linked','Ulanganlarga'],['none','Hech kimga']],c.dm)}
     <p class="rv-note top">"Ulanganlarga" — faqat WordDrop hisobini botga ulaganlar Drop AI bilan suhbatlasha oladi. Kun so'zi va viktorina hammaga ishlaydi.</p>
     <div class="xc xc-row"><div><b>Yangi guruhlarni men tasdiqlayman</b><span>Bot guruhga qo'shilsa, siz ruxsat bermaguncha jim turadi</span></div><button class="xc-tg ${c.approve_groups?'on':''}" id="baAp"><i></i></button></div>
+    <div class="xc xc-row"><div><b>Guruhlarga WordDrop e'lonlari</b><span>Faol guruhlarga foydali post: kun so'zi, viktorina yoki imkoniyat + ilova havolasi. 09:00–22:00 oralig'ida.</span></div><button class="xc-tg ${c.promo!==false?'on':''}" id="baPromo"><i></i></button></div>
+    <h3 class="qx-h">E'lon oralig'i</h3>
+    ${chips('baPh',[[3,'3 soat'],[5,'5 soat'],[8,'8 soat'],[12,'12 soat']],c.promo_hours||5)}
+    <p class="rv-note top">Guruh adminlari o'z guruhida <b>/reklama_off</b> deb e'lonlarni o'chira oladi. Juda tez-tez e'lon guruhdan chiqarib yuborilishga sabab bo'lishi mumkin.</p>
     <h3 class="qx-h">Yangi guruhlar uchun hazil darajasi</h3>
     ${chips('baHu',HUMOR.map((n,i)=>[i,n]),c.humor)}
     <h3 class="qx-h">Guruh a'zolari himoyasi</h3>
     <p class="rv-note top">Drop tashqi ko'rinish, din, millat, oila, sog'liq va siyosat haqida hazillashmaydi. Yashirin eslatmalar guruhda hech qachon aytilmaydi. Har kim guruhda <b>/unut</b> deb yozib, Drop u haqida eslab qolganlarini o'chira oladi.</p>`;
   bindChips(b,'baDm',v=>api('bot_cfg_set',{dm:v}));
   bindChips(b,'baHu',v=>api('bot_cfg_set',{humor:Number(v)}));
+  bindChips(b,'baPh',v=>api('bot_cfg_set',{promo_hours:Number(v)}));
+  b.querySelector('#baPromo').onclick=e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); api('bot_cfg_set',{promo:on}); };
   b.querySelector('#baAp').onclick=e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); api('bot_cfg_set',{approve_groups:on}); };
 }
 
@@ -9225,6 +9353,7 @@ function renderGroup(){
   el.querySelector('#bgBody').innerHTML=`
     ${g.status==='pending'?`<div class="ba-warn"><b>Bu guruh ruxsat kutmoqda.</b> Yoqsangiz, Drop guruhda salomlashadi va ishlay boshlaydi.</div>`:''}
     <div class="xc xc-row"><div><b>Drop shu guruhda gapiradi</b><span>${g.total_msgs} ta xabar ko'rdi</span></div><button class="xc-tg ${g.status==='on'?'on':''}" id="bgOn"><i></i></button></div>
+    <div class="xc xc-row"><div><b>WordDrop e'lonlari</b><span>${g.last_promo_at?'Oxirgisi: '+new Date(g.last_promo_at).toLocaleString('uz-UZ',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}):'Hali yuborilmagan'}</span></div><button class="xc-tg ${g.promo!==false?'on':''}" id="bgPromo"><i></i></button></div>
     <h3 class="qx-h">Qachon gapiradi</h3>
     ${chips('bgMode',MODES.map(m=>[m[0],m[1]]),g.mode)}
     <p class="rv-note top" id="bgModeN">${MODES.find(m=>m[0]===g.mode)?.[2]||''}</p>
@@ -9259,6 +9388,7 @@ function renderGroup(){
   b.querySelector('#bgOn').onclick=e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); set({status:on?'on':'off'}).then(()=>showToast(on?"Drop guruhda yoqildi":"Drop guruhda o'chirildi",IC.info)); };
   bindChips(b,'bgMode',v=>{ set({mode:v}); b.querySelector('#bgModeN').textContent=MODES.find(m=>m[0]===v)[2]; });
   bindChips(b,'bgHu',v=>set({humor:Number(v)}));
+  b.querySelector('#bgPromo').onclick=e=>{ const on=!e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on',on); set({promo:on}); };
   bindChips(b,'bgLim',v=>set({daily_limit:Number(v)}));
   b.querySelector('#bgQf').onchange=e=>set({quiet_from:e.target.value===''?null:Number(e.target.value)});
   b.querySelector('#bgQt').onchange=e=>set({quiet_to:e.target.value===''?null:Number(e.target.value)});

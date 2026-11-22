@@ -1,4 +1,4 @@
-// Supabase Edge Function: tg-bot  (WordDrop v97)
+// Supabase Edge Function: tg-bot  (WordDrop v99)
 // @WordDropUzBot — foydalanuvchilar bilan suhbat, kanal postlari va eslatmalar.
 //
 // Kirish yo'llari (bitta URL):
@@ -13,6 +13,8 @@
 //      botdagi /admin boshqaruv paneli, ovozli xabarlar (Groq Whisper), Telegram ichida ilova.
 // v97: WordDrop Pro — Telegram Stars (XTR) to'lovlari: oylik obuna va bir martalik 3 oy / 1 yil,
 //      /pro, /paysupport, /terms, pulni qaytarish (admin), Pro limiti 100/kun.
+// v99: guruhlarga muntazam WordDrop reklamasi (har N soatda, foydali mazmun bilan; guruh adminlari /reklama_off),
+//      send_pdf (kitobchani foydalanuvchi chatiga hujjat qilib yuborish), kanal postlari uchun illyustratsiya kalitlari.
 //
 // Sirlar: TELEGRAM_BOT_TOKEN, GROQ_API_KEY (Supabase Secrets); webhook/cron sirlari — wd_tg_kv jadvalida.
 
@@ -89,8 +91,8 @@ async function me() {
   return ME ?? { id: 0, username: "WordDropUzBot", can_read: false };
 }
 /* Umumiy bot sozlamalari */
-const CFG_DEF = { dm: "all", approve_groups: true, humor: 1 };
-async function cfg(): Promise<{ dm: string; approve_groups: boolean; humor: number }> { return { ...CFG_DEF, ...((await kv("bot_cfg")) ?? {}) }; }
+const CFG_DEF = { dm: "all", approve_groups: true, humor: 1, promo: true, promo_hours: 5 };
+async function cfg(): Promise<{ dm: string; approve_groups: boolean; humor: number; promo: boolean; promo_hours: number }> { return { ...CFG_DEF, ...((await kv("bot_cfg")) ?? {}) }; }
 const UZ = "O'zbekcha matn: standart adabiy o'zbek tili, lotin yozuvi, sodda. O'zbek apostrofi: o', g'.";
 
 /* ───────── So'zlar bazasi ───────── */
@@ -421,6 +423,11 @@ async function groupMessage(m: any) {
     await db.from("wd_tg_groups").update({ muted_until: cmd === "/jim" ? new Date(Date.now() + h * 3600_000).toISOString() : null }).eq("chat_id", chatId);
     return send(chatId, cmd === "/jim" ? `🤐 Mayli, ${h} soat jim turaman.` : "🙂 Yana shu yerdaman!");
   }
+  if (cmd === "/reklama_off" || cmd === "/reklama_on") {
+    if (!(await canModerate(chatId, f.id))) return;
+    await db.from("wd_tg_groups").update({ promo: cmd === "/reklama_on" }).eq("chat_id", chatId);
+    return send(chatId, cmd === "/reklama_on" ? "📣 WordDrop e'lonlari yana yoqildi." : "🔕 Tushunarli — bu guruhga WordDrop e'lonlarini yubormayman. Qayta yoqish: /reklama_on");
+  }
   if (g.status !== "on") return;
   if (cmd === "/quiz") return sendGroupQuiz(chatId);
   if (cmd === "/word") return send(chatId, wodText(await wordOfDay() ?? {}));
@@ -598,6 +605,46 @@ async function runImport(chatId: number, lines: { uid: number; name: string; tex
   }
 }
 
+/* ───────── Guruhlarga muntazam e'lon (reklama) ─────────
+   Har N soatda (bot_cfg.promo_hours) faol guruhga bitta foydali post: kun so'zi, viktorina yoki imkoniyat haqida.
+   Jim soatlar, /jim va guruhning o'z sozlamasi (/reklama_off) hurmat qilinadi; 3 kundan beri jim guruhlarga yuborilmaydi. */
+const PROMO_FEATS = [
+  "🎙 <b>Inglizcha gapirishni mashq qilmoqchimisiz?</b>\nBotga ovozli xabar yuboring — Drop talaffuz va grammatikangizni tekshirib, tabiiyroq variantini aytadi.",
+  "📘 <b>1 daqiqada shaxsiy kitobcha</b>\nDrop mavzu bo'yicha qoidalar, misollar, mashqlar va qirqiladigan kartochkalar bilan rangli PDF tuzadi va Telegram'ga yuboradi.",
+  "🔥 <b>Kuniga 10 daqiqa yetarli</b>\nSo'zlar, aqlli takror (SRS), duel va haftalik liga — WordDrop o'zbeklar uchun bepul ingliz tili ilovasi.",
+  "🧠 <b>So'zlar esdan chiqib ketyaptimi?</b>\nWordDrop har bir so'zni aynan unutishingizdan oldin takrorlatadi va o'zbekcha eslab qolish usulini beradi.",
+  "💬 <b>Drop AI — cho'ntakdagi o'qituvchi</b>\nGrammatika, tarjima, IELTS savollari — botga yozing, tushunarli o'zbekcha javob oling.",
+];
+async function groupPromo(g: any) {
+  const B = await me();
+  const kb = { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", url: `https://t.me/${B.username}?start=g` }, { text: "🌐 Sayt", url: "https://worddrop-app.uz" }]] };
+  const r = Math.random();
+  let res: any;
+  if (r < 0.34) { const v = await wordOfDay(); res = await send(g.chat_id, wodText(v ?? {}) + "\n\n💧 Har kuni shunday so'zlar, takror va Drop AI — WordDrop'da bepul.", { reply_markup: kb }); }
+  else if (r < 0.55) { await sendGroupQuiz(g.chat_id); res = await send(g.chat_id, "🎯 Shunday savollar bilan har kuni mashq qilish — WordDrop'da.", { reply_markup: kb }); }
+  else res = await send(g.chat_id, PROMO_FEATS[Math.floor(Math.random() * PROMO_FEATS.length)], { reply_markup: kb });
+  if (res && !res.ok && res.error_code === 403) await db.from("wd_tg_groups").update({ status: "left" }).eq("chat_id", g.chat_id);
+  return !!res?.ok;
+}
+async function promoTick(log: Record<string, unknown>) {
+  const conf = await cfg(); if (conf.promo === false) return;
+  const hrs = Math.max(1, Math.min(48, Number(conf.promo_hours) || 5));
+  const cutoff = new Date(Date.now() - hrs * 3600_000).toISOString();
+  const active = new Date(Date.now() - 3 * 86400_000).toISOString();
+  const { data: gs } = await db.from("wd_tg_groups").select("*").eq("status", "on").eq("promo", true)
+    .or(`last_promo_at.is.null,last_promo_at.lt.${cutoff}`).gte("updated_at", active).limit(15);
+  let n = 0;
+  for (const g of gs ?? []) {
+    if (!g.last_promo_at) { await db.from("wd_tg_groups").update({ last_promo_at: nowIso() }).eq("chat_id", g.chat_id); continue; }   // birinchisi N soatdan keyin
+    if (inQuiet(g) || (g.muted_until && Date.parse(g.muted_until) > Date.now())) continue;
+    const h = tz().hour; if (h < 9 || h >= 22) continue;   // tunda yubormaymiz
+    if (await groupPromo(g)) n++;
+    await db.from("wd_tg_groups").update({ last_promo_at: nowIso() }).eq("chat_id", g.chat_id);
+    await sleep(60);
+  }
+  if (n) log.promo = n;
+}
+
 /* ───────── Guruh viktorinasi ───────── */
 async function sendGroupQuiz(chatId: number) {
   const w = await randomWord(Math.floor(Math.random() * 1e9));
@@ -689,11 +736,14 @@ async function adminPanel(chatId: number, fromId: number, msgId: number | null =
   const text = `🤖 <b>Drop boshqaruvi</b>\n\n👥 Guruhlar: <b>${on}</b> faol${pend ? `, <b>${pend}</b> ruxsat kutmoqda` : ""}\n💬 Shaxsiy chatlar: <b>${users ?? 0}</b>\n` +
     `🗣 Shaxsiy xabarlarga javob: <b>${{ all: "hammaga", linked: "faqat ulanganlarga", none: "hech kimga" }[conf.dm] ?? conf.dm}</b>\n` +
     `✅ Yangi guruhlar: <b>${conf.approve_groups ? "siz ruxsat berasiz" : "darhol ishlaydi"}</b>\n` +
+    `📣 Guruhlarga e'lon: <b>${conf.promo ? `har ${conf.promo_hours} soatda` : "o'chiq"}</b>\n` +
     (B.can_read ? "" : `\n⚠️ <b>Privacy mode yoqilgan</b> — bot guruhlarda faqat buyruqlarni ko'radi. @BotFather → /setprivacy → @${esc(B.username)} → <b>Disable</b>, so'ng botni guruhdan chiqarib qayta qo'shing.\n`);
   return panel(chatId, msgId, text, [
     [{ text: `👥 Guruhlar (${on + pend})`, callback_data: "AG" }],
     [{ text: dot(conf.dm === "all") + "Hammaga", callback_data: "Ad:all" }, { text: dot(conf.dm === "linked") + "Ulanganlarga", callback_data: "Ad:linked" }, { text: dot(conf.dm === "none") + "Hech kimga", callback_data: "Ad:none" }],
     [{ text: `${conf.approve_groups ? "✅" : "⬜️"} Yangi guruhlarni men tasdiqlayman`, callback_data: "Aa" }],
+    [{ text: `${conf.promo ? "📣" : "🔕"} Guruhlarga e'lon: ${conf.promo ? "yoqilgan" : "o'chiq"}`, callback_data: "Aq" }],
+    [3, 5, 8, 12].map((h) => ({ text: dot(Number(conf.promo_hours) === h) + `har ${h} soat`, callback_data: `Ah:${h}` })),
     [{ text: "📱 Ilovada boshqarish", web_app: { url: APP_URL + "#bot" } }],
   ]);
 }
@@ -714,6 +764,7 @@ async function groupPanel(chatId: number, msgId: number | null, gid: number) {
     [20, 50, 100, 200].map((k) => ({ text: dot(g.daily_limit === k) + k + "/kun", callback_data: `Agl:${G}:${k}` })),
     [muted ? { text: "🔊 Gapirsin", callback_data: `Agq:${G}:0` } : { text: "🔇 1 soat jim", callback_data: `Agq:${G}:1` }, { text: "🔄 Hozir o'rgan", callback_data: `Agx:${G}` }],
     [{ text: "👤 A'zolar", callback_data: `Agp:${G}:0` }, { text: "📝 Ko'rsatma", callback_data: `Agr:${G}` }, { text: "😂 Ichki hazillar", callback_data: `Agj:${G}` }],
+    [{ text: g.promo ? "📣 E'lonlar: yoqilgan" : "🔕 E'lonlar: o'chiq", callback_data: `Agv:${G}` }],
     [{ text: "🚪 Guruhdan chiqish", callback_data: `Agk:${G}` }, { text: "⬅️ Guruhlar", callback_data: "AG" }],
   ]);
 }
@@ -745,6 +796,9 @@ async function adminCb(cq: any) {
     case "A": return adminPanel(chatId, cq.from.id, msgId);
     case "Ad": { const c = await cfg(); await kvSet("bot_cfg", { ...c, dm: a }); return adminPanel(chatId, cq.from.id, msgId); }
     case "Aa": { const c = await cfg(); await kvSet("bot_cfg", { ...c, approve_groups: !c.approve_groups }); return adminPanel(chatId, cq.from.id, msgId); }
+    case "Aq": { const c = await cfg(); await kvSet("bot_cfg", { ...c, promo: !c.promo }); return adminPanel(chatId, cq.from.id, msgId); }
+    case "Ah": { const c = await cfg(); await kvSet("bot_cfg", { ...c, promo_hours: Math.max(1, Math.min(48, Number(a) || 5)) }); return adminPanel(chatId, cq.from.id, msgId); }
+    case "Agv": { const { data: g } = await db.from("wd_tg_groups").select("promo").eq("chat_id", gid).maybeSingle(); await setG({ promo: !g?.promo }); return groupPanel(chatId, msgId, gid); }
     case "AG": {
       const { data: gs } = await db.from("wd_tg_groups").select("chat_id,title,status").neq("status", "left").order("updated_at", { ascending: false }).limit(30);
       const ic: Record<string, string> = { on: "🟢", off: "⚪️", pending: "🟡" };
@@ -850,11 +904,13 @@ async function adminApi(action: string, body: any): Promise<Response | null> {
       if (["all", "linked", "none"].includes(body.dm)) n.dm = body.dm;
       if (typeof body.approve_groups === "boolean") n.approve_groups = body.approve_groups;
       if ([0, 1, 2].includes(Number(body.humor))) n.humor = Number(body.humor);
+      if (typeof body.promo === "boolean") n.promo = body.promo;
+      if (body.promo_hours !== undefined) n.promo_hours = Math.max(1, Math.min(48, Number(body.promo_hours) || 5));
       await kvSet("bot_cfg", n); return json({ ok: true, cfg: n });
     }
     case "groups": {
       ME = null; await db.from("wd_tg_kv").delete().eq("key", "me"); const B = await me();
-      const { data } = await db.from("wd_tg_groups").select("chat_id,title,username,status,mode,humor,daily_limit,used,used_day,total_msgs,learned_at,muted_until").neq("status", "left").order("updated_at", { ascending: false });
+      const { data } = await db.from("wd_tg_groups").select("chat_id,title,username,status,mode,humor,daily_limit,used,used_day,total_msgs,learned_at,muted_until,promo,last_promo_at").neq("status", "left").order("updated_at", { ascending: false });
       return json({ groups: data ?? [], can_read: B.can_read, bot: B.username });
     }
     case "group_get": {
@@ -869,6 +925,7 @@ async function adminApi(action: string, body: any): Promise<Response | null> {
     case "group_set": {
       const P = body.patch ?? {}; const n: any = { updated_at: nowIso() };
       if (["on", "off"].includes(P.status)) n.status = P.status;
+      if (typeof P.promo === "boolean") n.promo = P.promo;
       if (["mention", "smart", "active"].includes(P.mode)) n.mode = P.mode;
       if ([0, 1, 2].includes(Number(P.humor)) && P.humor !== undefined) n.humor = Number(P.humor);
       if (P.daily_limit !== undefined) n.daily_limit = Math.max(0, Math.min(1000, Number(P.daily_limit) || 0));
@@ -915,14 +972,14 @@ async function adminApi(action: string, body: any): Promise<Response | null> {
    ═════════════════════════════════════════════════════════════════════ */
 const DAY_MS = 86400_000;
 const PLANS: Record<string, { title: string; desc: string; stars: number; days: number; sub?: boolean; label: string }> = {
-  m1: { title: "WordDrop Pro — oylik", label: "1 oy", desc: "Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi. Har 30 kunda avtomatik yangilanadi, istalgan vaqt bekor qilish mumkin.", stars: 149, days: 30, sub: true },
-  m3: { title: "WordDrop Pro — 3 oy", label: "3 oy", desc: "Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi — 90 kun. Bir martalik to'lov, avtomatik yechilmaydi.", stars: 399, days: 90 },
-  y1: { title: "WordDrop Pro — 1 yil", label: "1 yil", desc: "Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi — 365 kun. Bir martalik to'lov, avtomatik yechilmaydi.", stars: 1290, days: 365 },
+  m1: { title: "WordDrop Pro — oylik", label: "1 oy", desc: "Drop AI 100/kun, Pro kitobchalar, haftalik shaxsiy kitobcha, oyiga 2 streak muzlatgich, Pro ramka. Har 30 kunda avtomatik yangilanadi, istalgan vaqt bekor qilish mumkin.", stars: 149, days: 30, sub: true },
+  m3: { title: "WordDrop Pro — 3 oy", label: "3 oy", desc: "Drop AI 100/kun, Pro kitobchalar, haftalik shaxsiy kitobcha, oyiga 2 streak muzlatgich, Pro ramka — 90 kun. Bir martalik to'lov.", stars: 399, days: 90 },
+  y1: { title: "WordDrop Pro — 1 yil", label: "1 yil", desc: "Drop AI 100/kun, Pro kitobchalar, haftalik shaxsiy kitobcha, oyiga 2 streak muzlatgich, Pro ramka — 365 kun. Bir martalik to'lov.", stars: 1290, days: 365 },
 };
-const PRO_PERKS = ["Drop AI — kuniga 100 ta so'rov (oddiy hisobda 20)", "Ovozli Speaking mashqi — shu limit ichida", "PDF kitobchalar — shu limit ichida", "Profilda Pro belgisi"];
+const PRO_PERKS = ["Drop AI — kuniga 100 ta so'rov (oddiy hisobda 20)", "Pro kitobchalar: muharrir tekshiruvi, Pro muqovalar, bosmaxona sifatidagi PDF", "Haftalik shaxsiy kitobcha — zaif so'zlaringizdan", "Har oy 2 ta streak muzlatgich", "Pro tomchi ramkasi va barcha ramka/ism ranglari", "Profilda Pro belgisi"];
 const TERMS_TEXT = `📄 <b>WordDrop Pro shartlari</b>
 
-• Pro — WordDrop'dagi raqamli xizmat: Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi. Asosiy darslar har doim bepul qoladi.
+• Pro — WordDrop'dagi raqamli xizmat: Drop AI kuniga 100 ta so'rov, Pro kitobchalar, haftalik shaxsiy kitobcha, har oy 2 ta streak muzlatgich, Pro ramka va ranglar, Pro belgisi. Asosiy darslar har doim bepul qoladi.
 • To'lov faqat Telegram Stars orqali. Oylik obuna har 30 kunda avtomatik yangilanadi; 3 oylik va yillik — bir martalik.
 • Obunani istalgan vaqt bekor qilish mumkin: /pro → «Obunani bekor qilish» yoki Telegram sozlamalari → Stars. Pro to'langan muddat oxirigacha ishlaydi.
 • Qaytarish: xariddan keyin 7 kun ichida, Pro deyarli ishlatilmagan bo'lsa, Stars qaytariladi — /paysupport orqali yozing.
@@ -978,7 +1035,7 @@ async function onPaid(m: any) {
     sub_active: P.sub ? true : (cur?.sub_active ?? false), sub_charge_id: P.sub ? sp.telegram_payment_charge_id : (cur?.sub_charge_id ?? null) });
   const renew = sp.is_recurring && !sp.is_first_recurring;
   await send(m.chat.id, renew ? `⭐ Pro obunangiz yangilandi — ${fmtDay(until)} gacha. Rahmat!` :
-    `🎉 <b>Xush kelibsiz, Pro'ga!</b>\n\nPro ${fmtDay(until)} gacha faol: Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va profilda Pro belgisi.\n\nWordDrop'ni qayta ochsangiz, hammasi yoqilgan bo'ladi.`,
+    `🎉 <b>Xush kelibsiz, Pro'ga!</b>\n\nPro ${fmtDay(until)} gacha faol: Drop AI kuniga 100 ta so'rov, Pro kitobchalar, haftalik shaxsiy kitobcha, streak muzlatgichlar va Pro ramka.\n\nWordDrop'ni qayta ochsangiz, hammasi yoqilgan bo'ladi.`,
     { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
   for (const a of await adminChatIds()) await send(a, `💰 <b>Pro sotildi</b>: ${esc(P.label)} — ${sp.total_amount} ⭐${renew ? " (obuna yangilandi)" : ""}\n${esc(fromName(m.from))}${m.from.username ? " @" + esc(m.from.username) : ""}`);
 }
@@ -1038,6 +1095,22 @@ async function proUserApi(action: string, body: any, user: any): Promise<Respons
   }
   if (action === "pro_invoice") { const link = await proInvoiceLink(String(body.plan), user.id); return link ? json({ link }) : json({ error: "To'lov oynasi ochilmadi, birozdan keyin urining" }, 502); }
   if (action === "pro_cancel") { const r = await cancelSub(user.id); return json(r, r.ok ? 200 : 400); }
+  if (action === "send_pdf") {
+    const path = String(body.path || "");
+    if (!path.startsWith(user.id + "/") || !/\.pdf$/.test(path) || path.includes("..")) return json({ error: "Noto'g'ri fayl" }, 400);
+    const { data: ch } = await db.from("wd_tg_chats").select("chat_id").eq("user_id", user.id).maybeSingle();
+    if (!ch) { await db.storage.from("booklets").remove([path]); return json({ error: "Avval Telegram'ni ulang: Profil → Telegram" }, 400); }
+    const { data: file, error } = await db.storage.from("booklets").download(path);
+    if (error || !file) return json({ error: "Fayl topilmadi" }, 404);
+    const fd = new FormData();
+    fd.append("chat_id", String(ch.chat_id));
+    fd.append("document", file, (clip(body.name, 60).replace(/[^\w'ʻʼЀ-ӿ -]+/g, "") || "kitobcha") + ".pdf");
+    fd.append("caption", `📘 <b>${esc(clip(body.title, 120) || "Kitobcha")}</b>\n${body.pro ? "WordDrop Pro kitobcha" : "WordDrop kitobcha"} — chop etishingiz yoki telefonda o'qishingiz mumkin.`);
+    fd.append("parse_mode", "HTML");
+    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, { method: "POST", body: fd }).then((x) => x.json()).catch(() => ({ ok: false, description: "Telegram javob bermadi" }));
+    await db.storage.from("booklets").remove([path]);
+    return r.ok ? json({ ok: true }) : json({ error: r.description || "Yuborilmadi" }, 400);
+  }
   return null;
 }
 async function proAdminApi(action: string, body: any): Promise<Response | null> {
@@ -1164,7 +1237,9 @@ async function cron() {
   // 5) Eski ulash kodlari va guruh xabarlari (21 kundan eski) — tozalash
   await db.from("wd_tg_codes").delete().lt("created_at", new Date(Date.now() - 86400_000).toISOString());
   await db.from("wd_tg_msgs").delete().lt("created_at", new Date(Date.now() - 21 * 86400_000).toISOString());
-  // 6) O'rganish navbati qolib ketgan guruhlar (bittadan)
+  // 6) Guruhlarga muntazam e'lon
+  await promoTick(log);
+  // 7) O'rganish navbati qolib ketgan guruhlar (bittadan)
   const { data: lg } = await db.from("wd_tg_groups").select("chat_id").eq("status", "on").gte("new_msgs", 40).limit(1);
   for (const r of lg ?? []) { await learnGroup(r.chat_id); log.learned = r.chat_id; }
   return log;
@@ -1179,6 +1254,8 @@ async function authUser(req: Request) {
 }
 async function isAdmin(user: any) { const list: string[] = (await kv("admins")) ?? []; return !!user?.email && list.map((x) => x.toLowerCase()).includes(String(user.email).toLowerCase()); }
 
+/* Kanal rasmlari uchun illyustratsiyalar: Microsoft Fluent Emoji Flat (MIT), ilova Iconify orqali chizadi */
+const POST_ICONS = new Set<string>(["books", "open-book", "notebook", "memo", "pencil", "writing-hand", "graduation-cap", "school", "teacher", "woman-teacher", "man-student", "woman-student", "brain", "light-bulb", "speech-balloon", "thought-balloon", "left-speech-bubble", "speaking-head", "ear", "eyes", "microphone", "headphone", "loudspeaker", "bell", "star", "glowing-star", "sparkles", "trophy", "1st-place-medal", "sports-medal", "party-popper", "confetti-ball", "fire", "rocket", "chart-increasing", "bar-chart", "hourglass-done", "alarm-clock", "stopwatch", "calendar", "spiral-calendar", "check-mark-button", "cross-mark", "warning", "red-question-mark", "key", "locked", "unlocked", "link", "pushpin", "round-pushpin", "magnifying-glass-tilted-left", "gear", "hammer-and-wrench", "puzzle-piece", "house", "house-with-garden", "office-building", "hospital", "bank", "hotel", "classical-building", "stadium", "shopping-cart", "shopping-bags", "convenience-store", "department-store", "airplane", "airplane-departure", "train", "bus", "automobile", "taxi", "bicycle", "ship", "world-map", "globe-showing-europe-africa", "globe-with-meridians", "compass", "luggage", "passport-control", "ticket", "hot-beverage", "teacup-without-handle", "bubble-tea", "fork-and-knife-with-plate", "fork-and-knife", "pizza", "hamburger", "red-apple", "green-apple", "banana", "grapes", "bread", "croissant", "birthday-cake", "cookie", "ice-cream", "cooking", "pot-of-food", "green-salad", "steaming-bowl", "spaghetti", "sushi", "taco", "watermelon", "carrot", "cheese-wedge", "egg", "dog", "cat", "cat-face", "dog-face", "rabbit-face", "panda", "bear", "lion", "tiger-face", "fox", "monkey", "owl", "penguin", "butterfly", "fish", "dolphin", "elephant", "horse", "unicorn", "sun", "sun-with-face", "cloud", "umbrella", "snowflake", "rainbow", "cloud-with-rain", "high-voltage", "tornado", "water-wave", "seedling", "deciduous-tree", "evergreen-tree", "palm-tree", "cactus", "tulip", "rose", "sunflower", "herb", "four-leaf-clover", "maple-leaf", "red-heart", "orange-heart", "yellow-heart", "green-heart", "blue-heart", "purple-heart", "sparkling-heart", "smiling-face-with-smiling-eyes", "grinning-face", "face-with-tears-of-joy", "thinking-face", "star-struck", "partying-face", "smiling-face-with-sunglasses", "nerd-face", "sleeping-face", "worried-face", "pleading-face", "angry-face", "face-with-monocle", "hugging-face", "winking-face", "thumbs-up", "clapping-hands", "waving-hand", "handshake", "raising-hands", "flexed-biceps", "folded-hands", "ok-hand", "victory-hand", "mobile-phone", "laptop", "desktop-computer", "keyboard", "camera", "camera-with-flash", "television", "radio", "video-game", "joystick", "robot", "battery", "electric-plug", "money-bag", "dollar-banknote", "credit-card", "coin", "gem-stone", "wrapped-gift", "briefcase", "soccer-ball", "basketball", "tennis", "volleyball", "running-shoe", "person-running", "man-running", "woman-running", "person-swimming", "guitar", "musical-note", "musical-notes", "artist-palette", "framed-picture", "performing-arts", "clapper-board", "movie-camera", "popcorn", "man-health-worker", "woman-health-worker", "police-officer", "man-cook", "woman-cook", "man-farmer", "woman-scientist", "man-technologist", "woman-technologist", "firefighter", "pilot", "astronaut", "detective", "people-hugging", "baby", "bed", "couch-and-lamp", "door", "window", "toilet", "shower", "bathtub", "broom", "basket", "soap", "toothbrush", "jeans", "dress", "t-shirt", "crown", "top-hat", "glasses", "sunglasses", "envelope", "incoming-envelope", "package", "newspaper", "scroll", "page-facing-up", "clipboard", "card-index", "bookmark", "label", "paperclip", "scissors", "straight-ruler", "triangular-ruler", "first-quarter-moon", "crescent-moon", "new-moon-face", "full-moon-face", "night-with-stars", "sunrise", "cityscape", "milky-way"]);
 /* ───────── Admin: AI kontent rejasi ───────── */
 async function plan(body: any) {
   const count = Math.max(1, Math.min(10, Number(body.count) || 5));
@@ -1189,7 +1266,8 @@ async function plan(body: any) {
     `Sen WordDrop (o'zbeklar uchun bepul ingliz tili ilovasi, worddrop-app.uz) Telegram kanalining kontent muharririsan. ${UZ}
 ${count} ta post tayyorla. Turlar (aralashtir): ${kinds.join(", ")}. Mavzu yoki istak: ${clip(body.theme, 300) || "umumiy"}.
 Har post: kanal uchun jonli, foydali, qisqa. Emoji kam (1-3). Telegram HTML: faqat <b>, <i>. Oxirida ilovaga chaqiruv bo'lishi mumkin.
-"card" — rasm uchun qisqa matnlar (rasm dasturda chiziladi): {"title":"rasm sarlavhasi (≤40 belgi)","big":"katta matn: so'z, qoida yoki raqam (≤28 belgi)","sub":"izoh (≤90 belgi)","lines":["2-4 qisqa qator (≤60 belgi)"],"cta":"chaqiruv (≤36 belgi)"}
+"card" — rasm uchun qisqa matnlar (rasm dasturda chiziladi): {"title":"rasm sarlavhasi (≤40 belgi)","big":"katta matn: so'z, qoida yoki raqam (≤28 belgi)","sub":"izoh (≤90 belgi)","lines":["2-4 qisqa qator (≤60 belgi)"],"cta":"chaqiruv (≤36 belgi)","icon":"illyustratsiya nomi"}
+"icon" uchun FAQAT shu ro'yxatdan mavzuga eng mos nomni tanla: ${[...POST_ICONS].join(" ")}
 "quiz" turida "poll": {"question":"...","options":["3-4 variant"],"correct":0,"explanation":"qisqa izoh"}
 Agar "word" bo'lsa, quyidagi bazadagi so'zlardan foydalan: ${words.map((w) => `${w.en}=${w.uz}`).join(", ")}.
 JSON: {"posts":[{"kind":"word|grammar|quiz|promo|motivation|tip","caption":"post matni (≤900 belgi)","card":{...},"poll":null|{...}}]}`,
@@ -1197,7 +1275,7 @@ JSON: {"posts":[{"kind":"word|grammar|quiz|promo|motivation|tip","caption":"post
   const posts = (Array.isArray(a?.posts) ? a.posts : []).slice(0, count).map((p: any) => ({
     kind: clip(p?.kind, 20) || "tip",
     caption: clip(p?.caption, 1000).replace(/<(?!\/?(b|i)>)[^>]*>/g, ""),
-    card: { title: clip(p?.card?.title, 60), big: clip(p?.card?.big, 40), sub: clip(p?.card?.sub, 140), lines: (Array.isArray(p?.card?.lines) ? p.card.lines : []).slice(0, 4).map((x: unknown) => clip(x, 80)), cta: clip(p?.card?.cta, 50) },
+    card: { title: clip(p?.card?.title, 60), big: clip(p?.card?.big, 40), sub: clip(p?.card?.sub, 140), lines: (Array.isArray(p?.card?.lines) ? p.card.lines : []).slice(0, 4).map((x: unknown) => clip(x, 80)), cta: clip(p?.card?.cta, 50), icon: POST_ICONS.has(String(p?.card?.icon || "")) ? String(p.card.icon) : "" },
     poll: p?.poll && p.poll.question && Array.isArray(p.poll.options) ? { question: clip(p.poll.question, 280), options: p.poll.options.slice(0, 4).map((x: unknown) => clip(x, 90)), correct: Number(p.poll.correct) || 0, explanation: clip(p.poll.explanation, 190) } : null,
   }));
   return posts;
