@@ -1,4 +1,4 @@
-// Supabase Edge Function: tg-bot  (WordDrop v96)
+// Supabase Edge Function: tg-bot  (WordDrop v97)
 // @WordDropUzBot — foydalanuvchilar bilan suhbat, kanal postlari va eslatmalar.
 //
 // Kirish yo'llari (bitta URL):
@@ -11,6 +11,8 @@
 //
 // v96: guruhlarda "aqlli" Drop (guruh muhiti va a'zolar haqida xotira, hazil darajasi, rejimlar),
 //      botdagi /admin boshqaruv paneli, ovozli xabarlar (Groq Whisper), Telegram ichida ilova.
+// v97: WordDrop Pro — Telegram Stars (XTR) to'lovlari: oylik obuna va bir martalik 3 oy / 1 yil,
+//      /pro, /paysupport, /terms, pulni qaytarish (admin), Pro limiti 100/kun.
 //
 // Sirlar: TELEGRAM_BOT_TOKEN, GROQ_API_KEY (Supabase Secrets); webhook/cron sirlari — wd_tg_kv jadvalida.
 
@@ -148,11 +150,18 @@ async function userSummary(uid: string) {
 
 /* ───────── Drop AI limiti (ilova bilan umumiy) ───────── */
 const utcDay = () => new Date().toISOString().slice(0, 10);   // wd_drop_bump bilan bir xil (current_date, UTC)
+async function isPro(uid: string | null | undefined) {
+  if (!uid) return false;
+  const { data } = await db.from("wd_pro").select("until").eq("user_id", uid).maybeSingle();
+  return !!data && Date.parse(data.until) > Date.now();
+}
+async function askMax(chat: any) { return chat.user_id ? ((await isPro(chat.user_id)) ? 100 : 20) : 3; }
 async function askAllowed(chat: any): Promise<{ ok: boolean; left: number }> {
   const t = tz();
   if (chat.user_id) {
+    const max = await askMax(chat);
     const { data } = await db.from("wd_drop_usage").select("count").eq("user_id", chat.user_id).eq("day", utcDay()).maybeSingle();
-    const c = data?.count ?? 0; return { ok: c < 20, left: Math.max(0, 20 - c) };
+    const c = data?.count ?? 0; return { ok: c < max, left: Math.max(0, max - c) };
   }
   const c = chat.ask_day === t.day ? chat.ask_count : 0; return { ok: c < 3, left: Math.max(0, 3 - c) };
 }
@@ -161,7 +170,7 @@ async function askBump(chat: any) {
   if (chat.user_id) {
     const { data } = await db.from("wd_drop_usage").select("count,day").eq("user_id", chat.user_id).maybeSingle();
     const cur = data && data.day === utcDay() ? data.count : 0;
-    await db.from("wd_drop_usage").upsert({ user_id: chat.user_id, day: utcDay(), count: Math.min(20, cur + 1), updated_at: new Date().toISOString() });
+    await db.from("wd_drop_usage").upsert({ user_id: chat.user_id, day: utcDay(), count: Math.min(await askMax(chat), cur + 1), updated_at: new Date().toISOString() });
   } else {
     const c = chat.ask_day === t.day ? chat.ask_count + 1 : 1;
     await db.from("wd_tg_chats").update({ ask_day: t.day, ask_count: c }).eq("chat_id", chat.chat_id);
@@ -173,6 +182,7 @@ const KB_MAIN = { inline_keyboard: [
   [{ text: "☀️ Kun so'zi", callback_data: "w" }, { text: "🎯 Viktorina", callback_data: "q" }],
   [{ text: "🧠 Takrorim", callback_data: "r" }, { text: "🏆 Reyting", callback_data: "t" }],
   [{ text: "⚙️ Sozlamalar", callback_data: "s" }, { text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }],
+  [{ text: "⭐ WordDrop Pro", callback_data: "P" }],
 ] };
 function kbSettings(c: any) {
   return { inline_keyboard: [
@@ -208,13 +218,21 @@ async function sendQuiz(chatId: number, editMsg?: number) {
 async function onUpdate(u: any) {
   if (u.my_chat_member) return onMyChatMember(u.my_chat_member);
   if (u.callback_query) return onCallback(u.callback_query);
+  if (u.pre_checkout_query) return onPreCheckout(u.pre_checkout_query);
   const m = u.message; if (!m || !m.chat) return;
+  if (m.successful_payment) return onPaid(m);
+  if (m.refunded_payment) return onRefunded(m);
   if (m.chat.type === "group" || m.chat.type === "supergroup") { bg(groupMessage(m)); return; }
   if (m.chat.type !== "private") return;
   const chat = await upsertChat(m.from, m.chat.id); if (!chat) return;
   const text = String(m.text ?? "").trim();
+  if (text && m.reply_to_message && await supportReply(chat, m)) return;
   if (text && !text.startsWith("/") && await adminAwait(chat.chat_id, m.from.id, text)) return;
   if (text === "/admin") return adminPanel(chat.chat_id, m.from.id);
+  if (text && !text.startsWith("/") && await supportAwait(chat, m)) return;
+  if (text === "/pro" || text === "/start pro") return proOffer(chat);
+  if (text === "/paysupport") return paySupport(chat);
+  if (text === "/terms") return send(chat.chat_id, TERMS_TEXT, { reply_markup: { inline_keyboard: [[{ text: "To'liq shartlar", url: "https://worddrop-app.uz/terms.html#pro" }]] } });
   const { data: person } = await db.from("wd_tg_people").select("ignore").eq("user_id", m.from.id).maybeSingle();
   if (person?.ignore) return;   // admin "javob bermasin" degan odam
   if (!text && (m.voice || m.audio || m.video_note)) { bg(privateVoice(chat, m)); return; }
@@ -247,7 +265,7 @@ async function onUpdate(u: any) {
   // Oddiy matn → Drop AI (admin sozlamasiga ko'ra)
   const gate = await dmGate(chat); if (gate) return send(chat.chat_id, gate, { reply_markup: KB_MAIN });
   const q = await askAllowed(chat);
-  if (!q.ok) return send(chat.chat_id, chat.user_id ? "Bugungi 20 ta savol tugadi. Ertaga davom etamiz 🌙" : "Bugungi 3 ta bepul savol tugadi. WordDrop'da ro'yxatdan o'tib, hisobni ulasangiz — kuniga 20 ta.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop", url: APP_URL }]] } });
+  if (!q.ok) return limitMsg(chat);
   await tg("sendChatAction", { chat_id: chat.chat_id, action: "typing" });
   const s = chat.user_id ? await userSummary(chat.user_id) : null;
   const a = await groq(
@@ -273,6 +291,9 @@ async function onCallback(cq: any) {
   const { data: chat } = await db.from("wd_tg_chats").select("*").eq("chat_id", chatId).maybeSingle();
   if (!chat) return;
   if (data === "m") return send(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN });
+  if (data === "P") return proOffer(chat);
+  if (data === "Pt") return send(chatId, TERMS_TEXT);
+  if (data === "Pc") { const r = chat.user_id ? await cancelSub(chat.user_id) : { ok: false, error: "Hisob ulanmagan" }; return send(chatId, r.ok ? `Obuna bekor qilindi. Pro ${fmtDay(Date.parse((r as any).until))} gacha ishlashda davom etadi.` : "Bekor qilinmadi: " + esc((r as any).error)); }
   if (data === "w") return send(chatId, wodText(await wordOfDay() ?? {}), { reply_markup: { inline_keyboard: [[{ text: "🎯 Viktorina", callback_data: "q" }]] } });
   if (data === "q") return sendQuiz(chatId);
   if (data.startsWith("a:")) {
@@ -627,7 +648,7 @@ async function privateVoice(chat: any, m: any) {
   const v = m.voice || m.audio || m.video_note;
   if ((v.duration || 0) > 120) return send(chat.chat_id, "Ovozli xabar 2 daqiqadan oshmasin 🙂");
   const q = await askAllowed(chat);
-  if (!q.ok) return send(chat.chat_id, chat.user_id ? "Bugungi 20 ta so'rov tugadi. Ertaga davom etamiz 🌙" : "Bugungi 3 ta bepul so'rov tugadi. Hisobingizni ulasangiz — kuniga 20 ta.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop", web_app: { url: APP_URL } }]] } });
+  if (!q.ok) return limitMsg(chat);
   await tg("sendChatAction", { chat_id: chat.chat_id, action: "typing" });
   const t = await transcribe(v.file_id);
   if (!t?.text) return send(chat.chat_id, "Ovozni tushuna olmadim. Tinchroq joyda, aniqroq qilib qayta yuboring.");
@@ -886,6 +907,166 @@ async function adminApi(action: string, body: any): Promise<Response | null> {
   return null;
 }
 
+/* ═════════════════════════════════════════════════════════════════════
+   v97: WORDDROP PRO — TELEGRAM STARS (XTR)
+   ─ Raqamli xizmat: provider_token bo'sh, valyuta XTR.
+   ─ Oylik — Stars obunasi (30 kunda avtomatik yangilanadi); 3 oy / 1 yil — bir martalik.
+   ─ Pro faqat successful_payment kelgach yoqiladi; charge_id bo'yicha takrorlanmaydi.
+   ═════════════════════════════════════════════════════════════════════ */
+const DAY_MS = 86400_000;
+const PLANS: Record<string, { title: string; desc: string; stars: number; days: number; sub?: boolean; label: string }> = {
+  m1: { title: "WordDrop Pro — oylik", label: "1 oy", desc: "Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi. Har 30 kunda avtomatik yangilanadi, istalgan vaqt bekor qilish mumkin.", stars: 149, days: 30, sub: true },
+  m3: { title: "WordDrop Pro — 3 oy", label: "3 oy", desc: "Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi — 90 kun. Bir martalik to'lov, avtomatik yechilmaydi.", stars: 399, days: 90 },
+  y1: { title: "WordDrop Pro — 1 yil", label: "1 yil", desc: "Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi — 365 kun. Bir martalik to'lov, avtomatik yechilmaydi.", stars: 1290, days: 365 },
+};
+const PRO_PERKS = ["Drop AI — kuniga 100 ta so'rov (oddiy hisobda 20)", "Ovozli Speaking mashqi — shu limit ichida", "PDF kitobchalar — shu limit ichida", "Profilda Pro belgisi"];
+const TERMS_TEXT = `📄 <b>WordDrop Pro shartlari</b>
+
+• Pro — WordDrop'dagi raqamli xizmat: Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va Pro belgisi. Asosiy darslar har doim bepul qoladi.
+• To'lov faqat Telegram Stars orqali. Oylik obuna har 30 kunda avtomatik yangilanadi; 3 oylik va yillik — bir martalik.
+• Obunani istalgan vaqt bekor qilish mumkin: /pro → «Obunani bekor qilish» yoki Telegram sozlamalari → Stars. Pro to'langan muddat oxirigacha ishlaydi.
+• Qaytarish: xariddan keyin 7 kun ichida, Pro deyarli ishlatilmagan bo'lsa, Stars qaytariladi — /paysupport orqali yozing.
+• Bot orqali qilingan xaridlar bo'yicha Telegram yordam xizmati yordam bera olmaydi — barcha savollar /paysupport ga.
+• To'lov qilish orqali siz shu shartlarga rozilik bildirasiz.`;
+
+async function proRow(uid: string) { const { data } = await db.from("wd_pro").select("*").eq("user_id", uid).maybeSingle(); return data; }
+const fmtDay = (ms: number) => { const d = new Date(ms + 5 * 3600_000); const MO = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"]; return `${d.getUTCDate()}-${MO[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+
+async function proInvoiceLink(plan: string, uid: string): Promise<string | null> {
+  const P = PLANS[plan]; if (!P) return null;
+  const r = await tg("createInvoiceLink", { title: P.title, description: P.desc, payload: `pro:${plan}:${uid}`, currency: "XTR", provider_token: "",
+    prices: [{ label: P.title, amount: P.stars }], ...(P.sub ? { subscription_period: 30 * 86400 } : {}) });
+  if (!r.ok) console.error("[invoice]", r.description);
+  return r.ok ? r.result : null;
+}
+async function limitMsg(chat: any) {
+  if (!chat.user_id) return send(chat.chat_id, "Bugungi 3 ta bepul so'rov tugadi. WordDrop'ni oching — hisobingiz Telegram orqali ulanadi va kuniga 20 ta bo'ladi.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop", web_app: { url: APP_URL } }]] } });
+  if (await isPro(chat.user_id)) return send(chat.chat_id, "Bugungi 100 ta so'rov tugadi — ajoyib mehnat! Ertaga davom etamiz 🌙");
+  return send(chat.chat_id, "Bugungi 20 ta so'rov tugadi. Ertaga davom etamiz 🌙\n\n⭐ <b>Pro</b> bilan kuniga 100 ta — oyiga 149 Stars.", { reply_markup: { inline_keyboard: [[{ text: "⭐ Pro haqida", callback_data: "P" }]] } });
+}
+async function proOffer(chat: any) {
+  if (!chat?.user_id) return send(chat.chat_id, "⭐ <b>WordDrop Pro</b> hisobingizga yoziladi. Avval WordDrop'ni shu yerda oching — hisobingiz Telegram orqali o'zi ulanadi, keyin /pro ni qayta bosing.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  const row = await proRow(chat.user_id); const active = row && Date.parse(row.until) > Date.now();
+  const head = active ? `⭐ <b>Siz Pro'dasiz</b> — ${fmtDay(Date.parse(row.until))} gacha${row.sub_active ? " (oylik obuna yoqilgan)" : ""}.\nMuddatni uzaytirish mumkin:` : "⭐ <b>WordDrop Pro</b>";
+  const links = await Promise.all(Object.keys(PLANS).map((k) => proInvoiceLink(k, chat.user_id)));
+  const rows: any[][] = Object.keys(PLANS).map((k, i) => links[i] ? [{ text: `${PLANS[k].label} — ${PLANS[k].stars} ⭐${k === "y1" ? "  (−28%)" : k === "m3" ? "  (−11%)" : ""}`, url: links[i] }] : []).filter((r) => r.length);
+  if (active && row.sub_active) rows.push([{ text: "Obunani bekor qilish", callback_data: "Pc" }]);
+  rows.push([{ text: "📄 Shartlar", callback_data: "Pt" }]);
+  return send(chat.chat_id, `${head}\n\n${PRO_PERKS.map((x) => "✓ " + x).join("\n")}\n\nAsosiy darslar, so'zlar va takrorlash har doim bepul. To'lov — Telegram Stars orqali, xavfsiz.`, { reply_markup: { inline_keyboard: rows } });
+}
+async function onPreCheckout(q: any) {
+  const [k, plan, uid] = String(q.invoice_payload || "").split(":");
+  const P = PLANS[plan];
+  let err = "";
+  if (k !== "pro" || !P || !uid) err = "Bu to'lov eskirgan. /pro orqali qayta urinib ko'ring.";
+  else if (q.currency !== "XTR" || Number(q.total_amount) !== P.stars) err = "Narx o'zgargan. /pro orqali yangi to'lovni oching.";
+  else { const { data } = await db.auth.admin.getUserById(uid); if (!data?.user) err = "WordDrop hisobi topilmadi. Ilovani qayta oching."; }
+  return tg("answerPreCheckoutQuery", err ? { pre_checkout_query_id: q.id, ok: false, error_message: err } : { pre_checkout_query_id: q.id, ok: true });
+}
+async function onPaid(m: any) {
+  const sp = m.successful_payment; const [k, plan, uid] = String(sp.invoice_payload || "").split(":");
+  const P = PLANS[plan]; if (k !== "pro" || !P || !uid) return;
+  const ins = await db.from("wd_pro_payments").insert({ charge_id: sp.telegram_payment_charge_id, user_id: uid, tg_user: m.from.id, stars: sp.total_amount, plan,
+    recurring: !!sp.is_recurring, first_recurring: !!sp.is_first_recurring });
+  if (ins.error) { if (String(ins.error.code) === "23505") return; console.error("[pay]", ins.error); }
+  const cur = await proRow(uid); const now = Date.now();
+  const curUntil = cur ? Date.parse(cur.until) : 0;
+  let until: number;
+  if (P.sub && sp.subscription_expiration_date) until = curUntil > now + DAY_MS ? curUntil + P.days * DAY_MS : Math.max(sp.subscription_expiration_date * 1000, now + P.days * DAY_MS - DAY_MS);
+  else until = Math.max(now, curUntil) + P.days * DAY_MS;
+  await db.from("wd_pro").upsert({ user_id: uid, until: new Date(until).toISOString(), plan, tg_user: m.from.id, updated_at: nowIso(),
+    sub_active: P.sub ? true : (cur?.sub_active ?? false), sub_charge_id: P.sub ? sp.telegram_payment_charge_id : (cur?.sub_charge_id ?? null) });
+  const renew = sp.is_recurring && !sp.is_first_recurring;
+  await send(m.chat.id, renew ? `⭐ Pro obunangiz yangilandi — ${fmtDay(until)} gacha. Rahmat!` :
+    `🎉 <b>Xush kelibsiz, Pro'ga!</b>\n\nPro ${fmtDay(until)} gacha faol: Drop AI kuniga 100 ta so'rov, ovozli mashq, kitobchalar va profilda Pro belgisi.\n\nWordDrop'ni qayta ochsangiz, hammasi yoqilgan bo'ladi.`,
+    { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  for (const a of await adminChatIds()) await send(a, `💰 <b>Pro sotildi</b>: ${esc(P.label)} — ${sp.total_amount} ⭐${renew ? " (obuna yangilandi)" : ""}\n${esc(fromName(m.from))}${m.from.username ? " @" + esc(m.from.username) : ""}`);
+}
+async function revokeFor(charge: string) {
+  const { data: p } = await db.from("wd_pro_payments").select("*").eq("charge_id", charge).maybeSingle();
+  if (!p) return null;
+  await db.from("wd_pro_payments").update({ refunded: true }).eq("charge_id", charge);
+  if (p.user_id) {
+    const cur = await proRow(p.user_id);
+    if (cur) {
+      const days = PLANS[p.plan]?.days ?? 30;
+      const left = Math.max(Date.now(), Date.parse(cur.until) - days * DAY_MS);
+      await db.from("wd_pro").update({ until: new Date(left).toISOString(), sub_active: cur.sub_charge_id === charge ? false : cur.sub_active, updated_at: nowIso() }).eq("user_id", p.user_id);
+    }
+  }
+  return p;
+}
+async function onRefunded(m: any) { await revokeFor(m.refunded_payment.telegram_payment_charge_id); }
+async function cancelSub(uid: string) {
+  const cur = await proRow(uid); if (!cur?.sub_active || !cur.sub_charge_id || !cur.tg_user) return { ok: false, error: "Faol obuna topilmadi" };
+  const r = await tg("editUserStarSubscription", { user_id: cur.tg_user, telegram_payment_charge_id: cur.sub_charge_id, is_canceled: true });
+  if (!r.ok) return { ok: false, error: r.description };
+  await db.from("wd_pro").update({ sub_active: false, updated_at: nowIso() }).eq("user_id", uid);
+  return { ok: true, until: cur.until };
+}
+/* /paysupport — keyingi xabar adminlarga yetkaziladi */
+async function paySupport(chat: any) {
+  await kvSet("sup:" + chat.chat_id, { at: Date.now() });
+  return send(chat.chat_id, "💬 <b>To'lov bo'yicha yordam</b>\n\nMuammoni bitta xabarda yozing (qaysi tarif, qachon to'lagansiz, nima bo'ldi). Xabaringiz WordDrop adminiga yetkaziladi va shu yerga javob keladi.\n\n<i>Eslatma: bot orqali xaridlar bo'yicha Telegram yordam xizmati yordam bera olmaydi.</i>");
+}
+async function supportAwait(chat: any, m: any): Promise<boolean> {
+  const w = await kv("sup:" + chat.chat_id); if (!w || Date.now() - (w.at || 0) > 30 * 60_000) return false;
+  await db.from("wd_tg_kv").delete().eq("key", "sup:" + chat.chat_id);
+  const { data: pays } = chat.user_id ? await db.from("wd_pro_payments").select("plan,stars,created_at,refunded").eq("user_id", chat.user_id).order("created_at", { ascending: false }).limit(3) : { data: [] as any[] };
+  const info = (pays ?? []).map((p: any) => `${PLANS[p.plan]?.label ?? p.plan} ${p.stars}⭐ ${String(p.created_at).slice(0, 10)}${p.refunded ? " (qaytarilgan)" : ""}`).join("; ");
+  for (const a of await adminChatIds()) {
+    await send(a, `🆘 <b>/paysupport</b> — ${esc(fromName(m.from))}${m.from.username ? " @" + esc(m.from.username) : ""} (id ${m.from.id})\n${info ? "To'lovlar: " + esc(info) + "\n" : ""}\n${esc(clip(m.text, 1500))}\n\n<i>Javob: shu xabarga «reply» qilib yozing.</i>`, { reply_markup: { inline_keyboard: [[{ text: "Ilovada ko'rish", web_app: { url: APP_URL + "#bot" } }]] } });
+  }
+  await send(chat.chat_id, "✅ Yuborildi. Admin tez orada shu yerga javob yozadi.");
+  return true;
+}
+/* Admin /paysupport xabariga reply qilsa — javob foydalanuvchiga boradi */
+async function supportReply(chat: any, m: any): Promise<boolean> {
+  const t = String(m.reply_to_message?.text || ""); const mm = t.match(/^🆘 \/paysupport — .*\(id (\d+)\)/);
+  if (!mm || !(await tgIsAdmin(m.from.id))) return false;
+  const r = await send(Number(mm[1]), `💬 <b>WordDrop yordam:</b>\n\n${esc(clip(m.text, 3000))}`);
+  await send(chat.chat_id, r.ok ? "✅ Javob yuborildi." : "Yuborilmadi: " + esc(r.description));
+  return true;
+}
+
+/* Ilova va admin uchun API */
+async function proUserApi(action: string, body: any, user: any): Promise<Response | null> {
+  if (action === "pro_status") {
+    const row = await proRow(user.id);
+    return json({ pro: !!row && Date.parse(row.until) > Date.now(), until: row?.until ?? null, plan: row?.plan ?? null, sub_active: !!row?.sub_active,
+      plans: Object.entries(PLANS).map(([id, p]) => ({ id, label: p.label, stars: p.stars, days: p.days, sub: !!p.sub })), perks: PRO_PERKS });
+  }
+  if (action === "pro_invoice") { const link = await proInvoiceLink(String(body.plan), user.id); return link ? json({ link }) : json({ error: "To'lov oynasi ochilmadi, birozdan keyin urining" }, 502); }
+  if (action === "pro_cancel") { const r = await cancelSub(user.id); return json(r, r.ok ? 200 : 400); }
+  return null;
+}
+async function proAdminApi(action: string, body: any): Promise<Response | null> {
+  if (action === "pro_stats") {
+    const nowS = nowIso(); const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
+    const [{ count: active }, { count: subs }, { data: pays }] = await Promise.all([
+      db.from("wd_pro").select("user_id", { count: "exact", head: true }).gt("until", nowS),
+      db.from("wd_pro").select("user_id", { count: "exact", head: true }).gt("until", nowS).eq("sub_active", true),
+      db.from("wd_pro_payments").select("*").order("created_at", { ascending: false }).limit(40),
+    ]);
+    const month = (pays ?? []).filter((p: any) => p.created_at >= since && !p.refunded).reduce((s: number, p: any) => s + p.stars, 0);
+    const tgIds = [...new Set((pays ?? []).map((p: any) => p.tg_user).filter(Boolean))];
+    const { data: ch } = await db.from("wd_tg_chats").select("chat_id,username,first_name").in("chat_id", tgIds.length ? tgIds : [0]);
+    const who = new Map((ch ?? []).map((c: any) => [Number(c.chat_id), c.username ? "@" + c.username : c.first_name || String(c.chat_id)]));
+    return json({ active: active ?? 0, subs: subs ?? 0, month_stars: month, payments: (pays ?? []).map((p: any) => ({ ...p, who: who.get(Number(p.tg_user)) ?? String(p.tg_user ?? "—"), label: PLANS[p.plan]?.label ?? p.plan })) });
+  }
+  if (action === "pro_refund") {
+    const { data: p } = await db.from("wd_pro_payments").select("*").eq("charge_id", String(body.charge_id)).maybeSingle();
+    if (!p) return json({ error: "To'lov topilmadi" }, 404);
+    if (p.refunded) return json({ error: "Allaqachon qaytarilgan" }, 400);
+    const r = await tg("refundStarPayment", { user_id: p.tg_user, telegram_payment_charge_id: p.charge_id });
+    if (!r.ok) return json({ error: r.description || "Qaytarilmadi" }, 400);
+    await revokeFor(p.charge_id);
+    if (p.tg_user) await send(p.tg_user, `↩️ ${p.stars} ⭐ hisobingizga qaytarildi. Savollar bo'lsa — /paysupport.`);
+    return json({ ok: true });
+  }
+  return null;
+}
+
 /* ───────── Kanal ───────── */
 function publicUrl(path: string) { return `${SB_URL}/storage/v1/object/public/tg-posts/${path}`; }
 async function publishPost(p: any): Promise<{ ok: boolean; error?: string; id?: number }> {
@@ -913,12 +1094,13 @@ async function sendPostRow(p: any) {
 
 /* ───────── Botni sozlash (webhook, buyruqlar, tavsif) ───────── */
 async function setupBot() {
-  const r1 = await tg("setWebhook", { url: FN_URL, secret_token: await kv("webhook_secret"), allowed_updates: ["message", "callback_query", "my_chat_member"], drop_pending_updates: false });
+  const r1 = await tg("setWebhook", { url: FN_URL, secret_token: await kv("webhook_secret"), allowed_updates: ["message", "callback_query", "my_chat_member", "pre_checkout_query"], drop_pending_updates: false });
   if (r1.ok) {
     await tg("setMyCommands", { scope: { type: "all_private_chats" }, commands: [
       { command: "word", description: "Kun so'zi" }, { command: "quiz", description: "Viktorina" },
       { command: "review", description: "Takrorim" }, { command: "top", description: "Reyting" },
-      { command: "settings", description: "Eslatmalar" }, { command: "menu", description: "Menyu" } ] });
+      { command: "settings", description: "Eslatmalar" }, { command: "pro", description: "WordDrop Pro (Stars)" },
+      { command: "paysupport", description: "To'lov bo'yicha yordam" }, { command: "terms", description: "Pro shartlari" }, { command: "menu", description: "Menyu" } ] });
     await tg("setMyCommands", { scope: { type: "all_group_chats" }, commands: [
       { command: "quiz", description: "Guruh viktorinasi" }, { command: "word", description: "Kun so'zi" },
       { command: "unut", description: "Drop men haqimdagi xotirani o'chirsin" }, { command: "qayt", description: "Drop yana menga gapirsin" },
@@ -1045,6 +1227,7 @@ Deno.serve(async (req) => {
     if (!user) return json({ error: "Avval WordDrop hisobingizga kiring" }, 401);
 
     // 3) Foydalanuvchi
+    { const r = await proUserApi(action, body, user); if (r) return r; }
     if (action === "link_code") {
       const code = crypto.randomUUID().replace(/-/g, "").slice(0, 16);
       await db.from("wd_tg_codes").insert({ code, user_id: user.id });
@@ -1135,6 +1318,7 @@ Deno.serve(async (req) => {
       return json({ ok: true });
     }
     { const r = await adminApi(action, body); if (r) return r; }
+    { const r = await proAdminApi(action, body); if (r) return r; }
     if (action === "plan") { const posts = await plan(body); if (!posts.length) return json({ error: "Drop reja tuza olmadi, qayta urining" }, 502); return json({ posts }); }
     if (action === "test") {
       const { data } = await db.from("wd_tg_chats").select("chat_id").eq("user_id", user.id).maybeSingle();

@@ -4682,6 +4682,85 @@ body.dark .ba-warn b{color:#FFE9A8}
 .ba-ps .rv-go span{flex:none}
 #tgGroup .xs-ghost{margin-top:4px}
 #tgGroup .xs-main{margin-top:12px}
+
+/* =====================================================================
+   v97 — WordDrop Pro (Telegram Stars)
+   ===================================================================== */
+.pro-row-card{margin-bottom:14px}
+.pro-ic{background:#FFF3D1;color:#C98A00}
+body.dark .pro-ic{background:#3A2E10;color:#FFC845}
+.pro-badge{display:inline-flex;align-items:center;font-size:11px;font-weight:800;letter-spacing:.02em;padding:3px 7px;border-radius:7px;background:#FFC845;color:#3A2700;margin-left:6px;vertical-align:2px}
+.pv{background:var(--bg)}
+.pv .pv-scroll{padding:0 0 120px}
+.pv-back{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;z-index:3;width:40px;height:40px;border-radius:50%;border:none;background:rgba(15,27,61,.62);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px)}
+.pv-back svg{width:22px;height:22px}
+.pv-back:focus-visible,.pv-plan:focus-visible,.pv-cta:focus-visible{outline:3px solid #FFC845;outline-offset:2px}
+.pv-hero{background:#0F1B3D;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 64px) 24px 30px;border-radius:0 0 28px 28px;position:relative;overflow:hidden}
+.pv-hero::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,200,69,.16),transparent);pointer-events:none}
+.pv-hero h1{font-family:var(--wd-disp);font-size:30px;line-height:1.08;font-weight:800;letter-spacing:-.02em;margin:22px 0 8px;max-width:15ch}
+.pv-hero p{font-size:15px;line-height:1.5;color:rgba(255,255,255,.72);max-width:34ch}
+.pv-load{min-height:260px;display:flex;align-items:center;justify-content:center}
+.pv-load .pv-drop{width:60px;opacity:.5}
+.pv-drops{display:flex;align-items:flex-end;gap:14px}
+.pv-fig{margin:0;display:flex;align-items:flex-end;gap:8px}
+.pv-fig figcaption{display:flex;flex-direction:column;line-height:1}
+.pv-fig figcaption b{font-family:var(--wd-disp);font-weight:800;letter-spacing:-.03em}
+.pv-fig figcaption span{font-size:12.5px;font-weight:600;margin-top:4px;color:rgba(255,255,255,.6)}
+.pv-fig.free .pv-drop{width:38px}
+.pv-fig.free figcaption b{font-size:26px;color:rgba(255,255,255,.55)}
+.pv-fig.pro .pv-drop{width:74px}
+.pv-fig.pro figcaption b{font-size:52px;color:#FFC845}
+.pv-fig.pro figcaption span{color:#FFC845}
+.pv-arr{width:34px;color:rgba(255,255,255,.35);margin-bottom:18px}
+.pv-drop{display:block;height:auto}
+.pv-d-bg{fill:rgba(255,255,255,.08)}
+.pv-d-ln{fill:none;stroke-width:2.5}
+.pv-drop.blue .pv-d-w{fill:#7EA4FF}.pv-drop.blue .pv-d-ln{stroke:rgba(255,255,255,.35)}
+.pv-drop.gold .pv-d-w{fill:#FFC845}.pv-drop.gold .pv-d-ln{stroke:#FFC845}
+.pv-drop.rise .pv-d-w{animation:pvRise 1.1s cubic-bezier(.2,.8,.2,1) .15s both}
+@keyframes pvRise{from{transform:translateY(52px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.pv-drop.rise .pv-d-w{animation:none}}
+.pv-hero.on .pv-one .pv-drop{width:64px}
+.pv-chip{display:inline-block;margin-top:18px;font-size:12px;font-weight:800;padding:4px 10px;border-radius:8px;background:#FFC845;color:#3A2700}
+.pv-hero.on h1{margin-top:8px}
+.pv-pad{padding:22px 20px 0}
+.pv-cmp{width:100%;border-collapse:separate;border-spacing:0;background:var(--sur);border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:13.5px}
+.pv-cmp th{font-size:12px;font-weight:700;color:var(--i5);text-align:center;padding:12px 8px 8px}
+.pv-cmp th.pro{color:#B57B00}
+.pv-cmp td{padding:11px 8px;border-top:1px solid var(--line);text-align:center;color:var(--i7);white-space:nowrap}
+.pv-cmp td:first-child{text-align:left;padding-left:14px;color:var(--i9);font-weight:600;white-space:normal}
+.pv-cmp td.pro{color:var(--i9);font-weight:700;background:rgba(255,200,69,.10)}
+.pv-cmp th.pro{background:rgba(255,200,69,.10)}
+body.dark .pv-cmp th.pro{color:#FFC845}
+.pv-h{font-family:var(--wd-disp);font-size:19px;font-weight:800;color:var(--i9);margin:26px 0 10px;letter-spacing:-.01em}
+.pv-plans{display:flex;flex-direction:column;gap:10px}
+.pv-plan{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font-family:inherit;color:var(--i9);background:var(--sur);border:1.5px solid var(--line);border-radius:18px;padding:14px 14px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.pv-plan.on{border-color:#0F1B3D;box-shadow:0 0 0 1.5px #0F1B3D inset}
+body.dark .pv-plan.on{border-color:#FFC845;box-shadow:0 0 0 1.5px #FFC845 inset}
+.pv-radio{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);position:relative}
+.pv-plan.on .pv-radio{border-color:#0F1B3D;background:#0F1B3D}
+.pv-plan.on .pv-radio::after{content:'';position:absolute;inset:5px;border-radius:50%;background:#FFC845}
+body.dark .pv-plan.on .pv-radio{border-color:#FFC845;background:transparent}
+.pv-pl{flex:1;min-width:0}
+.pv-pl b{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:16px;font-weight:700}
+.pv-pl em,.pv-pl i{font-style:normal;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px}
+.pv-pl em{background:#FFC845;color:#3A2700}
+.pv-pl i{background:var(--ok-bg);color:var(--ok)}
+.pv-pl small{display:block;font-size:12px;color:var(--i5);margin-top:3px;line-height:1.35}
+.pv-pp{text-align:right;flex-shrink:0}
+.pv-pp b{display:flex;align-items:center;justify-content:flex-end;gap:3px;font-family:var(--wd-disp);font-size:22px;font-weight:800;letter-spacing:-.02em}
+.pv-pp b svg,.pv-cta b svg{width:16px;height:16px;color:#F2A900}
+.pv-pp small{display:block;font-size:11.5px;color:var(--i5)}
+.pv-fine{font-size:12px;line-height:1.55;color:var(--i5);margin:16px 2px 0}
+.pv-fine a{color:var(--wd-el)}
+.pv-cancel{display:block;margin:18px auto 0;border:none;background:none;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--bad);cursor:pointer}
+.pv-bar{position:absolute;left:0;right:0;bottom:0;padding:12px 20px calc(env(safe-area-inset-bottom,0px) + 14px);background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.pv-cta{display:flex;align-items:center;justify-content:space-between;width:100%;border:none;border-radius:16px;background:#0F1B3D;color:#fff;font-family:inherit;font-size:16px;font-weight:700;padding:16px 18px;cursor:pointer}
+.pv-cta b{display:flex;align-items:center;gap:4px;font-family:var(--wd-disp);font-size:19px;font-weight:800;color:#FFC845}
+.pv-cta:disabled{opacity:.7}
+.pv-pad>.pv-cta{justify-content:center}
+body.dark .pv-cta{background:#FFC845;color:#3A2700}body.dark .pv-cta b{color:#3A2700}body.dark .pv-cta b svg{color:#3A2700}
+.drop-pro-btn{margin-top:8px;border:none;background:var(--wd-ink);color:#FFC845;font-family:inherit;font-weight:700;font-size:13px;padding:8px 12px;border-radius:10px;cursor:pointer}
 </style>
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
@@ -5054,7 +5133,7 @@ body.dark .ba-warn b{color:#FFE9A8}
 <script>
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v96';
+window.__wdVer='v97';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -7300,7 +7379,7 @@ function closeSheet(){
    Supabase: wd_drop_msg + wd_drop_bump/today
    ============================================================ */
 (function DropAI(){
-  const DAILY_MAX_REG = 20;   // v94: ro'yxatdan o'tganlarga kuniga 20 ta
+  let DAILY_MAX_REG = 20;     // v94: ro'yxatdan o'tganlarga kuniga 20 ta; v97: Pro — 100
   const DAILY_MAX_GUEST = 3;
   const CTX_MSGS = 6;
   const MAX_LEN  = 800;
@@ -7708,7 +7787,8 @@ function closeSheet(){
   function renderDailyDone(){
     if(list.querySelector('.drop-sys.daily')) return;
     setMood('sleepy');
-    const el = renderSys("<b>Bugungi " + DAILY_MAX_REG + " ta savol tugadi.</b><br>Ertaga yana yordam beraman \ud83c\udf19");
+    const el = renderSys("<b>Bugungi " + DAILY_MAX_REG + " ta savol tugadi.</b><br>Ertaga yana yordam beraman \ud83c\udf19" +
+      (window.__wdIsPro ? "" : "<br><button type='button' class='drop-pro-btn' data-open-pro>\u2b50 Pro bilan kuniga 100 ta</button>"));
     el.classList.add('daily');
   }
   function renderQuickActions(){
@@ -7957,6 +8037,7 @@ function closeSheet(){
     if(t==='book' && window.__wdOpenBooklet) window.__wdOpenBooklet();
   }));
   window.__wdDropAI = { open: openChat, close: closeChat, setMood, remaining, isRegistered, bump: extBump, maxToday };
+  window.__wdSetDropMax = function(n){ DAILY_MAX_REG = n; try{ updateQuotaUI(); }catch(e){} };
 })();
 </script>
 <script>
@@ -9128,6 +9209,135 @@ document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#r
 // Botdagi "Ilovada boshqarish" tugmasi: app.html#bot
 function autoOpen(){ try{ if(/(^#|[#&])bot(&|$)/.test(location.hash||'')){ let n=0; const iv=setInterval(()=>{ n++; if(window.__wdIsSignedIn&&window.__wdIsSignedIn()){ clearInterval(iv); openBot(); } else if(n>40) clearInterval(iv); },500); } }catch(e){} }
 if(document.readyState==='complete') autoOpen(); else window.addEventListener('load',autoOpen);
+})();
+
+</script>
+<script>
+/* ==================================================================
+   v97: WORDDROP PRO — Telegram Stars
+   ------------------------------------------------------------------
+   To'lov Telegram ichida (Mini App: WebApp.openInvoice) yoki
+   t.me invoice havolasi orqali. Pro holati serverda (wd_pro);
+   Drop AI limiti serverda ham tekshiriladi (wd_drop_bump).
+   ================================================================== */
+(function(){
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const api=(a,x,t)=>window.__wdTgApi(a,x,t);
+const MO=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+const fmtDay=s=>{ const d=new Date(s); return `${d.getDate()}-${MO[d.getMonth()]} ${d.getFullYear()}`; };
+const STAR='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.5l1.3-6.6L2.5 9.3l6.6-.8z"/></svg>';
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+let P=null, pick='m1';
+
+function apply(){
+  const pro=!!(P&&P.pro);
+  window.__wdIsPro=pro;
+  try{ if(window.__wdSetDropMax) window.__wdSetDropMax(pro?100:20); }catch(e){}
+  document.documentElement.classList.toggle('is-pro',pro);
+}
+async function refresh(){
+  if(!(window.__wdIsSignedIn&&window.__wdIsSignedIn())) return null;
+  const r=await api('pro_status'); if(r.__error) return null;
+  P=r; window.__wdPro=r; apply(); return r;
+}
+window.__wdProRefresh=refresh;
+// Ishga tushganda (sessiya tayyor bo'lgach) holatni olamiz
+(async()=>{ try{ await window.__sbReady; }catch(e){} setTimeout(refresh,1500); })();
+
+/* Profil bloki */
+window.__wdProProfileBlock=function(){
+  const pro=P&&P.pro;
+  return `<div class="card settings-block pro-row-card"><div class="srow" id="rPro"><div class="icw pro-ic">${STAR}</div><div class="slabel">WordDrop Pro</div><div class="sval">${pro?fmtDay(P.until)+' gacha':'Stars bilan'}</div><div class="schev">${IC.chevR}</div></div></div>`;
+};
+window.__wdProBadge=function(){ return P&&P.pro?'<span class="pro-badge">Pro</span>':''; };
+document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#rPro, [data-open-pro]')) openPro(); });
+
+/* ==================== Pro oynasi (to'liq ekran) ==================== */
+const DROP='M32 4C32 4 9 30 9 43a23 23 0 0 0 46 0C55 30 32 4 32 4Z';
+let dropN=0;
+function drop(level,cls){ const id='pvd'+(++dropN), y=8+(1-level)*52;
+  return `<svg class="pv-drop ${cls}" viewBox="0 0 64 70" aria-hidden="true"><defs><clipPath id="${id}"><path d="${DROP}"/></clipPath></defs>
+    <path d="${DROP}" class="pv-d-bg"/><g clip-path="url(#${id})"><path class="pv-d-w" style="--y:${y}px" d="M0 ${y} Q16 ${y-3} 32 ${y} T64 ${y} V72 H0Z"/></g><path d="${DROP}" class="pv-d-ln"/></svg>`; }
+const MONTHS={m1:1,m3:3,y1:12};
+const PLAN_NOTE={m1:"Har 30 kunda yangilanadi, istalgan vaqt bekor qilasiz",m3:"Bir martalik to'lov, avtomatik yechilmaydi",y1:"Bir martalik to'lov, avtomatik yechilmaydi"};
+const ROWS=[["Darslar, so'zlar, takrorlash","Cheksiz","Cheksiz"],["Drop AI savollari","20 / kun","100 / kun"],["Ovozli Speaking mashqi","limit ichida","limit ichida"],["PDF kitobchalar","limit ichida","limit ichida"],["Profilda Pro belgisi","—","✓"]];
+const IBK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+async function openPro(){
+  window.__wdTgView('proView');
+  const el=document.getElementById('proView'); el.classList.add('pv');
+  el.innerHTML=`<button class="pv-back" id="pvBack" aria-label="Orqaga">${IBK}</button><div class="xm-scroll pv-scroll" id="pvBody"><div class="pv-hero pv-load">${drop(.2,'gold')}</div></div>`;
+  el.querySelector('#pvBack').onclick=()=>window.__wdTgCloseView('proView');
+  if(!(window.__wdIsSignedIn&&window.__wdIsSignedIn())){ drawGuest(); return; }
+  await refresh(); draw();
+}
+function drawGuest(){
+  const b=document.getElementById('pvBody'); if(!b) return;
+  b.innerHTML=`<section class="pv-hero">${heroDrops()}<h1>Drop bilan kuniga 100 ta savol</h1><p>Pro WordDrop hisobingizga yoziladi. Avval kiring yoki ro'yxatdan o'ting — bir daqiqa.</p></section>
+    <div class="pv-pad"><button class="pv-cta" id="pvIn">Kirish yoki ro'yxatdan o'tish</button></div>`;
+  b.querySelector('#pvIn').onclick=()=>{ window.__wdTgCloseView('proView'); try{ openAuthSheet('signup'); }catch(e){} };
+}
+function heroDrops(){
+  return `<div class="pv-drops"><figure class="pv-fig free">${drop(.2,'blue')}<figcaption><b>20</b><span>bepul</span></figcaption></figure>
+    <svg class="pv-arr" viewBox="0 0 40 12" aria-hidden="true"><path d="M2 6h32M28 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <figure class="pv-fig pro">${drop(1,'gold rise')}<figcaption><b>100</b><span>Pro</span></figcaption></figure></div>`;
+}
+function draw(){
+  const b=document.getElementById('pvBody'); if(!b) return;
+  if(!P){ b.innerHTML=`<section class="pv-hero"><h1>Ulanib bo'lmadi</h1><p>Internetni tekshirib, sahifani qayta oching.</p></section>`; return; }
+  const plans=P.plans||[]; const cur=plans.find(p=>p.id===pick)||plans[0];
+  const left=P.pro?Math.max(0,Math.ceil((Date.parse(P.until)-Date.now())/864e5)):0;
+  const hero=P.pro
+    ? `<section class="pv-hero on"><div class="pv-one">${drop(1,'gold')}</div><span class="pv-chip">Pro faol</span><h1>${fmtDay(P.until)} gacha</h1>
+        <p>${left} kun qoldi${P.sub_active?" · oylik obuna o'zi yangilanadi":''}. Drop AI kuniga 100 ta savolga javob beradi.</p></section>`
+    : `<section class="pv-hero">${heroDrops()}<h1>Drop bilan kuniga 100 ta savol</h1><p>Ko'proq gapiring, yozing va so'rang — kun o'rtasida to'xtab qolmasdan.</p></section>`;
+  b.innerHTML=`${hero}
+    <div class="pv-pad">
+      <table class="pv-cmp"><thead><tr><th></th><th>Bepul</th><th class="pro">Pro</th></tr></thead>
+        <tbody>${ROWS.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td class="pro">${esc(r[2])}</td></tr>`).join('')}</tbody></table>
+      <h3 class="pv-h">${P.pro?'Muddatni uzaytirish':'Tarifni tanlang'}</h3>
+      <div class="pv-plans" role="radiogroup" aria-label="Tarif">${plans.map(p=>{ const m=MONTHS[p.id]||1, per=Math.round(p.stars/m), save=p.id==='m1'?0:Math.round((1-p.stars/(plans[0].stars*m))*100);
+        return `<button role="radio" aria-checked="${p.id===pick}" class="pv-plan ${p.id===pick?'on':''}" data-p="${p.id}">
+          <span class="pv-radio"></span>
+          <span class="pv-pl"><b>${esc(p.label)}${p.id==='y1'?'<em>Eng foydali</em>':''}${save>0?`<i>−${save}%</i>`:''}</b><small>${PLAN_NOTE[p.id]||''}</small></span>
+          <span class="pv-pp"><b>${STAR}${p.stars}</b><small>${m>1?`oyiga ~${per}`:'oyiga'}</small></span></button>`; }).join('')}</div>
+      <p class="pv-fine">To'lov Telegram ichida, Telegram Stars orqali. Pro WordDrop hisobingizga yoziladi va barcha qurilmalarda ishlaydi. 7 kun ichida, Pro deyarli ishlatilmagan bo'lsa — qaytarish mumkin. <a href="terms.html#pro" target="_blank" rel="noopener">Shartlar</a> · yordam: botda /paysupport</p>
+      ${P.pro&&P.sub_active?'<button class="pv-cancel" id="proCancel">Oylik obunani bekor qilish</button>':''}
+    </div>
+    <div class="pv-bar"><button class="pv-cta" id="proBuy"><span>${cur?(cur.sub?'Obuna bo\'lish':(P.pro?'Uzaytirish':'Olish')):'Olish'}</span><b>${STAR}${cur?cur.stars:''}</b></button></div>`;
+  b.querySelectorAll('[data-p]').forEach(x=>x.onclick=()=>{
+    pick=x.dataset.p; const c2=plans.find(p=>p.id===pick);
+    b.querySelectorAll('[data-p]').forEach(y=>{ const on=y===x; y.classList.toggle('on',on); y.setAttribute('aria-checked',on); });
+    const cta=b.querySelector('#proBuy'); cta.querySelector('span').textContent=c2.sub?"Obuna bo'lish":(P.pro?'Uzaytirish':'Olish'); cta.querySelector('b').innerHTML=STAR+c2.stars;
+  });
+  b.querySelector('#proBuy').onclick=buy;
+  const c=b.querySelector('#proCancel'); if(c) c.onclick=async()=>{
+    if(!confirm(`Obuna bekor qilinsinmi? Pro ${fmtDay(P.until)} gacha ishlashda davom etadi.`)) return;
+    const r=await api('pro_cancel'); showToast(r.__error||r.ok===false?(r.msg||r.error||'Bekor qilinmadi'):'Obuna bekor qilindi',IC.info); await refresh(); draw();
+  };
+}
+async function buy(e){
+  const b=e.currentTarget; b.disabled=true; const old=b.innerHTML; b.innerHTML='<span>To\'lov oynasi ochilmoqda…</span>';
+  const r=await api('pro_invoice',{plan:pick},30000);
+  b.disabled=false; b.innerHTML=old;
+  if(r.__error||!r.link){ showToast(r.msg||r.error||"To'lov oynasi ochilmadi",IC.info); return; }
+  const W=window.Telegram&&window.Telegram.WebApp;
+  if(W&&W.openInvoice&&window.__wdInTelegram){
+    W.openInvoice(r.link,status=>{ if(status==='paid') waitPaid(); else if(status==='failed') showToast("To'lov o'tmadi",IC.info); });
+  } else {
+    window.open(r.link,'_blank','noopener');
+    showToast("Telegram'da to'lovni tasdiqlang — Pro shu yerda o'zi yoqiladi",IC.info);
+    waitPaid(180000);
+  }
+}
+async function waitPaid(limit){
+  const was=P&&P.until; const end=Date.now()+(limit||60000);
+  while(Date.now()<end){
+    await new Promise(r=>setTimeout(r,3500));
+    const r=await refresh();
+    if(r&&r.pro&&r.until!==was){ draw(); showToast("Pro yoqildi — rahmat! ⭐",IC.check||IC.info); try{ if(typeof renderProfile==='function'&&document.querySelector('#screen-profile.active, #screen-profile.on')) renderProfile(); }catch(e){} return; }
+  }
+}
+window.__wdOpenPro=openPro;
 })();
 
 </script>
@@ -16654,7 +16864,7 @@ function renderProfileInner(){
         </div>
         <button class="pf-name-btn" id="pfNameBtn">
           <span class="${window.__wdName?'':'ph'}">${window.__wdName?escapeHtml(window.__wdName):'Ismingizni kiriting'}</span>
-          ${titleChipHtml()}
+          ${titleChipHtml()}${window.__wdProBadge?window.__wdProBadge():''}
           <svg viewBox="0 0 24 24" class="ic"><path d="M4 20 L4 16 L15 5 L19 9 L8 20 Z"/><path d="M13 7 L17 11"/></svg>
         </button>
         <p>${inf.title} · ${leagueFor(inf.level).name} ligasi</p>
@@ -16690,6 +16900,7 @@ function renderProfileInner(){
       <div class="card settings-block">
         <div class="acc-row" id="accRow"></div>
       </div>
+      ${window.__wdProProfileBlock?window.__wdProProfileBlock():''}
       ${window.__wdTgProfileBlock?window.__wdTgProfileBlock():''}
       <div class="slbl" style="margin-left:20px">Sozlamalar</div>
       <div class="card settings-block">
