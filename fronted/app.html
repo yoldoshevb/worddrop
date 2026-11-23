@@ -136,7 +136,7 @@
 <script src="signature-data.js" defer></script>
 <script src="cert.js" defer onerror="window.__wdCertLoadFailed=true"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<link rel="stylesheet" href="app.tokens.51a7347b.css">
+<link rel="stylesheet" href="app.tokens.d5246f01.css">
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
 .side-brand{display:none}
@@ -659,7 +659,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.6c8de303.js"></script>
+<script src="app.svg-ikonkalar.30422533.js"></script>
 <script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
 <script>
 /* ==================================================================
@@ -932,15 +932,19 @@ const I={
   week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M8.5 15.5l2 2 4-4"/></svg>',
   shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.3-3 8-7 9.5-4-1.5-7-5.2-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg>',
   ring:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="5" rx="1.5"/><path d="M5 13v7h14v-7M12 8v12M12 8C10.5 5 7 4.5 7 6.5S10 8 12 8zM12 8c1.5-3 5-3.5 5-1.5S14 8 12 8z"/></svg>',
+  chevR:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'};
 const IBK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
 const PERKS=[
-  ['ai',"Drop AI — kuniga 100 ta savol","Grammatika, tarjima, Speaking mashqi va ovozli javoblar. Bepul hisobda 20 ta.",true],
+  ['chart',"Multilevel chuqur tahlil","Har bir qism va savol turi bo'yicha zaif joylar, imlo tufayli yo'qotilgan ballar, o'sish grafigi va shaxsiy reja. Writing va Speaking cheksiz AI baholanadi.",'deep'],
+  ['ai',"Drop AI — kuniga 100 ta savol","Grammatika, tarjima, Speaking mashqi va ovozli javoblar. Bepul hisobda 20 ta.",'meter'],
   ['book',"Pro kitobchalar","Kuchliroq AI tuzadi, muharrir tarjima va javoblarni tekshiradi. Pro muqovalar va bosmaxona sifatidagi PDF."],
   ['week',"Haftalik shaxsiy kitobcha","Drop eng ko'p adashgan so'zlaringizdan 7 kunlik takror kitobchasini tuzadi."],
   ['shield',"Seriya himoyasi","Har oy 2 ta streak muzlatgich. Bir-ikki kun kira olmasangiz ham seriya saqlanadi."],
   ['ring',"Pro ramka va ranglar","«Pro tomchi» ramkasi, barcha ramka va ism ranglari, profilda Pro belgisi."]];
-const CMP=[["Darslar, so'zlar, takrorlash","✓","✓"],["Drop AI savollari","20 / kun","100 / kun"],["Kitobcha sifati","Oddiy","Pro"],["Haftalik kitobcha","—","✓"],["Streak muzlatgich","Do'kondan","2 ta / oy"],["Ramka va ranglar","Do'kondan","Hammasi"]];
+const CMP=[["Darslar, so'zlar, takrorlash","✓","✓"],["Multilevel natijasi","Ball va javoblar","Chuqur tahlil"],["Writing/Speaking AI bahosi","1 marta","Cheksiz"],["Drop AI savollari","20 / kun","100 / kun"],["Kitobcha sifati","Oddiy","Pro"],["Haftalik kitobcha","—","✓"],["Streak muzlatgich","Do'kondan","2 ta / oy"],["Ramka va ranglar","Do'kondan","Hammasi"]];
 const FAQ=[
   ["Telegram Stars nima?","Telegram ichidagi raqamli to'lov birligi. To'lov oynasida yetmasa, o'sha yerning o'zida sotib olasiz — karta raqamini WordDrop ko'rmaydi."],
   ["Obunani qanday bekor qilaman?","Shu sahifada «Obunani bekor qilish» tugmasi yoki botda /pro. Pro to'langan muddat oxirigacha ishlaydi, keyin pul yechilmaydi."],
@@ -957,13 +961,21 @@ async function openPro(){
   await refresh(); draw();
 }
 function perksHtml(){
-  return `<ul class="px-perks">${PERKS.map(([i,t,d,meter])=>`<li><span class="px-ic">${I[i]}</span><div><b>${t}</b><p>${d}</p>${meter?`
+  return `<ul class="px-perks">${PERKS.map(([i,t,d,meter])=>`<li><span class="px-ic">${I[i]}</span><div><b>${t}</b><p>${d}</p>${meter==='deep'?DEEP_PREV:''}${meter==='meter'?`
     <div class="px-meter" aria-label="Kunlik Drop AI savollari: bepul 20, Pro 100"><div><span>Bepul</span><i style="--w:20%"></i><em>20</em></div><div class="pro"><span>Pro</span><i style="--w:100%"></i><em>100</em></div></div>`:''}</div></li>`).join('')}</ul>`;
 }
+const DEEP_PREV=`<div class="px-deep" aria-hidden="true"><div><span>Part 2 · Eslatma</span><i class="r" style="--w:38%"></i><em>3/6</em></div><div><span>Part 4 · Xarita</span><i class="y" style="--w:60%"></i><em>3/5</em></div><div><span>Part 6 · Ma'ruza</span><i class="g" style="--w:86%"></i><em>5/6</em></div><p>B2 gacha: Listening'da yana <b>3 ta</b> to'g'ri javob</p></div>`;
+/* v104: jonli «aurora» sarlavha */
+function heroHtml(title,sub){
+  return `<section class="px-hero px-aur"><i class="a1"></i><i class="a2"></i><i class="a3"></i>
+    <span class="px-tw t1">${STAR}</span><span class="px-tw t2">${STAR}</span><span class="px-tw t3">${STAR}</span>
+    <div class="px-hc"><span class="px-chip">${STAR}WordDrop Pro</span><h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div></section>`;
+}
+function invHtml(){ return `<button type="button" class="px-inv" id="pxInv"><span class="px-inv-ic">${I.gift}</span><span class="px-inv-t"><b>3 do'st = 7 kun Pro bepul</b><small>Do'stlaringizni taklif qiling — har 3 tasi uchun 7 kun</small></span><span class="px-inv-ch">${I.chevR}</span></button>`; }
 function faqHtml(){ return `<div class="px-faq">${FAQ.map(([q,a])=>`<details><summary>${esc(q)}${I.chev}</summary><p>${esc(a)}</p></details>`).join('')}</div>`; }
 function drawGuest(){
   const b=document.getElementById('pvBody'); if(!b) return;
-  b.innerHTML=`<section class="px-hero"><h1>Ko'proq mashq, kamroq to'xtash</h1><p>Pro WordDrop hisobingizga yoziladi. Avval kiring yoki ro'yxatdan o'ting — bir daqiqa.</p></section>
+  b.innerHTML=`${heroHtml("Ko'proq mashq, kamroq to'xtash","Pro WordDrop hisobingizga yoziladi. Avval kiring yoki ro'yxatdan o'ting — bir daqiqa.")}
     <div class="px-pad"><button class="px-cta" id="pvIn"><span>Kirish yoki ro'yxatdan o'tish</span></button>
     <h2 class="px-h">Pro'da nimalar bor</h2>${perksHtml()}<h2 class="px-h">Savollar</h2>${faqHtml()}</div>`;
   b.querySelector('#pvIn').onclick=()=>{ window.__wdTgCloseView('proView'); try{ openAuthSheet('signup'); }catch(e){} };
@@ -982,8 +994,8 @@ function draw(){
       <div class="px-bar" role="progressbar" aria-valuenow="${left}" aria-valuemin="0" aria-valuemax="${Math.max(total,left)}"><i style="--w:${pct}%"></i></div>
       <p>${left} kun qoldi${P.sub_active?' · obuna har 30 kunda o\'zi yangilanadi':''}</p></section>`;
   }
-  b.innerHTML=`<section class="px-hero">${P.pro?'':`<h1>Ko'proq mashq, kamroq to'xtash</h1><p>Asosiy darslar har doim bepul. Pro — kuniga 100 ta AI savoli, sifatli kitobchalar va seriya himoyasi.</p>`}</section>
-    <div class="px-pad">${status}
+  b.innerHTML=`${P.pro?heroHtml('Pro faol — zo\'r!','Barcha imkoniyatlar ochiq. Multilevel chuqur tahlili va 100 ta AI savoli sizni kutmoqda.'):heroHtml("Ko'proq mashq, kamroq to'xtash","Asosiy darslar har doim bepul. Pro — Multilevel chuqur tahlili, kuniga 100 ta AI savoli, sifatli kitobchalar va seriya himoyasi.")}
+    <div class="px-pad">${status}${P.pro?'':invHtml()}
       <h2 class="px-h">${P.pro?'Muddatni uzaytirish':'Tarifni tanlang'}</h2>
       <div class="px-plans" role="radiogroup" aria-label="Tarif">${plans.map(p=>{ const m=MONTHS[p.id]||1, per=Math.round(p.stars/m), save=m>1?Math.round((1-p.stars/(baseM*m))*100):0;
         const note=p.sub?"Obuna · har 30 kunda, istalgan vaqt bekor qilasiz":`${p.stars} ⭐ bir martalik · avtomatik yechilmaydi`;
@@ -1012,6 +1024,7 @@ function draw(){
     setCta();
   });
   b.querySelector('#proBuy').onclick=buy;
+  const iv=b.querySelector('#pxInv'); if(iv) iv.onclick=()=>{ if(window.__wdOpenInvite) window.__wdOpenInvite(); };
   const c=b.querySelector('#proCancel'); if(c) c.onclick=async()=>{
     if(!confirm(`Obuna bekor qilinsinmi? Pro ${fmtDay(P.until)} gacha ishlashda davom etadi.`)) return;
     const r=await api('pro_cancel'); showToast(r.__error||r.ok===false?(r.msg||r.error||'Bekor qilinmadi'):'Obuna bekor qilindi',IC.info); await refresh(); draw();
@@ -1950,7 +1963,7 @@ function downloadVaultWord(){
 }
 </script>
 
-<script src="app.5-profil.18192097.js"></script>
+<script src="app.5-profil.d03a1a9f.js"></script>
 
 <script src="app.listening-tinglash.d2627127.js"></script>
 
@@ -2686,7 +2699,7 @@ try{
 <script>
 /* v101: Multilevel imtihoni alohida faylda — faqat ochilganda yuklanadi */
 (function(){
-  const SRC='ml.v101d.js?v=recorded-listening'; let p=null;
+  const SRC='ml.v105.js'; let p=null;
   function load(){ if(window.WDML) return Promise.resolve(); if(p) return p;
     p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=SRC; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenML=async function(){ try{ await load(); window.WDML.open(); }catch(e){ try{ showToast("Imtihon moduli yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };

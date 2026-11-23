@@ -420,7 +420,7 @@ const CSS=`
 .mlx-rules{text-align:left;max-width:560px;margin:14px auto;padding:0 0 0 20px;line-height:1.6;font-size:14.5px;color:#2A3644}
 @media (max-width:640px){.mll-secs,.mlr-secs{grid-template-columns:1fr 1fr}.mlr-crit{grid-template-columns:1fr 1fr}.mls-arg{grid-template-columns:1fr}.mlx-cand{display:none}.mll-h1{font-size:24px}}
 `;
-function css(){ if(document.getElementById('mlzCss')) return; const s=document.createElement('style'); s.id='mlzCss'; s.textContent=CSS; document.head.appendChild(s); }
+function css(){ if(document.getElementById('mlzCss')) return; const s=document.createElement('style'); s.id='mlzCss'; s.textContent=CSS+DEEP_CSS; document.head.appendChild(s); }
 const IBACK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
 
 /* =====================================================================
@@ -939,9 +939,9 @@ async function finish(T,r){
 }
 async function showStored(a){
   const T=await loadTest(a.test_id); if(!T){ toast('Test topilmadi'); return; }
-  const sh=shell({cand:''},'Natija',T.title); renderResult(sh,T,a.mode,a.scores||{},a.detail||{});
+  const sh=shell({cand:''},'Natija',T.title); renderResult(sh,T,a.mode,a.scores||{},a.detail||{},a.created_at);
 }
-function renderResult(sh,T,mode,sc,det){
+function renderResult(sh,T,mode,sc,det,at){
   const secs=['listening','reading','writing','speaking'];
   const ov=sc.overall;
   const pct=v=>Math.round(Math.max(0,Math.min(75,v))/75*100);
@@ -950,6 +950,7 @@ function renderResult(sh,T,mode,sc,det){
     ${ov!=null?`<div class="mlr-scale" role="img" aria-label="Ball shkalasi: ${ov} dan 75"><span class="m" style="left:${pct(ov)}%"></span>${[[38,'B1'],[51,'B2'],[65,'C1']].map(([v,l])=>`<span class="t" style="left:${pct(v)}%">${l} ${v}</span>`).join('')}</div>`:''}
     <div class="mlr-secs">${secs.map(k=>{ const s=sc[k]; return `<div class="mlr-sec"><small>${SECN[k]}</small><b>${s?s.score:'—'}</b><span>${s?esc(s.level)+(s.raw!=null?` · ${s.raw}/35`:''):(det[k+'Err']?'baholanmadi':'topshirilmagan')}</span><i style="--w:${s?pct(s.score):0}%"></i></div>`; }).join('')}</div>
     <p class="mlr-note">Listening va Reading: to'g'ri javoblar soni 75 ballik shkalaga taxminiy o'tkazildi (rasmiy imtihonda Rasch modeli ishlatiladi). Writing va Speaking: AI imtihonchi baholadi. Natija taxminiy — rasmiy sertifikat emas.</p></div>`);
+  h.push(deepHtml(mode,sc,det,at));
   ['listening','reading'].forEach(k=>{ if(!det[k]) return;
     h.push(`<details class="mlx-part" ${mode===k?'open':''}><summary>${SECN[k]} — javoblar tahlili (${sc[k].raw}/35)</summary><table class="mlr-rev"><thead><tr><th>#</th><th>Sizning javobingiz</th><th>To'g'ri javob</th><th></th></tr></thead><tbody>${det[k].map(x=>`<tr><td>${x.n}</td><td>${esc(x.u)||'<span style="color:#9AA6B4">—</span>'}</td><td>${esc(x.a)}</td><td class="${x.c?'ok':'no'}">${x.c?'✓':'✗'}</td></tr>`).join('')}</tbody></table>
     ${k==='listening'?listeningScripts(T.listening):''}</details>`); });
@@ -965,7 +966,145 @@ function renderResult(sh,T,mode,sc,det){
   const back=()=>{ sh.close(); if(S.el) refresh().then(renderLobby); };
   $(sh.x,'#mlxQ').onclick=back; $(sh.body,'#mlrBack').onclick=back;
   const pb=$(sh.body,'[data-pro]'); if(pb) pb.onclick=()=>{ if(window.__wdOpenPro) window.__wdOpenPro(); };
+  $$(sh.body,'[data-mld-pro]').forEach(b=>b.onclick=()=>{ if(window.__wdOpenPro) window.__wdOpenPro(); });
+  $$(sh.body,'[data-mld-inv]').forEach(b=>b.onclick=()=>{ if(window.__wdOpenInvite) window.__wdOpenInvite(); });
 }
+/* =====================================================================
+   v104: CHUQUR TAHLIL (Pro) — qism va savol turi bo'yicha aniqlik, imlo,
+   keyingi darajagacha masofa, Writing/Speaking mezonlari, o'sish va reja.
+   Hammasi qurilmada, saqlangan javoblardan hisoblanadi (eski natijalarda ham).
+   ===================================================================== */
+const LPARTS=[[1,8,'1','Qisqa dialoglar','mcq'],[9,14,'2','Eslatmani to\'ldirish','gap'],[15,18,'3','So\'zlovchilarni moslash','match'],[19,23,'4','Xarita','map'],[24,29,'5','Suhbat parchalari','mcq'],[30,35,'6','Ma\'ruza','gap']];
+const RPARTS=[[1,6,'1','Gap to\'ldirish','gap'],[7,14,'2','Matnlarni moslash','match'],[15,20,'3','Sarlavhalar','match'],[21,24,'4','Ko\'p tanlovli','mcq'],[25,29,'4','True / False / NI','tfn'],[30,33,'5','Qisqa javob','gap'],[34,35,'5','Ko\'p tanlovli','mcq']];
+const QT={mcq:'Ko\'p tanlovli',gap:'Yozma javob',match:'Moslashtirish',map:'Xarita',tfn:'True/False/NI'};
+const TIPS={
+  'listening:mcq':"Audio boshlanishidan oldin savol va variantlarni o'qing. To'g'ri javob ko'pincha «but», «actually» kabi so'zlardan keyin keladi — birinchi eshitilgan variant ko'pincha tuzoq.",
+  'listening:gap':"Bo'sh joy atrofidagi so'zlarga qarab qanday javob kerakligini (son, ism, sana) oldindan taxmin qiling va harflarni aniq yozing.",
+  'listening:match':"Har bir so'zlovchining umumiy munosabatini (rozi yoki qarshi, mamnun yoki norozi) belgilang — alohida so'zlarga emas.",
+  'listening:map':"Boshlang'ich nuqtani toping va «opposite», «next to», «behind», «turn left» kabi joy so'zlarini barmoq bilan kuzatib boring.",
+  'reading:gap':"Bo'sh joy atrofidagi grammatikaga qarang: artikl, ko'plik, fe'l zamoni qaysi so'z turini talab qiladi.",
+  'reading:match':"Har abzasning birinchi va oxirgi gapini o'qing — asosiy g'oya odatda shu yerda. Bir xil so'z takrorlangan variant ko'pincha tuzoq.",
+  'reading:mcq':"Variantni matndagi aniq gap bilan solishtiring. Matnda bo'lmagan qo'shimcha ma'lumotli variant — tuzoq.",
+  'reading:tfn':"False — matn aksini aytadi. No Information — matnda bu haqda umuman gap yo'q. Faqat matnga tayaning, o'z bilimingizga emas."};
+const CRIT={task:'Topshiriqni bajarish',org:'Tuzilish va bog\'lovchilar',lex:'Lug\'at boyligi',gram:'Grammatika',flu:'Ravonlik'};
+const CRIT_TIP={
+  task:"Har bir savol qismiga alohida javob bering va so'z sonini bajaring — qisqa javob avtomatik pastroq baholanadi.",
+  org:"Fikrlarni xatboshilarga ajrating va «however», «as a result», «for instance» kabi bog'lovchilarni ishlating.",
+  lex:"Oddiy so'zlar o'rniga aniqroqlarini ishlating (good → beneficial, big → significant). Drop AI'dan sinonim so'rang.",
+  gram:"Murakkab gaplar (which, although, if) qo'shing, lekin avval zamonlar va artikllardagi xatolarni kamaytiring.",
+  flu:"Javobni uzluksiz 30–40 soniya davom ettirishni mashq qiling: fikr → sabab → misol. Uzoq pauzalar ball tushiradi."};
+function lev(a,b){ const m=a.length,n=b.length; if(!m||!n) return m||n; let p=Array.from({length:n+1},(_,j)=>j); for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+function analyze(sc,det){
+  const A={parts:[],types:{},spell:[],blank:0,next:null,secNext:[],crit:[]};
+  [['listening',LPARTS],['reading',RPARTS]].forEach(([k,PP])=>{ const rows=det[k]; if(!Array.isArray(rows)) return;
+    const by={}; rows.forEach(r=>by[r.n]=r);
+    PP.forEach(([a,b,pn,name,type])=>{ let ok=0,n=0;
+      for(let q=a;q<=b;q++){ const r=by[q]; if(!r) continue; n++;
+        const T=A.types[type]||(A.types[type]={ok:0,n:0}); T.n++;
+        if(r.c){ ok++; T.ok++; continue; }
+        if(!String(r.u||'').trim()){ A.blank++; continue; }
+        if(type==='gap'){ const u=nrm(r.u), w=nrm(r.a); if(u&&w&&w.length>3&&lev(u,w)<=Math.max(1,Math.round(w.length/5))) A.spell.push({sec:k,n:q,u:r.u,a:r.a}); } }
+      if(n) A.parts.push({sec:k,pn,name,type,ok,n,p:ok/n}); });
+  });
+  // Keyingi daraja: umumiy balldan; bo'limlar ham shu darajaga nisbatan hisoblanadi
+  const ref=sc.overall!=null?sc.overall:null;
+  if(ref!=null){ const t=[38,51,65].find(x=>x>ref); A.next=t?{lv:lvl(t),gap:t-ref}:null; A.top=!t; }
+  ['listening','reading'].forEach(k=>{ const s=sc[k]; if(!s||s.raw==null) return;
+    const t=A.next?[38,51,65].find(x=>x>ref):[38,51,65].find(x=>x>s.score); if(!t) return;
+    let need=0; while(s.raw+need<35&&raw75(s.raw+need)<t) need++;
+    if(need>0&&raw75(s.raw+need)>=t) A.secNext.push({sec:k,lv:lvl(t),need}); });
+  const crits=(list,keys,sec)=>{ if(!Array.isArray(list)||!list.length) return; keys.forEach(k=>{ const v=list.map(x=>Number(x[k])).filter(x=>!isNaN(x)); if(v.length) A.crit.push({sec,k,v:v.reduce((a,b)=>a+b,0)/v.length}); }); };
+  if(det.writing) crits(det.writing.tasks,['task','org','lex','gram'],'Writing');
+  if(det.speaking) crits(det.speaking.parts,['flu','lex','gram','task'],'Speaking');
+  return A;
+}
+function planOf(A){
+  const out=[];
+  A.parts.filter(p=>p.p<.6).sort((a,b)=>a.p-b.p).slice(0,2).forEach(p=>out.push({t:`${SECN[p.sec]} Part ${p.pn} — ${p.name}`,d:TIPS[p.sec+':'+p.type]||'',w:`${p.ok}/${p.n}`}));
+  const wc=A.crit.slice().sort((a,b)=>a.v-b.v)[0]; if(wc&&wc.v<4.5) out.push({t:`${wc.sec}: ${CRIT[wc.k]}`,d:CRIT_TIP[wc.k],w:`${wc.v.toFixed(1)}/6`});
+  if(A.spell.length>=2) out.push({t:'Imlo',d:`${A.spell.length} ta javob ma'no jihatdan to'g'ri, lekin imlosi xato bo'lgani uchun ball bermadi. WordDrop takrorlash mashqlarida so'zlarni yozib takrorlang.`,w:`−${A.spell.length}`});
+  if(A.blank>=3) out.push({t:"Javobsiz qolgan savollar",d:`${A.blank} ta savolga javob berilmadi. Multilevelda noto'g'ri javob uchun ball olinmaydi — hech qachon bo'sh qoldirmang, eng ehtimolli variantni belgilang.`,w:`${A.blank}`});
+  if(!out.length) out.push({t:"Zo'r natija",d:"Aniq zaif joy topilmadi. Keyingi darajaga chiqish uchun vaqtni qisqartirib (masalan, Reading'ni 50 daqiqada) mashq qiling.",w:'✓'});
+  return out.slice(0,4);
+}
+function trendSvg(pts){
+  if(pts.length<2) return '<p class="mld-mut">O\'sish grafigi ikkinchi imtihondan keyin paydo bo\'ladi.</p>';
+  const W=320,H=96,P=14, mn=Math.max(0,Math.min(...pts)-6), mx=Math.min(75,Math.max(...pts)+6), X=i=>P+i*(W-2*P)/(pts.length-1), Y=v=>H-P-(v-mn)/(mx-mn||1)*(H-2*P);
+  const d=pts.map((v,i)=>`${i?'L':'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ');
+  const last=pts[pts.length-1], prev=pts[pts.length-2], dl=last-prev;
+  return `<div class="mld-tr"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Oxirgi ${pts.length} ta natija: ${pts.join(', ')}"><path d="${d}" class="ln"/>${pts.map((v,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="${i===pts.length-1?4.5:3}" class="${i===pts.length-1?'cur':''}"><title>${v}</title></circle>`).join('')}</svg>
+    <div class="mld-trv"><b>${last}</b><span class="${dl>0?'up':dl<0?'dn':''}">${dl>0?'+':''}${dl} oldingiga nisbatan</span></div></div>`;
+}
+function deepHtml(mode,sc,det,at){
+  const A=analyze(sc,det);
+  if(!A.parts.length&&!A.crit.length) return '';
+  const pro=!!(S.access&&(S.access.pro||S.access.admin))||!!window.__wdIsPro;
+  const col=p=>p>=.7?'g':p>=.4?'y':'r';
+  const bar=(lbl,ok,n,sub)=>{ const p=n?ok/n:0; return `<div class="mld-row"><div class="mld-rl"><b>${esc(lbl)}</b>${sub?`<small>${esc(sub)}</small>`:''}</div><div class="mld-bar ${col(p)}"><i style="--w:${Math.round(p*100)}%"></i></div><em>${ok}/${n}</em></div>`; };
+  const nextCard=A.top?`<div class="mld-next top"><b>C1 — eng yuqori daraja</b><span>Natijani barqaror saqlash uchun haftasiga bir marta to'liq imtihon topshiring.</span></div>`
+    : A.next?`<div class="mld-next"><b>${esc(A.next.lv)} gacha ${A.next.gap} ball</b><span>${A.secNext.map(x=>`${SECN[x.sec]}: yana <strong>${x.need} ta</strong> to'g'ri javob → ${esc(x.lv)}`).join(' · ')||'Writing va Speaking mezonlarini yaxshilash eng tez yo\'l.'}</span></div>`:'';
+  const secs=['listening','reading'].filter(k=>A.parts.some(p=>p.sec===k));
+  const partsHtml=secs.map(k=>`<h5>${SECN[k]} — qismlar bo'yicha</h5>${A.parts.filter(p=>p.sec===k).map(p=>bar(`Part ${p.pn}`,p.ok,p.n,p.name)).join('')}`).join('');
+  const types=Object.entries(A.types); const typesHtml=types.length?`<h5>Savol turlari</h5><div class="mld-chips">${types.sort((a,b)=>a[1].ok/a[1].n-b[1].ok/b[1].n).map(([t,v])=>`<span class="${col(v.ok/v.n)}"><b>${Math.round(v.ok/v.n*100)}%</b>${QT[t]}</span>`).join('')}</div>`:'';
+  const spellHtml=A.spell.length?`<h5>Imlo tufayli yo'qotilgan ballar</h5><ul class="mld-sp">${A.spell.map(x=>`<li><span>${SECN[x.sec][0]}${x.n}</span><s>${esc(x.u)}</s> → <ins>${esc(x.a)}</ins></li>`).join('')}</ul>`:'';
+  const critHtml=A.crit.length?`<h5>Writing va Speaking mezonlari</h5>${A.crit.map(c=>bar(`${c.sec}`,Math.round(c.v*10)/10,6,CRIT[c.k])).join('')}`:'';
+  const hist=(S.attempts||[]).filter(a=>a.mode===mode&&a.scores&&a.scores.overall!=null&&(!at||Date.parse(a.created_at)<Date.parse(at)-2000)).sort((a,b)=>Date.parse(a.created_at)-Date.parse(b.created_at)).map(a=>a.scores.overall).slice(-7);
+  if(sc.overall!=null) hist.push(sc.overall);
+  const plan=planOf(A);
+  const planHtml=`<h5>Shaxsiy reja</h5><ol class="mld-plan">${plan.map(x=>`<li><div><b>${esc(x.t)}</b><em>${esc(x.w)}</em></div><p>${esc(x.d)}</p></li>`).join('')}</ol>`;
+  const body=`${partsHtml}${typesHtml}${spellHtml}${critHtml}<h5>O'sish</h5>${trendSvg(hist)}${planHtml}`;
+  if(pro) return `<section class="mld"><div class="mld-hd"><span class="mld-tag">Chuqur tahlil</span><span class="mld-pro on">Pro</span></div>${nextCard}${body}</section>`;
+  // Bepul: keyingi daraja va birinchi qism ochiq, qolgani xira + qulf
+  const first=secs[0]?`<h5>${SECN[secs[0]]} — qismlar bo'yicha</h5>${A.parts.filter(p=>p.sec===secs[0]).slice(0,2).map(p=>bar(`Part ${p.pn}`,p.ok,p.n,p.name)).join('')}`:'';
+  return `<section class="mld"><div class="mld-hd"><span class="mld-tag">Chuqur tahlil</span><span class="mld-pro">Pro</span></div>${nextCard}${first}
+    <div class="mld-lockw"><div class="mld-blur" aria-hidden="true">${body}</div>
+      <div class="mld-lock"><div class="mld-lk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></svg></div>
+        <b>To'liq tahlil Pro'da</b><p>Har bir qism va savol turi bo'yicha zaif joylaringiz, imlo tufayli yo'qotilgan ballar, o'sish grafigi va shaxsiy reja.</p>
+        <button class="mld-cta" data-mld-pro>WordDrop Pro'ni ko'rish</button><button class="mld-inv" data-mld-inv>yoki 3 do'st taklif qiling — 7 kun Pro bepul</button></div></div></section>`;
+}
+const DEEP_CSS=`
+.mld{background:#fff;border:1px solid #D9DFE6;border-radius:16px;padding:18px;margin:14px 0}
+.mld-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.mld-tag{font-size:17px;font-weight:800;letter-spacing:-.01em;color:#141B24}
+.mld-pro{font-size:11px;font-weight:800;padding:3px 8px;border-radius:7px;background:linear-gradient(120deg,#FFD35C,#FF9F43);color:#3A2200}
+.mld h5{font-size:13px;font-weight:700;color:#5E6B7A;margin:18px 0 8px}
+.mld-mut{font-size:13px;color:#5E6B7A}
+.mld-next{border-radius:12px;padding:12px 14px;background:linear-gradient(120deg,#EAF2FF,#E6FBF8);border:1px solid #CFE0FB}
+.mld-next b{display:block;font-size:16px;color:#123A9C}
+.mld-next span{display:block;font-size:13px;color:#33475B;margin-top:4px;line-height:1.5}.mld-next strong{color:#123A9C}
+.mld-next.top b{color:#0E7A57}
+.mld-row{display:grid;grid-template-columns:minmax(110px,38%) 1fr 40px;align-items:center;gap:10px;padding:5px 0}
+.mld-rl b{display:block;font-size:13.5px;color:#141B24}.mld-rl small{display:block;font-size:11.5px;color:#5E6B7A;line-height:1.3}
+.mld-bar{height:8px;border-radius:5px;background:#EEF1F5;position:relative;overflow:hidden}
+.mld-bar i{position:absolute;inset:0 auto 0 0;width:var(--w);border-radius:5px;transform-origin:left;animation:mldGrow .7s cubic-bezier(.2,.8,.2,1) both}
+.mld-bar.g i{background:#1E9E62}.mld-bar.y i{background:#E0A429}.mld-bar.r i{background:#E5484D}
+@keyframes mldGrow{from{transform:scaleX(0)}}
+.mld-row em{font-style:normal;font-size:12.5px;font-weight:700;color:#33475B;text-align:right;font-variant-numeric:tabular-nums}
+.mld-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mld-chips span{font-size:12.5px;color:#33475B;border-radius:9px;padding:6px 10px;border:1px solid #E1E6EC;background:#F7F9FB}
+.mld-chips b{margin-right:6px}.mld-chips .g b{color:#1E7A4C}.mld-chips .y b{color:#A86E00}.mld-chips .r b{color:#C62828}
+.mld-sp{list-style:none;margin:0;padding:0}.mld-sp li{font-size:14px;padding:5px 0;border-top:1px dashed #E1E6EC}
+.mld-sp span{display:inline-block;min-width:34px;font-size:11.5px;color:#5E6B7A}.mld-sp s{color:#C62828}.mld-sp ins{color:#1E7A4C;text-decoration:none;font-weight:600}
+.mld-tr{display:flex;align-items:center;gap:14px}.mld-tr svg{flex:1;max-width:320px;height:auto}
+.mld-tr .ln{fill:none;stroke:#2F6FED;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.mld-tr circle{fill:#fff;stroke:#2F6FED;stroke-width:2}.mld-tr circle.cur{fill:#2F6FED}
+.mld-trv b{display:block;font-size:26px;font-weight:800;color:#141B24}.mld-trv span{font-size:12px;color:#5E6B7A}.mld-trv .up{color:#1E7A4C}.mld-trv .dn{color:#C62828}
+.mld-plan{margin:0;padding:0;list-style:none;counter-reset:p}
+.mld-plan li{counter-increment:p;position:relative;padding:10px 0 10px 34px;border-top:1px solid #EEF1F5}
+.mld-plan li::before{content:counter(p);position:absolute;left:0;top:10px;width:24px;height:24px;border-radius:8px;background:#EAF2FF;color:#2F6FED;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.mld-plan li>div{display:flex;justify-content:space-between;gap:10px}.mld-plan b{font-size:14px;color:#141B24}.mld-plan em{font-style:normal;font-size:12.5px;font-weight:700;color:#5E6B7A}
+.mld-plan p{font-size:13.5px;line-height:1.5;color:#33475B;margin:4px 0 0}
+.mld-lockw{position:relative;margin-top:6px;min-height:280px}
+.mld-blur{filter:blur(6px);opacity:.55;pointer-events:none;user-select:none;max-height:420px;overflow:hidden}
+.mld-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 30%)}
+.mld-lk-ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,#2F6FED,#7B3CFF);box-shadow:0 8px 22px rgba(79,70,229,.35)}
+.mld-lk-ic svg{width:22px;height:22px}
+.mld-lock b{font-size:17px;color:#141B24;margin-top:10px}.mld-lock p{font-size:13.5px;line-height:1.5;color:#33475B;max-width:36ch;margin:6px 0 12px}
+.mld-cta{border:none;border-radius:12px;padding:12px 18px;font:700 14.5px inherit;font-family:inherit;color:#fff;cursor:pointer;background:linear-gradient(120deg,#2F6FED,#7B3CFF 60%,#19B6E6);background-size:200% 100%;animation:mldSh 4s ease-in-out infinite}
+@keyframes mldSh{50%{background-position:100% 0}}
+.mld-inv{border:none;background:none;color:#2F6FED;font:600 13px inherit;font-family:inherit;margin-top:8px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){.mld-bar i,.mld-cta{animation:none}}
+`;
 function fbTask(t,crit,title,model){
   return `<div class="mlr-fb"><h4><span>${esc(title)}</span><span>${t.pts} / ${t.max}</span></h4><div class="mlr-crit">${Object.entries(crit).map(([k,l])=>`<div><b>${t[k]}/6</b>${l}</div>`).join('')}</div>
     ${t.good_uz?`<p><b>Yaxshi:</b> ${esc(t.good_uz)}</p>`:''}${t.fix_uz?`<p><b>Yaxshilash:</b> ${esc(t.fix_uz)}</p>`:''}

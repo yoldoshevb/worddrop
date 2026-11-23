@@ -6,7 +6,7 @@
 //   • Daraja testi chat ichida (/level, /start level, «📊 Darajamni aniqlash»), 16 savol, moslashuvchan;
 //     natija wd_tg_chats.cefr, wd_placement va (hisob ulangan bo'lsa) wd_state.cefr ga yoziladi.
 //   • Viktorina foydalanuvchi darajasiga mos so'zlardan.
-//   • Do'st taklif qilish: t.me/WordDropUzBot?start=r_<uid> — yangi foydalanuvchi hisobini ulaganda ikkalasiga 7 kun Pro.
+//   • Do'st taklif qilish: t.me/WordDropUzBot?start=r_<uid> — har 3 ta do'st hisobini ulaganda taklif qilganga 7 kun Pro (v104).
 //   • /multilevel — Multilevel sinov imtihoni (ilovada #ml).
 //   • Yangi asosiy menyu va buyruqlar ro'yxati (action: "setup", admin JWT yoki x-cron-secret).
 //
@@ -147,7 +147,7 @@ async function ptFinish(chat: any, st: any, msgId?: number) {
 }
 
 /* ───────── Do'st taklif qilish ───────── */
-const REF_DAYS = 7, REF_MAX = 10;
+const REF_DAYS = 7, REF_STEP = 3, REF_MAX_REWARDS = 10;   // v104: har 3 do'st = 7 kun Pro, ko'pi bilan 10 marta
 const refLink = (uid: string) => `https://t.me/${BOT_NAME}?start=r_${uid.replace(/-/g, "")}`;
 const hexToUuid = (h: string) => `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
 async function addProDays(uid: string, days: number, tgUser?: number | null) {
@@ -157,11 +157,13 @@ async function addProDays(uid: string, days: number, tgUser?: number | null) {
   else await db.from("wd_pro").insert({ user_id: uid, until, plan: "referral", tg_user: tgUser ?? null, updated_at: nowIso() });
 }
 async function inviteMsg(chat: any) {
-  if (!chat.user_id) return send(chat.chat_id, `🎁 Do'stingizni taklif qiling — ikkalangiz <b>${REF_DAYS} kun Pro</b> olasiz.\n\nAvval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi. Keyin «Do'st taklif qilish» ni qayta bosing.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  if (!chat.user_id) return send(chat.chat_id, `🎁 <b>${REF_STEP} ta do'stingizni</b> taklif qiling — <b>${REF_DAYS} kun Pro</b> olasiz.\n\nAvval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi. Keyin «Do'st taklif qilish» ni qayta bosing.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
   const { count } = await db.from("wd_referrals").select("id", { count: "exact", head: true }).eq("referrer", chat.user_id);
   const link = refLink(chat.user_id);
-  const share = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(`WordDrop'da ingliz tilini birga o'rganamiz! Shu havola orqali kirsang, ikkalamizga ${REF_DAYS} kun Pro beriladi 🎁`)}`;
-  return send(chat.chat_id, `🎁 <b>Do'st taklif qilish</b>\n\nDo'stingiz havola orqali botga kirib, WordDrop'ni ochsa — <b>ikkalangizga ${REF_DAYS} kun Pro</b> qo'shiladi.\n\nSizning havolangiz:\n<code>${link}</code>\n\nTaklif qilganlaringiz: <b>${count ?? 0}</b> · mukofot ko'pi bilan ${REF_MAX} ta do'st uchun`, { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga yuborish", url: share }]] } });
+  const share = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(`WordDrop'da ingliz tilini birga o'rganamiz! Shu havola orqali qo'shil 💧`)}`;
+  const n = count ?? 0, step = n % REF_STEP, got = Math.min(REF_MAX_REWARDS, Math.floor(n / REF_STEP));
+  const bar = "●".repeat(step) + "○".repeat(REF_STEP - step);
+  return send(chat.chat_id, `🎁 <b>Do'st taklif qilish</b>\n\nHar <b>${REF_STEP} ta do'stingiz</b> havola orqali botga kirib, WordDrop'ni ochsa — sizga <b>${REF_DAYS} kun Pro</b> qo'shiladi.\n\nSizning havolangiz:\n<code>${link}</code>\n\nKeyingi mukofotgacha: ${bar} <b>${step}/${REF_STEP}</b>\nJami do'stlar: <b>${n}</b> · olingan mukofot: <b>${got}</b> (ko'pi bilan ${REF_MAX_REWARDS})`, { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga yuborish", url: share }]] } });
 }
 async function onRefStart(chat: any, code: string, from: any) {
   const by = hexToUuid(code.slice(2));
@@ -169,7 +171,7 @@ async function onRefStart(chat: any, code: string, from: any) {
   const hello = `Salom${from?.first_name ? ", " + esc(from.first_name) : ""}! 💧 Men <b>Drop</b> — WordDrop yordamchisiman.`;
   if (!ok || by === chat.user_id) { await send(chat.chat_id, hello, { reply_markup: KB_MAIN }); return chat.cefr ? null : ptIntro(chat); }
   if (chat._new) await db.from("wd_tg_chats").update({ ref_by: by }).eq("chat_id", chat.chat_id);
-  await send(chat.chat_id, `${hello}\nSizni do'stingiz taklif qildi.\n\n${chat._new ? `🎁 WordDrop'ni ochsangiz, sizga va do'stingizga <b>${REF_DAYS} kun Pro</b> beriladi.` : "Taklif bonusi faqat botga birinchi marta kirganlarga beriladi."}`, { reply_markup: KB_MAIN });
+  await send(chat.chat_id, `${hello}\nSizni do'stingiz taklif qildi.\n\n${chat._new ? `📱 WordDrop'ni shu yerdan oching — hisobingiz ulanadi va do'stingiz mukofotga bir qadam yaqinlashadi.\n🎁 Siz ham <b>${REF_STEP} ta do'stingizni</b> taklif qilsangiz, <b>${REF_DAYS} kun Pro</b> olasiz.` : "Taklif faqat botga birinchi marta kirganlar uchun hisoblanadi."}`, { reply_markup: KB_MAIN });
   if (!chat.cefr) await ptIntro(chat);
 }
 async function claimRef(chatId: number) {
@@ -177,15 +179,21 @@ async function claimRef(chatId: number) {
   if (!chat?.user_id || !chat.ref_by || chat.ref_claimed) return;
   await db.from("wd_tg_chats").update({ ref_claimed: true }).eq("chat_id", chatId);
   if (chat.ref_by === chat.user_id) return;
-  const { error } = await db.from("wd_referrals").insert({ referrer: chat.ref_by, invitee: chat.user_id, tg_chat: chatId, days: REF_DAYS });
+  const { error } = await db.from("wd_referrals").insert({ referrer: chat.ref_by, invitee: chat.user_id, tg_chat: chatId, days: 0 });
   if (error) return;   // bu hisob avval ham taklif orqali kelgan
-  await addProDays(chat.user_id, REF_DAYS, chatId);
   const { count } = await db.from("wd_referrals").select("id", { count: "exact", head: true }).eq("referrer", chat.ref_by);
-  const rewarded = (count ?? 0) <= REF_MAX;
-  if (rewarded) await addProDays(chat.ref_by, REF_DAYS);
-  await send(chatId, `🎁 Taklif bonusi: hisobingizga <b>${REF_DAYS} kun Pro</b> qo'shildi!`);
+  const n = count ?? 0, step = n % REF_STEP;
+  const rewarded = step === 0 && n / REF_STEP <= REF_MAX_REWARDS;
+  if (rewarded) { await addProDays(chat.ref_by, REF_DAYS); await db.from("wd_referrals").update({ days: REF_DAYS }).eq("invitee", chat.user_id); }
+  await send(chatId, `✅ Hisobingiz ulandi. 🎁 Siz ham <b>${REF_STEP} ta do'stingizni</b> taklif qilib, <b>${REF_DAYS} kun Pro</b> olishingiz mumkin — /invite`);
   const { data: rc } = await db.from("wd_tg_chats").select("chat_id").eq("user_id", chat.ref_by).limit(1).maybeSingle();
-  if (rc) await send(rc.chat_id, rewarded ? `🎉 Do'stingiz WordDrop'ga qo'shildi — sizga ham <b>${REF_DAYS} kun Pro</b> qo'shildi!` : `🎉 Do'stingiz WordDrop'ga qo'shildi. Mukofot limiti (${REF_MAX} ta) to'lgan, lekin rahmat!`);
+  if (rc) {
+    const left = (REF_STEP - step) % REF_STEP || REF_STEP;
+    const bar = "●".repeat(step || REF_STEP) + "○".repeat(step ? REF_STEP - step : 0);
+    await send(rc.chat_id, rewarded ? `🎉 Do'stingiz WordDrop'ga qo'shildi — ${bar} <b>${REF_STEP}/${REF_STEP}</b>!\nSizga <b>${REF_DAYS} kun Pro</b> qo'shildi 💧`
+      : step === 0 ? `🎉 Do'stingiz WordDrop'ga qo'shildi. Mukofot limiti (${REF_MAX_REWARDS} marta) to'lgan, lekin rahmat!`
+      : `🎉 Do'stingiz WordDrop'ga qo'shildi — ${bar} <b>${step}/${REF_STEP}</b>\nYana <b>${left} ta</b> do'st — va sizga <b>${REF_DAYS} kun Pro</b>.`);
+  }
 }
 
 /* ───────── Eski botga uzatish ───────── */
@@ -239,7 +247,7 @@ async function setup() {
     { command: "word", description: "Kun so'zi" }, { command: "quiz", description: "Viktorina" },
     { command: "level", description: "Daraja testi" }, { command: "multilevel", description: "Multilevel sinov imtihoni" },
     { command: "review", description: "Takrorim" }, { command: "top", description: "Reyting" },
-    { command: "invite", description: "Do'st taklif qilish — 7 kun Pro" }, { command: "settings", description: "Eslatmalar" },
+    { command: "invite", description: "3 do'st taklif qiling — 7 kun Pro" }, { command: "settings", description: "Eslatmalar" },
     { command: "pro", description: "WordDrop Pro (Stars)" }, { command: "paysupport", description: "To'lov bo'yicha yordam" },
     { command: "terms", description: "Pro shartlari" }, { command: "menu", description: "Menyu" } ] });
   return { webhook: r1.ok, commands: r2.ok, desc: r1.description };

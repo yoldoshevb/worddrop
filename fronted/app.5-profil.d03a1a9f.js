@@ -254,19 +254,21 @@ function openCEFRSheet(){
   });
 }
 /* v101: Do'st taklif qilish — t.me/WordDropUzBot?start=r_<uid>. Bonusni bot beradi (do'st hisobini ulaganda). */
+window.__wdOpenInvite=(...x)=>openInviteSheet(...x);   // v104: Pro oynasidan chaqiriladi
 async function openInviteSheet(){
   const u=window.__sbUser;
   if(!u || !u.id){ showToast("Avval hisobga kiring",IC.info); return; }
   const link='https://t.me/WordDropUzBot?start=r_'+String(u.id).replace(/-/g,'');
   let n=0; try{ const {count}=await window.__sb.from('wd_referrals').select('id',{count:'exact',head:true}).eq('referrer',u.id); n=count||0; }catch(e){}
-  const share='https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent("WordDrop'da ingliz tilini birga o'rganamiz! Shu havola orqali kirsang, ikkalamizga 7 kun Pro beriladi");
+  const share='https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent("WordDrop'da ingliz tilini birga o'rganamiz! Shu havola orqali qo'shil 💧");
+  const STEP=3, step=n%STEP, got=Math.min(10,Math.floor(n/STEP));   // v104: har 3 do'st = 7 kun Pro
   openSheet(`
     <h2>Do'st taklif qilish</h2>
-    <p class="desc">Do'stingiz havola orqali botga kirib, WordDrop'ni ochsa — sizga ham, unga ham <b>7 kun Pro</b> qo'shiladi. Mukofot 10 ta do'stgacha beriladi.</p>
-    <div class="inv-steps"><div><b>1</b><span>Havolani yuboring</span></div><div><b>2</b><span>Do'stingiz botda «Start» ni bosadi</span></div><div><b>3</b><span>U ilovani ochganda ikkalangizga Pro yoziladi</span></div></div>
+    <p class="desc">Har <b>3 ta do'stingiz</b> havola orqali botga kirib, WordDrop'ni ochsa — sizga <b>7 kun Pro</b> qo'shiladi. Mukofot 10 martagacha beriladi.</p>
+    <div class="inv-steps"><div><b>1</b><span>Havolani yuboring</span></div><div><b>2</b><span>Do'stingiz botda «Start» ni bosadi va ilovani ochadi</span></div><div><b>3</b><span>3 ta do'st qo'shilganda sizga 7 kun Pro yoziladi</span></div></div>
     <div class="inv-link"><code id="invLink">${escapeHtml(link)}</code></div>
     <div class="inv-row"><button class="btn-primary" id="invShare">Telegram orqali yuborish</button><button class="btn-sec" id="invCopy">Nusxa olish</button></div>
-    <div class="inv-meter"><div class="inv-meter-t"><span>Taklif qilganlaringiz</span><b>${n} / 10</b></div><div class="inv-bar"><i style="width:${Math.min(100,n*10)}%"></i></div></div>
+    <div class="inv-meter"><div class="inv-meter-t"><span>Keyingi 7 kun Pro'gacha</span><b>${step} / ${STEP}</b></div><div class="inv-bar"><i style="width:${Math.round(step/STEP*100)}%"></i></div><div class="inv-meter-t" style="margin-top:8px"><span>Jami do'stlar: ${n}</span><span>Olingan mukofot: ${got}</span></div></div>
   `);
   document.getElementById('invShare').onclick=()=>{ try{ if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.openTelegramLink) Telegram.WebApp.openTelegramLink(share); else window.open(share,'_blank','noopener'); }catch(e){ window.open(share,'_blank','noopener'); } };
   document.getElementById('invCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(link); showToast('Havola nusxalandi',IC.check); }catch(e){ showToast("Nusxalab bo'lmadi — havolani bosib turing",IC.info); } };
@@ -1172,7 +1174,7 @@ function renderProfileInner(){
         <div class="xp-next">Keyingi darajagacha ${inf.need-inf.inLevel} XP</div>
       </div>
       ${onbLevelCardHtml()}
-      <button class="card onb-card" id="pfInvite"><div class="onb-ic bl">${BADGE.trophy}</div><div class="onb-t"><span class="onb-lbl">Do'st taklif qilish</span><b class="onb-val">Ikkalangizga 7 kun Pro</b><span class="onb-sub">Do'stingiz havola orqali kirib, ilovani ochsa</span></div><svg viewBox="0 0 24 24" class="onb-chev"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="card onb-card" id="pfInvite"><div class="onb-ic bl">${BADGE.trophy}</div><div class="onb-t"><span class="onb-lbl">Do'st taklif qilish</span><b class="onb-val">3 do'st = 7 kun Pro</b><span class="onb-sub">Har 3 ta do'stingiz qo'shilganda</span></div><svg viewBox="0 0 24 24" class="onb-chev"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       ${onbGoalCardHtml()}
       ${onbInterestsCardHtml()}
       <div class="stat-row">
