@@ -62,3 +62,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-22 | ChatGPT | `worddrop-connector` (MCP) va `worddrop-listening` D1 | Cloudflare | connector 0.3.0 |
 | 2026-11-22 | ChatGPT | Multilevel audio tuzatishi | Pages (direct upload) | 6e8d064 |
 | 2026-11-23 | Claude | ChatGPT patchlari `main` ga qo'llandi; `docs/HAMKORLIK.md` | GitHub → Pages (avtomatik) | 8abf46a…e681e51 + shu commit |
+| 2026-11-23 | Claude | Multilevel #2 va #3 uchun Kokoro MP3 (62 yozuv); `ml-exam` v5: mavzular takrorlanmaydi, segment 900 belgi | GitHub → Pages, Supabase | shu commit |

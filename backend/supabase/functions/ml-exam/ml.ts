@@ -59,8 +59,36 @@ Photo queries must be generic and easy to find in a free photo library (e.g. 'pe
 
 /* ───────── yordamchilar ───────── */
 const arr = (v: unknown) => (Array.isArray(v) ? v : []);
+/* Noma'lum ovoz nomi (masalan "Speaker A") — hammasi bitta ovozga tushmasin: nomdan barqaror ovoz tanlaymiz */
+function voiceOf(raw: unknown) {
+  const n = String(raw ?? "").trim();
+  if (VOICES.includes(n)) return n;
+  let h = 0; for (const ch of n.toLowerCase()) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return n ? VOICES[h % VOICES.length] : "hannah";
+}
 function segs(v: unknown, clip: Ctx["clip"]) {
-  return arr(v).map((x: any) => ({ v: VOICES.includes(String(x?.v)) ? String(x.v) : "hannah", t: clip(x?.t, 400) })).filter((x) => x.t);
+  // v101e: 400 belgida gap o'rtasidan kesilib qolardi — 900 gacha ruxsat
+  return arr(v).map((x: any) => ({ v: voiceOf(x?.v), t: clip(x?.t, 900) })).filter((x) => x.t);
+}
+/* v101e: avvalgi testlarda ishlatilgan mavzular — AI ularni takrorlamasin */
+function usedTopics(c: Ctx): Promise<string> {
+  const k = c as any;   // har so'rov uchun bir marta (ishchi nusxa so'rovlar orasida qayta ishlatiladi)
+  return k._used ??= (async () => {
+    try {
+      const { data } = await c.SB.from("wd_ml_tests").select("listening,reading,writing,speaking").order("created_at", { ascending: false }).limit(25);
+      const out = new Set<string>();
+      for (const t of data ?? []) {
+        const L = t.listening ?? {}, R = t.reading ?? {}, W = t.writing ?? {}, S = t.speaking ?? {};
+        [L.p4?.title, L.p2?.title, L.p3?.intro, L.p6?.intro, ...(arr(L.p5).map((e: any) => e?.intro)), R.p1?.title, R.p2?.theme, R.p3?.title, R.p4?.title, R.p5?.title,
+          W.from, W.t2?.q, S.p12?.topic, S.p3?.topic].forEach((x) => { const v = String(x ?? "").replace(/\s+/g, " ").trim().slice(0, 110); if (v) out.add(v); });
+      }
+      return [...out].slice(0, 120).join(" | ");
+    } catch { return ""; }
+  })();
+}
+async function baseFor(c: Ctx) {
+  const u = await usedTopics(c);
+  return u ? `${BASE}\nThese topics, places, titles and themes were ALREADY USED in earlier tests — choose clearly DIFFERENT ones (different place names, subjects and settings): ${u}` : BASE;
 }
 const words = (s: string) => String(s || "").trim().split(/\s+/).filter(Boolean).length;
 const norm = (s: string) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -146,7 +174,8 @@ async function part<T>(c: Ctx, spec: string, maxTok: number, build: (p: any) => 
   let why = String(c.body?.why || "").slice(0, 300);   // ilova oldingi urinishning sababini qaytarib yuborishi mumkin
   for (let i = 0; i < 3; i++) {
     if (i > 0 && c.deadline - Date.now() < 50_000) break;   // yana bir urinishga vaqt yetmaydi — ilova qayta chaqiradi
-    const p = await slot(() => c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: `${BASE}\n${spec}` }, { role: "user", content: `Original content please. ${why ? "Previous attempt was rejected: " + why + ". Fix it." : ""} Seed ${crypto.randomUUID().slice(0, 8)}` }], maxTok + 1200, 0.8));
+    const base = await baseFor(c);
+    const p = await slot(() => c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: `${base}\n${spec}` }, { role: "user", content: `Original content please. ${why ? "Previous attempt was rejected: " + why + ". Fix it." : ""} Seed ${crypto.randomUUID().slice(0, 8)}` }], maxTok + 1200, 0.8));
     if (p instanceof Response) { why = "invalid JSON"; continue; }
     const x = build(p); why = check(x);
     if (!why) return x;
@@ -297,7 +326,8 @@ async function checkReading(c: Ctx, R: any) {
 }
 
 async function genWriting(c: Ctx) {
-  const p = await c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: W_SPEC }, { role: "user", content: `Seed ${crypto.randomUUID().slice(0, 8)}` }], 3000, 0.9);
+  const used = await usedTopics(c);
+  const p = await c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: W_SPEC + (used ? `\nALREADY USED in earlier tests — choose a different situation, sender and Part 2 question: ${used}` : "") }, { role: "user", content: `Seed ${crypto.randomUUID().slice(0, 8)}` }], 3000, 0.9);
   if (p instanceof Response) return p;
   const C = c.clip;
   const W = { situation: C(p.situation, 900), from: C(p.from, 80), friend: C(p.friend, 30) || "Aziz", t11: C(p.t11, 400), t12: C(p.t12, 400), t2: { intro: C(p.t2?.intro, 400), q: C(p.t2?.q, 400) } };
@@ -305,7 +335,8 @@ async function genWriting(c: Ctx) {
   return { W };
 }
 async function genSpeaking(c: Ctx) {
-  const p = await c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: S_SPEC }, { role: "user", content: `Seed ${crypto.randomUUID().slice(0, 8)}` }], 3000, 0.9);
+  const used = await usedTopics(c);
+  const p = await c.groqJson(c.apiKey, GEN_MODELS, [{ role: "system", content: S_SPEC + (used ? `\nALREADY USED in earlier tests — choose different picture topics, questions and a different Part 3 debate statement: ${used}` : "") }, { role: "user", content: `Seed ${crypto.randomUUID().slice(0, 8)}` }], 3000, 0.9);
   if (p instanceof Response) return p;
   const C = c.clip;
   const pic = (x: any) => ({ q: C(x?.q, 60), desc: C(x?.desc, 200) });
