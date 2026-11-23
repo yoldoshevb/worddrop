@@ -64,3 +64,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-23 | Claude | ChatGPT patchlari `main` ga qo'llandi; `docs/HAMKORLIK.md` | GitHub → Pages (avtomatik) | 8abf46a…e681e51 + shu commit |
 | 2026-11-23 | Claude | Multilevel #2 va #3 uchun Kokoro MP3 (62 yozuv); `ml-exam` v5: mavzular takrorlanmaydi, segment 900 belgi | GitHub → Pages, Supabase | shu commit |
 | 2026-11-23 | Claude | Splash v102: haqiqiy yuklanishga bog'langan, foydalanuvchi so'zlari, qorong'i rejim; head kutubxonalari defer | GitHub → Pages | shu commit |
+| 2026-11-23 | Claude | Splash v103–v104: silliq kompozitor motion, sintez ovoz, vinetkasiz fon; Telegram SDK erta ulanib `ready()` darhol chaqiriladi | GitHub → Pages | shu commit |

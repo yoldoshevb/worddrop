@@ -1,7 +1,7 @@
 
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v103';
+window.__wdVer='v104';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -1506,6 +1506,7 @@ window.__wdHideSplash=function(){
   if(window.__wdHideSplash.done) return; window.__wdHideSplash.done=true;
   const sp=document.getElementById('splash'); if(sp) sp.classList.add('leaving');
   document.getElementById('app').classList.add('visible');
+  try{ const W=window.Telegram&&window.Telegram.WebApp; if(W&&window.__wdInTelegram!==false){ W.setHeaderColor('#0F1B3D'); try{ W.setBackgroundColor(getComputedStyle(document.body).backgroundColor.match(/\d+/g).slice(0,3).reduce((h,x)=>h+(+x).toString(16).padStart(2,'0'),'#')); }catch(_){} } }catch(_){}
   setTimeout(()=>{ const x=document.getElementById('splash'); if(x) x.remove(); }, 580);
   // Splash tugagach: kirmagan mehmonga xush kelibsiz ekrani (Supabase javobini biroz kutamiz)
   setTimeout(maybeShowWelcome, 400);
