@@ -32,49 +32,42 @@
 (function(){ try{ var r=localStorage.getItem('worddrop_state_v1')||''; if(/"darkMode"\s*:\s*true/.test(r)) document.documentElement.classList.add('wd-boot-dark'); }catch(e){} })();
 </script>
 <style>
-/* ===== SPLASH v102 — HTML ichida (katta CSS faylini kutmaydi) ===== */
-#splash{--sp-bg:#F4F7FD;--sp-ink:#0F1B3D;--sp-mute:#66708A;--sp-el:#2F6FED;--sp-track:#DCE5F5;--sp-chip:#FFFFFF;--sp-chipb:#E1E8F5;
-  position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:var(--sp-bg);color:var(--sp-ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
-  padding:24px;transition:opacity .45s ease,visibility .45s;-webkit-font-smoothing:antialiased}
-.wd-boot-dark #splash{--sp-bg:#0F1420;--sp-ink:#EDF0F7;--sp-mute:#8A93A6;--sp-el:#4C87FF;--sp-track:#232B40;--sp-chip:#1A2032;--sp-chipb:#2A3145}
-#splash.leaving{opacity:0;visibility:hidden;pointer-events:none}
-.sp-stage{position:relative;width:240px;height:232px}
-/* so'z kartochkalari qutidan chiqib, yuqoriga ko'tariladi */
-.sp-words{position:absolute;left:50%;top:0;width:0;height:150px;z-index:2}
-.sp-w{position:absolute;left:0;bottom:0;transform:translate(-50%,28px) scale(.7);opacity:0;white-space:nowrap;
-  background:var(--sp-chip);border:1px solid var(--sp-chipb);border-radius:12px;padding:7px 12px;
-  box-shadow:0 6px 18px rgba(15,27,61,.10);font-size:13px;line-height:1.2;color:var(--sp-mute)}
-.sp-w b{font-family:"Bricolage Grotesque",Inter,sans-serif;font-weight:700;font-size:15px;color:var(--sp-ink);margin-right:6px;letter-spacing:-.01em}
-#splash.go .sp-w{animation:spRise .7s cubic-bezier(.2,.9,.3,1.3) both}
-/* yelpig'ich: har kartochka o'z joyida qoladi */
-.sp-w:nth-child(1){--x:-46px;--y:-104px;--r:-6deg}
-.sp-w:nth-child(2){--x:44px;--y:-70px;--r:5deg}
-.sp-w:nth-child(3){--x:-10px;--y:-34px;--r:-2deg}
-#splash.go .sp-w:nth-child(1){animation-delay:.5s}
-#splash.go .sp-w:nth-child(2){animation-delay:.72s}
-#splash.go .sp-w:nth-child(3){animation-delay:.94s}
-@keyframes spRise{0%{opacity:0;transform:translate(-50%,30px) scale(.6) rotate(0)}
-  100%{opacity:1;transform:translate(calc(-50% + var(--x)),var(--y)) scale(1) rotate(var(--r))}}
-.sp-box{position:absolute;left:50%;bottom:0;width:132px;height:120px;transform:translateX(-50%)}
-.sp-box svg{width:100%;height:100%;overflow:visible}
-.sp-lid{transform-box:fill-box;transform-origin:20% 100%}
-#splash.go .sp-box{animation:spIn .55s cubic-bezier(.2,.9,.3,1.25) both}
-#splash.go .sp-lid{animation:spLid .5s .35s cubic-bezier(.3,.8,.3,1.2) both}
-@keyframes spIn{0%{opacity:0;transform:translateX(-50%) translateY(14px) scale(.86)}100%{opacity:1;transform:translateX(-50%)}}
-@keyframes spLid{0%{transform:none}100%{transform:translate(-6px,-12px) rotate(-16deg)}}
-.sp-name{margin-top:22px;font-family:"Bricolage Grotesque",Inter,sans-serif;font-weight:800;font-size:38px;letter-spacing:-.03em;line-height:1}
-.sp-name span{color:var(--sp-el)}
-.sp-load{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:10px;min-height:46px}
-.sp-track{width:168px;height:4px;border-radius:4px;background:var(--sp-track);overflow:hidden}
-.sp-track i{display:block;height:100%;width:8%;border-radius:4px;background:var(--sp-el);transition:width .5s cubic-bezier(.3,.7,.3,1)}
-.sp-msg{font-size:13px;color:var(--sp-mute);text-align:center;min-height:16px}
-.sp-slow{display:none;margin-top:4px;border:1.5px solid var(--sp-chipb);background:var(--sp-chip);color:var(--sp-ink);
-  font:600 14px Inter,sans-serif;padding:10px 18px;border-radius:12px;cursor:pointer}
+/* ===== SPLASH v102c — minimal, motion: tomchi qutiga tushadi -> to'lqin -> belgiga aylanadi -> nom harfma-harf ===== */
+#splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#2F6FED radial-gradient(120% 70% at 50% 40%,#4A84F6 0%,#2F6FED 55%,#2558D6 100%);
+  color:#fff;-webkit-font-smoothing:antialiased;overflow:hidden}
+.wd-boot-dark #splash{background:#1D4FC4 radial-gradient(120% 70% at 50% 40%,#2E62DC 0%,#1D4FC4 60%,#173F9E 100%)}
+#splash.leaving{animation:spOut .42s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none}
+#splash.leaving .sp-logo{animation:spLogoOut .42s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes spOut{to{opacity:0;visibility:hidden}}
+@keyframes spLogoOut{to{transform:scale(1.12)}}
+.sp-logo{width:104px;height:120px;position:relative}
+.sp-logo svg{width:100%;height:100%;display:block;overflow:visible}
+.sp-box{transform-box:fill-box;transform-origin:50% 100%;opacity:0;
+  animation:spBoxIn .5s cubic-bezier(.2,.9,.3,1.35) .05s forwards, spSquash .42s cubic-bezier(.3,.7,.4,1) .66s}
+@keyframes spBoxIn{0%{opacity:0;transform:scale(.7)}100%{opacity:1;transform:none}}
+@keyframes spSquash{0%{transform:none}30%{transform:scale(1.05,.9)}65%{transform:scale(.98,1.04)}100%{transform:none}}
+.sp-fall{opacity:0;animation:spFall .34s cubic-bezier(.55,0,.9,.6) .32s forwards}
+@keyframes spFall{0%{opacity:0;transform:translateY(-70px) scale(.9,1.05)}20%{opacity:1}
+  88%{transform:translateY(0) scale(.9,1.08)}100%{opacity:1;transform:translateY(2px) scale(1.25,.55)}}
+.sp-fall-out{transform-box:fill-box;transform-origin:50% 100%;animation:spSink .2s ease-in .66s forwards}
+@keyframes spSink{to{opacity:0;transform:scale(.3)}}
+.sp-ring{transform-box:fill-box;transform-origin:50% 50%;opacity:0;animation:spRing .7s cubic-bezier(.2,.7,.3,1) .66s}
+@keyframes spRing{0%{opacity:.9;transform:scale(.25)}100%{opacity:0;transform:scale(1.7)}}
+.sp-mark{transform-box:fill-box;transform-origin:50% 60%;opacity:0;animation:spMark .38s cubic-bezier(.2,.9,.3,1.4) .78s forwards}
+@keyframes spMark{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:none}}
+.sp-name{margin-top:16px;display:flex;font-family:"Bricolage Grotesque",Inter,-apple-system,"Segoe UI",sans-serif;font-weight:800;font-size:32px;
+  letter-spacing:-.03em;line-height:1.15;overflow:hidden;padding:0 2px}
+.sp-name span{display:inline-block;transform:translateY(105%);opacity:0;animation:spLetter .42s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(.86s + var(--i)*32ms)}
+@keyframes spLetter{to{transform:none;opacity:1}}
+.sp-slow{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 48px);display:none;border:1.5px solid rgba(255,255,255,.55);
+  background:transparent;color:#fff;font:600 14px Inter,-apple-system,sans-serif;padding:10px 20px;border-radius:12px;cursor:pointer}
 #splash.slow .sp-slow{display:block}
-.sp-slow:focus-visible{outline:2px solid var(--sp-el);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){#splash.go .sp-box,#splash.go .sp-lid,#splash.go .sp-w{animation:none}
-  .sp-w{opacity:1;transform:translate(calc(-50% + var(--x)),var(--y)) rotate(var(--r))}}
+.sp-slow:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  .sp-box,.sp-mark,.sp-name span{animation:none!important;opacity:1;transform:none}
+  .sp-fall,.sp-ring{display:none}
+  #splash.leaving,#splash.leaving .sp-logo{animation-duration:.01s}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -255,71 +248,38 @@
 </script>
 </head>
 <body>
-<!-- SPLASH v102: quti ochiladi va undan foydalanuvchining o'z so'zlari chiqadi; yuklanish haqiqiy bosqichlarga bog'langan -->
-<div id="splash" role="status" aria-live="polite" aria-label="WordDrop yuklanmoqda">
-  <div class="sp-stage" aria-hidden="true">
-    <div class="sp-words" id="spWords"></div>
-    <div class="sp-box">
-      <svg viewBox="0 0 132 120" xmlns="http://www.w3.org/2000/svg">
-        <!-- ichki qorong'i qism (qopqoq ochilganda ko'rinadi) -->
-        <path d="M66 30 L118 54 L66 78 L14 54 Z" fill="#163C99"/>
-        <!-- chap yuza -->
-        <path d="M14 54 L66 78 L66 118 L14 94 Z" fill="#2459D8"/>
-        <!-- o'ng yuza -->
-        <path d="M66 78 L118 54 L118 94 L66 118 Z" fill="#3B74F0"/>
-        <path d="M66 78 L118 54" stroke="#9CC0FF" stroke-width="1.5" opacity=".7"/>
-        <!-- o'ng yuzadagi tomchi belgisi -->
-        <g transform="translate(92 86) skewY(-24.8)">
-          <path d="M0 -11 C5 -4 8 0 8 4 a8 8 0 0 1 -16 0 C-8 0 -5 -4 0 -11 Z" fill="#fff" opacity=".95"/>
-          <path d="M-5 5 a5.4 5.4 0 0 0 10 0 Z" fill="#3B74F0" opacity=".55"/>
-        </g>
-        <!-- qopqoq -->
-        <g class="sp-lid">
-          <path d="M66 26 L120 51 L66 76 L12 51 Z" fill="#6E9BFF"/>
-          <path d="M12 51 L66 76 L66 81 L12 56 Z" fill="#2B60DB"/>
-          <path d="M120 51 L66 76 L66 81 L120 56 Z" fill="#4A80F5"/>
-          <path d="M66 31 L110 51 L66 71 L22 51 Z" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.4"/>
-        </g>
-      </svg>
-    </div>
+<!-- SPLASH v102c: minimal + motion — tomchi qutiga tushadi, belgiga aylanadi, nom harfma-harf chiqadi -->
+<div id="splash" role="status" aria-label="WordDrop yuklanmoqda">
+  <div class="sp-logo" aria-hidden="true">
+    <svg viewBox="0 0 96 112" xmlns="http://www.w3.org/2000/svg">
+      <g class="sp-box">
+        <path d="M48 24 L86 43 L48 62 L10 43 Z" fill="#fff"/>
+        <path d="M10 47 L46 65 L46 106 L10 88 Z" fill="#fff" fill-opacity=".78"/>
+        <path d="M50 65 L86 47 L86 88 L50 106 Z" fill="#fff" fill-opacity=".92"/>
+        <ellipse class="sp-ring" cx="48" cy="43" rx="24" ry="12" fill="none" stroke="#2F6FED" stroke-width="2.2"/>
+        <g class="sp-mark"><g transform="translate(68 78) skewY(-26.6)"><path d="M0 -12 C5.5 -4.5 8.5 -.5 8.5 3.5 a8.5 8.5 0 0 1 -17 0 C-8.5 -.5 -5.5 -4.5 0 -12 Z" fill="#2F6FED"/></g></g>
+      </g>
+      <g class="sp-fall-out"><g class="sp-fall" style="transform-box:fill-box;transform-origin:50% 100%">
+        <path d="M48 20 C53 27 56 31 56 35 a8 8 0 0 1 -16 0 C40 31 43 27 48 20 Z" fill="#fff"/>
+      </g></g>
+    </svg>
   </div>
-  <div class="sp-name">Word<span>Drop</span></div>
-  <div class="sp-load">
-    <div class="sp-track" role="progressbar" aria-label="Yuklanish" aria-valuemin="0" aria-valuemax="100"><i id="spBar"></i></div>
-    <div class="sp-msg" id="spMsg">Ilova ochilmoqda…</div>
-    <button class="sp-slow" id="spSkip" type="button">Davom etish</button>
-  </div>
+  <div class="sp-name" aria-hidden="true"><span style="--i:0">W</span><span style="--i:1">o</span><span style="--i:2">r</span><span style="--i:3">d</span><span style="--i:4">D</span><span style="--i:5">r</span><span style="--i:6">o</span><span style="--i:7">p</span></div>
+  <button class="sp-slow" id="spSkip" type="button">Davom etish</button>
 </div>
 <script>
-/* Splash boshqaruvi: so'zlar — foydalanuvchining o'z lug'atidan; progress — haqiqiy bosqichlar */
+/* Splash: ilova tayyor bo'lishi bilan yopiladi (kamida ~0.9 s); sekin internetda 7 s dan keyin «Davom etish» */
 (function(){
   var sp=document.getElementById('splash'); if(!sp) return;
-  var t0=Date.now(), MIN=1300, SLOW=7000, MAX=12000;
-  var esc=function(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
-  var pairs=[["drop","tomchi"],["learn","o'rganmoq"],["grow","o'smoq"]], mine=false;
-  try{
-    var st=JSON.parse(localStorage.getItem('worddrop_state_v1')||'null');
-    var all=st&&st.srs?Object.keys(st.srs).map(function(k){ return st.srs[k]; }).filter(function(x){ return x&&x.t&&x.tr&&String(x.t).length<=16&&String(x.tr).length<=18; }):[];
-    if(all.length>=3){ pairs=[]; while(pairs.length<3&&all.length){ var x=all.splice(Math.floor(Math.random()*all.length),1)[0]; pairs.push([x.t,x.tr]); } mine=true; }
-  }catch(e){}
-  document.getElementById('spWords').innerHTML=pairs.map(function(p){ return '<span class="sp-w"><b>'+esc(p[0])+'</b>'+esc(p[1])+'</span>'; }).join('');
-  sp.classList.add('go');
-  var bar=document.getElementById('spBar'), msg=document.getElementById('spMsg'), pb=sp.querySelector('[role=progressbar]');
-  var stage=function(p,text){ bar.style.width=Math.round(p*100)+'%'; pb.setAttribute('aria-valuenow',Math.round(p*100)); if(text) msg.textContent=text; };
-  stage(.18, mine?"So'zlaringiz tayyorlanmoqda…":'Ilova ochilmoqda…');
-  var done=false;
-  function finish(){ if(done) return; done=true; stage(1,'Tayyor');
-    var go=function(){ if(typeof window.__wdHideSplash==='function') window.__wdHideSplash(); else { sp.classList.add('leaving'); var a=document.getElementById('app'); if(a) a.classList.add('visible'); setTimeout(function(){ sp.remove(); },500); } };
-    setTimeout(go, Math.max(0, MIN-(Date.now()-t0)) + 180);
+  var t0=Date.now(), MIN=1450, done=false;   // animatsiya to'liq ko'rinsin (~1.3 s)
+  function finish(){ if(done) return; done=true;
+    var go=function(){ if(typeof window.__wdHideSplash==='function') window.__wdHideSplash(); else { sp.classList.add('leaving'); var a=document.getElementById('app'); if(a) a.classList.add('visible'); setTimeout(function(){ sp.remove(); },400); } };
+    setTimeout(go, Math.max(0, MIN-(Date.now()-t0)));
   }
-  function whenReady(){
-    stage(.62,'Darslar yuklanmoqda…');
-    var sb=window.__sbReady, fin=function(){ stage(.9,'Hisob tekshirilmoqda…'); finish(); };
-    if(sb&&sb.then){ var tm=setTimeout(fin,2500); sb.then(function(){ clearTimeout(tm); fin(); },function(){ clearTimeout(tm); fin(); }); } else fin();
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',whenReady); else whenReady();
-  setTimeout(function(){ if(!done){ sp.classList.add('slow'); msg.textContent="Internet sekin — biroz kuting yoki davom eting"; } }, SLOW);
-  setTimeout(finish, MAX);
+  function ready(){ var sb=window.__sbReady; if(sb&&sb.then){ var tm=setTimeout(finish,1500); sb.then(function(){ clearTimeout(tm); finish(); },function(){ clearTimeout(tm); finish(); }); } else finish(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready); else ready();
+  setTimeout(function(){ if(!done) sp.classList.add('slow'); }, 7000);
+  setTimeout(finish, 12000);
   document.getElementById('spSkip').onclick=finish;
 })();
 </script>
@@ -554,7 +514,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.3e26d012.js"></script>
+<script src="app.svg-ikonkalar.4bfcccb8.js"></script>
 <script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
 <script>
 /* ==================================================================
