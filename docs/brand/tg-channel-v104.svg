@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4A86FF"/><stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EEF3FF"/></linearGradient>
+    <linearGradient id="left" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9DAFF"/><stop offset="1" stop-color="#A9C3FF"/></linearGradient>
+    <linearGradient id="right" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F8FF"/><stop offset="1" stop-color="#DCE7FF"/></linearGradient>
+    <linearGradient id="drop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E3ECFF"/></linearGradient>
+    <filter id="sh" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="dsh" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0B2A7A" flood-opacity=".28"/></filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- yumshoq soya -->
+  <ellipse cx="512" cy="852" rx="230" ry="30" fill="#0B2A7A" opacity=".30" filter="url(#sh)"/>
+  <g transform="translate(512 618) scale(5.6) translate(-60 -95)" filter="url(#dsh)">
+    <path d="M60 54 L106 77 L60 100 L14 77 Z" fill="url(#top)"/>
+    <path d="M14 81 L57 102 L57 136 L14 115 Z" fill="url(#left)"/>
+    <path d="M63 102 L106 81 L106 115 L63 136 Z" fill="url(#right)"/>
+    <g transform="translate(85 112) skewY(-26)"><path d="M0 -14 C6.5 -5.5 10 -.5 10 4 a10 10 0 0 1 -20 0 C-10 -.5 -6.5 -5.5 0 -14 Z" fill="#2F6FED"/></g>
+    <!-- tepadagi to'lqin -->
+    <ellipse cx="60" cy="77" rx="17" ry="8.5" fill="none" stroke="#2F6FED" stroke-width="1.6" opacity=".35"/>
+  </g>
+  <!-- tushayotgan tomchi -->
+  <g filter="url(#dsh)"><path d="M512 196 C543 238 561 261 561 284 a49 49 0 0 1 -98 0 C463 261 481 238 512 196 Z" fill="url(#drop)"/></g>
+</svg>
