@@ -251,6 +251,38 @@ async function isAdminJwt(req: Request) {
   return Array.isArray(list) && list.map((x: unknown) => String(x).toLowerCase()).includes(email);
 }
 
+/* v104: kanal profil rasmi — joriy rasmni ko'rish (info) yoki saytdagi PNG bilan almashtirish (url).
+   Token hech qachon javobga chiqmaydi: fayl shu funksiya ichida yuklanadi. */
+async function channelPhoto(body: any) {
+  const channel = await kv("channel");
+  const me = await tg("getMe", {});
+  const ch = await tg("getChat", { chat_id: channel });
+  if (!ch.ok) return { ok: false, error: ch.description, channel };
+  const mem = await tg("getChatMember", { chat_id: channel, user_id: me.result?.id });
+  const can = !!(mem.ok && (mem.result.status === "creator" || mem.result.can_change_info));
+  const info: any = { channel, title: ch.result.title, username: ch.result.username ?? null, bot_status: mem.ok ? mem.result.status : null, can_change_info: can, has_photo: !!ch.result.photo };
+  if (body.info) {
+    if (ch.result.photo?.big_file_id) {
+      const f = await tg("getFile", { file_id: ch.result.photo.big_file_id });
+      if (f.ok) {
+        const r = await fetch(`https://api.telegram.org/file/bot${BOT_TOKEN}/${f.result.file_path}`);
+        const b = new Uint8Array(await r.arrayBuffer()); let bin = ""; for (let i = 0; i < b.length; i++) bin += String.fromCharCode(b[i]);
+        info.photo_b64 = btoa(bin);
+      }
+    }
+    return { ok: true, ...info };
+  }
+  const url = String(body.url ?? "");
+  if (!/^https:\/\/(www\.)?worddrop-app\.uz\/[\w./-]+\.(png|jpg)(\?[\w=.-]*)?$/.test(url)) return { ok: false, error: "url faqat worddrop-app.uz dagi png/jpg bo'lishi kerak" };
+  if (!can) return { ok: false, error: "Botda kanal ma'lumotini o'zgartirish huquqi yo'q", ...info };
+  const img = await fetch(url);
+  const ct = img.headers.get("content-type") ?? "";
+  if (!img.ok || !ct.startsWith("image/")) return { ok: false, error: `Rasm olinmadi: ${img.status} ${ct}` };
+  const fd = new FormData(); fd.append("chat_id", String(channel)); fd.append("photo", new Blob([await img.arrayBuffer()], { type: ct }), "photo.png");
+  const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/setChatPhoto`, { method: "POST", body: fd }).then((x) => x.json()).catch((e) => ({ ok: false, description: String(e) }));
+  return { ok: !!r.ok, error: r.ok ? null : r.description, title: info.title };
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   try {
@@ -272,6 +304,7 @@ Deno.serve(async (req) => {
     const allowed = (cron && cron === String(await kv("cron_secret") ?? "")) || await isAdminJwt(req);
     if (!allowed) return json({ error: "Ruxsat yo'q" }, 403);
     if (body.action === "setup") return json(await setup());
+    if (body.action === "channel_photo") return json(await channelPhoto(body));
     return json({ error: "Noma'lum amal" }, 400);
   } catch (e) {
     console.error("[tg-v101]", e);
