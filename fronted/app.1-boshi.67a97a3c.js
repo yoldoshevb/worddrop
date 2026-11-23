@@ -444,25 +444,31 @@ function openPromoSheet(){
     </div>`);
     return;
   }
-  const used=!!window.__wdPromoUsed;
   const layer=openSheet(`<div class="pm-wrap">
     <div class="pm-ic">${PROMO_IC}</div>
     <h3 style="margin:0 0 6px">Promokod</h3>
-    <p class="pm-note" style="margin-top:0">Kodni kiriting \u2014 platformani to\u2019liq ko\u2019rib chiqish uchun
-      vaqtinchalik rejim ochiladi.</p>
-    <input class="pm-in" id="pmIn" placeholder="KOD" maxlength="20" autocomplete="off"
-      autocapitalize="characters" spellcheck="false" ${used?'disabled':''}>
-    <div class="pm-err" id="pmErr">${used?'Bu qurilmada promokod allaqachon ishlatilgan.':''}</div>
-    <button class="btn btn-primary btn-block" id="pmGo" style="margin-top:6px" ${used?'disabled':''}>Faollashtirish</button>
+    <p class="pm-note" style="margin-top:0">WordDrop Pro promokodini kiriting \u2014 Pro darhol hisobingizga qo\u2019shiladi.</p>
+    <input class="pm-in" id="pmIn" placeholder="WD-XXXX-XXXX" maxlength="32" autocomplete="off"
+      autocapitalize="characters" spellcheck="false">
+    <div class="pm-err" id="pmErr"></div>
+    <button class="btn btn-primary btn-block" id="pmGo" style="margin-top:6px">Faollashtirish</button>
   </div>`);
   const inp=layer.querySelector('#pmIn'), err=layer.querySelector('#pmErr'), go=layer.querySelector('#pmGo');
   if(inp) setTimeout(()=>inp.focus(),260);
   function submit(){
     const v=String(inp.value||'').trim().toUpperCase();
     if(!v){ err.textContent='Kodni kiriting'; return; }
-    if(window.__wdPromoUsed){ err.textContent='Bu qurilmada promokod allaqachon ishlatilgan.'; return; }
-    if(v!==PROMO_CODE){ err.textContent='Bunday kod topilmadi'; inp.value=''; return; }
-    promoActivate();
+    if(v===PROMO_CODE){
+      if(window.__wdPromoUsed){ err.textContent='Bu qurilmada promokod allaqachon ishlatilgan.'; return; }
+      promoActivate(); return;
+    }
+    // v106: Pro promokodi — serverda tekshiriladi
+    go.disabled=true; go.textContent='Tekshirilmoqda\u2026'; err.textContent='';
+    redeemPromo(v).then(r=>{
+      go.disabled=false; go.textContent='Faollashtirish';
+      if(!r.ok){ err.textContent=r.msg||'Promokod qabul qilinmadi'; return; }
+      promoProWin(r);
+    });
   }
   if(go) go.addEventListener('click',submit);
   if(inp) inp.addEventListener('keydown',e=>{ if(e.key==='Enter') submit(); });
@@ -519,6 +525,37 @@ async function promoActivate(){
   if(d) d.addEventListener('click',()=>{ closeSheet(); promoRefresh(); });
   promoTick();
 }
+
+/* v106: Pro promokodi (wd_promo_redeem_me). Ilova, Pro oynasi va promokod oynasi shu funksiyani ishlatadi. */
+async function redeemPromo(code){
+  try{ await window.__sbReady; }catch(e){}
+  const sb=window.__sb; if(!sb||!window.__sbUser) return {ok:false,msg:'Avval WordDrop hisobingizga kiring'};
+  const c=String(code||'').trim().toUpperCase().replace(/\s+/g,'');
+  if(!/^[A-Z0-9-]{4,32}$/.test(c)) return {ok:false,msg:'Promokod lotin harflari, raqam va «-» dan iborat bo\u2019ladi'};
+  const {data,error}=await sb.rpc('wd_promo_redeem_me',{c});
+  if(error||!data) return {ok:false,msg:"Tekshirib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring"};
+  if(data.ok){ try{ if(window.__wdProRefresh) await window.__wdProRefresh(); }catch(e){} }
+  return data;
+}
+window.__wdRedeemPromo=redeemPromo;
+function promoProWin(r){
+  promoFanfare(); try{ fireConfetti(); }catch(e){}
+  const d=new Date(r.until); const MO=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+  openSheet(`<div class="pm-win">
+    <div class="pm-halo">\u2b50</div>
+    <h3 style="margin:2px 0 2px">${r.days} kun WordDrop Pro!</h3>
+    <p class="pm-note" style="margin:0">${d.getDate()}-${MO[d.getMonth()]} ${d.getFullYear()} gacha faol</p>
+    <div class="pm-rows">
+      <div class="pm-row" style="animation-delay:.05s"><span class="e">\ud83c\udf93</span><div><b>Multilevel imtihonlari</b><span>Cheksiz, to\u2019liq tahlil va shaxsiy reja bilan</span></div></div>
+      <div class="pm-row" style="animation-delay:.15s"><span class="e">\ud83d\udcac</span><div><b>Drop AI \u2014 100 ta savol</b><span>Har kuni</span></div></div>
+      <div class="pm-row" style="animation-delay:.25s"><span class="e">\ud83d\udcda</span><div><b>Pro kitobchalar</b><span>Va seriya himoyasi</span></div></div>
+    </div>
+    <button class="btn btn-primary btn-block" id="pmDone" style="margin-top:14px">Zo\u2019r!</button>
+  </div>`);
+  const b=document.getElementById('pmDone'); if(b) b.addEventListener('click',()=>closeSheet());
+}
+window.__wdPromoProWin=promoProWin;
+window.__wdOpenPromo=()=>openPromoSheet();
 
 /* Faol tasma + vaqt tugaganda avtomatik qaytish */
 let _promoTimer=null;

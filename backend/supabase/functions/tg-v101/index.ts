@@ -8,6 +8,7 @@
 //   • Viktorina foydalanuvchi darajasiga mos so'zlardan.
 //   • Do'st taklif qilish: t.me/WordDropUzBot?start=r_<uid> — har 3 ta do'st hisobini ulaganda taklif qilganga 7 kun Pro (v104).
 //   • /multilevel — Multilevel sinov imtihoni (ilovada #ml).
+//   • /promo KOD yoki «🎟 Promokod» tugmasi — Pro promokodini faollashtirish (v106, wd_promo_redeem).
 //   • Yangi asosiy menyu va buyruqlar ro'yxati (action: "setup", admin JWT yoki x-cron-secret).
 //
 // Sirlar: TELEGRAM_BOT_TOKEN (Supabase Secrets). webhook_secret / cron_secret — wd_tg_kv.
@@ -51,6 +52,7 @@ const KB_MAIN = { inline_keyboard: [
   [{ text: "📊 Darajamni aniqlash", callback_data: "L" }, { text: "🎓 Multilevel", web_app: { url: APP_URL + "#ml" } }],
   [{ text: "⚙️ Sozlamalar", callback_data: "s" }, { text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }],
   [{ text: "⭐ WordDrop Pro", callback_data: "P" }, { text: "🎁 Do'st taklif qilish", callback_data: "I" }],
+  [{ text: "🎟 Promokod", callback_data: "PR" }],
 ] };
 
 /* ───────── Chat yozuvi ───────── */
@@ -196,6 +198,24 @@ async function claimRef(chatId: number) {
   }
 }
 
+/* ───────── Promokod (v106) ───────── */
+const MO = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+const fmtDay = (s: string) => { const d = new Date(s); return `${d.getUTCDate()}-${MO[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const PROMO_RE = /^[A-Za-z0-9-]{4,32}$/;
+async function promoAsk(chat: any, code = "") {
+  if (!chat.user_id) return send(chat.chat_id, `🎟 Promokodni ishlatish uchun avval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi.${code ? `\n\nKeyin shu xabarni yuboring:\n<code>/promo ${esc(code)}</code>` : " Keyin promokodni yuboring."}`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  await kvSet("promo:" + chat.chat_id, { at: Date.now() });
+  return send(chat.chat_id, "🎟 <b>Promokodni yuboring</b>\n\nMasalan: <code>WD-AB12-CD34</code>", { reply_markup: { inline_keyboard: [[{ text: "Bekor qilish", callback_data: "m" }]] } });
+}
+async function promoRedeem(chat: any, code: string, from: any) {
+  await db.from("wd_tg_kv").delete().eq("key", "promo:" + chat.chat_id);
+  if (!chat.user_id) return promoAsk(chat, code);
+  const { data, error } = await db.rpc("wd_promo_redeem", { uid: chat.user_id, c: code, tg: from?.id ?? chat.chat_id, via: "bot" });
+  if (error || !data) return send(chat.chat_id, "Promokodni tekshirib bo'lmadi. Birozdan keyin qayta urinib ko'ring.");
+  if (!data.ok) return send(chat.chat_id, `❌ ${esc(data.msg)}`, { reply_markup: { inline_keyboard: [[{ text: "🎟 Boshqa kod", callback_data: "PR" }, { text: "⭐ Pro tariflari", callback_data: "P" }]] } });
+  return send(chat.chat_id, `🎉 <b>Promokod faollashdi!</b>\n\nSizga <b>${data.days} kun WordDrop Pro</b> qo'shildi — ${fmtDay(data.until)} gacha.\nDrop AI 100 ta savol, Multilevel imtihonlari va chuqur tahlil endi ochiq.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+}
+
 /* ───────── Eski botga uzatish ───────── */
 async function forward(u: unknown) {
   const r = await fetch(OLD_URL, { method: "POST", headers: { "Content-Type": "application/json", "x-telegram-bot-api-secret-token": await webhookSecret() }, body: JSON.stringify(u) }).catch((e) => { console.error("[fwd]", e); return null; });
@@ -208,11 +228,12 @@ async function handle(u: any): Promise<boolean> {
   if (cq) {
     const chatId = cq.message?.chat?.id; const data = String(cq.data || "");
     if (!chatId || cq.message?.chat?.type !== "private") return false;
-    if (!["L", "Lg", "I", "q", "m"].includes(data) && !data.startsWith("L:")) return false;
+    if (!["L", "Lg", "I", "q", "m", "PR"].includes(data) && !data.startsWith("L:")) return false;
     tg("answerCallbackQuery", { callback_query_id: cq.id });
     const { data: chat } = await db.from("wd_tg_chats").select("*").eq("chat_id", chatId).maybeSingle();
     if (!chat) return false;
-    if (data === "m") { await send(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
+    if (data === "m") { await db.from("wd_tg_kv").delete().eq("key", "promo:" + chatId); await send(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
+    if (data === "PR") { await promoAsk(chat); return true; }
     if (data === "q") { if (!chat.cefr) return false; await sendQuiz(chatId, chat.cefr); return true; }
     if (data === "L") await ptIntro(chat);
     else if (data === "Lg") await ptStart(chat, cq.message?.message_id);
@@ -225,15 +246,25 @@ async function handle(u: any): Promise<boolean> {
   const text = String(m.text ?? "").trim();
   const cmd = text.split(/\s+/)[0].split("@")[0];
   const arg = text.split(/\s+/)[1] ?? "";
-  const mine = (cmd === "/start" && (arg === "" || arg === "level" || /^r_[0-9a-f]{32}$/.test(arg))) || ["/level", "/daraja", "/invite", "/multilevel", "/menu", "/help", "/quiz"].includes(cmd);
+  // Promokod kutilyapti: keyingi oddiy xabar — kod
+  if (!text.startsWith("/")) {
+    const w = await kv("promo:" + m.chat.id);
+    if (w && Date.now() - (w.at || 0) < 10 * 60_000) {
+      if (PROMO_RE.test(text.replace(/\s+/g, ""))) { const chat = await getChat(m.from, m.chat.id); if (chat) { await promoRedeem(chat, text, m.from); return true; } }
+      await db.from("wd_tg_kv").delete().eq("key", "promo:" + m.chat.id);
+    }
+  }
+  const mine = (cmd === "/start" && (arg === "" || arg === "level" || /^r_[0-9a-f]{32}$/.test(arg) || /^promo_[A-Za-z0-9-]{4,32}$/.test(arg))) || ["/level", "/daraja", "/invite", "/multilevel", "/menu", "/help", "/quiz", "/promo", "/promokod"].includes(cmd);
   if (!mine) return false;
   const chat = await getChat(m.from, m.chat.id); if (!chat) return false;
+  if (cmd === "/promo" || cmd === "/promokod") { if (arg && PROMO_RE.test(arg)) await promoRedeem(chat, arg, m.from); else await promoAsk(chat); return true; }
   if (cmd === "/quiz") { if (!chat.cefr) return false; await sendQuiz(chat.chat_id, chat.cefr); return true; }
   if (cmd === "/menu" || cmd === "/help") { await send(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
   if (cmd === "/level" || cmd === "/daraja" || (cmd === "/start" && arg === "level")) { await ptIntro(chat); return true; }
   if (cmd === "/invite") { await inviteMsg(chat); return true; }
   if (cmd === "/multilevel") { await send(chat.chat_id, "🎓 <b>Multilevel sinov imtihoni</b>\n\nListening (6 qism), Reading (5 qism), Writing va Speaking — rasmiy formatdagi tartib va vaqt bilan. Natija 75 ballik shkalada va CEFR darajasida.", { reply_markup: { inline_keyboard: [[{ text: "🎓 Imtihonni ochish", web_app: { url: APP_URL + "#ml" } }]] } }); return true; }
   if (arg.startsWith("r_")) { await onRefStart(chat, arg, m.from); return true; }
+  if (arg.startsWith("promo_")) { await promoRedeem(chat, arg.slice(6), m.from); return true; }
   // oddiy /start
   await send(chat.chat_id, `Salom${m.from.first_name ? ", " + esc(m.from.first_name) : ""}! 💧 Men <b>Drop</b> — WordDrop yordamchisiman.\n\n• Har kuni ertalab yangi so'z yuboraman\n• Viktorina bilan bilimingizni sinaymiz\n• Inglizcha savolingizga javob beraman — shunchaki yozing\n• 🎓 Multilevel sinov imtihonini ilovada topshirasiz`, { reply_markup: KB_MAIN });
   if (!chat.cefr) await ptIntro(chat);
@@ -249,6 +280,7 @@ async function setup() {
     { command: "review", description: "Takrorim" }, { command: "top", description: "Reyting" },
     { command: "invite", description: "3 do'st taklif qiling — 7 kun Pro" }, { command: "settings", description: "Eslatmalar" },
     { command: "pro", description: "WordDrop Pro (Stars)" }, { command: "paysupport", description: "To'lov bo'yicha yordam" },
+    { command: "promo", description: "Promokodni faollashtirish" },
     { command: "terms", description: "Pro shartlari" }, { command: "menu", description: "Menyu" } ] });
   return { webhook: r1.ok, commands: r2.ok, desc: r1.description };
 }

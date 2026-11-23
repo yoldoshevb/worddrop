@@ -136,7 +136,7 @@
 <script src="signature-data.js" defer></script>
 <script src="cert.js" defer onerror="window.__wdCertLoadFailed=true"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<link rel="stylesheet" href="app.tokens.d5246f01.css">
+<link rel="stylesheet" href="app.tokens.ad90ac7c.css">
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
 .side-brand{display:none}
@@ -659,8 +659,8 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.71926d67.js"></script>
-<script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
+<script src="app.svg-ikonkalar.948bfac1.js"></script>
+<script src="app.kitobcha-studiyasi-v94.5078a2cd.js"></script>
 <script>
 /* ==================================================================
    v96: BOT BOSHQARUVI (admin) — guruhlar, a'zolar, shaxsiy chat siyosati
@@ -871,6 +871,81 @@ function openPerson(uid){
   };
 }
 
+/* ==================== v106: PROMOKODLAR (admin) ====================
+   Promokod to'liq Pro beradi (wd_pro.until uzayadi). Cheklovlar: necha kun, nechta odam (standart 1),
+   amal qilish muddati, faqat yangi foydalanuvchilar. Yaratish: wd_promo_create (faqat admin). */
+const PM={days:7,max:1,n:1,custom:'',until:'',onlyNew:false,note:'',made:null};
+function openPromoAdmin(){ view('tgPromo'); renderPromoAdmin(); }
+window.__wdOpenPromoAdmin=openPromoAdmin;
+async function renderPromoAdmin(){
+  const el=document.getElementById('tgPromo'); if(!el) return;
+  el.innerHTML=head('Promokodlar','pmaBack')+`<div class="xm-scroll" id="pmaBody"></div>`;
+  el.querySelector('#pmaBack').onclick=()=>closeView('tgPromo');
+  const b=el.querySelector('#pmaBody');
+  const one=PM.max===1;
+  b.innerHTML=`
+    <h3 class="qx-h">Necha kun Pro beradi</h3>
+    ${chips('pmaD',[[3,'3 kun'],[7,'7 kun'],[14,'14 kun'],[30,'30 kun'],[90,'90 kun'],[365,'1 yil']],PM.days)}
+    <h3 class="qx-h">Nechta odam ishlata oladi</h3>
+    ${chips('pmaM',[[1,'Bir martalik'],[10,'10 kishi'],[50,'50 kishi'],[100,'100 kishi'],[1000,'1000 kishi']],PM.max)}
+    <p class="rv-note top">${one?"Bir martalik kod — eng xavfsiz: tarqalib ketsa ham faqat bir kishi ishlatadi. Bir nechta odamga bersangiz, har biriga alohida kod yarating.":"Bitta kodni shuncha odam ishlata oladi (har kim bir marta). Kanal yoki aksiya uchun qulay."}</p>
+    ${one?`<h3 class="qx-h">Nechta kod yaratish</h3>${chips('pmaN',[[1,'1 ta'],[5,'5 ta'],[10,'10 ta'],[25,'25 ta'],[50,'50 ta']],PM.n)}`:`
+    <h3 class="qx-h">O'z kodingiz <i style="font-weight:400;color:var(--i5)">— ixtiyoriy, masalan BAHOR2026</i></h3>
+    <input class="bk-in pma-in" id="pmaCode" maxlength="32" placeholder="Bo'sh qoldirsangiz — avtomatik" value="${esc(PM.custom)}" autocapitalize="characters" spellcheck="false">`}
+    <h3 class="qx-h">Amal qilish muddati <i style="font-weight:400;color:var(--i5)">— ixtiyoriy</i></h3>
+    <input class="bk-in pma-in" id="pmaUntil" type="date" value="${esc(PM.until)}">
+    <div class="xc xc-row"><div><b>Faqat yangi foydalanuvchilar</b><span>Ilgari hech qachon Pro bo'lmaganlar ishlata oladi</span></div><button class="xc-tg ${PM.onlyNew?'on':''}" id="pmaNew"><i></i></button></div>
+    <h3 class="qx-h">Izoh <i style="font-weight:400;color:var(--i5)">— kimga yoki nima uchun</i></h3>
+    <input class="bk-in pma-in" id="pmaNote" maxlength="120" placeholder="Masalan: Instagram aksiya, o'qituvchi Dilnoza" value="${esc(PM.note)}">
+    <button class="rv-go pma-go" id="pmaMake"><span>${one&&PM.n>1?`${PM.n} ta kod yaratish`:'Promokod yaratish'}</span></button>
+    <div id="pmaMade">${PM.made?madeHtml(PM.made):''}</div>
+    <h3 class="qx-h" style="margin-top:26px">Yaratilgan promokodlar</h3>
+    <div id="pmaList"><div class="bk-busy"><b>Yuklanmoqda</b></div></div>`;
+  bindChips(b,'pmaD',v=>{ PM.days=Number(v); });
+  bindChips(b,'pmaM',v=>{ PM.max=Number(v); if(PM.max!==1) PM.n=1; save(); renderPromoAdmin(); });
+  bindChips(b,'pmaN',v=>{ PM.n=Number(v); const g=b.querySelector('#pmaMake span'); if(g) g.textContent=PM.n>1?`${PM.n} ta kod yaratish`:'Promokod yaratish'; });
+  function save(){ const c=b.querySelector('#pmaCode'); if(c) PM.custom=c.value; PM.until=b.querySelector('#pmaUntil').value; PM.note=b.querySelector('#pmaNote').value; }
+  b.querySelector('#pmaNew').onclick=e=>{ PM.onlyNew=!PM.onlyNew; e.currentTarget.classList.toggle('on',PM.onlyNew); };
+  b.querySelector('#pmaMake').onclick=async e=>{
+    save(); const btn=e.currentTarget; const custom=PM.max===1?'':PM.custom.trim().toUpperCase().replace(/\s+/g,'');
+    if(custom&&!/^[A-Z0-9-]{4,32}$/.test(custom)){ showToast("Kod 4–32 belgi: lotin harflari, raqam va «-»",IC.info); return; }
+    btn.disabled=true;
+    const until=PM.until?new Date(PM.until+'T23:59:59+05:00').toISOString():null;
+    const {data,error}=await window.__sb.rpc('wd_promo_create',{p_days:PM.days,p_max:PM.max,p_n:PM.max===1?PM.n:1,p_code:custom||null,p_valid_until:until,p_only_new:PM.onlyNew,p_note:PM.note.trim()||null});
+    btn.disabled=false;
+    if(error){ showToast(/duplicate|unique/i.test(error.message)?"Bu kod allaqachon mavjud":("Yaratilmadi: "+error.message),IC.info); return; }
+    PM.made={codes:data.codes,days:PM.days,max:PM.max}; PM.custom='';
+    const m=b.querySelector('#pmaMade'); m.innerHTML=madeHtml(PM.made); bindMade(m); loadPromoList();
+  };
+  if(PM.made) bindMade(b.querySelector('#pmaMade'));
+  loadPromoList();
+}
+function madeHtml(x){
+  return `<div class="pma-made"><div class="pma-made-h"><b>${x.codes.length>1?x.codes.length+' ta kod tayyor':'Kod tayyor'}</b><span>${x.days} kun Pro · ${x.max===1?'bir martalik':x.max+' kishi'}</span></div>
+    <div class="pma-codes">${x.codes.map(c=>`<code>${esc(c)}</code>`).join('')}</div>
+    <div class="pma-made-a"><button class="btn-sec" data-pma-copy>Nusxa olish</button><button class="btn-sec" data-pma-share>Bot havolasi</button></div>
+    <p class="rv-note">Foydalanuvchi kodni ilovadagi Pro oynasida yoki botda kiritadi: <b>/promo ${esc(x.codes[0])}</b></p></div>`;
+}
+function bindMade(m){
+  const cp=m.querySelector('[data-pma-copy]'); if(cp) cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(PM.made.codes.join('\n')); showToast('Nusxalandi',IC.check); }catch(e){ showToast("Nusxalab bo'lmadi",IC.info); } };
+  const sh=m.querySelector('[data-pma-share]'); if(sh) sh.onclick=async()=>{ const t=PM.made.codes.map(c=>`https://t.me/WordDropUzBot?start=promo_${c}`).join('\n'); try{ await navigator.clipboard.writeText(t); showToast('Havola nusxalandi',IC.check); }catch(e){} };
+}
+async function loadPromoList(){
+  const box=document.getElementById('pmaList'); if(!box) return;
+  const {data,error}=await window.__sb.from('wd_promo_codes').select('code,days,max_uses,used,valid_until,only_new,note,active,created_at').order('created_at',{ascending:false}).limit(150);
+  if(!document.getElementById('pmaList')) return;
+  if(error){ box.innerHTML=`<div class="bk-busy"><b>${esc(error.message)}</b></div>`; return; }
+  if(!data.length){ box.innerHTML='<p class="rv-note">Hali promokod yaratilmagan.</p>'; return; }
+  const now=Date.now();
+  box.innerHTML=`<div class="pma-list">${data.map(x=>{ const exp=x.valid_until&&Date.parse(x.valid_until)<now, full=x.used>=x.max_uses;
+    const st=!x.active?['O\'chirilgan','off']:exp?['Muddati o\'tgan','off']:full?['Ishlatilgan','done']:['Faol','on'];
+    return `<div class="pma-row"><div class="pma-r1"><code>${esc(x.code)}</code><span class="pma-st ${st[1]}">${st[0]}</span></div>
+      <div class="pma-r2">${x.days} kun · ${x.used}/${x.max_uses} ishlatildi${x.valid_until?' · '+new Date(x.valid_until).toLocaleDateString('uz-UZ')+' gacha':''}${x.only_new?' · faqat yangilar':''}${x.note?' · '+esc(x.note):''}</div>
+      <div class="pma-r3"><button data-pc="${esc(x.code)}">Nusxa</button>${!full&&!exp?`<button data-pt="${esc(x.code)}" data-on="${x.active?0:1}">${x.active?'O\'chirish':'Yoqish'}</button>`:''}</div></div>`; }).join('')}</div>`;
+  box.querySelectorAll('[data-pc]').forEach(x=>x.onclick=async()=>{ try{ await navigator.clipboard.writeText(x.dataset.pc); showToast('Nusxalandi',IC.check); }catch(e){} });
+  box.querySelectorAll('[data-pt]').forEach(x=>x.onclick=async()=>{ const {error}=await window.__sb.rpc('wd_promo_set_active',{p_code:x.dataset.pt,p_active:x.dataset.on==='1'}); if(error) showToast(error.message,IC.info); loadPromoList(); });
+}
+document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#rPromoAdm')) openPromoAdmin(); });
 document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#rBot')) openBot(); });
 document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#rStats')) window.__wdOpenStats&&window.__wdOpenStats(); });
 // Botdagi "Ilovada boshqarish" tugmasi: app.html#bot
@@ -1004,6 +1079,9 @@ function draw(){
           <span class="px-dot"></span>
           <span class="px-pl"><b>${esc(p.label)}${save>0?`<em>${save}% tejaysiz</em>`:''}</b><small>${note}</small></span>
           <span class="px-pp">${m>1?`<s>${baseM}</s>`:''}<b>${per}</b><small>⭐ / oy</small></span></button>`; }).join('')}</div>
+      <div class="px-promo" id="pxPromo"><button type="button" class="px-promo-t" id="pxPromoT">${I.gift}<span>Promokodingiz bormi?</span>${I.chev}</button>
+        <div class="px-promo-f"><input id="pxPromoIn" maxlength="32" placeholder="WD-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" id="pxPromoGo">Faollashtirish</button></div>
+        <p class="px-promo-e" id="pxPromoE"></p></div>
       <h2 class="px-h">Pro'da nimalar bor</h2>${perksHtml()}
       <h2 class="px-h">Bepul va Pro</h2>
       <table class="px-cmp"><thead><tr><th scope="col"><span class="sr">Imkoniyat</span></th><th scope="col">Bepul</th><th scope="col" class="pro">Pro</th></tr></thead>
@@ -1025,6 +1103,15 @@ function draw(){
   });
   b.querySelector('#proBuy').onclick=buy;
   const iv=b.querySelector('#pxInv'); if(iv) iv.onclick=()=>{ if(window.__wdOpenInvite) window.__wdOpenInvite(); };
+  // v106: promokod
+  const pw=b.querySelector('#pxPromo'), pin=b.querySelector('#pxPromoIn'), pe=b.querySelector('#pxPromoE'), pg=b.querySelector('#pxPromoGo');
+  b.querySelector('#pxPromoT').onclick=()=>{ pw.classList.toggle('open'); if(pw.classList.contains('open')) setTimeout(()=>pin.focus(),60); };
+  const pgo=async()=>{ pg.disabled=true; pg.textContent='Tekshirilmoqda…'; pe.textContent='';
+    const r=window.__wdRedeemPromo?await window.__wdRedeemPromo(pin.value):{ok:false,msg:'Qayta urinib ko\'ring'};
+    pg.disabled=false; pg.textContent='Faollashtirish';
+    if(!r.ok){ pe.textContent=r.msg||'Promokod qabul qilinmadi'; return; }
+    await refresh(); draw(); if(window.__wdPromoProWin) window.__wdPromoProWin(r); };
+  pg.onclick=pgo; pin.addEventListener('keydown',e=>{ if(e.key==='Enter') pgo(); });
   const c=b.querySelector('#proCancel'); if(c) c.onclick=async()=>{
     if(!confirm(`Obuna bekor qilinsinmi? Pro ${fmtDay(P.until)} gacha ishlashda davom etadi.`)) return;
     const r=await api('pro_cancel'); showToast(r.__error||r.ok===false?(r.msg||r.error||'Bekor qilinmadi'):'Obuna bekor qilindi',IC.info); await refresh(); draw();
@@ -1057,7 +1144,7 @@ window.__wdOpenPro=openPro;
 
 </script>
 
-<script src="app.1-boshi.26a94e04.js"></script>
+<script src="app.1-boshi.67a97a3c.js"></script>
 
 <script src="app.2-shablonlar.6052af76.js"></script>
 
