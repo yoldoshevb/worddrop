@@ -66,3 +66,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-23 | Claude | Splash v102: haqiqiy yuklanishga bog'langan, foydalanuvchi so'zlari, qorong'i rejim; head kutubxonalari defer | GitHub → Pages | shu commit |
 | 2026-11-23 | Claude | Splash v103–v104: silliq kompozitor motion, sintez ovoz, vinetkasiz fon; Telegram SDK erta ulanib `ready()` darhol chaqiriladi | GitHub → Pages | shu commit |
 | 2026-11-24 | Claude | v105: taklif — 3 do'st = 7 kun Pro (tg-v101 v3); Multilevel chuqur tahlil (ml.v105.js); Pro oynasi yangi dizayn | GitHub → Pages, Supabase | shu commit |
+| 2026-11-24 | Claude | v105b: Multilevel — Pro; bepul hisobga bitta cheklangan urinish (wd_ml_free, ml-exam v6, RLS), ml.v105b.js | GitHub → Pages, Supabase | shu commit |

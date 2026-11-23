@@ -429,13 +429,22 @@ async function scoreSpeaking(c: Ctx) {
   return c.json({ expert: Math.round(expert * 10) / 10, score, level: level75(score), parts: out, summary_uz: C(r.summary_uz, 500) });
 }
 
-/* Ruxsat: admin — har doim bepul; Pro — cheksiz; oddiy hisob — 1 ta bepul to'liq sinov */
-async function canScore(c: Ctx) {
+/* v105 ruxsat: admin/Pro — cheksiz va to'liq; bepul hisob — bitta urinish (wd_ml_free), cheklangan natija.
+   Mantiq bazada: wd_ml_access, wd_ml_claim, wd_ml_gate, wd_ml_mark. */
+async function canScore(c: Ctx, kind: string) {
   const au = await adminUser(c); if (!au) return { ok: false, msg: "Avval WordDrop hisobingizga kiring" };
-  if (au.isAdmin) return { ok: true };
-  const { data: pro } = await c.SB.rpc("wd_is_pro", { uid: au.user.id }); if (pro) return { ok: true };
-  const { count } = await c.SB.from("wd_ml_attempts").select("id", { count: "exact", head: true }).eq("user_id", au.user.id).in("mode", ["full", "writing", "speaking"]);
-  return (count ?? 0) < 1 ? { ok: true } : { ok: false, msg: "Bepul sinov ishlatilgan. Writing va Speaking baholash — WordDrop Pro'da.", pro: true };
+  const { data, error } = await c.SB.rpc("wd_ml_gate", { uid: au.user.id, kind });
+  if (error || !data) return { ok: false, msg: "Ruxsat tekshirilmadi, qayta urinib ko'ring" };
+  return { ...data, uid: au.user.id };
+}
+/* Bepul urinish: faqat ball, daraja va qisqa xulosa — mezonlar, tuzatishlar va namunalar Pro'da */
+async function limitResp(r: Response, kind: string): Promise<Response> {
+  const j: any = await r.clone().json().catch(() => null);
+  if (!j || j.error) return r;
+  const list = (j.tasks || j.parts || []).map((x: any) => ({ id: x.id, pts: x.pts, max: x.max, words: x.words }));
+  const out: any = { expert: j.expert, score: j.score, level: j.level, summary_uz: j.summary_uz, limited: true };
+  if (kind === "writing") out.tasks = list; else out.parts = list;
+  return new Response(JSON.stringify(out), { status: 200, headers: r.headers });
 }
 
 export async function mlHandle(mode: string, c: Ctx): Promise<Response> {
@@ -462,15 +471,23 @@ export async function mlHandle(mode: string, c: Ctx): Promise<Response> {
     return c.json(x);
   }
   if (mode === "ml_score_writing" || mode === "ml_score_speaking") {
-    const g = await canScore(c); if (!g.ok) return c.json({ error: g.msg, pro: !!(g as any).pro }, 403);
-    return mode === "ml_score_writing" ? await scoreWriting(c) : await scoreSpeaking(c);
+    const kind = mode === "ml_score_writing" ? "writing" : "speaking";
+    const g: any = await canScore(c, kind); if (!g.ok) return c.json({ error: g.msg, pro: !!g.pro }, 403);
+    const r = kind === "writing" ? await scoreWriting(c) : await scoreSpeaking(c);
+    if (r.status !== 200) return r;
+    if (g.limited) { await c.SB.rpc("wd_ml_mark", { uid: g.uid, kind }); return await limitResp(r, kind); }
+    return r;
+  }
+  if (mode === "ml_start") {
+    const au = await adminUser(c); if (!au) return c.json({ error: "Avval WordDrop hisobingizga kiring" }, 401);
+    const { data, error } = await c.SB.rpc("wd_ml_claim", { uid: au.user.id, m: String(c.body.exam || "full") });
+    if (error || !data) return c.json({ error: "Boshlab bo'lmadi, qayta urinib ko'ring" }, 500);
+    return data.ok ? c.json(data) : c.json({ error: data.msg, pro: !!data.pro }, 403);
   }
   if (mode === "ml_access") {
     const au = await adminUser(c); if (!au) return c.json({ admin: false, pro: false, free_left: 0, signed: false });
-    if (au.isAdmin) return c.json({ admin: true, pro: true, free_left: 99, signed: true });
-    const { data: pro } = await c.SB.rpc("wd_is_pro", { uid: au.user.id });
-    const { count } = await c.SB.from("wd_ml_attempts").select("id", { count: "exact", head: true }).eq("user_id", au.user.id).in("mode", ["full", "writing", "speaking"]);
-    return c.json({ admin: false, pro: !!pro, free_left: pro ? 99 : Math.max(0, 1 - (count ?? 0)), signed: true });
+    const { data } = await c.SB.rpc("wd_ml_access", { uid: au.user.id });
+    return c.json(data || { admin: !!au.isAdmin, pro: !!au.isAdmin, free_left: 0, signed: true });
   }
   return c.json({ error: "Noma'lum ml rejim" }, 400);
 }

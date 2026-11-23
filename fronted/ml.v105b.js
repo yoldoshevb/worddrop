@@ -453,17 +453,26 @@ function run(){ try{ return JSON.parse(localStorage.getItem(LS_RUN)||'null'); }c
 function saveRun(r){ try{ if(r) localStorage.setItem(LS_RUN,JSON.stringify(r)); else localStorage.removeItem(LS_RUN); }catch(e){} }
 function renderLobby(){
   const sc=$(S.el,'#mlSc'); const A=S.access||{};
-  const ready=S.tests.filter(t=>t.status==='ready');
+  const PRO=!!(A.admin||A.pro);
+  const readyN=PRO?S.tests.filter(t=>t.status==='ready').length:(A.ready||0);
+  const ready={length:readyN};
   const r=run();
-  const canFull=A.signed&&(A.admin||A.pro||A.free_left>0);
+  const claim=A.claim||null;
+  /* v105: Multilevel — Pro. Bepul hisob: bitta urinish (to'liq yoki bitta bo'lim), cheklangan natija */
+  const can=m=>A.signed&&(PRO||A.free_left>0||(claim&&claim.mode===m));
+  const canFull=can('full');
+  const LOCK='<svg class="mll-lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></svg>';
   const access=!A.signed?`Imtihon topshirish uchun WordDrop hisobingizga kiring.`
     :A.admin?`Siz administratorsiz — barcha imtihonlar va AI baholash siz uchun doim bepul.`
-    :A.pro?`Pro: cheksiz sinov va Writing/Speaking bo'yicha AI baholash.`
-    :A.free_left>0?`Bitta to'liq sinov bepul. Keyingilari uchun — <button class="mll-link" id="mlPro">WordDrop Pro</button>. Listening va Reading mashqi doim bepul.`
-    :`Bepul to'liq sinov ishlatilgan. Listening va Reading mashqi bepul; Writing va Speaking baholash — <button class="mll-link" id="mlPro">WordDrop Pro</button>'da.`;
+    :A.pro?`Pro: cheksiz imtihonlar, Writing/Speaking bo'yicha to'liq AI baholash va chuqur tahlil.`
+    :A.free_left>0?`Sizda <b>bitta bepul urinish</b> bor: to'liq imtihon yoki bitta bo'lim. Bepul urinish natijasi cheklangan — ball va daraja, javoblarning bir qismi va qisqa xulosa.`
+    :claim?`Bepul urinishingiz boshlangan (${esc(SECN[claim.mode]||claim.mode)}) — uni oxiriga yetkazing.`
+    :`Bepul urinishingiz ishlatilgan. Yangi imtihonlar — <button class="mll-link" id="mlPro">WordDrop Pro</button>'da.`;
+  const proCard=A.signed&&!PRO?`<div class="mll-procard"><div><b>Multilevel — WordDrop Pro imkoniyati</b><small>Cheksiz imtihonlar, har bir javob tahlili, Writing va Speaking bo'yicha to'liq AI baholash, chuqur tahlil va shaxsiy reja.</small></div><button class="mll-btn pri" id="mlPro2">Pro'ni ko'rish</button><button class="mll-link" id="mlInv">yoki 3 do'st taklif qiling — 7 kun Pro</button></div>`:'';
   sc.innerHTML=`<div class="mll-in">
     <h1 class="mll-h1">Haqiqiy imtihon sharoitida o'zingizni sinang</h1>
     <p class="mll-p">Multilevel (CEFR) imtihonining to'liq formati: 4 bo'lim, rasmiy vaqt va savollar soni. Audio ikki marta eshittiriladi, to'xtatib bo'lmaydi. Oxirida 75 ballik shkalada natija va har bir javob tahlili.</p>
+    ${proCard}
     ${r?`<div class="mll-card mll-resume"><div><b>Tugallanmagan imtihon</b><small>${esc(r.title||'')} · ${esc(SECN[r.sec]||'')} bo'limidan davom etasiz</small></div><button class="mll-btn pri" id="mlRes">Davom ettirish</button><button class="mll-btn bad" id="mlDrop">Bekor</button></div>`:''}
     <h2 class="mll-h2">Imtihon tuzilishi</h2>
     <table class="mll-fmt"><thead><tr><th>Bo'lim</th><th>Tarkibi</th><th>Vaqt</th></tr></thead><tbody>
@@ -472,15 +481,18 @@ function renderLobby(){
       <tr><td><b>Writing</b></td><td>Task 1.1 · 1.2 · Part 2<small>Norasmiy xat (~50), rasmiy xat (120–150), forum post (180–200)</small></td><td class="n">60 daq</td></tr>
       <tr><td><b>Speaking</b></td><td>Part 1.1 · 1.2 · 2 · 3<small>Savollar, rasmlarni solishtirish, rasm + 3 savol, munozara</small></td><td class="n">≈ 15 daq</td></tr>
     </tbody></table>
-    <button class="mll-go" id="mlFull" ${!canFull||!ready.length?'disabled':''}>To'liq imtihonni boshlash<span>≈ 3 soat</span></button>
-    <div class="mll-secs">${['listening','reading','writing','speaking'].map(k=>`<button class="mll-sec" data-sec="${k}" ${!A.signed||!ready.length?'disabled':''}><b>${SECN[k]}</b><small>${SECT[k]}</small></button>`).join('')}</div>
+    <button class="mll-go ${A.signed&&!canFull?'locked':''}" id="mlFull" ${!A.signed||!ready.length?'disabled':''}>${A.signed&&!canFull?LOCK:''}To'liq imtihonni boshlash<span>≈ 3 soat</span></button>
+    <div class="mll-secs">${['listening','reading','writing','speaking'].map(k=>`<button class="mll-sec ${A.signed&&!can(k)?'locked':''}" data-sec="${k}" ${!A.signed||!ready.length?'disabled':''}><b>${A.signed&&!can(k)?LOCK:''}${SECN[k]}</b><small>${SECT[k]}</small></button>`).join('')}</div>
     <p class="mll-note">${access}${!ready.length?' Hozircha imtihon variantlari tayyorlanmoqda.':''}</p>
     ${S.attempts.length?`<h2 class="mll-h2">Natijalarim</h2><div class="mll-hist">${S.attempts.map(histRow).join('')}</div>`:''}
     ${A.admin?adminHtml():''}
     <p class="mll-note">Sinov materiallari original, real imtihon savollari ko'chirilmagan. Natija taxminiy va rasmiy sertifikat o'rnini bosmaydi.</p></div>`;
-  const pro=$(sc,'#mlPro'); if(pro) pro.onclick=()=>{ if(window.__wdOpenPro) window.__wdOpenPro(); };
-  const full=$(sc,'#mlFull'); if(full) full.onclick=()=>startNew('full');
-  $$(sc,'[data-sec]').forEach(b=>b.onclick=()=>startNew(b.dataset.sec));
+  const openPro=()=>{ if(window.__wdOpenPro) window.__wdOpenPro(); };
+  ['#mlPro','#mlPro2'].forEach(id=>{ const b=$(sc,id); if(b) b.onclick=openPro; });
+  const inv=$(sc,'#mlInv'); if(inv) inv.onclick=()=>{ if(window.__wdOpenInvite) window.__wdOpenInvite(); };
+  const go=m=>{ if(!can(m)){ toast(claim?`Bepul urinishingiz ${SECN[claim.mode]||claim.mode} uchun boshlangan`:"Bepul urinish ishlatilgan — yangi imtihonlar Pro'da"); openPro(); return; } startNew(m); };
+  const full=$(sc,'#mlFull'); if(full) full.onclick=()=>go('full');
+  $$(sc,'[data-sec]').forEach(b=>b.onclick=()=>go(b.dataset.sec));
   const res=$(sc,'#mlRes'); if(res) res.onclick=()=>resume();
   const dr=$(sc,'#mlDrop'); if(dr) dr.onclick=()=>{ if(confirm("Tugallanmagan imtihon o'chirilsinmi?")){ saveRun(null); renderLobby(); } };
   $$(sc,'[data-att]').forEach(b=>b.onclick=()=>{ const a=S.attempts.find(x=>x.id===b.dataset.att); if(a) showStored(a); });
@@ -506,10 +518,18 @@ async function pickTest(){
 }
 async function loadTest(id){ try{ const {data}=await sb().from('wd_ml_tests').select('*').eq('id',id).single(); return data; }catch(e){ return null; } }
 async function startNew(mode,testId){
+  const A=S.access||{}; let limited=false;
+  if(!(A.admin||A.pro)){
+    if(!A.claim&&!confirm(`Bu sizning yagona bepul urinishingiz: ${mode==='full'?"to'liq imtihon (≈ 3 soat)":SECN[mode]+' bo\'limi'}.\nNatija cheklangan bo'ladi. Boshlaysizmi?`)) return;
+    const j=await mlApi({mode:'ml_start',exam:mode},20000);
+    if(j.__error){ toast(j.msg); if(j.pro&&window.__wdOpenPro) window.__wdOpenPro(); return; }
+    testId=j.test_id; limited=true;
+    S.access={...A,free_left:0,claim:{test_id:j.test_id,mode}};
+  }
   const T=testId?await loadTest(testId):await pickTest(); if(!T){ toast("Imtihon varianti topilmadi"); return; }
   const secs=mode==='full'?['listening','reading','writing','speaking']:[mode];
   const u=await uid();
-  const r={id:'r'+Date.now(),testId:T.id,title:T.title,mode,secs,sec:secs[0],cand:'WD-'+String(u||'000000').replace(/-/g,'').slice(-6).toUpperCase(),ans:{listening:{},reading:{},writing:{t11:'',t12:'',t2:''}},deadline:{},scores:{},detail:{}};
+  const r={id:'r'+Date.now(),testId:T.id,title:T.title,mode,secs,sec:secs[0],cand:'WD-'+String(u||'000000').replace(/-/g,'').slice(-6).toUpperCase(),ans:{listening:{},reading:{},writing:{t11:'',t12:'',t2:''}},deadline:{},scores:{},detail:{limited}};
   saveRun(r); try{ sb().rpc('wd_ml_use',{tid:T.id}); }catch(e){}
   examFlow(T,r);
 }
@@ -946,18 +966,25 @@ function renderResult(sh,T,mode,sc,det,at){
   const ov=sc.overall;
   const pct=v=>Math.round(Math.max(0,Math.min(75,v))/75*100);
   const h=[];
+  const lim=!(S.access&&(S.access.pro||S.access.admin))&&!window.__wdIsPro;   // v105: bepul — cheklangan natija
+  const LKROW=n=>`<div class="mlr-lockrow"><span>Qolgan ${n} ta javob tahlili, audio matnlari va izohlar — Pro'da</span><button class="mll-btn pri" data-mld-pro>Pro'ni ko'rish</button></div>`;
+  if(lim) h.push(`<div class="mlr-limited"><b>Bepul urinish — cheklangan natija</b><span>Ball va daraja to'liq hisoblangan. Har bir javob tahlili, Writing/Speaking bo'yicha batafsil izohlar va chuqur tahlil — WordDrop Pro'da.</span></div>`);
   h.push(`<div class="mlr-hero"><div class="mlr-big"><b>${esc(sc.level||'—')}</b><span>${ov!=null?`${ov} / 75 ball${mode==='full'?' · to\'rt bo\'lim o\'rtachasi':''}`:''}</span></div>
     ${ov!=null?`<div class="mlr-scale" role="img" aria-label="Ball shkalasi: ${ov} dan 75"><span class="m" style="left:${pct(ov)}%"></span>${[[38,'B1'],[51,'B2'],[65,'C1']].map(([v,l])=>`<span class="t" style="left:${pct(v)}%">${l} ${v}</span>`).join('')}</div>`:''}
     <div class="mlr-secs">${secs.map(k=>{ const s=sc[k]; return `<div class="mlr-sec"><small>${SECN[k]}</small><b>${s?s.score:'—'}</b><span>${s?esc(s.level)+(s.raw!=null?` · ${s.raw}/35`:''):(det[k+'Err']?'baholanmadi':'topshirilmagan')}</span><i style="--w:${s?pct(s.score):0}%"></i></div>`; }).join('')}</div>
     <p class="mlr-note">Listening va Reading: to'g'ri javoblar soni 75 ballik shkalaga taxminiy o'tkazildi (rasmiy imtihonda Rasch modeli ishlatiladi). Writing va Speaking: AI imtihonchi baholadi. Natija taxminiy — rasmiy sertifikat emas.</p></div>`);
   h.push(deepHtml(mode,sc,det,at));
   ['listening','reading'].forEach(k=>{ if(!det[k]) return;
-    h.push(`<details class="mlx-part" ${mode===k?'open':''}><summary>${SECN[k]} — javoblar tahlili (${sc[k].raw}/35)</summary><table class="mlr-rev"><thead><tr><th>#</th><th>Sizning javobingiz</th><th>To'g'ri javob</th><th></th></tr></thead><tbody>${det[k].map(x=>`<tr><td>${x.n}</td><td>${esc(x.u)||'<span style="color:#9AA6B4">—</span>'}</td><td>${esc(x.a)}</td><td class="${x.c?'ok':'no'}">${x.c?'✓':'✗'}</td></tr>`).join('')}</tbody></table>
-    ${k==='listening'?listeningScripts(T.listening):''}</details>`); });
-  if(det.writing){ const w=det.writing;
+    h.push(`<details class="mlx-part" ${mode===k?'open':''}><summary>${SECN[k]} — javoblar tahlili (${sc[k].raw}/35)</summary><table class="mlr-rev"><thead><tr><th>#</th><th>Sizning javobingiz</th><th>To'g'ri javob</th><th></th></tr></thead><tbody>${(lim?det[k].slice(0,5):det[k]).map(x=>`<tr><td>${x.n}</td><td>${esc(x.u)||'<span style="color:#9AA6B4">—</span>'}</td><td>${esc(x.a)}</td><td class="${x.c?'ok':'no'}">${x.c?'✓':'✗'}</td></tr>`).join('')}</tbody></table>
+    ${lim?LKROW(det[k].length-5):k==='listening'?listeningScripts(T.listening):''}</details>`); });
+  const brief=(name,x,list,lbl)=>`<details class="mlx-part" open><summary>${name} — AI imtihonchi xulosasi (${x.score}/75)</summary><p class="mll-p" style="margin:6px 0 12px">${esc(x.summary_uz||'')}</p>
+    <div class="mlr-brief">${(list||[]).map(t=>`<div><span>${lbl(t)}</span><b>${t.pts} / ${t.max}</b></div>`).join('')}</div>${LKROW(0).replace(/Qolgan 0 ta javob tahlili, audio matnlari va izohlar/,'Mezonlar bo\'yicha ball, xatolar tuzatilishi va namunaviy javob')}</details>`;
+  if(det.writing&&(lim||det.writing.limited)){ h.push(brief('Writing',sc.writing,det.writing.tasks,t=>`Task ${t.id==='2'?'Part 2':t.id}${t.words!=null?` · ${t.words} so'z`:''}`)); }
+  else if(det.writing){ const w=det.writing;
     h.push(`<details class="mlx-part" open><summary>Writing — AI imtihonchi xulosasi (${sc.writing.score}/75)</summary><p class="mll-p" style="margin:6px 0 12px">${esc(w.summary_uz)}</p>${(w.tasks||[]).map(t=>fbTask(t,{task:'Topshiriq',org:'Tuzilish',lex:'Lug\'at',gram:'Grammatika'},`Task ${t.id==='2'?'Part 2':t.id} · ${t.words} so'z`,t.model)).join('')}</details>`); }
   else if(det.writingErr) h.push(errCard('Writing',det.writingErr,det.writingPro));
-  if(det.speaking){ const s=det.speaking;
+  if(det.speaking&&(lim||det.speaking.limited)){ h.push(brief('Speaking',sc.speaking,det.speaking.parts,p=>`Part ${p.id}`)); }
+  else if(det.speaking){ const s=det.speaking;
     h.push(`<details class="mlx-part" open><summary>Speaking — AI imtihonchi xulosasi (${sc.speaking.score}/75)</summary><p class="mll-p" style="margin:6px 0 12px">${esc(s.summary_uz)}</p>${(s.parts||[]).map(p=>fbTask(p,{flu:'Ravonlik',lex:'Lug\'at',gram:'Grammatika',task:'Mazmun'},`Part ${p.id}`,p.better)).join('')}
       <h4 style="margin:12px 0 6px">Javoblaringiz</h4>${(s.items||[]).map((it,i)=>`<div class="mlr-fb"><b>Part ${esc(it.part)}</b> — ${esc(it.q)}<div class="mlr-scr">${esc(it.text||'(nutq aniqlanmadi)')}</div>${det.speakAudio&&det.speakAudio[i]?`<audio controls src="${det.speakAudio[i]}" style="width:100%"></audio>`:''}<small style="color:#5E6B7A">${it.sec} s · ${words(it.text)} so'z</small></div>`).join('')}</details>`); }
   else if(det.speakingErr) h.push(errCard('Speaking',det.speakingErr,det.speakingPro));
@@ -1063,6 +1090,15 @@ function deepHtml(mode,sc,det,at){
         <button class="mld-cta" data-mld-pro>WordDrop Pro'ni ko'rish</button><button class="mld-inv" data-mld-inv>yoki 3 do'st taklif qiling — 7 kun Pro bepul</button></div></div></section>`;
 }
 const DEEP_CSS=`
+.mll-procard{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 14px;margin:16px 0 4px;padding:16px;border-radius:16px;color:#fff;background:linear-gradient(120deg,#2F6FED,#7B3CFF 60%,#C23BFF);box-shadow:0 12px 28px -14px rgba(91,60,255,.7)}
+.mll-procard b{display:block;font-size:16px}.mll-procard small{display:block;font-size:13px;line-height:1.45;opacity:.9;margin-top:4px}
+.mll-procard .mll-btn{background:#fff;color:#3B2CF0;border:none}.mll-procard .mll-link{grid-column:1/-1;justify-self:start;color:#fff;opacity:.92}
+.mll-go.locked,.mll-sec.locked{opacity:.78}.mll-lk{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px}
+.mlr-limited{border-radius:14px;padding:12px 14px;margin-bottom:12px;background:#FFF7E6;border:1px solid #FFD98A}
+.mlr-limited b{display:block;font-size:14.5px;color:#7A4B00}.mlr-limited span{display:block;font-size:13px;line-height:1.5;color:#6B5520;margin-top:3px}
+.mlr-lockrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:10px 0 4px;padding:12px 14px;border-radius:12px;background:linear-gradient(120deg,#EEF3FF,#F4EEFF);font-size:13.5px;color:#33475B}
+.mlr-brief{display:flex;flex-direction:column;gap:6px}.mlr-brief div{display:flex;justify-content:space-between;background:#fff;border:1px solid #E1E6EC;border-radius:10px;padding:9px 12px;font-size:14px}
+@media (max-width:640px){.mll-procard{grid-template-columns:1fr}}
 .mld{background:#fff;border:1px solid #D9DFE6;border-radius:16px;padding:18px;margin:14px 0}
 .mld-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .mld-tag{font-size:17px;font-weight:800;letter-spacing:-.01em;color:#141B24}
@@ -1106,7 +1142,7 @@ const DEEP_CSS=`
 @media (prefers-reduced-motion:reduce){.mld-bar i,.mld-cta{animation:none}}
 `;
 function fbTask(t,crit,title,model){
-  return `<div class="mlr-fb"><h4><span>${esc(title)}</span><span>${t.pts} / ${t.max}</span></h4><div class="mlr-crit">${Object.entries(crit).map(([k,l])=>`<div><b>${t[k]}/6</b>${l}</div>`).join('')}</div>
+  return `<div class="mlr-fb"><h4><span>${esc(title)}</span><span>${t.pts} / ${t.max}</span></h4>${Object.keys(crit).some(k=>t[k]!=null)?`<div class="mlr-crit">${Object.entries(crit).map(([k,l])=>`<div><b>${t[k]}/6</b>${l}</div>`).join('')}</div>`:''}
     ${t.good_uz?`<p><b>Yaxshi:</b> ${esc(t.good_uz)}</p>`:''}${t.fix_uz?`<p><b>Yaxshilash:</b> ${esc(t.fix_uz)}</p>`:''}
     ${(t.corr||[]).length?`<ul class="mlr-corr">${t.corr.map(c=>`<li><s>${esc(c.wrong)}</s> → <ins>${esc(c.right)}</ins><br><small style="color:#5E6B7A">${esc(c.uz)}</small></li>`).join('')}</ul>`:''}
     ${model?`<details><summary>Namunaviy javob</summary><div class="mlr-model">${esc(model)}</div></details>`:''}</div>`;

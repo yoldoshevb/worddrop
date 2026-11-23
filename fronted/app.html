@@ -659,7 +659,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.30422533.js"></script>
+<script src="app.svg-ikonkalar.71926d67.js"></script>
 <script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
 <script>
 /* ==================================================================
@@ -938,13 +938,13 @@ const I={
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'};
 const IBK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
 const PERKS=[
-  ['chart',"Multilevel chuqur tahlil","Har bir qism va savol turi bo'yicha zaif joylar, imlo tufayli yo'qotilgan ballar, o'sish grafigi va shaxsiy reja. Writing va Speaking cheksiz AI baholanadi.",'deep'],
+  ['chart',"Multilevel imtihonlari va chuqur tahlil","Cheksiz sinov imtihonlari, har bir javob tahlili, Writing va Speaking bo'yicha to'liq AI baholash, zaif joylar, o'sish grafigi va shaxsiy reja. Bepul hisobda — bitta cheklangan urinish.",'deep'],
   ['ai',"Drop AI — kuniga 100 ta savol","Grammatika, tarjima, Speaking mashqi va ovozli javoblar. Bepul hisobda 20 ta.",'meter'],
   ['book',"Pro kitobchalar","Kuchliroq AI tuzadi, muharrir tarjima va javoblarni tekshiradi. Pro muqovalar va bosmaxona sifatidagi PDF."],
   ['week',"Haftalik shaxsiy kitobcha","Drop eng ko'p adashgan so'zlaringizdan 7 kunlik takror kitobchasini tuzadi."],
   ['shield',"Seriya himoyasi","Har oy 2 ta streak muzlatgich. Bir-ikki kun kira olmasangiz ham seriya saqlanadi."],
   ['ring',"Pro ramka va ranglar","«Pro tomchi» ramkasi, barcha ramka va ism ranglari, profilda Pro belgisi."]];
-const CMP=[["Darslar, so'zlar, takrorlash","✓","✓"],["Multilevel natijasi","Ball va javoblar","Chuqur tahlil"],["Writing/Speaking AI bahosi","1 marta","Cheksiz"],["Drop AI savollari","20 / kun","100 / kun"],["Kitobcha sifati","Oddiy","Pro"],["Haftalik kitobcha","—","✓"],["Streak muzlatgich","Do'kondan","2 ta / oy"],["Ramka va ranglar","Do'kondan","Hammasi"]];
+const CMP=[["Darslar, so'zlar, takrorlash","✓","✓"],["Multilevel imtihonlari","1 marta","Cheksiz"],["Multilevel natijasi","Ball va daraja","To'liq tahlil"],["Drop AI savollari","20 / kun","100 / kun"],["Kitobcha sifati","Oddiy","Pro"],["Haftalik kitobcha","—","✓"],["Streak muzlatgich","Do'kondan","2 ta / oy"],["Ramka va ranglar","Do'kondan","Hammasi"]];
 const FAQ=[
   ["Telegram Stars nima?","Telegram ichidagi raqamli to'lov birligi. To'lov oynasida yetmasa, o'sha yerning o'zida sotib olasiz — karta raqamini WordDrop ko'rmaydi."],
   ["Obunani qanday bekor qilaman?","Shu sahifada «Obunani bekor qilish» tugmasi yoki botda /pro. Pro to'langan muddat oxirigacha ishlaydi, keyin pul yechilmaydi."],
@@ -2699,7 +2699,7 @@ try{
 <script>
 /* v101: Multilevel imtihoni alohida faylda — faqat ochilganda yuklanadi */
 (function(){
-  const SRC='ml.v105.js'; let p=null;
+  const SRC='ml.v105b.js'; let p=null;
   function load(){ if(window.WDML) return Promise.resolve(); if(p) return p;
     p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=SRC; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenML=async function(){ try{ await load(); window.WDML.open(); }catch(e){ try{ showToast("Imtihon moduli yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };
