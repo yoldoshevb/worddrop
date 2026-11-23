@@ -27,17 +27,66 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="WordDrop">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script>
+/* v102: splash — saqlangan qorong'i rejimni sahifa chizilishidan oldin qo'llaymiz (miltillamasin) */
+(function(){ try{ var r=localStorage.getItem('worddrop_state_v1')||''; if(/"darkMode"\s*:\s*true/.test(r)) document.documentElement.classList.add('wd-boot-dark'); }catch(e){} })();
+</script>
+<style>
+/* ===== SPLASH v102 — HTML ichida (katta CSS faylini kutmaydi) ===== */
+#splash{--sp-bg:#F4F7FD;--sp-ink:#0F1B3D;--sp-mute:#66708A;--sp-el:#2F6FED;--sp-track:#DCE5F5;--sp-chip:#FFFFFF;--sp-chipb:#E1E8F5;
+  position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--sp-bg);color:var(--sp-ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding:24px;transition:opacity .45s ease,visibility .45s;-webkit-font-smoothing:antialiased}
+.wd-boot-dark #splash{--sp-bg:#0F1420;--sp-ink:#EDF0F7;--sp-mute:#8A93A6;--sp-el:#4C87FF;--sp-track:#232B40;--sp-chip:#1A2032;--sp-chipb:#2A3145}
+#splash.leaving{opacity:0;visibility:hidden;pointer-events:none}
+.sp-stage{position:relative;width:240px;height:232px}
+/* so'z kartochkalari qutidan chiqib, yuqoriga ko'tariladi */
+.sp-words{position:absolute;left:50%;top:0;width:0;height:150px;z-index:2}
+.sp-w{position:absolute;left:0;bottom:0;transform:translate(-50%,28px) scale(.7);opacity:0;white-space:nowrap;
+  background:var(--sp-chip);border:1px solid var(--sp-chipb);border-radius:12px;padding:7px 12px;
+  box-shadow:0 6px 18px rgba(15,27,61,.10);font-size:13px;line-height:1.2;color:var(--sp-mute)}
+.sp-w b{font-family:"Bricolage Grotesque",Inter,sans-serif;font-weight:700;font-size:15px;color:var(--sp-ink);margin-right:6px;letter-spacing:-.01em}
+#splash.go .sp-w{animation:spRise .7s cubic-bezier(.2,.9,.3,1.3) both}
+/* yelpig'ich: har kartochka o'z joyida qoladi */
+.sp-w:nth-child(1){--x:-46px;--y:-104px;--r:-6deg}
+.sp-w:nth-child(2){--x:44px;--y:-70px;--r:5deg}
+.sp-w:nth-child(3){--x:-10px;--y:-34px;--r:-2deg}
+#splash.go .sp-w:nth-child(1){animation-delay:.5s}
+#splash.go .sp-w:nth-child(2){animation-delay:.72s}
+#splash.go .sp-w:nth-child(3){animation-delay:.94s}
+@keyframes spRise{0%{opacity:0;transform:translate(-50%,30px) scale(.6) rotate(0)}
+  100%{opacity:1;transform:translate(calc(-50% + var(--x)),var(--y)) scale(1) rotate(var(--r))}}
+.sp-box{position:absolute;left:50%;bottom:0;width:132px;height:120px;transform:translateX(-50%)}
+.sp-box svg{width:100%;height:100%;overflow:visible}
+.sp-lid{transform-box:fill-box;transform-origin:20% 100%}
+#splash.go .sp-box{animation:spIn .55s cubic-bezier(.2,.9,.3,1.25) both}
+#splash.go .sp-lid{animation:spLid .5s .35s cubic-bezier(.3,.8,.3,1.2) both}
+@keyframes spIn{0%{opacity:0;transform:translateX(-50%) translateY(14px) scale(.86)}100%{opacity:1;transform:translateX(-50%)}}
+@keyframes spLid{0%{transform:none}100%{transform:translate(-6px,-12px) rotate(-16deg)}}
+.sp-name{margin-top:22px;font-family:"Bricolage Grotesque",Inter,sans-serif;font-weight:800;font-size:38px;letter-spacing:-.03em;line-height:1}
+.sp-name span{color:var(--sp-el)}
+.sp-load{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:10px;min-height:46px}
+.sp-track{width:168px;height:4px;border-radius:4px;background:var(--sp-track);overflow:hidden}
+.sp-track i{display:block;height:100%;width:8%;border-radius:4px;background:var(--sp-el);transition:width .5s cubic-bezier(.3,.7,.3,1)}
+.sp-msg{font-size:13px;color:var(--sp-mute);text-align:center;min-height:16px}
+.sp-slow{display:none;margin-top:4px;border:1.5px solid var(--sp-chipb);background:var(--sp-chip);color:var(--sp-ink);
+  font:600 14px Inter,sans-serif;padding:10px 18px;border-radius:12px;cursor:pointer}
+#splash.slow .sp-slow{display:block}
+.sp-slow:focus-visible{outline:2px solid var(--sp-el);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#splash.go .sp-box,#splash.go .sp-lid,#splash.go .sp-w{animation:none}
+  .sp-w{opacity:1;transform:translate(calc(-50% + var(--x)),var(--y)) rotate(var(--r))}}
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=Shadows+Into+Light&family=Homemade+Apple&family=Architects+Daughter&display=swap" rel="stylesheet">
 <!-- WordDrop Sertifikat — kutubxonalar (QR + PDF eksport) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="signature-data.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="signature-data.js" defer></script>
 <script src="cert.js" defer onerror="window.__wdCertLoadFailed=true"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<link rel="stylesheet" href="app.tokens.08d5535b.css">
+<link rel="stylesheet" href="app.tokens.51a7347b.css">
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
 .side-brand{display:none}
@@ -206,106 +255,74 @@
 </script>
 </head>
 <body>
-<!-- SPLASH -->
-<div id="splash">
-  <i class="sdust"></i><i class="sdust"></i><i class="sdust"></i><i class="sdust"></i>
-  <div class="smark">
-    <svg viewBox="0 0 170 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="bxF" x1="0" y1="0" x2="0.85" y2="1">
-          <stop offset="0" stop-color="#5C93FF"/><stop offset="1" stop-color="#1B4FCB"/></linearGradient>
-        <linearGradient id="bxS" x1="0" y1="0" x2="1" y2="0.6">
-          <stop offset="0" stop-color="#2E63D8"/><stop offset="1" stop-color="#123C9E"/></linearGradient>
-        <linearGradient id="bxLid" x1="0.1" y1="0" x2="0.9" y2="1">
-          <stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#EEF5FF"/>
-          <stop offset="1" stop-color="#D3E4FF"/></linearGradient>
-        <linearGradient id="bxTrim" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C6DBFF"/></linearGradient>
-        <radialGradient id="bxSheen" cx="42%" cy="26%" r="62%">
-          <stop offset="0" stop-color="#fff" stop-opacity=".42"/>
-          <stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-        <!-- Ichki chuqurlik soyalari (ambient occlusion) -->
-        <linearGradient id="aoF" x1="0" y1="0" x2="0.25" y2="1">
-          <stop offset="0" stop-color="#0A2A6E" stop-opacity=".30"/>
-          <stop offset=".32" stop-color="#0A2A6E" stop-opacity=".10"/>
-          <stop offset=".72" stop-color="#0A2A6E" stop-opacity="0"/>
-          <stop offset="1" stop-color="#061C4E" stop-opacity=".22"/></linearGradient>
-        <linearGradient id="aoS" x1="1" y1="0" x2="0.2" y2="1">
-          <stop offset="0" stop-color="#04143A" stop-opacity=".34"/>
-          <stop offset=".38" stop-color="#04143A" stop-opacity=".14"/>
-          <stop offset="1" stop-color="#04143A" stop-opacity=".24"/></linearGradient>
-        <linearGradient id="aoLid" x1="0.5" y1="0" x2="0.5" y2="1">
-          <stop offset="0" stop-color="#7FA5DC" stop-opacity="0"/>
-          <stop offset="1" stop-color="#5C82BC" stop-opacity=".30"/></linearGradient>
-        <clipPath id="cLid"><path d="M85 20 L133 46 L85 72 L37 46 Z"/></clipPath>
-        <clipPath id="cF"><path d="M85 74 L133 48 L133 104 L85 130 Z"/></clipPath>
-        <clipPath id="cS"><path d="M37 48 L85 74 L85 130 L37 104 Z"/></clipPath>
-      </defs>
-      <g class="bxBody">
-        <!-- ===== QOPQOQ (oq-metall panel) ===== -->
-        <path d="M85 20 L133 46 L85 72 L37 46 Z" fill="url(#bxLid)"/>
-        <g clip-path="url(#cLid)">
-          <path d="M85 20 L133 46 L85 72 L37 46 Z" fill="url(#aoLid)"/>
+<!-- SPLASH v102: quti ochiladi va undan foydalanuvchining o'z so'zlari chiqadi; yuklanish haqiqiy bosqichlarga bog'langan -->
+<div id="splash" role="status" aria-live="polite" aria-label="WordDrop yuklanmoqda">
+  <div class="sp-stage" aria-hidden="true">
+    <div class="sp-words" id="spWords"></div>
+    <div class="sp-box">
+      <svg viewBox="0 0 132 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- ichki qorong'i qism (qopqoq ochilganda ko'rinadi) -->
+        <path d="M66 30 L118 54 L66 78 L14 54 Z" fill="#163C99"/>
+        <!-- chap yuza -->
+        <path d="M14 54 L66 78 L66 118 L14 94 Z" fill="#2459D8"/>
+        <!-- o'ng yuza -->
+        <path d="M66 78 L118 54 L118 94 L66 118 Z" fill="#3B74F0"/>
+        <path d="M66 78 L118 54" stroke="#9CC0FF" stroke-width="1.5" opacity=".7"/>
+        <!-- o'ng yuzadagi tomchi belgisi -->
+        <g transform="translate(92 86) skewY(-24.8)">
+          <path d="M0 -11 C5 -4 8 0 8 4 a8 8 0 0 1 -16 0 C-8 0 -5 -4 0 -11 Z" fill="#fff" opacity=".95"/>
+          <path d="M-5 5 a5.4 5.4 0 0 0 10 0 Z" fill="#3B74F0" opacity=".55"/>
         </g>
-        <path d="M85 24.5 L127 46 L85 67.5 L43 46 Z" fill="none"
-              stroke="#8FB4EE" stroke-opacity=".55" stroke-width="1.4"/>
-        <!-- qopqoq qalinligi -->
-        <path d="M37 46 L85 72 L85 77 L37 51 Z" fill="#C2D8F7"/>
-        <path d="M133 46 L85 72 L85 77 L133 51 Z" fill="#A9C6EE"/>
-        <!-- ===== O'NG YUZA: WordDrop paneli ===== -->
-        <path d="M85 74 L133 48 L133 104 L85 130 Z" fill="url(#bxF)"/>
-        <g clip-path="url(#cF)">
-          <path d="M85 74 L133 48 L133 104 L85 130 Z" fill="url(#bxSheen)"/>
-          <path d="M85 74 L133 48 L133 104 L85 130 Z" fill="url(#aoF)"/>
-          <!-- diagonal naqsh -->
-          <g stroke="#fff" stroke-opacity=".08" stroke-width="1.6">
-            <path d="M88 132 L136 78"/><path d="M96 136 L144 82"/><path d="M80 128 L128 74"/>
-            <path d="M72 124 L120 70"/><path d="M104 140 L152 86"/>
-          </g>
-          <!-- oq ramka -->
-          <path d="M89 80 L129 58 L129 98 L89 120 Z" fill="none"
-                stroke="#fff" stroke-opacity=".34" stroke-width="3"/>
-          <!-- yozuv (perspektivada) -->
-          <g transform="translate(109,90) skewY(-28.5)">
-            <text x="0" y="-4" text-anchor="middle" fill="#fff" fill-opacity=".96"
-                  font-family="Inter,-apple-system,sans-serif" font-size="7.2" font-weight="800"
-                  letter-spacing="-0.2">WordDrop</text>
-            <text x="0" y="4.5" text-anchor="middle" fill="#fff" fill-opacity=".7"
-                  font-family="Inter,-apple-system,sans-serif" font-size="3.6" font-weight="700"
-                  letter-spacing="0.2">New Vocabularies</text>
-            <g fill="#fff" fill-opacity=".42">
-              <circle cx="-8" cy="11" r="1.1"/><circle cx="-4" cy="11" r="1.1"/>
-              <circle cx="0" cy="11" r="1.1"/><circle cx="4" cy="11" r="1.1"/><circle cx="8" cy="11" r="1.1"/>
-            </g>
-          </g>
+        <!-- qopqoq -->
+        <g class="sp-lid">
+          <path d="M66 26 L120 51 L66 76 L12 51 Z" fill="#6E9BFF"/>
+          <path d="M12 51 L66 76 L66 81 L12 56 Z" fill="#2B60DB"/>
+          <path d="M120 51 L66 76 L66 81 L120 56 Z" fill="#4A80F5"/>
+          <path d="M66 31 L110 51 L66 71 L22 51 Z" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.4"/>
         </g>
-        <!-- ===== CHAP YUZA ===== -->
-        <path d="M37 48 L85 74 L85 130 L37 104 Z" fill="url(#bxS)"/>
-        <g clip-path="url(#cS)">
-          <path d="M37 48 L85 74 L85 130 L37 104 Z" fill="url(#aoS)"/>
-          <g stroke="#fff" stroke-opacity=".07" stroke-width="1.6">
-            <path d="M34 56 L82 136"/><path d="M42 52 L90 132"/><path d="M26 60 L74 140"/>
-          </g>
-          <path d="M41 56 L81 78 L81 120 L41 98 Z" fill="none"
-                stroke="#fff" stroke-opacity=".22" stroke-width="2.6"/>
-        </g>
-        <!-- ===== METALL CHAMBARLAR (corner trim) ===== -->
-        <g stroke="url(#bxTrim)" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".92">
-          <path d="M85 74 L85 130"/>
-          <path d="M37 48 L37 104"/>
-          <path d="M133 48 L133 104"/>
-          <path d="M37 104 L85 130 L133 104"/>
-        </g>
-        <g stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".75">
-          <path d="M37 48 L85 74 L133 48"/>
-        </g>
-      </g>
-    </svg>
+      </svg>
+    </div>
   </div>
-  <div class="stit">WordDrop</div>
-  <div class="stag">Ingliz tilini bosqichma-bosqich o'rganing</div>
-  <div class="sbar"><i></i><b></b></div>
+  <div class="sp-name">Word<span>Drop</span></div>
+  <div class="sp-load">
+    <div class="sp-track" role="progressbar" aria-label="Yuklanish" aria-valuemin="0" aria-valuemax="100"><i id="spBar"></i></div>
+    <div class="sp-msg" id="spMsg">Ilova ochilmoqda…</div>
+    <button class="sp-slow" id="spSkip" type="button">Davom etish</button>
+  </div>
 </div>
+<script>
+/* Splash boshqaruvi: so'zlar — foydalanuvchining o'z lug'atidan; progress — haqiqiy bosqichlar */
+(function(){
+  var sp=document.getElementById('splash'); if(!sp) return;
+  var t0=Date.now(), MIN=1300, SLOW=7000, MAX=12000;
+  var esc=function(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var pairs=[["drop","tomchi"],["learn","o'rganmoq"],["grow","o'smoq"]], mine=false;
+  try{
+    var st=JSON.parse(localStorage.getItem('worddrop_state_v1')||'null');
+    var all=st&&st.srs?Object.keys(st.srs).map(function(k){ return st.srs[k]; }).filter(function(x){ return x&&x.t&&x.tr&&String(x.t).length<=16&&String(x.tr).length<=18; }):[];
+    if(all.length>=3){ pairs=[]; while(pairs.length<3&&all.length){ var x=all.splice(Math.floor(Math.random()*all.length),1)[0]; pairs.push([x.t,x.tr]); } mine=true; }
+  }catch(e){}
+  document.getElementById('spWords').innerHTML=pairs.map(function(p){ return '<span class="sp-w"><b>'+esc(p[0])+'</b>'+esc(p[1])+'</span>'; }).join('');
+  sp.classList.add('go');
+  var bar=document.getElementById('spBar'), msg=document.getElementById('spMsg'), pb=sp.querySelector('[role=progressbar]');
+  var stage=function(p,text){ bar.style.width=Math.round(p*100)+'%'; pb.setAttribute('aria-valuenow',Math.round(p*100)); if(text) msg.textContent=text; };
+  stage(.18, mine?"So'zlaringiz tayyorlanmoqda…":'Ilova ochilmoqda…');
+  var done=false;
+  function finish(){ if(done) return; done=true; stage(1,'Tayyor');
+    var go=function(){ if(typeof window.__wdHideSplash==='function') window.__wdHideSplash(); else { sp.classList.add('leaving'); var a=document.getElementById('app'); if(a) a.classList.add('visible'); setTimeout(function(){ sp.remove(); },500); } };
+    setTimeout(go, Math.max(0, MIN-(Date.now()-t0)) + 180);
+  }
+  function whenReady(){
+    stage(.62,'Darslar yuklanmoqda…');
+    var sb=window.__sbReady, fin=function(){ stage(.9,'Hisob tekshirilmoqda…'); finish(); };
+    if(sb&&sb.then){ var tm=setTimeout(fin,2500); sb.then(function(){ clearTimeout(tm); fin(); },function(){ clearTimeout(tm); fin(); }); } else fin();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',whenReady); else whenReady();
+  setTimeout(function(){ if(!done){ sp.classList.add('slow'); msg.textContent="Internet sekin — biroz kuting yoki davom eting"; } }, SLOW);
+  setTimeout(finish, MAX);
+  document.getElementById('spSkip').onclick=finish;
+})();
+</script>
 <!-- APP -->
 <div id="app">
   <div class="screens" id="screens">
@@ -537,7 +554,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.1eccf30f.js"></script>
+<script src="app.svg-ikonkalar.3e26d012.js"></script>
 <script src="app.kitobcha-studiyasi-v94.6b608a29.js"></script>
 <script>
 /* ==================================================================

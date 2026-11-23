@@ -1,7 +1,7 @@
 
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v101c';
+window.__wdVer='v102';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -1501,17 +1501,16 @@ function speak(term){
 }
 
 /* ========== SPLASH ========== */
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    document.getElementById('splash').classList.add('leaving');
-    document.getElementById('app').classList.add('visible');
-    setTimeout(()=>document.getElementById('splash').remove(), 650);
-    // Splash tugagach: kirmagan mehmonga xush kelibsiz ekrani.
-    // Supabase javobini biroz kutamiz (kirgan foydalanuvchiga ko'rsatmaslik uchun).
-    setTimeout(maybeShowWelcome, 400);
-    setTimeout(function(){ try{ maybeShowRegNudge(); }catch(e){} }, 1800);
-  }, 2600);
-});
+/* v102: splash ilova tayyor bo'lganda yopiladi (boshqaruvi splash ichidagi skriptda) */
+window.__wdHideSplash=function(){
+  if(window.__wdHideSplash.done) return; window.__wdHideSplash.done=true;
+  const sp=document.getElementById('splash'); if(sp) sp.classList.add('leaving');
+  document.getElementById('app').classList.add('visible');
+  setTimeout(()=>{ const x=document.getElementById('splash'); if(x) x.remove(); }, 500);
+  // Splash tugagach: kirmagan mehmonga xush kelibsiz ekrani (Supabase javobini biroz kutamiz)
+  setTimeout(maybeShowWelcome, 400);
+  setTimeout(function(){ try{ maybeShowRegNudge(); }catch(e){} }, 1800);
+};
 
 /* Xush kelibsiz ekrani — faqat hisobga kirmagan va ilk marta ochgan mehmonga */
 function maybeShowWelcome(){
