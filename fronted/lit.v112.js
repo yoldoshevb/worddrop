@@ -25,6 +25,7 @@ const isPro=()=>!!(window.__wdIsPro||S.canAll);
 
 /* ---------- ikonlar ---------- */
 const I={
+  warn:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
   x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   aa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19l5-13 5 13M4.8 14.5h6.4M14.5 19l3.2-8.5 3.3 8.5M15.6 16.3h4.3"/></svg>',
@@ -194,7 +195,7 @@ function renderWork(id){
         <h1>${esc(w.title)}</h1>
         ${m.title_uz?`<p class="lw-uz">${esc(m.title_uz)}${m.orig_title?` <span>(${esc(m.orig_title)})</span>`:''}</p>`:''}
         <p class="lw-by">${esc(w.author)}${w.year?', '+w.year:''}</p>
-        <div class="lw-facts"><span class="lt-tag ${w.edition}">${w.edition==='study'?"O'quv nashri":"To'liq matn"}</span>${w.level?`<span>${esc(w.level)}</span>`:''}<span>${w.toc.length} bob</span><span>~${mins(w.words)} daqiqa</span></div>
+        <div class="lw-facts"><span class="lt-tag ${w.edition}">${w.edition==='study'?"O'quv nashri":"To'liq matn"}</span>${w.level?`<span>${esc(w.level)}</span>`:''}<span>${w.toc.length} bob</span><span>~${mins(w.words)} daqiqa</span>${m.warn_uz?`<span class="lw-wtag" data-warn>${I.warn} Ogohlantirish</span>`:''}</div>
         <button class="lt-cta" data-start>${started?`Davom ettirish: ${p.cur+1}-bob`:"O'qishni boshlash"}</button>
         ${pct(w)?`<div class="lw-pg"><i class="lt-bar"><i style="width:${pct(w)}%"></i></i><span>${pct(w)}% o'qildi</span></div>`:''}
       </div>
@@ -205,6 +206,7 @@ function renderWork(id){
       ${!isPro()?`<div class="lw-pro"><b>Barcha boblar — Pro'da</b><p>Birinchi bob hammaga ochiq. Pro bilan barcha asarlarning har bir bobi, tarjimasi, lug'ati va savollari ochiladi.</p><button data-pro>Pro'ni ko'rish</button></div>`:''}
     </section>
     <section class="lw-pane" data-pane="about" hidden>
+      ${m.warn_uz?`<div class="lw-note lw-warn"><b>Ogohlantirish</b><p>${esc(m.warn_uz)} ${WARN_GEN}</p></div>`:''}
       ${m.blurb_uz?`<p class="lw-lead">${esc(m.blurb_uz)}</p>`:''}
       ${m.why_uz?`<h3>Nega o'qish kerak</h3><p>${esc(m.why_uz)}</p>`:''}
       ${m.author_uz?`<h3>Muallif</h3><p>${esc(m.author_uz)}</p>`:''}
@@ -218,11 +220,24 @@ function renderWork(id){
   $(el,'[data-start]').onclick=()=>openChap(id,started?p.cur:0);
   $$(el,'[data-ch]').forEach(b=>b.onclick=()=>openChap(id,+b.dataset.ch));
   const pb=$(el,'[data-pro]'); if(pb) pb.onclick=openPro;
+  const wt=$(el,'[data-warn]'); if(wt) wt.onclick=()=>warnSheet(w,()=>openChap(id,started?p.cur:0));
   $$(el,'[data-tab]').forEach(b=>b.onclick=()=>{ $$(el,'[data-tab]').forEach(x=>x.classList.toggle('on',x===b)); $$(el,'[data-pane]').forEach(x=>x.hidden=x.dataset.pane!==b.dataset.tab); });
 }
 function openPro(){ if(window.__wdOpenPro) window.__wdOpenPro(); else toast("Pro bo'limi topilmadi"); }
+const WARN_GEN="Asar o'z davrining mahsuli: unda bugun noto'g'ri, kamsituvchi yoki og'ir deb hisoblanadigan qarashlar va sahnalar uchrashi mumkin. Matn adabiy va tarixiy qadri uchun o'zgartirilmasdan berilgan. Bu qarashlar muallif va uning davriga tegishli — WordDrop ularni qo'llab-quvvatlamaydi va ular o'quvchida uyg'otishi mumkin bo'lgan noqulaylik uchun javobgar emas.";
+function warnSheet(w,go){
+  const m=w.meta||{};
+  sheet(`<div class="ls-lock"><div class="ls-li ls-warn">${I.warn}</div><h3>O'qishdan oldin</h3>
+    <p class="lw-wsp">${esc(m.warn_uz)}</p><p>${WARN_GEN}</p>
+    <button class="lt-cta" data-ok>Tushundim, o'qishni boshlash</button>
+    <button class="lt-ghost" data-no>Hozircha emas</button></div>`, sh=>{
+    $(sh,'[data-ok]').onclick=()=>{ const a=ls('wd_lit_warn',{}); a[w.id]=1; lsSet('wd_lit_warn',a); closeSheet(); go(); };
+    $(sh,'[data-no]').onclick=closeSheet;
+  });
+}
 function openChap(id,idx){
   const w=S.works.find(x=>x.id===id); const c=w&&w.toc[idx]; if(!c) return;
+  if(w.meta&&w.meta.warn_uz&&!ls('wd_lit_warn',{})[id]){ warnSheet(w,()=>openChap(id,idx)); return; }
   if(!c.free&&!isPro()){ lockSheet(w,c); return; }
   push('read',{id,idx});
 }
@@ -579,7 +594,10 @@ function css(){
 .lw-dl{margin:0;display:grid;grid-template-columns:minmax(110px,max-content) 1fr;gap:10px 16px;font-size:14.5px;line-height:1.55}
 .lw-dl dt{font-weight:700}.lw-dl dd{margin:0;color:var(--uzc)}
 .lw-note{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:14px 16px;background:var(--sur)}
-.lw-note b{font-size:14px}.lw-note p{font-size:14px!important;color:var(--mut);margin-top:4px!important}
+.lw-note b{font-size:14px}.lw-warn{border-color:#d9a23a;background:color-mix(in srgb,#f4b942 10%,var(--sur))}.lw-warn{margin:0 0 20px}
+.lw-wtag{display:inline-flex;align-items:center;gap:4px;color:#b7791f;cursor:pointer}.lw-wtag svg{width:14px;height:14px}
+.ls-warn{color:#b7791f}.ls-lock p.lw-wsp{color:var(--ink);font-weight:600}
+.lw-note p{font-size:14px!important;color:var(--mut);margin-top:4px!important}
 /* o'quvchi */
 .lr-top{padding-bottom:10px}
 .lr-prog{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:transparent}
