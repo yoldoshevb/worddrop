@@ -50,6 +50,7 @@ function motif(m,c){
 }
 function cover(w,size){
   const c=w.cover||{};
+  if(c.img) return `<div class="lc lc-${size||'m'} lc-img" style="--cb:${esc(c.bg||'#E7E2D8')}"><img src="${esc(c.img)}" alt="${esc(w.title)} — ${esc(w.author)}" loading="lazy" decoding="async"></div>`;
   const long=Math.max(...String(w.title).split(/\s+/).map(x=>x.length))>=10;
   return `<div class="lc lc-${size||'m'}${long?' lc-long':''}" style="--cb:${esc(c.bg||'#E7E2D8')};--ci:${esc(c.ink||'#1D1B16')};--ca:${esc(c.accent||'#C8402B')}">
     ${motif(c.motif,c)}
@@ -146,19 +147,29 @@ function renderLib(){
       <label class="ll-q">${I.search}<input id="ltQ" type="search" placeholder="Asar yoki muallif" value="${esc(S.q)}"></label>
       <div class="ll-chips"><button class="ll-chip${S.filter==='all'?' on':''}" data-f="all">Hammasi</button>${genres.map(g=>`<button class="ll-chip${S.filter===g?' on':''}" data-f="${esc(g)}">${esc(g)}</button>`).join('')}</div>
     </div>
-    ${list.length?`<div class="ll-grid">${list.map(w=>`<button class="ll-book" data-work="${esc(w.id)}">
-      ${cover(w,'m')}${pct(w)?`<i class="lt-bar"><i style="width:${pct(w)}%"></i></i>`:''}
-      <b>${esc(w.title)}</b><span>${esc(w.author)}${w.year?' · '+w.year:''}</span>
-      <em class="lt-tag ${w.edition}">${w.edition==='study'?"O'quv nashri":"To'liq matn"}</em>
-    </button>`).join('')}</div>`
+    ${list.length?shelves(list)
     :`<div class="ll-empty">${S.works.length?'Bu so\'rov bo\'yicha asar topilmadi.':'Kitoblar yuklanmadi. Internetni tekshirib, qayta oching.'}</div>`}
-    <p class="ll-soon">Tez orada: Austen, Dostoyevskiy, Orwell, Zamyatin, Nitsshe, Huxley va boshqalar.</p>
+    <p class="ll-soon">Tez orada: Dostoyevskiy, Orwell, Zamyatin, Nitsshe, Huxley va boshqalar.</p>
   </div></div>`;
   $(el,'[data-back]').onclick=back;
   $$(el,'[data-work]').forEach(b=>b.onclick=()=>push('work',b.dataset.work));
   $$(el,'[data-f]').forEach(b=>b.onclick=()=>{ S.filter=b.dataset.f; renderLib(); });
   const qi=$(el,'#ltQ'); qi.oninput=()=>{ S.q=qi.value; const p=qi.selectionStart; renderLib(); const n=$(S.el,'#ltQ'); n.focus(); try{ n.setSelectionRange(p,p); }catch(e){} };
 }
+
+/* Kitob javoni: muqovalar tokchada qator turadi, ostida nomlari */
+function shelfCols(){ const w=Math.min(880,(S.el&&S.el.clientWidth)||800)-36; return Math.max(3,Math.min(6,Math.floor((w+16)/(148+16)))); }
+function shelves(list){
+  const n=shelfCols(); S.cols=n; let h='';
+  for(let r=0;r<list.length;r+=n){ const row=list.slice(r,r+n);
+    h+=`<div class="ll-shelf" style="--cols:${n}">
+      <div class="ll-row">${row.map(w=>`<button class="ll-book" data-work="${esc(w.id)}" aria-label="${esc(w.title)}, ${esc(w.author)}">${cover(w,'m')}${pct(w)?`<i class="ll-pc" style="--p:${pct(w)}%"></i>`:''}</button>`).join('')}</div>
+      <i class="ll-ledge"></i>
+      <div class="ll-caps">${row.map(w=>`<button class="ll-cap" data-work="${esc(w.id)}" tabindex="-1"><b>${esc(w.title)}</b><span>${esc(w.author)}${w.year?' · '+w.year:''}</span><em class="lt-tag ${w.edition}">${w.edition==='study'?"O'quv nashri":"To'liq matn"}</em></button>`).join('')}</div>
+    </div>`; }
+  return h;
+}
+let rzT=0; window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ const t=S.stack[S.stack.length-1]; if(S.el&&t&&t[0]==='lib'&&shelfCols()!==S.cols) renderLib(); },150); });
 
 /* =====================================================================
    ASAR SAHIFASI
@@ -273,7 +284,7 @@ async function renderRead(id,idx){
   <div class="lt-sc lr-sc" id="ltSc"><div class="lr-wait"><span class="lt-spin"></span></div></div>`;
   const el=S.el;
   $(el,'[data-back]').onclick=back;
-  $(el,'[data-uz]').onclick=()=>{ S.set.uz=!S.set.uz; lsSet(LS_SET,S.set); $(el,'[data-uz]').classList.toggle('on',S.set.uz); el.classList.toggle('uz-on',S.set.uz); toast(S.set.uz?"Tarjima har xatboshi ostida ko'rinadi":"Tarjima yashirildi — kerakli xatboshini bosing"); };
+  $(el,'[data-uz]').onclick=()=>{ S.set.uz=!S.set.uz; lsSet(LS_SET,S.set); $(el,'[data-uz]').classList.toggle('on',S.set.uz); el.classList.toggle('uz-on',S.set.uz); if(S.set.uz) retrigger(); toast(S.set.uz?"Tarjima har xatboshi ostida ko'rinadi":"Tarjima yashirildi — kerakli xatboshini bosing"); };
   $(el,'[data-toc]').onclick=()=>tocSheet(w);
   $(el,'[data-set]').onclick=setSheet;
   el.classList.toggle('uz-on',S.set.uz);
@@ -290,7 +301,7 @@ async function renderRead(id,idx){
   sc.innerHTML=`<article class="lr-art f-${S.set.font}" style="--fs:${S.set.fs}px">
     <header class="lr-hd"><span>${c.part?c.part+'-qism · ':''}${idx+1}-bob</span><h1>${esc(c.title)}</h1><p>${esc(c.title_uz)} · ${mins(c.words)} daqiqa</p></header>
     ${w.edition==='study'&&idx===0?`<p class="lr-ed">O'quv nashri: asar mazmuni WordDrop qayta hikoyasida, asl matn emas.</p>`:''}
-    <div class="lr-body">${(body.paras||[]).map((pp,i)=>`<div class="lr-p" data-i="${i}"><p class="lr-en">${markup(pp.en||'',keys)}</p>${pp.uz?`<p class="lr-uz">${esc(pp.uz)}</p><button class="lr-pt" data-pt="${i}" aria-label="Tarjima">${I.tr}</button>`:''}</div>`).join('')}</div>
+    <div class="lr-body">${(body.paras||[]).map((pp,i)=>`<div class="lr-p${pp.uz?'':' need'}" data-i="${i}"><p class="lr-en">${markup(pp.en||'',keys)}</p><p class="lr-uz">${pp.uz?esc(pp.uz):''}</p><button class="lr-pt" data-pt="${i}" aria-label="Tarjima">${I.tr}</button></div>`).join('')}</div>
     <p class="lr-hint">So'zni bosing — tarjimasi chiqadi. Belgilangan so'zlar bob lug'atida.</p>
     ${body.recap_uz?`<section class="lr-box"><h2>Qisqacha</h2><p>${esc(body.recap_uz)}</p></section>`:''}
     ${(body.gloss||[]).length?`<section class="lr-box"><div class="lr-bh"><h2>Bob lug'ati</h2><button class="lt-ghost sm" data-addall>${I.plus} Hammasini Takrorimga</button></div>
@@ -307,7 +318,7 @@ async function renderRead(id,idx){
   sc.addEventListener('click',e=>{
     const g=e.target.closest('.lr-g'); if(g){ const it=body.gloss[+g.dataset.g]; wordSheet(g.textContent,it,sentenceOf(g)); return; }
     const wd=e.target.closest('.lr-w'); if(wd){ wordSheet(wd.textContent,null,sentenceOf(wd)); return; }
-    const pt=e.target.closest('[data-pt]'); if(pt){ pt.parentElement.classList.toggle('show'); return; }
+    const pt=e.target.closest('[data-pt]'); if(pt){ const box=pt.parentElement; box.classList.toggle('show'); if(box.classList.contains('show')&&box.classList.contains('need')) needTr(id,idx,[box]); return; }
     const gi=e.target.closest('[data-gi]'); if(gi){ const it=body.gloss[+gi.dataset.gi]; wordSheet(it.t,it,it.ex||''); return; }
   });
   const aa=$(sc,'[data-addall]'); if(aa) aa.onclick=()=>{ let n=0; body.gloss.forEach(g=>{ if(addSrs(g.t,g.uz,g.ex,w,true)) n++; }); toast(n?`${n} ta so'z Takrorimga qo'shildi`:"Bu so'zlar Takrorimda allaqachon bor"); };
@@ -324,6 +335,8 @@ async function renderRead(id,idx){
     }); });
   $$(sc,'[data-go]').forEach(b=>b.onclick=()=>{ markDone(id,idx); goChap(+b.dataset.go); });
   const fin=$(sc,'[data-fin]'); if(fin) fin.onclick=()=>{ markDone(id,idx); finishSheet(w); };
+  // tarjimasi yo'q xatboshilar: «Doim» rejimida ko'ringanda avtomatik tarjima qilinadi
+  watchTr(sc,id,idx);
   // joyni tiklash va kuzatish
   const pos=sameChap?p.pos:0;
   requestAnimationFrame(()=>{ if(pos>0.02) sc.scrollTop=pos*(sc.scrollHeight-sc.clientHeight); trackScroll(sc,id); });
@@ -338,6 +351,30 @@ function trackScroll(sc,id){ stopScrollTrack(); scrollEl=sc;
     clearTimeout(S.scrollT); S.scrollT=setTimeout(()=>{ const p=prog(id); p.pos=r; if(r>0.97) markDone(id,S.chIdx); else saveProg(id,false); },400); };
   sc.addEventListener('scroll',scrollFn,{passive:true}); scrollFn(); }
 function stopScrollTrack(){ if(scrollEl&&scrollFn) scrollEl.removeEventListener('scroll',scrollFn); scrollEl=null; scrollFn=null; }
+
+/* ---------- xatbosh tarjimasi (talab bo'yicha, serverda keshlanadi) ---------- */
+const TR_URL='https://jgeycbyaoiybpudakgmk.supabase.co/functions/v1/lit-tr', SB_KEY='sb_publishable_b_6vafUIGzOO9xJmFv2t9g_sQD3kQ1J';
+let trObs=null, trQueue=new Set(), trT=0;
+async function needTr(id,idx,boxes){
+  boxes=boxes.filter(b=>b.classList.contains('need')&&!b.classList.contains('busy')); if(!boxes.length) return;
+  boxes.forEach(b=>{ b.classList.add('busy'); const u=b.querySelector('.lr-uz'); if(u&&!u.textContent) u.innerHTML='<span class="lt-spin sm"></span> Tarjima qilinmoqda…'; });
+  let tk=null; try{ const {data}=await sb().auth.getSession(); tk=data&&data.session?data.session.access_token:null; }catch(e){}
+  let j=null;
+  try{ const r=await fetch(TR_URL,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+(tk||SB_KEY)},body:JSON.stringify({work_id:id,idx,i:boxes.map(b=>+b.dataset.i)})}); j=await r.json().catch(()=>null); }catch(e){}
+  boxes.forEach(b=>{ b.classList.remove('busy'); const u=b.querySelector('.lr-uz'); const t=j&&j.t&&j.t[b.dataset.i];
+    if(t){ b.classList.remove('need'); u.textContent=t; const pp=S.ch&&S.ch.paras&&S.ch.paras[+b.dataset.i]; if(pp) pp.uz=t; }
+    else u.textContent=j&&j.pro?"Tarjima Pro'da ochiladi.":j&&j.limit?"Bugungi tarjima limiti tugadi, ertaga davom etadi.":"Tarjima hozircha olinmadi. Qayta bosib ko'ring."; });
+}
+function watchTr(sc,id,idx){
+  if(trObs){ trObs.disconnect(); trObs=null; } trQueue.clear();
+  if(!('IntersectionObserver' in window)) return;
+  trObs=new IntersectionObserver(es=>{ if(!S.set.uz) return;
+    es.forEach(e=>{ if(e.isIntersecting&&e.target.classList.contains('need')) trQueue.add(e.target); });
+    clearTimeout(trT); trT=setTimeout(()=>{ const b=[...trQueue].slice(0,6); b.forEach(x=>trQueue.delete(x)); if(b.length) needTr(id,idx,b); },250);
+  },{root:sc,rootMargin:'300px 0px'});
+  $$(sc,'.lr-p.need').forEach(p=>trObs.observe(p));
+}
+function retrigger(){ const sc=S.el&&$(S.el,'#ltSc'); const t=S.stack[S.stack.length-1]; if(sc&&t&&t[0]==='read') watchTr(sc,t[1].id,t[1].idx); }
 
 /* ---------- so'z kartasi ---------- */
 function addSrs(t,uz,ex,w,silent){
@@ -402,7 +439,7 @@ function setSheet(){
     $$(sh,'[data-fs]').forEach(b=>b.onclick=()=>{ s.fs=Math.max(15,Math.min(26,s.fs+(+b.dataset.fs))); $(sh,'#lsFs').textContent=s.fs; const a=art(); if(a) a.style.setProperty('--fs',s.fs+'px'); lsSet(LS_SET,s); });
     $$(sh,'[data-font]').forEach(b=>b.onclick=()=>{ s.font=b.dataset.font; $$(sh,'[data-font]').forEach(x=>x.classList.toggle('on',x===b)); const a=art(); if(a){ a.classList.remove('f-serif','f-sans'); a.classList.add('f-'+s.font); } lsSet(LS_SET,s); });
     $$(sh,'[data-th]').forEach(b=>b.onclick=()=>{ s.theme=b.dataset.th; $$(sh,'[data-th]').forEach(x=>x.classList.toggle('on',x===b)); applyTheme(); lsSet(LS_SET,s); });
-    $$(sh,'[data-uzm]').forEach(b=>b.onclick=()=>{ s.uz=b.dataset.uzm==='true'; $$(sh,'[data-uzm]').forEach(x=>x.classList.toggle('on',x===b)); S.el.classList.toggle('uz-on',s.uz); const u=$(S.el,'[data-uz]'); if(u) u.classList.toggle('on',s.uz); lsSet(LS_SET,s); });
+    $$(sh,'[data-uzm]').forEach(b=>b.onclick=()=>{ s.uz=b.dataset.uzm==='true'; $$(sh,'[data-uzm]').forEach(x=>x.classList.toggle('on',x===b)); S.el.classList.toggle('uz-on',s.uz); if(s.uz) retrigger(); const u=$(S.el,'[data-uz]'); if(u) u.classList.toggle('on',s.uz); lsSet(LS_SET,s); });
   });
 }
 function finishSheet(w){
@@ -483,7 +520,23 @@ function css(){
 .ll-chips::-webkit-scrollbar{display:none}
 .ll-chip{flex:0 0 auto;border:1px solid var(--line);background:var(--sur);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600}
 .ll-chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.ll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:26px 18px}
+.ll-shelf{margin:0 0 34px}
+.ll-row,.ll-caps{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:0 16px;padding:0 10px}
+.ll-row{align-items:end}
+.ll-row .ll-book{position:relative;border:0;background:transparent;padding:0;display:block;transform-origin:bottom center;transition:transform .2s ease}
+.ll-row .ll-book:hover{transform:translateY(-6px) rotate(-1deg)}
+.ll-row .lc{width:100%}
+.ll-pc{position:absolute;left:8%;right:8%;bottom:6px;height:4px;border-radius:4px;background:rgba(255,255,255,.55);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.ll-pc::after{content:'';position:absolute;inset:0 auto 0 0;width:var(--p);background:var(--acc)}
+.ll-ledge{display:block;height:12px;border-radius:3px;background:linear-gradient(#D9CDB8,#BFAF93);box-shadow:0 10px 18px -8px rgba(60,40,10,.45),inset 0 1px 0 rgba(255,255,255,.55)}
+.th-night .ll-ledge{background:linear-gradient(#3A342C,#2A251F);box-shadow:0 10px 18px -8px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
+.ll-caps{padding-top:12px;align-items:start}
+.ll-cap{border:0;background:transparent;padding:0;text-align:left;display:flex;flex-direction:column;gap:3px;min-width:0}
+.ll-cap b{font-size:14.5px;font-weight:700;line-height:1.25}
+.ll-cap span{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ll-cap em{align-self:flex-start;margin-top:3px}
+.lc-img{background:var(--cb)}.lc-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.lc-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(255,255,255,.12) 3%,rgba(0,0,0,0) 7%);pointer-events:none}
 .ll-book{border:0;background:transparent;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px;transition:transform .18s}
 .ll-book:hover{transform:translateY(-3px)}
 .ll-book>b{font-size:15px;font-weight:700;margin-top:6px;line-height:1.25}
@@ -550,6 +603,8 @@ function css(){
 .lr-pt{position:absolute;right:-40px;top:2px;width:30px;height:30px;border:0;background:transparent;border-radius:8px;color:var(--mut);opacity:.55;display:grid;place-items:center}
 .lr-pt svg{width:17px;height:17px}.lr-pt:hover{opacity:1;background:var(--accs);color:var(--acc)}
 .uz-on .lr-pt{display:none}
+.lr-uz:empty{display:none!important}
+.lr-p.need.show .lr-uz,.uz-on .lr-p.need .lr-uz{display:block}
 .lr-hint{font-size:12.5px;color:var(--mut);text-align:center;margin:26px 0}
 .lr-box{border-top:1px solid var(--line);padding:22px 0 6px;margin-top:8px}
 .lr-box h2{font-size:17px;font-weight:700;margin:0 0 10px}
@@ -608,7 +663,7 @@ function css(){
 @media (max-width:820px){ .lr-pt{position:static;display:inline-grid;width:auto;height:auto;padding:4px 0;opacity:.6;margin-top:2px} .lr-pt::after{content:'Tarjima';font-size:12.5px;font-weight:600;margin-left:5px} .lr-pt{grid-auto-flow:column;align-items:center} }
 @media (max-width:560px){
   .ll-hd h1{font-size:38px}
-  .ll-grid{grid-template-columns:repeat(2,1fr);gap:22px 14px}
+  .ll-row,.ll-caps{gap:0 10px;padding:0 4px}.ll-cap b{font-size:13px}.ll-cap em{font-size:10px;padding:2px 6px}
   .lw-hero{flex-direction:column;align-items:flex-start;gap:16px}
   .lc-l{width:130px}.lc-l .lc-t b{font-size:27px}.lc-l.lc-long .lc-t b{font-size:17px}
   .lw-info h1{font-size:36px}
