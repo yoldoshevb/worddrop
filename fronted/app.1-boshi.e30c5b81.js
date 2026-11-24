@@ -4490,6 +4490,14 @@ function renderHome(){
         </div>
         ${(()=>{ let b=null; try{ b=localStorage.getItem('wd_ml_best'); }catch(e){} return b?`<div class="ib-band"><b>${b}</b><span>Daraja</span></div>`:''; })()}
       </button>
+      <button class="ielts-banner lit-banner" id="litBanner">
+        <div class="ib-mark lit-mark" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="ib-txt">
+          <div class="ib-kicker">Yangi · Adabiyot</div>
+          <div class="ib-title">Kitob javoni</div>
+          <div class="ib-sub">Jahon klassikasi ingliz tilida · tarjima va lug'at bilan</div>
+        </div>
+      </button>
       <button class="ielts-banner" id="ieltsBanner">
         <div class="ib-mark">IELTS</div>
         <div class="ib-txt">
@@ -4565,6 +4573,7 @@ function renderHome(){
   const shB=sec.querySelector('#shopHomeCard');
   if(shB) shB.addEventListener('click',shopOpenSheet);
   const mlb=sec.querySelector('#mlBanner'); if(mlb) mlb.addEventListener('click',()=>window.__wdOpenML&&window.__wdOpenML());
+  const litb=sec.querySelector('#litBanner'); if(litb) litb.addEventListener('click',()=>window.__wdOpenLit&&window.__wdOpenLit());
   const ibtn=sec.querySelector('#ieltsBanner');
   if(ibtn) ibtn.addEventListener('click',()=>{
     const layer=openSheet(`

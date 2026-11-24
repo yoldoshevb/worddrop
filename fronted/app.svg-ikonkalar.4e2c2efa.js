@@ -1,7 +1,7 @@
 
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v107';
+window.__wdVer='v108';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -190,6 +190,7 @@ async function translateWordAI(term){
   if(data && typeof data.uz==='string' && data.uz.trim()) return data.uz.trim();
   return null; // Edge Function 'translate' rejimini qo'llamasa — foydalanuvchi o'zi kiritadi
 }
+window.__wdTranslateWord=translateWordAI;
 /* So'z devori uchun: so'zning ma'nosini o'zbekchada izohlash (tarjimasiz!) */
 async function meaningWordAI(term){
   const data = await aiRequest({ mode:'meaning', term });

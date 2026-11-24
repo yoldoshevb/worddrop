@@ -70,3 +70,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-24 | Claude | v106: Pro promokodlari — wd_promo_codes/uses, admin oynasi, ilova (Pro oynasi, promokod oynasi) va bot (/promo, tugma, start=promo_KOD), tg-v101 v5 | GitHub → Pages, Supabase | shu commit |
 | 2026-11-24 | Claude | v106: kompyuter uchun maxsus kursor (cursor.v106.js) — ilova va landing | GitHub → Pages | shu commit |
 | 2026-11-24 | Claude | v107: kompyuterda sichqoncha g'ildiragi chetdagi bo'sh joylarda ham kontentni aylantiradi | GitHub → Pages | shu commit |
+| 2026-11-24 | Claude | v108: «Adabiyot» rejimi — wd_lit_works/chapters/progress (RLS: 1-bob bepul, qolgani Pro), lit-sync edge function (content/adabiyot/*.json → baza), lit.v108.js o'quvchi, birinchi asar: The Stranger (o'quv nashri) | GitHub → Pages, Supabase | shu commit |

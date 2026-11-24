@@ -1705,6 +1705,9 @@ body.dark .ipg-title{color:var(--i9)}
   border-radius:10px;padding:6px 10px;min-width:56px;
 }
 .ml-banner .ib-mark{background:#1F2A37;font-size:10px}
+.lit-banner .ib-mark.lit-mark{background:#F2B33D;gap:3px;align-items:flex-end;padding-bottom:10px}
+.lit-mark i{display:block;width:6px;border-radius:2px;background:#1D1B16}
+.lit-mark i:nth-child(1){height:22px}.lit-mark i:nth-child(2){height:26px;background:#C8402B}.lit-mark i:nth-child(3){height:18px;transform:rotate(12deg);transform-origin:bottom}
 .ml-banner .ib-band{background:rgba(47,111,237,.08);border-color:rgba(47,111,237,.18)}
 .ml-banner .ib-band b{color:#2F6FED}
 .ielts-banner .ib-band b{display:block;font-size:18px;font-weight:800;color:#E8374A;font-variant-numeric:tabular-nums;line-height:1}

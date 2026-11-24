@@ -1,0 +1,336 @@
+{
+  "id": "the-stranger",
+  "title": "The Stranger",
+  "author": "Albert Camus",
+  "year": 1942,
+  "orig_lang": "fr",
+  "edition": "study",
+  "level": "B1–B2",
+  "genres": ["Ekzistensializm", "Falsafa", "Roman"],
+  "sort": 10,
+  "free_chapters": 1,
+  "published": true,
+  "cover": { "bg": "#F2B33D", "ink": "#1D1B16", "accent": "#C8402B", "motif": "sun" },
+  "meta": {
+    "title_uz": "Begona",
+    "orig_title": "L'Étranger",
+    "blurb_uz": "Jazoir, 1930-yillar. Oddiy idora xodimi Merso onasining dafnida yig'lamaydi, ertasiga dengizga cho'miladi va kinoga boradi. Bir necha haftadan keyin quyosh ostida, deyarli sababsiz, bir odamni otib qo'yadi. Sud uni qotillik uchun emas, ko'proq «his qilmagani» uchun ayblaydi.",
+    "why_uz": "XX asrning eng ko'p o'qilgan romanlaridan biri. Qisqa va sodda jumlalar bilan yozilgan, shuning uchun B1–B2 o'quvchi uchun juda mos. Hayotning ma'nosi, jamiyat qoidalari va samimiylik haqida o'ylashga majbur qiladi.",
+    "author_uz": "Alber Kamyu (1913–1960) — Jazoirda tug'ilgan fransuz yozuvchisi va faylasufi. 1957-yilda Nobel mukofotini olgan. Uning «absurd» falsafasiga ko'ra, inson hayotdan ma'no izlaydi, dunyo esa jim turadi — mana shu nomuvofiqlik absurddir.",
+    "edition_uz": "Bu — WordDrop o'quv nashri. Roman hali mualliflik huquqi bilan himoyalangan, shuning uchun bu yerda asl matn emas, har bir bobning inglizcha qayta hikoyasi (WordDrop jamoasi yozgan), o'zbekcha tarjimasi, lug'at, savollar va tahlil berilgan. To'liq romanni kitob do'konidan yoki kutubxonadan o'qishingiz mumkin.",
+    "characters": [
+      { "name": "Meursault", "uz": "Merso — hikoyachi, Jazoirdagi idora xodimi. Har narsaga befarq, faqat jismoniy hislarni (quyosh, issiq, dengiz) sezadi va hech qachon yolg'on gapirmaydi." },
+      { "name": "Marie Cardona", "uz": "Mari — Mersoning sobiq hamkasbi, keyin sevgilisi. Quvnoq, hayotni sevadi, unga turmushga chiqmoqchi." },
+      { "name": "Raymond Sintès", "uz": "Raymon — qo'shni, shubhali odam. Merso uning iltimosi bilan xat yozib, xavfli voqealarga aralashib qoladi." },
+      { "name": "Salamano", "uz": "Salamano — keksa qo'shni. Kasal itini doim so'kadi va uradi, lekin it yo'qolganda qattiq qayg'uradi." },
+      { "name": "Céleste", "uz": "Selest — restoran egasi, Mersoning sodiq do'sti. Sudda uni himoya qiladi." },
+      { "name": "Thomas Pérez", "uz": "Tomas Peres — Merso onasining qariyalar uyidagi yaqin do'sti." },
+      { "name": "The Chaplain", "uz": "Ruhoniy — qamoqxonada Mersoni Xudoga ishonishga undaydi." }
+    ],
+    "themes": [
+      { "t": "The Absurd", "uz": "Absurd — inson ma'no izlaydi, dunyo esa javob bermaydi. Merso buni oxirida qabul qiladi va tinchlik topadi." },
+      { "t": "Honesty", "uz": "Samimiylik — Merso o'zini his qilmagan narsani his qilganday ko'rsatmaydi. Jamiyat buni kechira olmaydi." },
+      { "t": "Society and judgement", "uz": "Jamiyat va hukm — sud qotillikni emas, onasining dafnida yig'lamaganini ko'proq muhokama qiladi." },
+      { "t": "Nature and the senses", "uz": "Tabiat va hislar — quyosh, issiq va dengiz voqealarni boshqaradigan kuchday tasvirlanadi." },
+      { "t": "Death", "uz": "O'lim — roman onaning o'limi bilan boshlanib, qahramonning o'lim jazosi bilan tugaydi." }
+    ]
+  },
+  "chapters": [
+    {
+      "part": 1,
+      "title": "The Telegram",
+      "title_uz": "Telegramma",
+      "recap_uz": "Merso onasining o'limi haqida xabar oladi, qariyalar uyiga boradi, tun bo'yi tobut yonida o'tiradi va ertasi kuni jazirama issiqda dafn qiladi.",
+      "paras": [
+        { "en": "The novel opens with a short telegram: Meursault's mother has died. She lived in a home for old people in Marengo, about fifty miles from Algiers. Meursault, a young office clerk, asks his boss for two days off. The boss agrees, but he does not look happy. Meursault even feels he has to say sorry, and then he thinks it was not his fault.", "uz": "Roman qisqa telegramma bilan boshlanadi: Mersoning onasi vafot etgan. U Jazoirdan taxminan ellik mil uzoqlikdagi Marengo shahridagi qariyalar uyida yashagan. Yosh idora xodimi Merso xo'jayinidan ikki kunlik ruxsat so'raydi. Xo'jayin rozi bo'ladi, lekin xursand ko'rinmaydi. Merso hatto uzr so'rashga majbur bo'lganday his qiladi, keyin esa bunga o'zi aybdor emasligini o'ylaydi." },
+        { "en": "He eats lunch at Céleste's restaurant, borrows a black tie from his friend Emmanuel and takes the afternoon bus. The bus is hot, the road shines in the sun, and he sleeps most of the way. At the home, the director tells him that his mother had lived there for three years. Meursault could not afford to look after her, and at home she had nobody to talk to.", "uz": "U Selestning restoranida tushlik qiladi, do'sti Emmanueldan qora galstuk olib turadi va tushdan keyingi avtobusga chiqadi. Avtobus ichi issiq, yo'l quyoshda yaltiraydi va u yo'lning ko'p qismida uxlab ketadi. Qariyalar uyida direktor unga onasi u yerda uch yil yashaganini aytadi. Merso unga g'amxo'rlik qilishga qurbi yetmagan, uyda esa onasining gaplashadigan odami bo'lmagan." },
+        { "en": "That night he sits with the coffin in a bright white room. The caretaker offers to open the lid so he can see his mother's face, but Meursault says no. He drinks coffee with milk, smokes a cigarette and feels tired. His mother's old friends come in quietly and sit around him. One woman cries for a long time, and Meursault wishes she would stop.", "uz": "O'sha kecha u oppoq, yorug' xonada tobut yonida o'tiradi. Qorovul onasining yuzini ko'rishi uchun qopqoqni ochib berishni taklif qiladi, ammo Merso rad etadi. U sutli qahva ichadi, sigaret chekadi va charchoqni his qiladi. Onasining keksa do'stlari jimgina kirib, uning atrofida o'tirishadi. Bir ayol uzoq yig'laydi, Merso esa u to'xtashini istaydi." },
+        { "en": "In the morning the funeral walks slowly to the village church under a burning sun. Old Thomas Pérez, his mother's closest friend at the home, cannot keep up and takes short cuts across the fields. Meursault notices the heat, the smell of leather and the black road more than his own feelings. When the bus brings him back to Algiers, he is simply glad that he can go to bed and sleep for twelve hours.", "uz": "Ertalab dafn marosimi jazirama quyosh ostida qishloq cherkoviga sekin yo'l oladi. Onasining qariyalar uyidagi eng yaqin do'sti, keksa Tomas Peres ulgurolmay, dalalar orqali qisqa yo'ldan yuradi. Merso o'z hislaridan ko'ra issiqni, charm hidini va qop-qora yo'lni ko'proq sezadi. Avtobus uni Jazoirga qaytarganda, u shunchaki yotib, o'n ikki soat uxlay olishidan xursand bo'ladi." }
+      ],
+      "gloss": [
+        { "t": "telegram", "uz": "telegramma", "ex": "The novel opens with a short telegram." },
+        { "t": "afford", "uz": "qurbi yetmoq", "ex": "Meursault could not afford to look after her." },
+        { "t": "coffin", "uz": "tobut", "ex": "He sits with the coffin in a bright white room." },
+        { "t": "caretaker", "uz": "qorovul, xizmatchi", "ex": "The caretaker offers to open the lid." },
+        { "t": "funeral", "uz": "dafn marosimi", "ex": "The funeral walks slowly to the village church." },
+        { "t": "keep up", "uz": "ortda qolmaslik, ulgurmoq", "ex": "Old Thomas Pérez cannot keep up." },
+        { "t": "burning", "uz": "kuydiradigan, jazirama", "ex": "...under a burning sun." }
+      ],
+      "quiz": [
+        { "q": "Why did Meursault's mother live in a home for old people?", "o": ["She wanted to live near the sea", "He could not afford to care for her", "The doctor told her to go there", "She did not like Algiers"], "a": 1, "why_uz": "Direktor Mersoning onasiga qarashga pul yetmaganini va uyda gaplashadigan odami bo'lmaganini eslatadi." },
+        { "q": "What does Meursault do when the caretaker offers to open the coffin?", "o": ["He agrees at once", "He starts to cry", "He refuses", "He calls the director"], "a": 2, "why_uz": "U onasining yuzini ko'rishni xohlamaydi. Bu keyinchalik sudda unga qarshi ishlatiladi." },
+        { "q": "What does Meursault notice most during the funeral?", "o": ["The heat and the sun", "The priest's words", "His own sadness", "The flowers in the church"], "a": 0, "why_uz": "Kamyu Mersoning hislarini emas, jismoniy taassurotlarini — issiq, quyosh, hidlarni tasvirlaydi." }
+      ],
+      "note_uz": "Birinchi bob butun romanning ohangini belgilaydi. Merso yolg'on qayg'u ko'rsatmaydi, faqat ko'rgan va sezganini aytadi. O'quvchi uni sovuq odam deb o'ylashi mumkin, lekin Kamyu bizni so'rashga undaydi: biz his qilmagan narsani his qilganday ko'rsatishimiz kerakmi?"
+    },
+    {
+      "part": 1,
+      "title": "Sunday",
+      "title_uz": "Yakshanba",
+      "recap_uz": "Dafndan keyingi kun Merso dengizda Mari bilan uchrashadi, kechqurun kinoga boradi. Yakshanbani balkonda ko'chani tomosha qilib o'tkazadi.",
+      "paras": [
+        { "en": "On Saturday morning Meursault understands why his boss looked unhappy: with the two days off and the weekend, he has four free days. He goes swimming at the harbour and meets Marie Cardona, a young woman who used to work as a typist in his office. They swim together, lie on a floating board in the sun, and he rests his head on her stomach.", "uz": "Shanba kuni ertalab Merso xo'jayini nega norozi bo'lganini tushunadi: ikki kunlik ruxsat va dam olish kunlari qo'shilib, unda to'rt kun bo'sh vaqt bor. U portga cho'milgani boradi va ilgari idorasida mashinistka bo'lib ishlagan yosh ayol — Mari Kardona bilan uchrashadi. Ular birga suzishadi, quyoshda suzuvchi taxtada yotishadi va Merso boshini uning qorniga qo'yadi." },
+        { "en": "In the evening they go to the cinema to see a comedy. When Marie sees his black tie, she is surprised to hear that his mother died only yesterday. She says nothing, but she moves back a little. Then the film starts, they laugh at the jokes, and later she spends the night at his flat.", "uz": "Kechqurun ular komediya ko'rish uchun kinoga borishadi. Mari uning qora galstugini ko'rib, onasi kechagina vafot etganini eshitganda hayron qoladi. U hech narsa demaydi, lekin biroz chetga suriladi. Keyin film boshlanadi, ular hazillarga kulishadi va o'sha kecha Mari uning uyida qoladi." },
+        { "en": "On Sunday Meursault stays at home. He does not like Sundays. He eats bread from the loaf, reads old newspapers and then spends the whole afternoon on his balcony, watching the street below. He describes families going for a walk, young men going to the cinema, the football fans coming home and the street lights coming on.", "uz": "Yakshanba kuni Merso uyda qoladi. U yakshanbalarni yoqtirmaydi. U nonni butun bo'lakdan uzib yeydi, eski gazetalarni o'qiydi, keyin tushdan keyin butun vaqtini balkonda pastdagi ko'chani kuzatib o'tkazadi. U sayrga chiqqan oilalarni, kinoga ketayotgan yigitlarni, uyga qaytayotgan futbol muxlislarini va yonayotgan ko'cha chiroqlarini tasvirlaydi." },
+        { "en": "When it gets dark, he closes the window and thinks that one more Sunday is over. His mother is now buried, tomorrow he will go back to work, and, as he says to himself, nothing has really changed. For him, life continues in the same simple rhythm of work, food, sleep and the sea.", "uz": "Qorong'i tushganda u derazani yopib, yana bir yakshanba tugadi, deb o'ylaydi. Onasi endi dafn qilingan, ertaga u ishga qaytadi va o'ziga aytganidek, aslida hech narsa o'zgarmadi. Uning uchun hayot ish, ovqat, uyqu va dengizdan iborat o'sha oddiy maromda davom etadi." }
+      ],
+      "gloss": [
+        { "t": "harbour", "uz": "port, bandargoh", "ex": "He goes swimming at the harbour." },
+        { "t": "typist", "uz": "mashinistka", "ex": "...who used to work as a typist in his office." },
+        { "t": "used to", "uz": "ilgari ... edi (odat)", "ex": "She used to work in his office." },
+        { "t": "surprised", "uz": "hayron", "ex": "She is surprised to hear that his mother died." },
+        { "t": "balcony", "uz": "balkon", "ex": "He spends the afternoon on his balcony." },
+        { "t": "rhythm", "uz": "marom, ritm", "ex": "Life continues in the same simple rhythm." }
+      ],
+      "quiz": [
+        { "q": "Who is Marie Cardona?", "o": ["Meursault's sister", "A nurse from the home", "A former typist from his office", "Raymond's girlfriend"], "a": 2, "why_uz": "Mari ilgari Merso ishlaydigan idorada mashinistka bo'lgan." },
+        { "q": "How does Marie react when she learns about his mother?", "o": ["She leaves the cinema", "She moves back a little but says nothing", "She cries", "She asks many questions"], "a": 1, "why_uz": "U hayron bo'ladi va biroz chetga suriladi, ammo hech narsa demaydi." },
+        { "q": "What does Meursault think at the end of Sunday?", "o": ["That he must change his life", "That he misses his mother very much", "That nothing has really changed", "That he wants to move to Paris"], "a": 2, "why_uz": "Bu fikr keyin sudda «u onasining o'limidan keyin hech narsa his qilmagan» degan dalilga aylanadi." }
+      ],
+      "note_uz": "Bu bobdagi kichik voqealar — dengiz, komediya filmi, Mari — sudda katta ayblovga aylanadi. Kamyu bir xil faktlarni ikki xil ko'rsatadi: Merso uchun bu oddiy kun, jamiyat uchun esa «yuraksiz odam»ning isboti."
+    },
+    {
+      "part": 1,
+      "title": "Raymond's Letter",
+      "title_uz": "Raymonning xati",
+      "recap_uz": "Merso qo'shnilari — itini uradigan keksa Salamano va shubhali Raymon bilan tanishamiz. Raymon Mersodan sevgilisini jazolash uchun xat yozib berishni so'raydi.",
+      "paras": [
+        { "en": "On Monday Meursault works hard at the office. His boss is kind and asks how old his mother was; Meursault is not sure and says about sixty. At lunch he and his friend Emmanuel run after a truck and jump onto it, laughing and sweating in the dust and the sun.", "uz": "Dushanba kuni Merso idorada qattiq ishlaydi. Xo'jayini mehribon bo'lib, onasi necha yoshda bo'lganini so'raydi; Merso aniq bilmaydi va «oltmishlar atrofida» deydi. Tushlikda u do'sti Emmanuel bilan yuk mashinasi ortidan yugurib, unga sakrab chiqishadi — chang va quyosh ostida kulib, terlab." },
+        { "en": "In the evening he meets two neighbours on the dark stairs. The first is old Salamano, who has lived with his ugly, sick spaniel for eight years. Every day they walk the same streets, and every day the old man pulls the dog, hits it and shouts at it. Yet the two of them look strangely alike.", "uz": "Kechqurun u qorong'i zinapoyada ikki qo'shnisini uchratadi. Birinchisi — keksa Salamano, u sakkiz yildan beri xunuk, kasal spaniel iti bilan yashaydi. Ular har kuni bir xil ko'chalardan yurishadi va chol har kuni itni tortadi, uradi va unga baqiradi. Shunga qaramay, ikkalasi g'alati darajada bir-biriga o'xshaydi." },
+        { "en": "The second neighbour is Raymond Sintès. He says he works in a warehouse, but people in the street believe he lives off women. Raymond invites Meursault to his room for black pudding and wine. He has a bandage on his hand after a fight with the brother of his girlfriend, an Arab woman who, he believes, has been cheating him.", "uz": "Ikkinchi qo'shni — Raymon Sintes. U omborda ishlashini aytadi, lekin ko'chadagilar uni ayollar hisobiga yashaydi deb hisoblashadi. Raymon Mersoni xonasiga qon kolbasasi va vino bilan mehmon qiladi. Uning qo'li bog'langan: u sevgilisining akasi bilan mushtlashgan, sevgilisi — arab ayol — uni aldayapti, deb o'ylaydi." },
+        { "en": "Raymond wants to punish her. He asks Meursault to write a letter that will make her come back, so that he can humiliate her. Meursault does not really care either way, so he writes the letter. Raymond is very pleased and tells him that now they are real friends. Meursault notices that he does not mind being his friend.", "uz": "Raymon uni jazolamoqchi. U Mersodan ayolni qaytib kelishga undaydigan xat yozib berishni so'raydi, toki keyin uni kamsitsin. Mersoga baribir, shuning uchun u xatni yozadi. Raymon juda mamnun bo'lib, endi ular haqiqiy do'st ekanini aytadi. Merso uning do'sti bo'lishga qarshi emasligini sezadi." }
+      ],
+      "gloss": [
+        { "t": "neighbour", "uz": "qo'shni", "ex": "He meets two neighbours on the dark stairs." },
+        { "t": "spaniel", "uz": "spaniel (it zoti)", "ex": "...his ugly, sick spaniel." },
+        { "t": "warehouse", "uz": "ombor", "ex": "He says he works in a warehouse." },
+        { "t": "bandage", "uz": "bint, bog'lam", "ex": "He has a bandage on his hand." },
+        { "t": "cheat", "uz": "aldamoq, xiyonat qilmoq", "ex": "...who, he believes, has been cheating him." },
+        { "t": "humiliate", "uz": "kamsitmoq, xo'rlamoq", "ex": "...so that he can humiliate her." },
+        { "t": "either way", "uz": "baribir, qaysi biri bo'lsa ham", "ex": "Meursault does not really care either way." }
+      ],
+      "quiz": [
+        { "q": "How does Salamano treat his dog?", "o": ["He feeds it very well", "He pulls it, hits it and shouts at it", "He never takes it outside", "He wants to sell it"], "a": 1, "why_uz": "Salamano itni doim so'kadi va uradi, lekin keyin u yo'qolganda qayg'uradi." },
+        { "q": "What does Raymond ask Meursault to do?", "o": ["Lend him money", "Write a letter to his girlfriend", "Fight her brother", "Call the police"], "a": 1, "why_uz": "Raymon ayolni qaytarib, keyin kamsitish uchun xat kerak." },
+        { "q": "Why does Meursault agree?", "o": ["He hates the woman", "Raymond pays him", "He does not really care either way", "He is afraid of Raymond"], "a": 2, "why_uz": "Mersoning befarqligi uni asta-sekin fojiaga olib boradi." }
+      ],
+      "note_uz": "Salamano va iti — romandagi kichik, lekin muhim ramz: kimgadir yomon munosabatda bo'lish ham bog'lanishning bir shakli. Raymon esa Mersoning hayotiga zo'ravonlik olib kiradi. Xatni yozish — Merso o'ylab ko'rmasdan qilgan birinchi tanlov."
+    },
+    {
+      "part": 1,
+      "title": "Marie Asks",
+      "title_uz": "Mari so'raydi",
+      "recap_uz": "Mari Mersodan uni sevadimi, deb so'raydi. Raymon sevgilisini uradi, politsiya keladi. Salamanoning iti yo'qoladi.",
+      "paras": [
+        { "en": "After a busy week, Marie and Meursault take a bus to a beach outside the city. They swim, play in the waves and kiss. Back at his flat, Marie asks him if he loves her. He answers honestly that the question does not mean much to him, but he probably does not. She looks sad for a moment, then laughs again.", "uz": "Band hafta o'tgach, Mari bilan Merso avtobusda shahar tashqarisidagi plyajga borishadi. Ular suzishadi, to'lqinlarda o'ynashadi va o'pishishadi. Uyiga qaytgach, Mari undan uni sevadimi, deb so'raydi. Merso samimiy javob beradi: bu savol uning uchun unchalik ma'noga ega emas, lekin, ehtimol, sevmaydi. Mari bir zum xafa bo'ladi, keyin yana kuladi." },
+        { "en": "Suddenly they hear a terrible noise from Raymond's room: a woman is screaming and Raymond is beating her. People come out onto the stairs. Marie asks Meursault to call the police, but he says he does not like the police. In the end a policeman arrives, slaps Raymond for keeping a cigarette in his mouth and orders him to come to the police station.", "uz": "To'satdan ular Raymonning xonasidan dahshatli shovqin eshitishadi: bir ayol qichqiryapti, Raymon esa uni uryapti. Odamlar zinapoyaga chiqishadi. Mari Mersodan politsiyani chaqirishni so'raydi, lekin u politsiyani yoqtirmasligini aytadi. Oxiri politsiyachi keladi, og'zida sigaret ushlab turgani uchun Raymonning yuziga shapaloq uradi va uni bo'limga kelishga buyuradi." },
+        { "en": "Later Raymond comes to see Meursault. He is not ashamed; he thinks the woman got what she deserved. He asks Meursault to tell the police that she had cheated him. Meursault agrees to be his witness. That evening they go out together, drink and play billiards, and Meursault finds the evening pleasant.", "uz": "Keyinroq Raymon Merso oldiga keladi. U uyalmaydi; ayol munosib jazosini oldi, deb hisoblaydi. U Mersodan politsiyaga ayol uni aldaganini aytishni so'raydi. Merso uning guvohi bo'lishga rozi bo'ladi. O'sha oqshom ular birga ko'chaga chiqishadi, ichishadi, bilyard o'ynashadi va Mersoga oqshom yoqimli tuyuladi." },
+        { "en": "When they return, they find old Salamano alone at the door, very upset. His dog is gone. The old man, who always cursed the animal, now walks around nervously and keeps repeating that he does not know what to do.", "uz": "Qaytib kelishganda, ular eshik oldida yolg'iz va juda hayajonlangan keksa Salamanoni ko'rishadi. Uning iti yo'qolgan. Doim hayvonni so'kadigan chol endi asabiy holda u yoqdan-bu yoqqa yuradi va nima qilishini bilmasligini qayta-qayta takrorlaydi." }
+      ],
+      "gloss": [
+        { "t": "honestly", "uz": "samimiy, rostini aytib", "ex": "He answers honestly." },
+        { "t": "scream", "uz": "qichqirmoq", "ex": "A woman is screaming." },
+        { "t": "slap", "uz": "shapaloq urmoq", "ex": "A policeman slaps Raymond." },
+        { "t": "ashamed", "uz": "uyalgan", "ex": "He is not ashamed." },
+        { "t": "deserve", "uz": "munosib bo'lmoq, loyiq bo'lmoq", "ex": "...the woman got what she deserved." },
+        { "t": "witness", "uz": "guvoh", "ex": "Meursault agrees to be his witness." },
+        { "t": "upset", "uz": "xafa, hayajonlangan", "ex": "...old Salamano alone at the door, very upset." }
+      ],
+      "quiz": [
+        { "q": "What does Meursault answer when Marie asks if he loves her?", "o": ["Yes, very much", "The question means little to him, and probably not", "He refuses to answer", "He says he will love her later"], "a": 1, "why_uz": "Merso hatto sevgi haqida ham yolg'on gapirmaydi." },
+        { "q": "Why does the policeman slap Raymond?", "o": ["For shouting", "For keeping a cigarette in his mouth", "For running away", "For hitting Meursault"], "a": 1, "why_uz": "Politsiyachi Raymonning hurmatsizligi — og'zidagi sigaret uchun uradi." },
+        { "q": "What does Meursault agree to do for Raymond?", "o": ["Hide him", "Be his witness", "Pay a fine", "Talk to the woman"], "a": 1, "why_uz": "U yana o'ylamasdan Raymon tomoniga o'tadi." }
+      ],
+      "note_uz": "Mersoning javobi «sevgi so'zi hech narsa anglatmaydi» shafqatsiz eshitiladi, lekin u yolg'on gapirishni istamaydi. Ayni paytda u zo'ravonlikka befarq qaraydi va Raymonga yordam beradi — samimiylik va mas'uliyat bir xil narsa emasligini ko'ramiz."
+    },
+    {
+      "part": 1,
+      "title": "An Offer from Paris",
+      "title_uz": "Parijdan taklif",
+      "recap_uz": "Xo'jayin Mersoga Parijda ishlashni taklif qiladi, u befarq javob beradi. Mari turmush qurishni so'raydi. Salamano itini topa olmaydi.",
+      "paras": [
+        { "en": "Raymond phones Meursault at the office. A friend of his, Masson, has invited them to his small house by the sea on Sunday. Raymond also says that a group of Arabs, including his girlfriend's brother, has been following him all day.", "uz": "Raymon idoraga Mersoga qo'ng'iroq qiladi. Uning do'sti Masson ularni yakshanba kuni dengiz bo'yidagi kichik uyiga taklif qilgan. Raymon yana kun bo'yi bir guruh arablar, jumladan sevgilisining akasi, uning ortidan yurganini aytadi." },
+        { "en": "Then the boss calls Meursault into his office. He wants to open an office in Paris and offers him the job. Meursault says yes, but adds that it does not really matter to him: one life is as good as another. The boss is disappointed and says he has no ambition. Meursault remembers that he once had ambitions as a student, but later he understood that none of it really mattered.", "uz": "Keyin xo'jayin Mersoni xonasiga chaqiradi. U Parijda bo'lim ochmoqchi va unga shu ishni taklif qiladi. Merso rozi bo'ladi, lekin bu unga unchalik muhim emasligini qo'shimcha qiladi: bir hayot boshqasidan yomon emas. Xo'jayin hafsalasi pir bo'lib, unda intilish yo'qligini aytadi. Merso talabalik paytida o'zida ham orzular bo'lganini eslaydi, keyin esa bularning hech biri aslida muhim emasligini tushunganini." },
+        { "en": "In the evening Marie asks him to marry her. He says he does not mind, and they can marry if she wants. She asks again if he loves her, and he gives the same answer as before. Marie says that he is a strange man, and that perhaps this is why she loves him. Then she laughs, holds his arm and says she would love to see Paris.", "uz": "Kechqurun Mari undan turmush qurishni so'raydi. U qarshi emasligini, agar Mari xohlasa, turmush qurishlari mumkinligini aytadi. Mari yana uni sevadimi, deb so'raydi, u esa avvalgi javobini takrorlaydi. Mari uni g'alati odam deydi va, balki, shuning uchun uni sevar ekan. Keyin u kulib, Mersoning qo'lidan ushlaydi va Parijni ko'rishni juda istashini aytadi." },
+        { "en": "Later, Salamano knocks on his door. He lost his dog at the parade ground, where there was a fair, and nobody has found it. The old man talks about the dog's skin disease and about his late wife. He also says that people in the street spoke badly of Meursault for sending his mother to the home, but he knows that Meursault loved her.", "uz": "Keyinroq Salamano uning eshigini taqillatadi. U itini yarmarka bo'lgan maydonda yo'qotgan va uni hech kim topmagan. Chol itning teri kasalligi va marhum xotini haqida gapiradi. U yana ko'chadagilar Mersoni onasini qariyalar uyiga berib qo'ygani uchun yomonlashganini, lekin u Merso onasini sevganini bilishini aytadi." }
+      ],
+      "gloss": [
+        { "t": "offer", "uz": "taklif (qilmoq)", "ex": "He offers him the job." },
+        { "t": "it doesn't matter", "uz": "muhim emas, farqi yo'q", "ex": "It does not really matter to him." },
+        { "t": "disappointed", "uz": "hafsalasi pir bo'lgan", "ex": "The boss is disappointed." },
+        { "t": "ambition", "uz": "intilish, orzu-maqsad", "ex": "He says he has no ambition." },
+        { "t": "marry", "uz": "turmush qurmoq", "ex": "Marie asks him to marry her." },
+        { "t": "fair", "uz": "yarmarka", "ex": "...the parade ground, where there was a fair." },
+        { "t": "late (wife)", "uz": "marhum (xotin)", "ex": "...about his late wife." }
+      ],
+      "quiz": [
+        { "q": "How does Meursault react to the job in Paris?", "o": ["He is very excited", "He says one life is as good as another", "He refuses angrily", "He asks for more money"], "a": 1, "why_uz": "Uning uchun bir joy yoki boshqa joyning farqi yo'q." },
+        { "q": "What does Marie say about him?", "o": ["That he is boring", "That he is strange, and maybe that is why she loves him", "That he must change", "That she will leave him"], "a": 1, "why_uz": "Mari uning g'alatiligini qabul qiladi." },
+        { "q": "Where did Salamano lose his dog?", "o": ["At the beach", "At the parade ground during a fair", "At the market", "At the station"], "a": 1, "why_uz": "Yarmarka paytida maydonda it qochib ketgan." }
+      ],
+      "note_uz": "Bu bobda jamiyatning ikki katta «qoida»si — martaba va nikoh — Mersoga taklif qilinadi. U ikkalasini ham rad etmaydi, lekin ularga ma'no ham bermaydi. Kamyu uchun bu befarqlik emas, balki «hayotning yuqori ma'nosi» haqidagi yolg'on va'dalarni qabul qilmaslikdir."
+    },
+    {
+      "part": 1,
+      "title": "The Beach",
+      "title_uz": "Plyaj",
+      "recap_uz": "Dengiz bo'yidagi yakshanba: Raymon arablar bilan mushtlashadi va pichoq jarohati oladi. Merso keyinroq yolg'iz qaytadi va quyosh ostida arabni otib qo'yadi.",
+      "paras": [
+        { "en": "On Sunday Meursault, Marie and Raymond take the bus to Masson's small house by the sea. Near the bus stop they see a group of Arabs watching them. At the beach the day is beautiful: they swim, eat fried fish, drink a lot of wine and laugh. Meursault feels heavy with the sun and the food.", "uz": "Yakshanba kuni Merso, Mari va Raymon avtobusda Massonning dengiz bo'yidagi kichik uyiga borishadi. Bekat yaqinida ularni kuzatib turgan bir guruh arablarni ko'rishadi. Plyajda kun go'zal: ular suzishadi, qovurilgan baliq yeyishadi, ko'p vino ichishadi va kulishadi. Merso quyosh va ovqatdan og'irlashganini his qiladi." },
+        { "en": "Later the three men walk along the sand and meet two of the Arabs. A fight starts. One of the Arabs cuts Raymond on the arm and the mouth with a knife, and then the two men walk back slowly. Raymond goes to a doctor and comes back angry, with bandages. He wants to return to the beach, and he takes a gun.", "uz": "Keyinroq uch erkak qum bo'ylab sayr qilib, arablardan ikkitasiga duch kelishadi. Mushtlashuv boshlanadi. Arablardan biri pichoq bilan Raymonning qo'li va og'zini kesadi, keyin ikkalasi sekin ortga ketishadi. Raymon shifokorga borib, bintlangan va g'azablangan holda qaytadi. U yana plyajga qaytmoqchi va o'zi bilan to'pponcha oladi." },
+        { "en": "Meursault goes with him and asks for the gun, so that Raymond will not shoot without a reason. The two Arabs are resting near a small spring behind a rock. Nothing happens; they simply look at each other, and then the Arabs slip away behind the rock. Raymond and Meursault go back to the house, but Meursault still has the gun in his pocket.", "uz": "Merso u bilan boradi va Raymon sababsiz otmasligi uchun to'pponchani o'ziga berishni so'raydi. Ikki arab qoya ortidagi kichik buloq yonida dam olishyapti. Hech narsa sodir bo'lmaydi; ular shunchaki bir-birlariga qarab turishadi, keyin arablar qoya ortiga sirg'alib ketishadi. Raymon bilan Merso uyga qaytishadi, lekin to'pponcha hali ham Mersoning cho'ntagida." },
+        { "en": "He does not want to go inside, so he walks alone along the beach in the terrible heat. He wants to reach the cool spring. One of the Arabs is there again. The man takes out his knife, the light flashes on the blade into Meursault's eyes, and sweat blinds him. His hand closes on the gun and he fires. Then he fires four more times into the still body, and he understands that he has destroyed the balance of a happy day.", "uz": "U uyga kirishni istamaydi va dahshatli issiqda yolg'iz o'zi plyaj bo'ylab yuradi. U salqin buloqqa yetib bormoqchi. Arablardan biri yana o'sha yerda. Odam pichog'ini chiqaradi, tig'dagi yorug'lik Mersoning ko'ziga uriladi, ter esa uning ko'zini ko'r qiladi. Qo'li to'pponchani siqadi va u o'q uzadi. Keyin harakatsiz tanaga yana to'rt marta o'q uzadi va baxtli kunning muvozanatini buzib qo'yganini tushunadi." }
+      ],
+      "gloss": [
+        { "t": "fried", "uz": "qovurilgan", "ex": "They eat fried fish." },
+        { "t": "knife", "uz": "pichoq", "ex": "One of the Arabs cuts Raymond with a knife." },
+        { "t": "spring", "uz": "buloq", "ex": "...near a small spring behind a rock." },
+        { "t": "slip away", "uz": "sirg'alib ketmoq, sezdirmay ketmoq", "ex": "The Arabs slip away behind the rock." },
+        { "t": "blade", "uz": "tig'", "ex": "The light flashes on the blade." },
+        { "t": "blind", "uz": "ko'r qilmoq", "ex": "Sweat blinds him." },
+        { "t": "balance", "uz": "muvozanat", "ex": "...he has destroyed the balance of a happy day." }
+      ],
+      "quiz": [
+        { "q": "Why does Meursault take Raymond's gun?", "o": ["He wants to kill the Arabs", "So that Raymond will not shoot without a reason", "To sell it", "Because Marie asks him"], "a": 1, "why_uz": "Dastlab u zo'ravonlikning oldini olmoqchi bo'ladi." },
+        { "q": "Why does Meursault walk back to the beach alone?", "o": ["To find Raymond's enemy", "He does not want to go inside and looks for the cool spring", "To meet Marie", "To swim"], "a": 1, "why_uz": "Uni reja emas, issiq va quyosh boshqaradi." },
+        { "q": "How many times does he fire in total?", "o": ["Once", "Twice", "Three times", "Five times"], "a": 3, "why_uz": "Bir o'q, keyin yana to'rtta — sudda aynan shu to'rt o'q haqida ko'p so'rashadi." }
+      ],
+      "note_uz": "Birinchi qism shu bob bilan tugaydi. Kamyu qotillikni ongli qaror sifatida emas, quyosh, issiq, yorug'lik va charchoqning natijasi sifatida tasvirlaydi. Romanning ikkinchi qismi shu bir lahzani jamiyat qanday «tushuntirib berishga» urinishi haqida."
+    },
+    {
+      "part": 2,
+      "title": "The Examining Magistrate",
+      "title_uz": "Tergovchi",
+      "recap_uz": "Merso hibsga olinadi. Advokat va tergovchi uni ko'proq onasining dafnidagi xatti-harakati haqida so'roq qilishadi. Tergovchi xochni ko'rsatib, Xudoga ishonasanmi, deb so'raydi.",
+      "paras": [
+        { "en": "After his arrest, Meursault is questioned many times. At first he does not take the situation very seriously. The court gives him a young lawyer, who explains that the police have learned about his behaviour at his mother's funeral. The lawyer asks whether he felt sad that day. Meursault says he probably loved his mother, but that all healthy people sometimes wish the people they love were dead.", "uz": "Hibsga olingandan keyin Merso ko'p marta so'roq qilinadi. Avvaliga u vaziyatga unchalik jiddiy qaramaydi. Sud unga yosh advokat tayinlaydi, u politsiya Mersoning onasining dafnidagi xatti-harakati haqida bilib olganini tushuntiradi. Advokat o'sha kuni u qayg'urganmi, deb so'raydi. Merso onasini, ehtimol, sevganini, lekin barcha sog'lom odamlar ba'zan sevgan kishilarining o'limini o'ylab qo'yishini aytadi." },
+        { "en": "The lawyer is upset and asks him never to say that in court. He wants Meursault to say that he controlled his natural feelings that day. Meursault refuses, because it would not be true. He notices that the lawyer looks at him with a kind of disgust, and he wishes he could explain that he is just like everyone else.", "uz": "Advokat xafa bo'lib, buni sudda hech qachon aytmaslikni so'raydi. U Mersoning o'sha kuni tabiiy hislarini jilovlaganini aytishini istaydi. Merso rad etadi, chunki bu rost bo'lmaydi. U advokat unga qandaydir jirkanish bilan qarayotganini sezadi va o'zining boshqalardan farqi yo'qligini tushuntira olishni istaydi." },
+        { "en": "The examining magistrate is more interested in one detail: why did Meursault wait between the first shot and the next four? Meursault cannot answer. Then the magistrate takes a silver crucifix from a drawer, holds it in front of Meursault's face and asks if he believes in God. Meursault says no. The magistrate cannot accept that a man has no faith; for him, life would then have no meaning.", "uz": "Tergovchini bitta tafsilot ko'proq qiziqtiradi: nega Merso birinchi o'q bilan keyingi to'rttasi orasida kutdi? Merso javob bera olmaydi. Shunda tergovchi tortmadan kumush xoch olib, uni Mersoning yuziga tutadi va Xudoga ishonasanmi, deb so'raydi. Merso yo'q, deydi. Tergovchi insonda e'tiqod bo'lmasligini qabul qila olmaydi — unga ko'ra, bunda hayot ma'nosiz bo'lib qoladi." },
+        { "en": "The questioning continues for eleven months. Slowly the meetings become almost friendly, and the magistrate calls Meursault by a joking nickname because of his lack of faith. Meursault even feels that he is almost one of the family. Only later does he understand how serious his situation is.", "uz": "So'roqlar o'n bir oy davom etadi. Asta-sekin uchrashuvlar deyarli samimiy tus oladi, tergovchi esa e'tiqodsizligi uchun Mersoni hazil laqab bilan chaqiradi. Merso hatto o'zini deyarli oila a'zosiday his qiladi. Vaziyati naqadar jiddiyligini u faqat keyinroq tushunadi." }
+      ],
+      "gloss": [
+        { "t": "arrest", "uz": "hibsga olish", "ex": "After his arrest, Meursault is questioned." },
+        { "t": "lawyer", "uz": "advokat", "ex": "The court gives him a young lawyer." },
+        { "t": "behaviour", "uz": "xatti-harakat", "ex": "...his behaviour at his mother's funeral." },
+        { "t": "disgust", "uz": "jirkanish", "ex": "...with a kind of disgust." },
+        { "t": "magistrate", "uz": "tergovchi sudya", "ex": "The examining magistrate is more interested in one detail." },
+        { "t": "crucifix", "uz": "xoch (Iso suvrati bilan)", "ex": "He takes a silver crucifix from a drawer." },
+        { "t": "faith", "uz": "e'tiqod, imon", "ex": "...that a man has no faith." }
+      ],
+      "quiz": [
+        { "q": "What does the lawyer ask Meursault not to say in court?", "o": ["That he hates Raymond", "That healthy people sometimes wish loved ones were dead", "That he likes the sea", "That he wants to go to Paris"], "a": 1, "why_uz": "Advokat bu samimiy, lekin «sovuq» fikr sudyalarni unga qarshi qo'yishini biladi." },
+        { "q": "What question does Meursault fail to answer?", "o": ["Why he waited between the first shot and the others", "Where he bought the gun", "Who Marie is", "Why he lives alone"], "a": 0, "why_uz": "Bu savolga mantiqiy javob yo'q — Merso o'zi ham bilmaydi." },
+        { "q": "How long does the questioning last?", "o": ["Two weeks", "Six months", "Eleven months", "Three years"], "a": 2, "why_uz": "Tergov o'n bir oy davom etadi." }
+      ],
+      "note_uz": "Ikkinchi qismda til o'zgaradi: endi Merso emas, boshqalar uning hayotini «hikoya qiladi». Advokat ham, tergovchi ham undan ma'lum bir ma'no — pushaymonlik yoki e'tiqod — talab qiladi. Merso esa yolg'on tuyg'u ko'rsatishdan bosh tortadi."
+    },
+    {
+      "part": 2,
+      "title": "Life in Prison",
+      "title_uz": "Qamoqdagi hayot",
+      "recap_uz": "Mari qamoqqa uchrashuvga keladi. Merso sigaret va ayollardan mahrum bo'lishga, vaqtni xotiralar bilan o'ldirishga o'rganadi.",
+      "paras": [
+        { "en": "Marie visits him once in prison. The visiting room is loud and crowded: prisoners on one side, visitors on the other, with a space between them, so everyone has to shout. Marie smiles, tells him to be hopeful and says they will get married. Soon after, she writes to say she is no longer allowed to visit, because she is not his wife.", "uz": "Mari uni qamoqda bir marta ko'rgani keladi. Uchrashuv xonasi shovqinli va gavjum: bir tomonda mahbuslar, boshqa tomonda mehmonlar, o'rtada bo'sh joy, shuning uchun hamma baqirishga majbur. Mari jilmayib, umidini yo'qotmaslikni aytadi va ular turmush qurishlarini aytadi. Ko'p o'tmay u xat yozib, endi unga uchrashuvga ruxsat berilmasligini bildiradi, chunki u Mersoning xotini emas." },
+        { "en": "At first Meursault still thinks like a free man: he wants to go to the beach and walk to the sea. Then he begins to think like a prisoner. He misses women and cigarettes very much, but slowly he gets used to living without them. He understands that taking away freedom is the real punishment.", "uz": "Avvaliga Merso hali ham erkin odamday o'ylaydi: plyajga borib, dengiz tomon yurishni istaydi. Keyin u mahbusday o'ylay boshlaydi. U ayollarni va sigaretni juda sog'inadi, ammo asta-sekin ularsiz yashashga o'rganadi. U haqiqiy jazo — erkinlikdan mahrum qilish ekanini tushunadi." },
+        { "en": "To kill time, he remembers his old room in great detail: every piece of furniture, every object, every scratch on the walls. He finds that a man who has lived only one day could easily spend a hundred years in prison, because he would have enough memories. He also learns to sleep for many hours a day.", "uz": "Vaqtni o'tkazish uchun u eski xonasini juda batafsil eslaydi: har bir mebel, har bir buyum, devorlardagi har bir tirnalgan iz. U atigi bir kun yashagan odam ham qamoqda yuz yilni bemalol o'tkaza olishini anglaydi, chunki unda yetarlicha xotira bo'ladi. U yana kuniga ko'p soat uxlashni o'rganadi." },
+        { "en": "Under his mattress he finds an old piece of newspaper with a strange story. A man left his village, became rich abroad and came back years later. He did not tell his mother and sister who he was, and that night they killed him for his money. Meursault reads the story thousands of times. One day he sees his own serious face in his metal food bowl and realises that he has been talking to himself.", "uz": "Matrasi ostidan u g'alati voqea yozilgan eski gazeta parchasini topadi. Bir odam qishlog'idan ketib, chet elda boyib, ko'p yillardan keyin qaytgan. U onasi va singlisiga kimligini aytmagan va o'sha kecha ular pul uchun uni o'ldirishgan. Merso bu voqeani ming marta o'qiydi. Bir kuni u temir ovqat idishida o'zining jiddiy yuzini ko'radi va o'zi bilan gaplashib yurganini anglaydi." }
+      ],
+      "gloss": [
+        { "t": "crowded", "uz": "gavjum", "ex": "The visiting room is loud and crowded." },
+        { "t": "allowed", "uz": "ruxsat berilgan", "ex": "She is no longer allowed to visit." },
+        { "t": "get used to", "uz": "o'rganib qolmoq", "ex": "He gets used to living without them." },
+        { "t": "punishment", "uz": "jazo", "ex": "Taking away freedom is the real punishment." },
+        { "t": "kill time", "uz": "vaqtni o'tkazmoq", "ex": "To kill time, he remembers his old room." },
+        { "t": "mattress", "uz": "matras, to'shak", "ex": "Under his mattress he finds an old newspaper." },
+        { "t": "realise", "uz": "anglamoq, tushunib yetmoq", "ex": "He realises that he has been talking to himself." }
+      ],
+      "quiz": [
+        { "q": "Why can Marie no longer visit him?", "o": ["She moved to Paris", "She is not his wife", "She is ill", "He refuses to see her"], "a": 1, "why_uz": "Qamoq qoidasiga ko'ra faqat xotiniga ruxsat beriladi." },
+        { "q": "How does Meursault kill time?", "o": ["By reading the Bible", "By remembering every detail of his room", "By writing letters", "By working in the kitchen"], "a": 1, "why_uz": "Xotira uning erkinligiga aylanadi." },
+        { "q": "What is the newspaper story about?", "o": ["A famous trial", "A man killed by his mother and sister who did not recognise him", "A storm at sea", "A war in Europe"], "a": 1, "why_uz": "Bu absurd voqea — Kamyuning «Anglashilmovchilik» pyesasining asosi." }
+      ],
+      "note_uz": "Qamoqda Merso birinchi marta ichki dunyosiga qaraydi. Xotiralar, uyqu va gazetadagi absurd voqea — bularning barchasi hayotning ma'nosiz, lekin baribir qimmatli ekanini ko'rsatadi."
+    },
+    {
+      "part": 2,
+      "title": "The Trial",
+      "title_uz": "Sud",
+      "recap_uz": "Yozda sud boshlanadi. Qariyalar uyi direktori, qorovul, Peres, Selest, Mari, Masson, Salamano va Raymon guvohlik beradi. Prokuror dafndagi xatti-harakatni asosiy dalilga aylantiradi.",
+      "paras": [
+        { "en": "The trial begins in early summer. The courtroom is hot and full of people; journalists have come because there is not much news. Meursault feels like an outsider at his own trial. He even has the strange feeling that everyone is there to judge him, while he is only watching.", "uz": "Sud yoz boshida boshlanadi. Sud zali issiq va odamlarga to'la; yangilik kam bo'lgani uchun jurnalistlar ham kelgan. Merso o'z sudida o'zini begonaday his qiladi. Unda hatto hamma uni hukm qilish uchun kelgan, u esa faqat tomosha qilayotganday g'alati tuyg'u paydo bo'ladi." },
+        { "en": "The first witnesses come from the home. The director says Meursault did not want to see his mother's face, did not cry and did not know her age. The caretaker says Meursault smoked, slept and drank coffee with milk by the coffin. Old Pérez says he did not see him cry. Each small detail makes the jury look at Meursault with more dislike.", "uz": "Birinchi guvohlar qariyalar uyidan keladi. Direktor Merso onasining yuzini ko'rishni istamaganini, yig'lamaganini va uning yoshini bilmaganini aytadi. Qorovul Merso tobut yonida chekkanini, uxlaganini va sutli qahva ichganini aytadi. Keksa Peres uning yig'laganini ko'rmaganini aytadi. Har bir kichik tafsilot hakamlar hay'atini Mersoga ko'proq yoqtirmay qarashga majbur qiladi." },
+        { "en": "Céleste says that what happened was simply bad luck, like bad weather, and he wants to say more, but the court stops him. Marie explains that they met the day after the funeral, went swimming and saw a comedy at the cinema. She starts crying, saying that Meursault is a good man and that the court is twisting her words.", "uz": "Selest sodir bo'lgan voqea shunchaki omadsizlik, xuddi yomon ob-havoday, deydi va yana gapirmoqchi bo'ladi, lekin sud uni to'xtatadi. Mari ular dafndan keyingi kuni uchrashganini, cho'milganini va kinoda komediya ko'rganini tushuntiradi. U yig'lab, Merso yaxshi odam ekanini va sud uning so'zlarini buzib ko'rsatayotganini aytadi." },
+        { "en": "Masson and Salamano also try to help, but nobody listens much. When Raymond says that Meursault was involved by chance, the prosecutor answers that he wrote Raymond's letter and was a friend of a man of bad character. In the end the prosecutor shouts that Meursault buried his mother with the heart of a criminal. Meursault sees that this sentence has a strong effect on everyone.", "uz": "Masson va Salamano ham yordam berishga urinishadi, lekin ularni deyarli hech kim tinglamaydi. Raymon Merso tasodifan aralashib qolganini aytganda, prokuror u Raymonning xatini yozganini va yomon fe'lli odamning do'sti bo'lganini eslatadi. Oxirida prokuror Merso onasini jinoyatchi yuragi bilan dafn qilgan, deb qichqiradi. Merso bu jumla hammaga kuchli ta'sir qilganini ko'radi." }
+      ],
+      "gloss": [
+        { "t": "trial", "uz": "sud jarayoni", "ex": "The trial begins in early summer." },
+        { "t": "outsider", "uz": "begona, chetdagi odam", "ex": "Meursault feels like an outsider at his own trial." },
+        { "t": "jury", "uz": "hakamlar hay'ati (prisyajnilar)", "ex": "...makes the jury look at Meursault with more dislike." },
+        { "t": "bad luck", "uz": "omadsizlik, baxtsizlik", "ex": "What happened was simply bad luck." },
+        { "t": "twist (words)", "uz": "so'zlarni buzib ko'rsatmoq", "ex": "...the court is twisting her words." },
+        { "t": "prosecutor", "uz": "prokuror, ayblovchi", "ex": "The prosecutor answers..." },
+        { "t": "by chance", "uz": "tasodifan", "ex": "...Meursault was involved by chance." }
+      ],
+      "quiz": [
+        { "q": "What do the first witnesses mostly talk about?", "o": ["The murder on the beach", "Meursault's behaviour at his mother's funeral", "His work at the office", "Raymond's girlfriend"], "a": 1, "why_uz": "Sud qotillikdan ko'ra dafndagi xatti-harakatga ko'proq e'tibor beradi." },
+        { "q": "How does Céleste describe what happened?", "o": ["As a planned crime", "As bad luck", "As self-defence", "As Raymond's fault"], "a": 1, "why_uz": "Oddiy do'st sifatida u voqeani tabiiy omadsizlikka o'xshatadi." },
+        { "q": "What is the prosecutor's main idea?", "o": ["Meursault was drunk", "Meursault buried his mother with the heart of a criminal", "Meursault is mentally ill", "Meursault acted for money"], "a": 1, "why_uz": "Prokuror dafnni qotillik bilan bog'lab, Mersoni «yuraksiz» odam qilib ko'rsatadi." }
+      ],
+      "note_uz": "Kamyuning mashhur fikri: jamiyatimizda onasining dafnida yig'lamagan har bir odam o'limga hukm qilinishi mumkin. Bu bobda sud haqiqatni emas, «to'g'ri his-tuyg'ular»ni izlaydi."
+    },
+    {
+      "part": 2,
+      "title": "The Verdict",
+      "title_uz": "Hukm",
+      "recap_uz": "Prokuror o'lim jazosini talab qiladi, advokat himoya qiladi. Hakamlar hay'ati Mersoni aybdor deb topadi: unga ommaviy maydonda boshini kesish jazosi tayinlanadi.",
+      "paras": [
+        { "en": "In the final speeches everybody talks about Meursault, but nobody asks him much. The prosecutor says the crime was planned and that Meursault has no soul: he never showed regret and does not understand right and wrong. He even connects him with the next case in court, a man who killed his own father, and says Meursault is guilty in a similar way.", "uz": "Yakuniy nutqlarda hamma Merso haqida gapiradi, lekin undan deyarli hech narsa so'ramaydi. Prokuror jinoyat rejalashtirilgan va Mersoda qalb yo'q, deydi: u hech qachon pushaymonlik ko'rsatmagan, yaxshi va yomonni farqlamaydi. U hatto Mersoni sudda navbatdagi ish — o'z otasini o'ldirgan odam bilan bog'laydi va Merso ham shunga o'xshash tarzda aybdor ekanini aytadi." },
+        { "en": "The prosecutor asks for the death penalty. Meursault would like to say that he has never been able to feel real regret for anything, because he always lives in the present moment. But he is not allowed to speak much. When the judge asks if he has anything to add, he says quickly that he killed the man because of the sun. Some people in the room laugh.", "uz": "Prokuror o'lim jazosini talab qiladi. Merso hech qachon biror narsa uchun chin pushaymonlik his qila olmaganini aytmoqchi, chunki u doim hozirgi lahza bilan yashaydi. Lekin unga ko'p gapirishga ruxsat berilmaydi. Sudya qo'shimcha aytadigan gapi bormi, deb so'raganda, u shoshib arabni quyosh sababli o'ldirganini aytadi. Zaldagi ba'zi odamlar kulishadi." },
+        { "en": "His lawyer speaks for a long time about Meursault as a good worker and a loyal son. Meursault feels tired and empty, and his mind goes to small memories of his free life: the smell of summer, the streets he loved, Marie's laughter. He hears an ice-cream seller's horn outside and feels a wave of sadness.", "uz": "Advokati Merso haqida yaxshi xodim va sadoqatli o'g'il sifatida uzoq gapiradi. Merso charchoq va bo'shliqni his qiladi, xayoli erkin hayotining kichik xotiralariga ketadi: yoz hidi, u sevgan ko'chalar, Marining kulgisi. U tashqarida muzqaymoq sotuvchining karnayini eshitadi va uni qayg'u to'lqini qamrab oladi." },
+        { "en": "Late in the evening the jury returns. The judge reads the verdict: Meursault will have his head cut off in a public square, in the name of the French people. Meursault sees a strange respect on the faces around him. When the judge asks if he has anything to say, he thinks for a moment and says no.", "uz": "Kechki payt hakamlar hay'ati qaytadi. Sudya hukmni o'qiydi: fransuz xalqi nomidan Mersoning boshi ommaviy maydonda kesiladi. Merso atrofdagi yuzlarda g'alati hurmatni ko'radi. Sudya aytadigan gapi bormi, deb so'raganda, u bir zum o'ylaydi va yo'q, deydi." }
+      ],
+      "gloss": [
+        { "t": "regret", "uz": "pushaymonlik", "ex": "He never showed regret." },
+        { "t": "guilty", "uz": "aybdor", "ex": "Meursault is guilty in a similar way." },
+        { "t": "death penalty", "uz": "o'lim jazosi", "ex": "The prosecutor asks for the death penalty." },
+        { "t": "loyal", "uz": "sadoqatli", "ex": "...a good worker and a loyal son." },
+        { "t": "empty", "uz": "bo'sh, ichi bo'm-bo'sh", "ex": "Meursault feels tired and empty." },
+        { "t": "verdict", "uz": "hukm (hay'at qarori)", "ex": "The judge reads the verdict." },
+        { "t": "in the name of", "uz": "... nomidan", "ex": "...in the name of the French people." }
+      ],
+      "quiz": [
+        { "q": "What reason does Meursault give for the killing?", "o": ["Self-defence", "Money", "The sun", "Raymond told him to"], "a": 2, "why_uz": "Bu samimiy javob, lekin zaldagilarga kulgili tuyuladi." },
+        { "q": "Why can Meursault not feel real regret?", "o": ["He is proud", "He always lives in the present moment", "He does not remember the crime", "He hates the victim"], "a": 1, "why_uz": "Merso o'tmish haqida qayg'urmaydi, faqat hozirgi lahzani sezadi." },
+        { "q": "What is the verdict?", "o": ["Ten years in prison", "Freedom", "Death in a public square", "Life in prison"], "a": 2, "why_uz": "Unga ommaviy maydonda o'lim jazosi tayinlanadi." }
+      ],
+      "note_uz": "Merso o'z sudida begona: uning taqdiri haqida boshqalar gapiradi, u esa jim. Hukm qotillik uchun emas, ko'proq jamiyat kutgan tuyg'ularni ko'rsatmagani uchun chiqarilganday tuyuladi."
+    },
+    {
+      "part": 2,
+      "title": "The Chaplain",
+      "title_uz": "Ruhoniy",
+      "recap_uz": "Merso apellyatsiya natijasini kutadi. Ruhoniyni rad etadi, keyin g'azab bilan unga qichqiradi. Oxirida u dunyoning befarqligini qabul qilib, tinchlik va baxtni his qiladi.",
+      "paras": [
+        { "en": "In his cell Meursault thinks about two things: the dawn, when condemned men are taken away, and his appeal. He wonders if there is any way to escape the machine of justice. He remembers that his father once went to see an execution and came home sick. Now he thinks that watching executions is the only thing that truly matters to a man.", "uz": "Kamerasida Merso ikki narsa haqida o'ylaydi: hukm qilinganlar olib ketiladigan tong va apellyatsiyasi. U adolat mashinasidan qochib qutulishning biror yo'li bormi, deb o'ylaydi. U otasi bir marta qatlni ko'rgani borib, uyga kasal bo'lib qaytganini eslaydi. Endi u qatlni ko'rish inson uchun chindan ham muhim yagona narsa, deb o'ylaydi." },
+        { "en": "He imagines that his appeal is refused, and then that it is accepted. Accepting death is hard, but he tells himself that everyone dies, now or in twenty years, so the difference is not important. Every night he waits for the sound of footsteps at dawn, and every morning he is glad to have one more day.", "uz": "U apellyatsiyasi rad etilganini, keyin esa qabul qilinganini tasavvur qiladi. O'limni qabul qilish qiyin, lekin u o'ziga hamma — hozir yoki yigirma yildan keyin — baribir o'lishini, shuning uchun farq muhim emasligini aytadi. Har kecha u tongdagi qadam tovushlarini kutadi va har tong yana bir kun qo'lga kiritganidan xursand bo'ladi." },
+        { "en": "The prison chaplain comes to see him again, although Meursault has refused many times. The chaplain talks about God, sin and hope, and says Meursault's heart is blind. Suddenly Meursault explodes. He takes the priest by the collar and shouts that none of his certainties is worth one hair of a woman. Meursault is sure of himself, sure of his life and sure of the death that is coming.", "uz": "Merso ko'p marta rad etganiga qaramay, qamoqxona ruhoniysi yana uni ko'rgani keladi. Ruhoniy Xudo, gunoh va umid haqida gapiradi va Mersoning qalbi ko'r ekanini aytadi. To'satdan Merso portlaydi. U ruhoniyning yoqasidan ushlab, uning barcha ishonchlari bir ayolning bitta sochiga ham arzimasligini qichqiradi. Merso o'ziga, hayotiga va yaqinlashayotgan o'limga ishonchi komil." },
+        { "en": "After the chaplain leaves, Meursault becomes calm and sleeps. He wakes up under the stars and smells the night and the sea. He thinks of his mother, who found a new friend at the end of her life and felt ready to live again. For the first time he opens himself to the gentle indifference of the world, and he feels that he has been happy and is still happy. He hopes that on the day of his execution there will be a large crowd, greeting him with cries of hate.", "uz": "Ruhoniy ketgach, Merso tinchlanadi va uxlaydi. U yulduzlar ostida uyg'onib, tun va dengiz hidini sezadi. U hayotining oxirida yangi do'st topgan va yana yashashga tayyor bo'lgan onasini eslaydi. U birinchi marta dunyoning muloyim befarqligiga o'zini ochadi va baxtli bo'lganini, hozir ham baxtli ekanini his qiladi. U qatl kuni katta olomon to'planib, uni nafrat qichqiriqlari bilan kutib olishini umid qiladi." }
+      ],
+      "gloss": [
+        { "t": "cell", "uz": "kamera (qamoqxonada)", "ex": "In his cell Meursault thinks about two things." },
+        { "t": "condemned", "uz": "hukm qilingan", "ex": "...when condemned men are taken away." },
+        { "t": "appeal", "uz": "apellyatsiya, shikoyat", "ex": "He imagines that his appeal is refused." },
+        { "t": "execution", "uz": "qatl", "ex": "His father once went to see an execution." },
+        { "t": "chaplain", "uz": "(qamoqxona) ruhoniysi", "ex": "The prison chaplain comes to see him." },
+        { "t": "explode", "uz": "portlamoq, jahli chiqib ketmoq", "ex": "Suddenly Meursault explodes." },
+        { "t": "indifference", "uz": "befarqlik", "ex": "...the gentle indifference of the world." }
+      ],
+      "quiz": [
+        { "q": "How does Meursault think about the time of death?", "o": ["Dying later is much better", "Everyone dies, now or in twenty years, so the difference is small", "He will never die", "Only old people should die"], "a": 1, "why_uz": "U o'limni hayotning muqarrar qismi sifatida qabul qilishga urinadi." },
+        { "q": "What makes Meursault explode?", "o": ["The prison food", "The chaplain's talk about God and hope", "Marie's letter", "The judge's visit"], "a": 1, "why_uz": "Ruhoniy unga «yuqori ma'no» taklif qiladi, Merso esa faqat shu hayotni qadrlaydi." },
+        { "q": "How does Meursault feel at the end?", "o": ["Afraid and angry", "Calm and happy", "Sorry for his crime", "Hopeful about escape"], "a": 1, "why_uz": "Absurdni qabul qilgach, u tinchlik va baxt topadi." }
+      ],
+      "note_uz": "Final — Kamyu falsafasining yuragi. Dunyo inson uchun ma'no yaratmaydi, lekin buni tan olgan odam ozod bo'ladi. Merso Xudoga yoki umidga emas, shu hayotning o'ziga — quyosh, dengiz va tunga sodiq qoladi. Keyinroq Kamyu yozganidek, u «yolg'on gapirishdan bosh tortgani uchun» o'ladi."
+    }
+  ]
+}

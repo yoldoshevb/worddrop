@@ -136,7 +136,7 @@
 <script src="signature-data.js" defer></script>
 <script src="cert.js" defer onerror="window.__wdCertLoadFailed=true"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<link rel="stylesheet" href="app.tokens.ad90ac7c.css">
+<link rel="stylesheet" href="app.tokens.6f861978.css">
 <style id="wd-desktop">
 /* ===== DESKTOP LAYOUT — faqat min-width:1024px. Mobil qatlamga tegmaydi. ===== */
 .side-brand{display:none}
@@ -660,7 +660,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.0264e316.js"></script>
+<script src="app.svg-ikonkalar.4e2c2efa.js"></script>
 <script src="app.kitobcha-studiyasi-v94.5078a2cd.js"></script>
 <script>
 /* ==================================================================
@@ -1145,7 +1145,7 @@ window.__wdOpenPro=openPro;
 
 </script>
 
-<script src="app.1-boshi.67a97a3c.js"></script>
+<script src="app.1-boshi.e30c5b81.js"></script>
 
 <script src="app.2-shablonlar.6052af76.js"></script>
 
@@ -2792,6 +2792,14 @@ try{
     p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=SRC; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenML=async function(){ try{ await load(); window.WDML.open(); }catch(e){ try{ showToast("Imtihon moduli yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };
   window.addEventListener('load',()=>{ if(location.hash==='#ml') setTimeout(()=>window.__wdOpenML(),1200); });
+})();
+/* v108: Adabiyot (kitob javoni) — alohida fayl, faqat ochilganda yuklanadi */
+(function(){
+  let p=null;
+  function load(){ if(window.WDLit) return Promise.resolve(); if(p) return p;
+    p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='lit.v108.js'; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
+  window.__wdOpenLit=async function(o){ try{ await load(); window.WDLit.open(o||{}); }catch(e){ try{ showToast("Adabiyot bo'limi yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };
+  window.addEventListener('load',()=>{ if(location.hash==='#adabiyot') setTimeout(()=>window.__wdOpenLit(),1200); });
 })();
 /* v101: Admin statistika — alohida fayl, faqat ochilganda yuklanadi */
 (function(){
