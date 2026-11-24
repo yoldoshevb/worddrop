@@ -152,7 +152,7 @@ function renderLib(){
       <em class="lt-tag ${w.edition}">${w.edition==='study'?"O'quv nashri":"To'liq matn"}</em>
     </button>`).join('')}</div>`
     :`<div class="ll-empty">${S.works.length?'Bu so\'rov bo\'yicha asar topilmadi.':'Kitoblar yuklanmadi. Internetni tekshirib, qayta oching.'}</div>`}
-    <p class="ll-soon">Tez orada: Kafka, Austen, Dostoyevskiy, Orwell, Zamyatin, Nitsshe va boshqalar.</p>
+    <p class="ll-soon">Tez orada: Austen, Dostoyevskiy, Orwell, Zamyatin, Nitsshe, Huxley va boshqalar.</p>
   </div></div>`;
   $(el,'[data-back]').onclick=back;
   $$(el,'[data-work]').forEach(b=>b.onclick=()=>push('work',b.dataset.work));
@@ -463,7 +463,7 @@ function css(){
 .lc-m{font-size:15px}
 .lc-m .lc-t b{font-size:26px}
 .lc-l{width:168px;font-size:17px}.lc-l .lc-t b{font-size:34px}
-.lc-t b{overflow-wrap:anywhere}.lc-m.lc-long .lc-t b{font-size:20px}.lc-l.lc-long .lc-t b{font-size:26px}.lc-s.lc-long .lc-t b{font-size:10px}
+.lc-t b{overflow-wrap:break-word;hyphens:manual}.lc-m.lc-long .lc-t b{font-size:20px}.lc-l.lc-long .lc-t b{font-size:22px}.lc-s.lc-long .lc-t b{font-size:10px}
 /* kutubxona */
 .ll-hd{padding:10px 0 18px}
 .ll-hd h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:46px;line-height:1;letter-spacing:-1px;margin:0 0 8px}
@@ -610,7 +610,7 @@ function css(){
   .ll-hd h1{font-size:38px}
   .ll-grid{grid-template-columns:repeat(2,1fr);gap:22px 14px}
   .lw-hero{flex-direction:column;align-items:flex-start;gap:16px}
-  .lc-l{width:130px}.lc-l .lc-t b{font-size:27px}.lc-l.lc-long .lc-t b{font-size:21px}
+  .lc-l{width:130px}.lc-l .lc-t b{font-size:27px}.lc-l.lc-long .lc-t b{font-size:17px}
   .lw-info h1{font-size:36px}
   .lw-info .lt-cta{width:100%}
   .lr-art{padding:20px 18px 60px}

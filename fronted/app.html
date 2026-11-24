@@ -2797,7 +2797,7 @@ try{
 (function(){
   let p=null;
   function load(){ if(window.WDLit) return Promise.resolve(); if(p) return p;
-    p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='lit.v108.js'; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
+    p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='lit.v109.js'; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenLit=async function(o){ try{ await load(); window.WDLit.open(o||{}); }catch(e){ try{ showToast("Adabiyot bo'limi yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };
   window.addEventListener('load',()=>{ if(location.hash==='#adabiyot') setTimeout(()=>window.__wdOpenLit(),1200); });
 })();
