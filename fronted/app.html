@@ -660,7 +660,7 @@
 <div id="toast" class="toast"></div>
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
-<script src="app.svg-ikonkalar.948bfac1.js"></script>
+<script src="app.svg-ikonkalar.0264e316.js"></script>
 <script src="app.kitobcha-studiyasi-v94.5078a2cd.js"></script>
 <script>
 /* ==================================================================
@@ -2817,6 +2817,39 @@ try{
       window.__wdOpenPT({skippable:true});
     }catch(e){} },3500);
   });
+})();
+</script>
+<script>
+/* v107: KOMPYUTER — sichqoncha g'ildiragi hamma joyda ishlasin.
+   Kontent markazdagi ustunda aylanadi; g'ildirak chetdagi bo'sh joyda yoki sarlavha ustida bo'lsa,
+   o'sha balandlikdagi markaziy kontent aylantiriladi. G'ildirakni o'zi ishlatadigan joylar
+   (3D o'yin, xarita, defaultPrevented) va Ctrl+g'ildirak (masshtab) tegilmaydi. */
+(function(){
+  if(!(window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+  function scrollable(el,dy){
+    if(!el||el.nodeType!==1) return false;
+    const cs=getComputedStyle(el); if(!/(auto|scroll|overlay)/.test(cs.overflowY)) return false;
+    if(el.scrollHeight<=el.clientHeight+1) return false;
+    return dy>0 ? el.scrollTop+el.clientHeight<el.scrollHeight-1 : el.scrollTop>0;
+  }
+  function owner(el,dy){ while(el&&el!==document.body&&el!==document.documentElement){ if(scrollable(el,dy)) return el; el=el.parentElement; } return null; }
+  function anyScroller(el){ while(el&&el!==document.body){ const cs=getComputedStyle(el); if(/(auto|scroll|overlay)/.test(cs.overflowY)&&el.scrollHeight>el.clientHeight+1) return el; el=el.parentElement; } return null; }
+  document.addEventListener('wheel',function(e){
+    if(e.defaultPrevented||e.ctrlKey||Math.abs(e.deltaY)<Math.abs(e.deltaX)) return;
+    const t=e.target; if(t&&t.closest&&t.closest('canvas,input[type=range],select')) return;
+    if(owner(t,e.deltaY)) return;                         // brauzerning o'zi aylantiradi
+    if(t&&t.closest&&anyScroller(t)) return;                // ichki ro'yxat chetiga yetgan — tashqarini sudramaymiz
+    const y=Math.min(innerHeight-2,Math.max(2,e.clientY));
+    let box=null;
+    for(const x of [innerWidth/2, innerWidth*0.6, innerWidth*0.4]){
+      const stack=document.elementsFromPoint(x,y);
+      for(const el of stack){ const o=anyScroller(el); if(o){ box=o; break; } }
+      if(box) break;
+    }
+    if(!box) return;
+    const k=e.deltaMode===1?16:e.deltaMode===2?box.clientHeight:1;
+    box.scrollBy({top:e.deltaY*k,left:0,behavior:'auto'});
+  },{passive:true});
 })();
 </script>
 </body>

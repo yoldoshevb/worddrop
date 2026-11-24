@@ -69,3 +69,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-24 | Claude | v105b: Multilevel — Pro; bepul hisobga bitta cheklangan urinish (wd_ml_free, ml-exam v6, RLS), ml.v105b.js | GitHub → Pages, Supabase | shu commit |
 | 2026-11-24 | Claude | v106: Pro promokodlari — wd_promo_codes/uses, admin oynasi, ilova (Pro oynasi, promokod oynasi) va bot (/promo, tugma, start=promo_KOD), tg-v101 v5 | GitHub → Pages, Supabase | shu commit |
 | 2026-11-24 | Claude | v106: kompyuter uchun maxsus kursor (cursor.v106.js) — ilova va landing | GitHub → Pages | shu commit |
+| 2026-11-24 | Claude | v107: kompyuterda sichqoncha g'ildiragi chetdagi bo'sh joylarda ham kontentni aylantiradi | GitHub → Pages | shu commit |
