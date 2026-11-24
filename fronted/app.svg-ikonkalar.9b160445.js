@@ -1,7 +1,7 @@
 
 /* Ichki versiya belgisi — foydalanuvchiga ko'rinmaydi.
    Brauzer konsolida tekshirish: window.__wdVer  */
-window.__wdVer='v108';
+window.__wdVer='v111';
 /* v95: Telegram bot (@WordDropUzBot) — ulash, Kanal studiyasi; eslab qolish usuli; ko'k topshiriqlar; onboarding qayta yoqildi */
 /* v94: Drop AI — suhbat sherigi, rasmdan so'z, kitobcha studiyasi (drop-pro), kunlik limit 20 */
 /* v93: Xotira markazi (FSRS SRS) + Kunlik/Haftalik vazifalar va sandiqlar + Story kartalari */  /* v92: Nutq tuzatildi — Speaking takror/vaqt + Studio mikrofon qotib qolishi */
@@ -197,13 +197,6 @@ async function meaningWordAI(term){
   if(data && typeof data.meaning==='string' && data.meaning.trim()) return data.meaning.trim();
   return null;
 }
-/* Doska uchun: grammatik mavzuni tekshirib, o'zbekcha qoidalarini qaytaradi.
-   Kutilgan javob: { title:"First Conditional", rules:[{sign:"+",rule:"...",example:"..."}] } */
-async function boardTopicAI(topic){
-  const data = await aiRequest({ mode:'board', topic });
-  if(data && typeof data.title==='string' && Array.isArray(data.rules) && data.rules.length) return data;
-  return null;
-}
 /* Dars uchun: bosqich raqamiga mos 10 ta advanced so'z to'plamini tuzadi.
    Kutilgan javob: { theme:"...", words:[{term,pos,tr,ipa,def,ex,forms:[..]}] } */
 async function levelWordsAI(level, avoid){
@@ -236,14 +229,6 @@ async function levelWordsAI(level, avoid){
   }
   return null;
 }
-/* Parta qog'ozi uchun: mavzu bo'yicha chiroyli, formal inglizcha matn.
-   Kutilgan javob: { title:"...", text:"..." } */
-async function writingAI(topic){
-  const data = await aiRequest({ mode:'writing', topic });
-  if(data && typeof data.title==='string' && typeof data.text==='string' && data.text.trim()) return data;
-  return null;
-}
-
 /* ========== LOCAL STORAGE — progress hech qachon yo'qolmasligi uchun ========== */
 const LS_KEY='worddrop_state_v1';
 function loadState(){
@@ -292,14 +277,9 @@ function __wdWriteState(){
       avatar:window.__wdAvatar||'',
       darkMode:window.__wdDark===true,
       settings:{sound:window.__wdSoundOn!==false, notif:window.__wdNotifOn!==false},
-      wallWords:(window.__wdWallWords||[]),
       listenPaid:(window.__wdListenPaid||{}),
       titleId:(window.__wdTitleId||''),
       genLevels:(window.__wdGenLevels||{}),
-      wallBoard:(window.__wdWallBoard||null),
-      tvVideo:(window.__wdTvVideo||null),
-      notebook:(window.__wdNotebook||[]),
-      windowScene:(window.__wdWindowScene||'real'),
       ielts:(window.__wdIelts||[]),
       lang:(window.__wdLang||'uz'),
       srs:(window.__wdSrs||{}),
@@ -309,7 +289,6 @@ function __wdWriteState(){
       duels:(window.__wdDuels||[]),
       coins:(window.__wdCoins||0),
       room:(window.__wdRoom||null),
-      roomCode:(window.__wdRoomCode||''),
       frame:(window.__wdFrame||''),
       boostUntil:(window.__wdBoostUntil||0),
       wheelLast:(window.__wdWheelLast||0),
@@ -716,19 +695,10 @@ window.__wdAvatar = SAVED_STATE.avatar || '';
 window.__wdDark = SAVED_STATE.darkMode === true;
 window.__wdSoundOn = SAVED_STATE.settings ? SAVED_STATE.settings.sound !== false : true;
 window.__wdNotifOn = SAVED_STATE.settings ? SAVED_STATE.settings.notif !== false : true;
-window.__wdWallWords = Array.isArray(SAVED_STATE.wallWords) ? SAVED_STATE.wallWords : []; // So'z devori lug'ati
+window.__wdWallWords = []; // v111: So'z devori olib tashlandi (eski so'zlar Takrorimga ko'chiriladi)
 window.__wdListenPaid = (SAVED_STATE.listenPaid && typeof SAVED_STATE.listenPaid==='object') ? SAVED_STATE.listenPaid : {}; // tinglash mukofoti hisobi
 window.__wdTitleId = SAVED_STATE.titleId || ''; // profilga taqilgan titul (yutuq id)
 window.__wdGenLevels = (SAVED_STATE.genLevels && typeof SAVED_STATE.genLevels==='object') ? SAVED_STATE.genLevels : {}; // AI tuzgan darslar keshi
-window.__wdWallBoard = (SAVED_STATE.wallBoard && SAVED_STATE.wallBoard.title) ? SAVED_STATE.wallBoard : null; // Doskadagi mavzu
-/* Televizordagi video. Foydalanuvchi o'zi havola qo'ymagan bo'lsa —
-   standart video ko'rsatiladi (hammada bir xil, sozlash shart emas). */
-window.TV_DEFAULT={type:'video', src:'https://jgeycbyaoiybpudakgmk.supabase.co/storage/v1/object/public/videos/VID_20260806_060024_096.mp4'};
-window.__wdTvVideo = (SAVED_STATE.tvVideo && SAVED_STATE.tvVideo.src) ? SAVED_STATE.tvVideo
-  : (typeof SAVED_STATE.tvVideo==='string' && SAVED_STATE.tvVideo) ? {type:'yt', src:SAVED_STATE.tvVideo}
-  : window.TV_DEFAULT;   // manba HECH QACHON bo'sh qolmaydi
-window.__wdNotebook = Array.isArray(SAVED_STATE.notebook) ? SAVED_STATE.notebook : []; // Partadagi daftar sahifalari
-window.__wdWindowScene = (SAVED_STATE.windowScene==='fantasy') ? 'fantasy' : 'real'; // Deraza manzarasi
 window.__wdIelts = Array.isArray(SAVED_STATE.ielts) ? SAVED_STATE.ielts : []; // IELTS mock natijalar tarixi
 window.__wdLang = (SAVED_STATE.lang==='en') ? 'en' : 'uz'; // interfeys tili
 window.__wdSrs = (SAVED_STATE.srs && typeof SAVED_STATE.srs==='object' && !Array.isArray(SAVED_STATE.srs)) ? SAVED_STATE.srs : {}; // SRS takrorlash bazasi
@@ -738,10 +708,9 @@ window.__wdCoins = Math.max(0, Number(SAVED_STATE.coins)||0); // tanga balansi
    Kod olib tashlandi, lekin saqlangan holatda qolgan. Bir marta tozalaymiz. */
 if(!SAVED_STATE.testCleared && window.__wdCoins>=50000) window.__wdCoins=0;
 window.__wdTestCleared=true;
-window.__wdRoom = (SAVED_STATE.room && typeof SAVED_STATE.room==='object')
-  ? {owned:!!SAVED_STATE.room.owned, inv:(SAVED_STATE.room.inv&&typeof SAVED_STATE.room.inv==='object')?SAVED_STATE.room.inv:{}, items:Array.isArray(SAVED_STATE.room.items)?SAVED_STATE.room.items:[], wallItems:Array.isArray(SAVED_STATE.room.wallItems)?SAVED_STATE.room.wallItems:[], fish:Array.isArray(SAVED_STATE.room.fish)?SAVED_STATE.room.fish:[], deco:(SAVED_STATE.room.deco&&typeof SAVED_STATE.room.deco==='object')?SAVED_STATE.room.deco:{view:'day',night:false}}
-  : {owned:false, inv:{}, items:[], wallItems:[], fish:[], deco:{view:'day',night:false}}; // shaxsiy xona
-window.__wdRoomCode = (typeof SAVED_STATE.roomCode==='string')?SAVED_STATE.roomCode:''; // xona mehmon kodi
+/* v111: Shaxsiy xona olib tashlandi — __wdRoom endi faqat inventar (muzlatgich, garov va h.k.) */
+window.__wdRoom = {inv:(SAVED_STATE.room&&SAVED_STATE.room.inv&&typeof SAVED_STATE.room.inv==='object')?SAVED_STATE.room.inv:{},
+  proFreeze:(SAVED_STATE.room&&SAVED_STATE.room.proFreeze)||''};
 window.__wdFrame = (typeof SAVED_STATE.frame==='string')?SAVED_STATE.frame:''; // profil ramkasi
 window.__wdBoostUntil = Number(SAVED_STATE.boostUntil)||0; // XP booster tugash vaqti (ms)
 window.__wdWheelLast = Number(SAVED_STATE.wheelLast)||0;   // omad g'ildiragi oxirgi bepul aylantirilgan vaqt
@@ -822,9 +791,6 @@ document.addEventListener('click',(e)=>{
 }, true);
 window.__wdNameColor = (typeof SAVED_STATE.nameColor==='string')?SAVED_STATE.nameColor:''; // reyting ism rangi
 // Eski bitta-varaq formatidan ko'chirish
-if(window.__wdNotebook.length===0 && SAVED_STATE.deskWriting && SAVED_STATE.deskWriting.text){
-  window.__wdNotebook.push(SAVED_STATE.deskWriting);
-}
 
 /* ========== XP / DARAJA / YUTUQLAR TIZIMI ========== */
 // Daraja formulasi: har daraja uchun kerakli XP asta-sekin oshadi
