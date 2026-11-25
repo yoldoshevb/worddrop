@@ -24,7 +24,7 @@
 "why_uz": "«Metamorfoza» va «Jarayon»dan keyin Kafkaning eng muhim asari. Kamyu «Sizif afsonasi»da aynan «Qasr»ni tahlil qilgan — javondagi Kamyu asarlari bilan birga o'qish juda qiziq. Gaplari uzun, lekin tili tushunarli: B2–C1 darajasi uchun yaxshi mashq.",
 "author_uz": "Frans Kafka (1883–1924) — Pragada tug'ilgan nemis tilli yozuvchi. Hayotligida juda kam asar nashr etgan; vasiyatida qo'lyozmalarini yoqib yuborishni so'ragan, lekin do'sti Maks Brod ularni nashr qildi. «Qasr» 1922-yilda yozilgan va 1926-yilda, Kafka vafotidan keyin chop etilgan.",
 "edition_uz": "To'liq matn. Inglizcha matn — WordDrop'ning nemischa asl nusxadan («Das Schloß», Kafka vafotidan keyin Maks Brod nashri asosidagi matn) o'z tarjimasi; mashhur Muir (1930), Harman (1998) va Underwood (1997) tarjimalaridan foydalanilmagan, chunki ular hali himoyada. O'zbekchasi qo'lda tarjima qilingan. Kafka romanni tugatmagan — matn gap o'rtasida uziladi. Kafka bob nomlari qo'ymagan, bu nashrdagi bo'linish va sarlavhalar WordDrop'niki; juda uzun xatboshilar o'qish qulayligi uchun bo'lingan. Nashr bosqichma-bosqich to'ldirilmoqda. Muqova — foydalanuvchi bergan rasm.",
-"progress_uz": "Hozircha 22 bobdan 5 tasi tayyor; qolganlari bosqichma-bosqich qo'shiladi.",
+"progress_uz": "Hozircha 22 bobdan 7 tasi tayyor; qolganlari bosqichma-bosqich qo'shiladi.",
 "source_uz": "Frans Kafka 1924-yilda vafot etgan — nemischa asl matn jamoat mulki.",
 "characters": [
 [
@@ -1103,6 +1103,604 @@
 ],
 "a": 1,
 "why_uz": "Xato ehtimoli umuman hisobga olinmaydi."
+}
+]
+},
+{
+"part": null,
+"title": "6. The telephone and the keepsakes",
+"title_uz": "6. Telefon va yodgorliklar",
+"recap_uz": "Oqsoqol Brunsvik va qishloq kengashi haqida, idoraning «o'z-o'zidan» chiqaradigan qarorlari haqida gapiradi. Uning fikricha, Klammning maktubi rasmiy emas, shaxsiy maktub; Qasrdan keladigan telefon javoblari esa ko'pincha charchagan amaldorlarning hazili. K. o'z huquqini talab qiladi. Mehmonxonaga qaytgach, beka Gardena unga xabarchi yigitning surati, ro'mol va qalpoqchani — yigirma yildan ortiq saqlab kelgan Klamm yodgorliklarini ko'rsatadi.",
+"note_uz": "",
+"paras": [
+{
+"en": "'No,' said the mayor, 'it is not a big case. In that respect you have no reason to complain; it is one of the smallest among the small. The amount of work does not determine the rank of a case; you are still far from understanding the authorities if you think so. But even if the amount of work were what counted, your case would be one of the least; ordinary cases, that is, those without so-called errors, give much more work, and of course much more fruitful work. Besides, you know nothing yet of the real work your case caused; that is what I am about to tell you. At first Sordini left me out of it, but his officials came, and every day formal interrogations of respected members of the community took place at the Herrenhof. Most of them stood by me; only a few became suspicious. The question of land surveying touches a peasant closely; they scented some secret agreements and injustices, found a leader into the bargain, and Sordini was bound to conclude from their statements that if I had put the question before the village council, not everyone would have been against engaging a land surveyor. So something self-evident — namely, that no land surveyor is needed — was made at least questionable. A certain Brunswick distinguished himself especially in this — you probably don't know him. He is perhaps not bad, but stupid and full of fancies; he is a brother-in-law of Lasemann's.'",
+"uz": "— Yo'q, — dedi oqsoqol, — bu katta ish emas. Bu jihatdan nolishga asosingiz yo'q, bu kichiklar orasidagi eng kichik ishlardan biri. Ishning hajmi ishning darajasini belgilamaydi, agar shunday deb o'ylasangiz, idorani tushunishdan hali juda uzoqsiz. Lekin hatto ish hajmi muhim bo'lganida ham, sizning ishingiz eng kichiklaridan biri bo'lardi; oddiy ishlar, ya'ni xato deb ataladigan narsasiz ishlar ancha ko'p va, albatta, ancha samaraliroq ish beradi. Aytgancha, siz hali ishingiz keltirib chiqargan haqiqiy ish haqida hech narsa bilmaysiz, men hozir shu haqda aytib bermoqchiman. Avvaliga Sordini meni chetda qoldirdi, lekin uning amaldorlari kelishdi, har kuni «Herrenhof»da jamoaning obro'li a'zolarini bayonnomali so'roq qilish bo'lardi. Ularning aksariyati meni qo'llab-quvvatladi, faqat ba'zilari shubhaga tushdi; yer o'lchash masalasi dehqonga yaqin, ular qandaydir yashirin kelishuvlar va adolatsizliklarni hidlashdi, buning ustiga o'zlariga boshliq topishdi va Sordini ularning ko'rsatmalaridan, agar men masalani qishloq kengashiga qo'yganimda, hamma ham yer o'lchovchi chaqirilishiga qarshi bo'lmas edi, degan ishonchga kelishi kerak edi. Shunday qilib, o'z-o'zidan ayon bo'lgan narsa — ya'ni yer o'lchovchi kerak emasligi — hech bo'lmaganda shubhali qilib qo'yildi. Bunda ayniqsa qandaydir Brunsvik ajralib turdi — siz uni tanimasangiz kerak — u balki yomon odam emasdir, lekin ahmoq va xayolparast, u Lazemanning bajasi."
+},
+{
+"en": "'The master tanner?' asked K., and described the full-bearded man he had seen at Lasemann's.",
+"uz": "— Ko'nchi ustaningmi? — so'radi K. va Lazemannikida ko'rgan to'la soqolli odamni tasvirlab berdi."
+},
+{
+"en": "'Yes, that's him,' said the mayor.",
+"uz": "— Ha, aynan o'sha, — dedi oqsoqol."
+},
+{
+"en": "'I know his wife too,' said K., a little at random.",
+"uz": "— Uning xotinini ham taniyman, — dedi K. biroz tavakkal qilib."
+},
+{
+"en": "'That's possible,' said the mayor, and fell silent.",
+"uz": "— Bo'lishi mumkin, — dedi oqsoqol va jim bo'lib qoldi."
+},
+{
+"en": "'She is beautiful,' said K., 'but a little pale and sickly. She comes from the Castle, I suppose?' This was said half as a question.",
+"uz": "— U chiroyli, — dedi K., — lekin biroz rangpar va kasalmand. U Qasrdan kelgan bo'lsa kerak? — Bu yarim so'roq tarzida aytildi."
+},
+{
+"en": "The mayor looked at the clock, poured medicine onto a spoon and swallowed it hastily.",
+"uz": "Oqsoqol soatga qaradi, qoshiqqa dori quyib, uni shoshib yutdi."
+},
+{
+"en": "'I suppose all you know of the Castle is the office furniture?' asked K. rudely.",
+"uz": "— Siz Qasrda faqat idora jihozlarini bilsangiz kerak? — so'radi K. qo'pollik bilan."
+},
+{
+"en": "'Yes,' said the mayor with an ironic and yet grateful smile. 'That is also the most important thing. And as for Brunswick: if we could exclude him from the community, almost all of us would be happy, and Lasemann not least. But at that time Brunswick gained some influence; he's no orator, but he's a shouter, and that is enough for some. And so it came about that I was forced to put the matter before the village council — Brunswick's only success at first, by the way, for naturally the council, by a large majority, would have nothing to do with a land surveyor. That too was years ago now, but all that time the matter has never come to rest — partly because of the conscientiousness of Sordini, who tried by the most careful enquiries to discover the motives of both the majority and the opposition, partly because of the stupidity and ambition of Brunswick, who has various personal connections with the authorities and kept setting them in motion with ever new inventions of his fancy. Sordini, of course, did not let himself be deceived by Brunswick — how could Brunswick deceive Sordini? But precisely in order not to be deceived, new enquiries were necessary, and before they were finished Brunswick had already thought up something new; he is very nimble, it belongs to his stupidity. And now I come to a special characteristic of our official apparatus. In keeping with its precision, it is also extremely sensitive.",
+"uz": "— Ha, — dedi oqsoqol kinoyali, lekin minnatdor jilmayish bilan. — Ular eng muhim narsa ham. Brunsvikka kelsak: agar uni jamoadan chiqarib yubora olsak, deyarli hammamiz baxtli bo'lardik, Lazeman ham eng kam emas. Lekin o'shanda Brunsvik qandaydir ta'sirga ega bo'ldi, u notiq emas, lekin baqiroq, ba'zilarga bu ham yetadi. Shunday qilib, men masalani qishloq kengashiga qo'yishga majbur bo'ldim, aytgancha, bu avvaliga Brunsvikning yagona muvaffaqiyati edi, chunki kengash, albatta, katta ko'pchilik bilan yer o'lchovchi haqida hech narsa bilishni istamadi. Bu ham allaqachon yillar oldin bo'lgan, lekin butun vaqt davomida ish tinchimadi — qisman ko'pchilikning ham, muxolifatning ham sabablarini eng sinchkov tekshiruvlar bilan o'rganishga urinadigan Sordinining vijdonliligi tufayli, qisman idoralar bilan turli shaxsiy aloqalari bo'lgan va ularni xayolining tobora yangi to'qimalari bilan harakatga keltirib turgan Brunsvikning ahmoqligi va shuhratparastligi tufayli. Sordini, albatta, Brunsvikka aldanmadi — Brunsvik Sordinini qanday aldasin? Lekin aynan aldanmaslik uchun yangi tekshiruvlar kerak edi va ular tugamasdanoq Brunsvik allaqachon yana yangi narsa o'ylab topgan edi; u juda serharakat, bu uning ahmoqligiga tegishli. Endi esa idora apparatimizning alohida bir xususiyati haqida gapiraman. O'zining aniqligiga mos ravishda u nihoyatda sezgir ham."
+},
+{
+"en": "When a matter has been considered for a very long time, it can happen, even before the considerations are finished, that suddenly, like lightning, at some unforeseeable point that cannot be found later either, a decision emerges which settles the matter — very rightly, as a rule, but arbitrarily all the same. It is as though the official apparatus could no longer bear the tension, the years of irritation by the same matter, perhaps trivial in itself, and had made the decision out of itself, without the officials' help. Of course no miracle has happened, and some official has certainly written the decision or made an unwritten one; but in any case it cannot be established, at least not by us, from here, nor even from the office, which official decided in this case and for what reasons. Only the control offices establish that, much later; but we never learn of it, and by then it would hardly interest anyone any more. Now, as I said, these very decisions are mostly excellent; the only disturbing thing about them is that, as is usually the way, one learns of them too late and so goes on passionately debating matters that were decided long ago.",
+"uz": "Agar bir ish juda uzoq vaqt o'ylab ko'rilgan bo'lsa, mulohazalar hali tugamagan bo'lsa ham, birdan chaqmoqdek, oldindan ko'rib bo'lmaydigan va keyin ham topib bo'lmaydigan bir joyda ishni — ko'pincha juda to'g'ri bo'lsa ham, baribir o'zboshimchalik bilan — yakunlaydigan bir qaror paydo bo'lishi mumkin. Go'yo idora apparati o'sha bir xil, ehtimol o'z-o'zidan arzimas bo'lgan ish tufayli yillar davom etgan zo'riqish va qo'zg'atishga endi chiday olmay, amaldorlarning yordamisiz, o'zidan qaror chiqargandek. Albatta, hech qanday mo'jiza sodir bo'lmagan, qandaydir amaldor qarorni yozgan yoki yozilmagan qaror qabul qilgan, lekin har holda qaysi amaldor bu holatda qaror qilganini va qanday sabablarga ko'ra ekanini hech bo'lmaganda biz tomondan, bu yerdan, hatto idoradan ham aniqlab bo'lmaydi. Buni faqat nazorat idoralari ancha keyin aniqlaydi; lekin biz buni endi bilmaymiz, aytgancha, o'shanda bu hech kimni qiziqtirmaydi ham. Aytganimdek, aynan bu qarorlar ko'pincha ajoyib bo'ladi, ulardagi xalaqit beradigan yagona narsa — odatda bo'lganidek, bu qarorlar haqida juda kech bilasiz va shuning uchun bu orada allaqachon hal qilingan ishlar ustida hamon ehtiros bilan maslahatlashasiz."
+},
+{
+"en": "I don't know whether such a decision was made in your case — some things speak for it, some against. But if it had been, the summons would have been sent to you, and you would have made the long journey here; much time would have passed in the meantime, and all the while Sordini would still have been working himself to exhaustion over the same matter, Brunswick intriguing, and I tormented by both. I only hint at this possibility; but this much I know for certain: a control office meanwhile discovered that many years ago an enquiry about a land surveyor had gone out from department A to the community, without any answer having come so far. They asked me again, and now of course the whole matter was cleared up: department A was satisfied with my answer that no land surveyor was needed, and Sordini had to recognize that he had not been competent in this case and had done — through no fault of his own, of course — so much useless, nerve-shattering work. If new work had not pressed in from all sides as always, and if your case had not after all been only a very small case — one might almost say the smallest among the small — we would all have breathed again, I believe even Sordini himself. Only Brunswick sulked, but that was merely ridiculous.",
+"uz": "Sizning ishingizda shunday qaror chiqarilganmi, bilmayman — ba'zi narsalar buni tasdiqlaydi, ba'zilari rad etadi; lekin agar shunday bo'lgan bo'lsa, sizga chaqiruv yuborilgan bo'lardi va siz bu yerga katta safar qilgan bo'lardingiz, bunda ko'p vaqt o'tardi va bu orada Sordini hamon shu yerda o'sha ish ustida holdan toyguncha ishlagan, Brunsvik fitna qilgan, men esa ikkovi tomonidan qiynalgan bo'lardim. Bu imkoniyatga faqat ishora qilaman, lekin quyidagini aniq bilaman: bu orada bir nazorat idorasi A bo'limidan ko'p yillar oldin jamoaga yer o'lchovchi haqida so'rov yuborilgani, lekin hozirgacha javob kelmaganini aniqladi. Mendan yana so'rashdi va endi, albatta, butun ish oydinlashdi: A bo'limi mening yer o'lchovchi kerak emas, degan javobim bilan qanoatlandi, Sordini esa bu ishda vakolatli bo'lmaganini va, albatta, aybsiz ravishda, shuncha keraksiz, asabni buzadigan ish qilganini tan olishi kerak bo'ldi. Agar har doimgidek har tomondan yangi ish yopirilib kelmaganida va sizning ishingiz baribir juda kichik ish — deyish mumkinki, kichiklar orasidagi eng kichigi — bo'lmaganida, hammamiz yengil nafas olgan bo'lardik, menimcha, hatto Sordinining o'zi ham. Faqat Brunsvik g'ashlandi, lekin bu shunchaki kulgili edi."
+},
+{
+"en": "And now imagine my disappointment, land surveyor, when now, after the whole affair had been happily concluded — and a long time has passed since then as well — you suddenly turn up, and it begins to look as though the matter were to start all over again. You will understand that I am firmly resolved not to allow that on any account, as far as it lies with me?'",
+"uz": "Endi tasavvur qiling, janob yer o'lchovchi, butun ish baxtli yakunlangandan keyin — undan beri ham yana ko'p vaqt o'tdi — birdan siz paydo bo'lib, ish yana boshidan boshlanadigandek tuyulganida, mening ko'nglim qanchalik qoldi. Men bunga, qo'limdan kelguncha, hech qanday holatda yo'l qo'ymaslikka qat'iy qaror qilganimni tushunasiz, shundaymi?"
+},
+{
+"en": "'Certainly,' said K., 'but I understand even better that a terrible abuse is being practised here on me — perhaps even on the laws. As for me, I shall know how to defend myself.'",
+"uz": "— Albatta, — dedi K., — lekin bundan ham yaxshiroq tushunamanki, bu yerda men bilan, balki hatto qonunlar bilan ham dahshatli suiiste'mol qilinmoqda. O'zim uchun bunga qarshi himoyalanishni bilaman."
+},
+{
+"en": "'How do you intend to do that?' asked the mayor.",
+"uz": "— Buni qanday qilmoqchisiz? — so'radi oqsoqol."
+},
+{
+"en": "'I can't reveal that,' said K.",
+"uz": "— Buni oshkor qila olmayman, — dedi K."
+},
+{
+"en": "'I don't want to force myself on you,' said the mayor, 'only I would ask you to bear in mind that you have in me — I won't say a friend, for we are complete strangers — but in a sense a business friend. The one thing I won't allow is that you be taken on as land surveyor; otherwise you can always turn to me with confidence — within the limits of my power, of course, which is not great.'",
+"uz": "— Men o'zimni majburlab tiqishtirmoqchi emasman, — dedi oqsoqol, — faqat o'ylab ko'rishingizni so'rayman: menda sizning — do'stingiz demayman, chunki biz butunlay begonamiz — lekin qaysidir ma'noda ish bo'yicha do'stingiz bor. Faqat sizning yer o'lchovchi sifatida qabul qilinishingizga yo'l qo'ymayman; boshqa hollarda menga doim ishonch bilan murojaat qilishingiz mumkin — albatta, katta bo'lmagan hokimiyatim chegarasida."
+},
+{
+"en": "'You keep talking about my being taken on as land surveyor,' said K., 'but I have already been taken on. Here is Klamm's letter.'",
+"uz": "— Siz doim, — dedi K., — men yer o'lchovchi sifatida qabul qilinishim kerak, deb gapirasiz, lekin men allaqachon qabul qilinganman. Mana Klammning maktubi."
+},
+{
+"en": "'Klamm's letter,' said the mayor. 'It is valuable and venerable because of Klamm's signature, which seems to be genuine; otherwise, however — but I don't dare give an opinion on it alone. Mizzi!' he called, and then: 'But what are you doing?'",
+"uz": "— Klammning maktubi, — dedi oqsoqol. — U Klammning haqiqiy ko'rinadigan imzosi tufayli qimmatli va muhtaram, lekin boshqa jihatdan… lekin bu haqda yolg'iz fikr bildirishga jur'at etmayman. Mitsi! — chaqirdi u va keyin: — Sizlar nima qilyapsizlar?"
+},
+{
+"en": "The assistants and Mizzi, unnoticed for so long, had evidently not found the file they were looking for, and had then wanted to shut everything back in the cupboard, but had not managed it because of the disordered superabundance of files. Then the assistants had hit on the idea they were now carrying out. They had laid the cupboard on its back on the floor, stuffed all the files into it, then sat down with Mizzi on the cupboard door and were now trying in this way to press it slowly shut.",
+"uz": "Shuncha vaqt e'tibordan chetda qolgan yordamchilar va Mitsi, aftidan, izlangan hujjatni topa olmagan, keyin hamma narsani yana shkafga qamab qo'ymoqchi bo'lishgan, lekin hujjatlarning tartibsiz ko'pligi tufayli buni uddalay olishmagan edi. Shunda yordamchilarning xayoliga hozir amalga oshirayotgan fikr kelgan bo'lsa kerak. Ular shkafni polga yotqizib, barcha hujjatlarni unga tiqishgan, keyin Mitsi bilan shkaf eshigi ustiga o'tirib, shu tarzda uni sekin bosib yopishga urinishardi."
+},
+{
+"en": "'So the file hasn't been found,' said the mayor. 'A pity; but you know the story already, so we don't really need the file any more; besides, it will certainly turn up yet; it's probably at the teacher's, where there are a great many files. But now come here with your candle, Mizzi, and read me this letter.'",
+"uz": "— Demak, hujjat topilmadi, — dedi oqsoqol. — Afsus, lekin voqeani siz allaqachon bilasiz, aslida bizga hujjat endi kerak emas, aytgancha, u albatta hali topiladi, u, ehtimol, o'qituvchida, unda hali juda ko'p hujjatlar bor. Lekin endi shaming bilan bu yoqqa kel, Mitsi, va menga bu maktubni o'qib ber."
+},
+{
+"en": "Mizzi came, and looked even greyer and more insignificant as she sat on the edge of the bed and pressed herself against the strong, vigorous man who held her round the waist. Only her little face stood out now in the candlelight, with clear, severe lines softened only by the decline of age. Hardly had she glanced at the letter when she lightly folded her hands. 'From Klamm,' she said. They then read the letter together, whispered a little with each other, and finally, just as the assistants shouted 'Hurrah!' — for they had at last pressed the cupboard door shut, and Mizzi looked over at them with quiet gratitude — the mayor said:",
+"uz": "Mitsi keldi va karavot chetida o'tirib, uni belidan quchoqlab turgan kuchli, hayotga to'la erkakka suyanganida yanada kulrang va ko'rimsizroq ko'rindi. Endi sham yorug'ida faqat uning kichkina yuzi — aniq, qattiq, faqat yoshning so'nishi bilan yumshagan chiziqlari bilan — ko'zga tashlanardi. Maktubga qarashi bilanoq u qo'llarini yengil qovushtirdi. «Klammdan», dedi u. Keyin ular maktubni birga o'qishdi, bir-biri bilan biroz pichirlashdi va nihoyat, yordamchilar aynan «Hurra!» deb qichqirganlarida — chunki ular nihoyat shkaf eshigini bosib yopishgan edi, Mitsi esa ularga jim minnatdorlik bilan qaradi — oqsoqol dedi:"
+},
+{
+"en": "'Mizzi is completely of my opinion, and now I think I may venture to say it. This letter is not an official communication at all, but a private letter. That is clearly recognizable from the very salutation: \"Dear Sir\". Moreover, it does not say in a single word that you have been taken on as land surveyor; rather, it speaks only in general of the Count's service, and even that is not stated as binding: you have only been taken on \"as you know\" — that is, the burden of proof that you have been taken on is placed on you. Finally, in official matters you are referred exclusively to me, the mayor, as your immediate superior, who is to tell you everything further — which for the most part has already been done. To anyone who knows how to read official communications, and consequently reads unofficial letters even better, all this is more than plain. That you, a stranger, don't see it does not surprise me. On the whole, the letter means nothing more than that Klamm personally intends to look after you in case you are taken into the Count's service.'",
+"uz": "— Mitsi mening fikrimga butunlay qo'shiladi, endi buni aytishga jur'at qilsam bo'ladi. Bu maktub umuman rasmiy xat emas, balki shaxsiy maktub. Buni murojaatning o'zidan — «Hurmatli janob!» — aniq bilish mumkin. Bundan tashqari, unda siz yer o'lchovchi sifatida qabul qilinganingiz haqida bir og'iz ham so'z yo'q, aksincha, umuman graflik xizmati haqida gap boradi, bu ham majburiy tarzda aytilmagan, siz faqat «o'zingiz bilganingizdek» qabul qilingansiz, ya'ni qabul qilinganingizni isbotlash yuki sizning zimmangizga yuklangan. Nihoyat, rasmiy jihatdan siz faqat menga — oqsoqolga bevosita boshlig'ingiz sifatida yo'naltirilgansiz, men sizga barcha batafsil ma'lumotlarni berishim kerak, bu esa katta qismi allaqachon bajarildi. Rasmiy xatlarni o'qishni biladigan va shuning uchun norasmiy maktublarni yanada yaxshiroq o'qiydigan odam uchun bularning hammasi haddan tashqari aniq. Sizning — begonaning buni tushunmasligingiz meni hayron qoldirmaydi. Umuman olganda, maktub faqat bir narsani anglatadi: agar siz graflik xizmatiga qabul qilinsangiz, Klamm shaxsan siz bilan qiziqishni niyat qilgan."
+},
+{
+"en": "'You interpret the letter so well, mayor,' said K., 'that in the end nothing remains but a signature on a blank sheet of paper. Don't you notice how you are belittling Klamm's name, which you pretend to respect?'",
+"uz": "— Siz, janob oqsoqol, — dedi K., — maktubni shunchalik yaxshi talqin qilyapsizki, oxir-oqibat bo'sh qog'oz varag'idagi imzodan boshqa hech narsa qolmaydi. Hurmat qilgandek ko'rinayotgan Klammning ismini bu bilan qanchalik kamsitayotganingizni payqamayapsizmi?"
+},
+{
+"en": "'That is a misunderstanding,' said the mayor. 'I don't fail to recognize the significance of the letter; I don't belittle it by my interpretation — on the contrary. A private letter from Klamm naturally has much more significance than an official communication; only it does not have the significance you attach to it.'",
+"uz": "— Bu anglashilmovchilik, — dedi oqsoqol. — Men maktubning ahamiyatini inkor etmayman, talqinim bilan uni kamsitmayman, aksincha. Klammning shaxsiy maktubi, albatta, rasmiy xatdan ancha ko'proq ahamiyatga ega; faqat aynan siz unga bergan ahamiyatga ega emas."
+},
+{
+"en": "'Do you know Schwarzer?' asked K.",
+"uz": "— Shvartserni taniysizmi? — so'radi K."
+},
+{
+"en": "'No,' said the mayor. 'Do you, Mizzi? No, neither. No, we don't know him.'",
+"uz": "— Yo'q, — dedi oqsoqol, — sen-chi, Mitsi? Sen ham yo'q. Yo'q, biz uni tanimaymiz."
+},
+{
+"en": "'That's strange,' said K. 'He's the son of an under-steward.'",
+"uz": "— G'alati, — dedi K., — u kastelyan o'rinbosarining o'g'li."
+},
+{
+"en": "'My dear land surveyor,' said the mayor, 'how am I supposed to know all the sons of all the under-stewards?'",
+"uz": "— Aziz janob yer o'lchovchi, — dedi oqsoqol, — barcha kastelyan o'rinbosarlarining barcha o'g'illarini qanday tanishim kerak?"
+},
+{
+"en": "'Very well,' said K., 'then you'll have to believe me that he is. I had an unpleasant scene with this Schwarzer on the very day I arrived. He then enquired by telephone of the under-steward called Fritz and was told that I had been taken on as land surveyor. How do you explain that, mayor?'",
+"uz": "— Yaxshi, — dedi K., — unda uning shu ekaniga menga ishonishingizga to'g'ri keladi. Kelgan kunimdayoq bu Shvartser bilan noxush bir voqea bo'lgan edi. Keyin u Frits ismli kastelyan o'rinbosaridan telefon orqali surishtirdi va men yer o'lchovchi sifatida qabul qilinganim haqida ma'lumot oldi. Buni qanday tushuntirasiz, janob oqsoqol?"
+},
+{
+"en": "'Very simply,' said the mayor. 'You have simply never yet come into contact with our authorities. All these contacts are only apparent, but in your ignorance of the circumstances you take them for real. And as for the telephone: you see, I, who certainly have enough to do with the authorities, have no telephone. In taprooms and the like it may do good service — rather like a mechanical music box — but it is no more than that. Have you ever telephoned here? Yes? Well then, perhaps you will understand me. At the Castle the telephone evidently works excellently; I've been told they telephone there without interruption, which of course speeds up the work a great deal. This uninterrupted telephoning we hear in the telephones here as a rushing and singing — you will certainly have heard it too. But this rushing and this singing is the only correct and trustworthy thing the telephones here transmit to us; everything else is deceptive. There is no definite telephone connection with the Castle, no central exchange that passes on our calls. When one rings the Castle from here, it rings there on all the instruments of the lowest departments — or rather, it would ring on all of them if, as I know for certain, the bell were not switched off on almost all of them.",
+"uz": "— Juda oddiy, — dedi oqsoqol. — Siz shunchaki hali hech qachon bizning idoralarimiz bilan aloqaga kirishmagansiz. Bu aloqalarning hammasi faqat zohiriy, siz esa ahvolni bilmasligingiz tufayli ularni haqiqiy deb hisoblaysiz. Telefonga kelsak: qarang, idoralar bilan haqiqatan yetarlicha ishim bo'lgan menda telefon yo'q. Umumiy zallarda va shunga o'xshash joylarda u yaxshi xizmat qilishi mumkin — taxminan musiqa avtomatidek, bundan ortiq emas. Bu yerda hech telefon qilganmisiz, ha? Mana, unda, balki meni tushunarsiz. Qasrda telefon, aftidan, ajoyib ishlaydi; menga aytishlaricha, u yerda tinimsiz telefon qilinadi, bu, albatta, ishni juda tezlashtiradi. Bu tinimsiz telefon qilishni biz bu yerdagi telefonlarda shovqin va qo'shiq sifatida eshitamiz, siz ham, albatta, eshitgansiz. Lekin aynan bu shovqin va bu qo'shiq bu yerdagi telefonlar bizga yetkazadigan yagona to'g'ri va ishonchli narsa, qolgan hammasi aldamchi. Qasr bilan aniq telefon aloqasi yo'q, qo'ng'iroqlarimizni o'tkazadigan markaziy stansiya yo'q; bu yerdan Qasrga qo'ng'iroq qilinsa, u yerda eng quyi bo'limlarning barcha apparatlarida jiringlaydi, aniqrog'i, agar men aniq bilganimdek, deyarli hammasida bu qo'ng'iroq o'chirib qo'yilmaganida, hammasida jiringlagan bo'lardi."
+},
+{
+"en": "Now and then, however, an overtired official feels the need to amuse himself a little, especially in the evening or at night, and switches the bell on; then we get an answer — an answer, mind you, that is nothing but a joke. That is very understandable, after all. Who may claim the right to ring into the middle of the most important work, always going on at a furious pace, because of his little private worries? Nor do I understand how even a stranger can believe that when he rings Sordini, for example, it is really Sordini who answers him. Far more likely it is some little registry clerk from a completely different department. On the other hand, it may happen at some choice hour that when one rings the little registry clerk, Sordini himself answers. Then, of course, it is better to run away from the telephone before the first sound is heard.'",
+"uz": "Lekin vaqti-vaqti bilan haddan tashqari charchagan bir amaldor, ayniqsa kechqurun yoki tunda, biroz ko'ngil ochish ehtiyojini his qiladi va qo'ng'iroqni yoqadi; shunda biz javob olamiz, lekin hazildan boshqa hech narsa bo'lmagan javob. Bu juda tushunarli ham. Kim o'zining kichik shaxsiy tashvishlari uchun eng muhim va doim telbalarcha tezlikda borayotgan ishlarning o'rtasiga qo'ng'iroq qilishga da'vo qila oladi? Men hatto begona odam ham, masalan, Sordiniga qo'ng'iroq qilganda, unga haqiqatan Sordinining o'zi javob beryapti, deb qanday ishonishi mumkinligini ham tushunmayman. Aksincha, bu, ehtimol, butunlay boshqa bo'limning kichik bir ro'yxatchisidir. Boshqa tomondan, albatta, tanlangan bir soatda kichik ro'yxatchiga qo'ng'iroq qilinganda Sordinining o'zi javob berishi ham mumkin. Unda, albatta, birinchi tovush eshitilishidan oldin telefondan qochib ketgan ma'qul."
+},
+{
+"en": "'I hadn't looked at it like that, I admit,' said K. 'I couldn't know these details. I didn't have much confidence in these telephone conversations, and was always aware that only what one actually learns or achieves in the Castle itself has real significance.'",
+"uz": "— To'g'ri, men bunga bunday qaramagan edim, — dedi K., — bu tafsilotlarni bila olmasdim; bu telefon suhbatlariga unchalik ishonchim yo'q edi va doim faqat Qasrning o'zida to'g'ridan-to'g'ri bilib olinadigan yoki erishiladigan narsagina haqiqiy ahamiyatga ega ekanini bilardim."
+},
+{
+"en": "'No,' said the mayor, clinging to a word, 'these telephone answers certainly do have real significance — how could they not? How could information given by an official from the Castle be without significance? I said so already in connection with Klamm's letter: all these utterances have no official significance; if you ascribe official significance to them, you go astray; but their private significance, in a friendly or hostile sense, is very great — usually greater than any official significance could ever be.'",
+"uz": "— Yo'q, — dedi oqsoqol bir so'zga yopishib, — bu telefon javoblari, albatta, haqiqiy ahamiyatga ega, qanday bo'lmasin? Qasr amaldori bergan ma'lumot qanday qilib ahamiyatsiz bo'lishi mumkin? Men buni Klammning maktubi munosabati bilan aytgan edim: bu gaplarning hammasi rasmiy ahamiyatga ega emas; agar ularga rasmiy ahamiyat bersangiz, adashasiz; lekin ularning do'stona yoki dushmanona ma'nodagi shaxsiy ahamiyati juda katta, ko'pincha rasmiy ahamiyat hech qachon bo'la olmaydiganidan ham kattaroq."
+},
+{
+"en": "'Very well,' said K. 'Supposing it is all like that, then I'd have a lot of good friends in the Castle. Looked at closely, even that department's idea, all those years ago, that a land surveyor might be sent for some day was an act of friendship towards me, and in the time that followed one act was lined up after another, until finally I was lured here — to a bad end, it's true — and threatened with being thrown out.'",
+"uz": "— Yaxshi, — dedi K., — faraz qilaylik, hammasi shunday; unda Qasrda ko'plab yaxshi do'stlarim bor ekan; sinchiklab qaralsa, ko'p yillar oldin o'sha bo'limning bir kun yer o'lchovchini chaqirish mumkin, degan fikri ham menga nisbatan do'stlik harakati bo'lgan, keyingi davrda esa ular biri ketidan ikkinchisi tizilgan, toki oxir-oqibat — to'g'ri, yomon oqibat bilan — meni bu yerga aldab olib kelishdi va endi haydash bilan tahdid qilishyapti."
+},
+{
+"en": "'There is a certain truth in your view,' said the mayor. 'You are right that the Castle's utterances must not be taken literally. But caution is necessary everywhere, not only here, and the more necessary the more important the utterance in question. But what you then said about being lured here I cannot understand. Had you followed my explanations better, you would know that the question of your being summoned here is far too difficult for us to answer in the course of a little conversation.'",
+"uz": "— Sizning qarashingizda ma'lum haqiqat bor, — dedi oqsoqol, — Qasrning gaplarini so'zma-so'z qabul qilmaslik kerakligida haqsiz. Lekin ehtiyotkorlik hamma joyda kerak, faqat bu yerda emas, va gap ketayotgan so'z qanchalik muhim bo'lsa, shunchalik ko'proq kerak. Lekin aldab olib kelish haqida keyin aytganingizni tushunmayman. Agar tushuntirishlarimni yaxshiroq tinglaganingizda, sizni bu yerga chaqirish masalasi kichik bir suhbat davomida javob berishimiz uchun juda qiyin ekanini bilishingiz kerak edi."
+},
+{
+"en": "'So the result remains,' said K., 'that everything is very unclear and insoluble — except for the throwing out.'",
+"uz": "— Demak, natija shunday qoladi, — dedi K., — haydashdan boshqa hamma narsa juda noaniq va hal qilib bo'lmaydigan."
+},
+{
+"en": "'Who would dare to throw you out, land surveyor?' said the mayor. 'Precisely the unclarity of the preliminary questions guarantees you the most courteous treatment; only you seem to be too sensitive. Nobody is keeping you here, but that's surely not throwing you out.'",
+"uz": "— Sizni haydashga kim jur'at etardi, janob yer o'lchovchi? — dedi oqsoqol. — Aynan dastlabki savollarning noaniqligi sizga eng xushmuomala munosabatni kafolatlaydi, faqat siz, ko'rinishidan, haddan tashqari sezgirsiz. Sizni bu yerda hech kim ushlab turmayapti, lekin bu haydash emas-ku."
+},
+{
+"en": "'Oh, mayor,' said K., 'now it is you again who sees some things all too clearly. I'll list for you some of what keeps me here: the sacrifices I made to get away from home, the long, hard journey, the well-founded hopes I had of being taken on here, my complete lack of means, the impossibility of finding other suitable work at home now, and finally, not least, my fiancée, who is from here.'",
+"uz": "— Oh, janob oqsoqol, — dedi K., — endi yana siz ba'zi narsalarni haddan tashqari aniq ko'ryapsiz. Meni bu yerda ushlab turgan narsalardan ba'zilarini sanab beray: uydan chiqib ketish uchun qilgan qurbonlarim, uzoq, og'ir safar, bu yerga qabul qilinishim haqidagi asosli umidlarim, mening butunlay mol-mulksizligim, endi uyda boshqa munosib ish topishning imkonsizligi va nihoyat, eng kam emas, mahalliy bo'lgan qallig'im."
+},
+{
+"en": "'Ah, Frieda,' said the mayor, without the least surprise. 'I know. But Frieda would follow you anywhere. As for the rest, certain considerations are of course necessary here, and I shall report on it to the Castle. Should a decision come, or should it become necessary to question you again before that, I'll send for you. Do you agree to that?'",
+"uz": "— Ha, Frida, — dedi oqsoqol hech qanday hayratsiz. — Bilaman. Lekin Frida siz bilan qayerga bo'lsa ham boradi. Qolganiga kelsak, bu yerda, albatta, ba'zi mulohazalar kerak va men bu haqda Qasrga xabar beraman. Agar qaror kelsa yoki undan oldin sizni yana so'roq qilish zarur bo'lib qolsa, sizni chaqirtiraman. Bunga rozimisiz?"
+},
+{
+"en": "'No, not at all,' said K. 'I don't want gifts of grace from the Castle, but my rights.'",
+"uz": "— Yo'q, umuman, — dedi K., — men Qasrdan marhamat sovg'alarini emas, o'z huquqimni istayman."
+},
+{
+"en": "'Mizzi,' said the mayor to his wife, who was still sitting pressed against him, lost in dreams, playing with Klamm's letter, from which she had folded a little boat — K. took it away from her now in alarm — 'Mizzi, my leg is beginning to hurt badly again; we'll have to change the compress.'",
+"uz": "— Mitsi, — dedi oqsoqol hamon unga suyanib, xayolga botib, Klammning maktubi bilan o'ynab o'tirgan xotiniga — u maktubdan kichkina qayiq yasab olgan edi, K. endi uni qo'rqib undan tortib oldi. — Mitsi, oyog'im yana qattiq og'riy boshladi, kompressni yangilashimiz kerak bo'ladi."
+},
+{
+"en": "K. stood up. 'Then I'll take my leave,' he said.",
+"uz": "K. o'rnidan turdi. — Unda men xayrlashaman, — dedi u."
+},
+{
+"en": "'Yes,' said Mizzi, who was already preparing an ointment, 'and there's too strong a draught too.' K. turned round; the assistants, in their always ill-timed zeal, had at once flung open both halves of the door at K.'s remark. To protect the sickroom from the cold pouring in, K. could only bow briefly to the mayor. Then he ran out of the room, dragging the assistants with him, and quickly shut the door. In front of the inn the landlord was waiting for him. He would not have dared to speak without being asked, so K. asked him what he wanted. 'Have you got a new lodging yet?' asked the landlord, looking at the ground. 'You're asking on your wife's orders,' said K. 'You're very dependent on her, I suppose?' — 'No,' said the landlord, 'I'm not asking on her orders. But she is very upset and unhappy because of you; she can't work; she lies in bed sighing and complaining all the time.' — 'Shall I go to her?' asked K. 'I beg you to,' said the landlord. 'I meant to fetch you from the mayor's; I listened at the door there, but you were talking and I didn't want to disturb you; I was worried about my wife too, so I ran back again, but she wouldn't let me in to her, so there was nothing for it but to wait for you.' — 'Then come quickly,' said K. 'I'll soon calm her down.' — 'If only you could,' said the landlord.",
+"uz": "«Ha, — dedi allaqachon malham tayyorlayotgan Mitsi, — elvizak ham juda kuchli.» K. o'girildi; yordamchilar o'zlarining doim noo'rin xizmat g'ayratida K.ning gapi bilanoq eshikning ikki tavaqasini ham lang ochib yuborishgan edi. Kasal xonasini kuchli kirib kelayotgan sovuqdan himoya qilish uchun K. oqsoqolga faqat bir zum ta'zim qila oldi. Keyin u yordamchilarni ergashtirib xonadan yugurib chiqdi va eshikni tezda yopdi. Mehmonxona oldida uni mehmonxona egasi kutib turardi. U so'ralmasdan gapirishga jur'at etmagan bo'lardi, shuning uchun K. undan nima istashini so'radi. «Yangi turar joying bormi?» — so'radi mehmonxona egasi yerga qarab. «Sen xotiningning topshirig'i bilan so'rayapsan, — dedi K., — unga juda qaram bo'lsang kerak?» — «Yo'q, — dedi mehmonxona egasi, — uning topshirig'i bilan so'rayotganim yo'q. Lekin u sen tufayli juda hayajonda va baxtsiz, ishlay olmaydi, to'shakda yotib, tinimsiz xo'rsinadi va nolydi.» — «Uning oldiga boraymi?» — so'radi K. «Iltimos qilaman, — dedi mehmonxona egasi, — men seni oqsoqolnikidan olib kelmoqchi edim, u yerda eshik oldida quloq soldim, lekin sizlar suhbatlashayotgan edingizlar, xalaqit bermoqchi emas edim, xotinim uchun ham xavotirlanayotgan edim, yana orqaga yugurdim, lekin u meni yoniga qo'ymadi, shuning uchun seni kutishdan boshqa ilojim qolmadi.» — «Unda tezroq yur, — dedi K., — men uni tez tinchlantiraman.» — «Qaniydi uddalasang», dedi mehmonxona egasi."
+},
+{
+"en": "They went through the bright kitchen, where three or four maids, each far from the others, positively froze at their chance tasks at the sight of K. Already in the kitchen one could hear the landlady sighing. She was lying in a windowless closet separated from the kitchen by a thin wooden partition. It had room only for a big double bed and a cupboard. The bed was placed so that from it one could survey the whole kitchen and supervise the work. From the kitchen, on the other hand, hardly anything in the closet could be seen. It was quite dark in there; only the white-and-red bedclothes gleamed a little. Only when one had gone in and one's eyes had grown used to it could one make out details.",
+"uz": "Ular yorug' oshxonadan o'tishdi, u yerda har biri boshqasidan uzoqda bo'lgan uch-to'rt xizmatkor qiz K.ni ko'rib, tasodifiy ishlari ustida rosmana qotib qolishdi. Oshxonadayoq bekaning xo'rsinishi eshitilardi. U oshxonadan yengil taxta devor bilan ajratilgan derazasiz xonachada yotardi. Unda faqat katta er-xotin karavoti va shkaf uchun joy bor edi. Karavot shunday qo'yilgan ediki, undan butun oshxonani ko'zdan kechirish va ishni nazorat qilish mumkin edi. Oshxonadan esa xonachada deyarli hech narsa ko'rinmasdi. U yer butunlay qorong'i edi, faqat oq-qizil choyshab biroz yiltirab turardi. Faqat ichkariga kirib, ko'zlar ko'nikkandan keyingina tafsilotlarni ajratish mumkin edi."
+},
+{
+"en": "'You've come at last,' said the landlady weakly. She lay stretched out on her back; her breathing evidently troubled her; she had thrown back the feather quilt. In bed she looked much younger than in her clothes, but a little nightcap of delicate lace, which she wore although it was too small and wobbled on her hair, made the decay of her face pitiful. 'How was I to come?' said K. gently. 'You didn't send for me.' — 'You shouldn't have kept me waiting so long,' said the landlady with the obstinacy of the sick. 'Sit down,' she said, pointing to the edge of the bed, 'but the rest of you go away!' Besides the assistants, the maids too had pushed their way in meanwhile. 'Shall I go too, Gardena?' said the landlord. K. heard the woman's name for the first time. 'Of course,' she said slowly, and, as if occupied with other thoughts, added absently: 'Why should you of all people stay?' But when they had all withdrawn into the kitchen — this time even the assistants followed at once, though they were after one of the maids — Gardena was still alert enough to realize that everything said here could be heard from the kitchen, since the closet had no door; and so she ordered them all to leave the kitchen too. It was done immediately.",
+"uz": "«Nihoyat keldingiz», dedi beka zaif ovozda. U chalqancha cho'zilib yotardi, nafas olish, aftidan, unga qiyin edi, par ko'rpani orqaga otib tashlagan edi. To'shakda u kiyimdagidan ancha yoshroq ko'rinardi, lekin nozik to'rdan tikilgan, kichkina bo'lsa ham kiyib olgan va sochi ustida chayqalib turgan tungi qalpoqcha yuzining so'lganligini achinarli qilardi. «Qanday kelishim kerak edi? — dedi K. muloyimlik bilan. — Axir siz meni chaqirtirmadingiz-ku.» — «Meni bunchalik uzoq kuttirmasligingiz kerak edi», dedi beka kasallarga xos qaysarlik bilan. «O'tiring, — dedi u karavot chetini ko'rsatib, — boshqalaringiz esa chiqib keting!» Yordamchilardan tashqari bu orada xizmatkor qizlar ham ichkariga suqilib kirishgan edi. «Men ham chiqib keteymi, Gardena?» — dedi mehmonxona egasi. K. ayolning ismini birinchi marta eshitdi. «Albatta», dedi u sekin va go'yo boshqa o'ylar bilan band bo'lgandek, parishon qo'shib qo'ydi: «Nega aynan sen qolishing kerak?» Lekin hammasi oshxonaga chekinishganida — bu safar yordamchilar ham darhol ergashishdi, garchi ular bir xizmatkor qizning ortidan yurgan bo'lsalar ham — Gardena baribir bu yerda gapirilgan hamma narsani oshxonadan eshitish mumkinligini anglash uchun yetarlicha hushyor edi, chunki xonachaning eshigi yo'q edi, shuning uchun u hammaga oshxonani ham tark etishni buyurdi. Bu darhol bajarildi."
+},
+{
+"en": "'Please,' said Gardena then, 'land surveyor, a shawl is hanging right at the front of the cupboard; hand it to me, I want to cover myself with it; I can't bear the feather quilt, I'm breathing so heavily.' And when K. had brought her the shawl, she said: 'Look, that's a beautiful shawl, isn't it?' To K. it seemed an ordinary woollen shawl; he felt it once more only to oblige her, but said nothing. 'Yes, it's a beautiful shawl,' said Gardena, and wrapped herself in it. Now she lay there peacefully; all suffering seemed to have been taken from her; she even remembered her hair, disordered by lying down, sat up for a little while and tidied her hair a little round the cap. She had abundant hair.",
+"uz": "«Iltimos, — dedi keyin Gardena, — janob yer o'lchovchi, shkafning shundoqqina old tomonida ro'mol osilgan, uni menga uzating, u bilan o'ranib olmoqchiman, par ko'rpaga chiday olmayman, juda og'ir nafas olyapman.» K. unga ro'molni olib kelganida, u dedi: «Qarang, bu chiroyli ro'mol, shunday emasmi?» K.ga bu oddiy jun ro'mol bo'lib tuyuldi, u faqat iltifot uchun uni yana bir bor ushlab ko'rdi, lekin hech narsa demadi. «Ha, bu chiroyli ro'mol», dedi Gardena va unga o'raldi. Endi u tinchgina yotardi; go'yo barcha azoblar undan olib tashlangandek edi, hatto yotishdan to'zg'igan sochlari ham esiga tushdi, u bir zum o'tirib, qalpoqcha atrofidagi sochini biroz tuzatdi. Uning sochi qalin edi."
+},
+{
+"en": "K. grew impatient and said: 'You had me asked, Frau Landlady, whether I already had another lodging.' — 'I had you asked?' said the landlady. 'No, that's a mistake.' — 'Your husband asked me just now.' — 'I believe it,' said the landlady. 'I'm cursed with him. When I didn't want you here, he kept you here; now that I'm happy you live here, he drives you away. That's the sort of thing he always does.' 'So you have changed your opinion of me so much?' said K. 'In an hour or two?' — 'I haven't changed my opinion,' said the landlady, weaker again. 'Give me your hand. There. And now promise me to be completely sincere; I want to be so with you too.' — 'Good,' said K., 'but who will begin?' — 'I will,' said the landlady. It did not give the impression that she meant to meet K. halfway in this, but rather that she was eager to speak first.",
+"uz": "K. sabrsizlanib dedi: «Bekam, siz mendan boshqa turar joyim bormi, deb so'ratdingiz.» — «Men so'ratdimmi? — dedi beka. — Yo'q, bu xato.» — «Eringiz hozirgina mendan shuni so'radi.» — «Bunga ishonaman, — dedi beka, — u bilan jabr ko'ryapman. Men sizni bu yerda istamaganimda, u sizni shu yerda ushlab turdi, endi esa, siz shu yerda yashayotganingizdan baxtiyor bo'lganimda, u sizni haydayapti. U doim shunga o'xshash qiladi.» «Demak, — dedi K., — men haqimdagi fikringizni shunchalik o'zgartirdingizmi? Bir-ikki soat ichida?» — «Fikrimni o'zgartirmadim, — dedi beka yana zaifroq, — qo'lingizni bering. Mana. Endi menga butunlay samimiy bo'lishga va'da bering, men ham siz bilan shunday bo'lmoqchiman.» — «Yaxshi, — dedi K., — lekin kim boshlaydi?» — «Men», dedi beka. Bu u K.ga yon bosmoqchidek emas, balki birinchi bo'lib gapirishga tashna bo'lgandek taassurot qoldirdi."
+},
+{
+"en": "She drew a photograph out from under the pillow and handed it to K. 'Look at this picture,' she said imploringly. To see it better K. took a step into the kitchen, but even there it was not easy to make anything out on the picture, for it was faded with age, cracked in many places, crumpled and stained. 'It's not in very good condition,' said K. 'Unfortunately, unfortunately,' said the landlady. 'When one carries it about for years, it gets like that. But if you look at it closely, you will still make everything out, quite certainly. I can help you, by the way — tell me what you see; it gives me great pleasure to hear about the picture. Well?' — 'A young man,' said K. 'Right,' said the landlady, 'and what is he doing?' — 'He's lying on a board, I think, stretching and yawning.' The landlady laughed. 'That's quite wrong,' she said. 'But here is the board, and here he lies,' K. insisted. 'Look more closely,' said the landlady crossly. 'Is he really lying?' — 'No,' said K. now, 'he isn't lying, he's floating, and — now I see it — it isn't a board at all but probably a cord, and the young man is doing a high jump.' — 'There you are,' said the landlady, delighted. 'He's jumping; that's how the official messengers practise. I knew you'd make it out.",
+"uz": "U yostiq ostidan bir fotosurat chiqarib, K.ga uzatdi. «Bu suratga qarang», dedi u iltijo bilan. Uni yaxshiroq ko'rish uchun K. oshxonaga bir qadam qo'ydi, lekin u yerda ham suratda biror narsani ajratish oson emas edi, chunki u yoshdan rangi o'chgan, ko'p joyidan singan, g'ijimlangan va dog' bosgan edi. «Unchalik yaxshi holatda emas», dedi K. «Afsus, afsuski, — dedi beka, — yillar davomida doim o'zing bilan olib yursang, shunday bo'ladi. Lekin diqqat bilan qarasangiz, baribir hammasini ajratasiz, albatta. Aytgancha, sizga yordam bera olaman, nima ko'rayotganingizni ayting, surat haqida eshitish menga juda yoqadi. Xo'sh?» — «Bir yigitni», dedi K. «To'g'ri, — dedi beka, — u nima qilyapti?» — «U, menimcha, taxta ustida yotibdi, kerishib esnayapti.» Beka kuldi. «Bu butunlay noto'g'ri», dedi u. «Lekin mana taxta, mana u yotibdi», — K. o'z fikrida turib oldi. «Diqqatliroq qarang, — dedi beka achchiqlanib, — u haqiqatan yotibdimi?» — «Yo'q, — dedi endi K., — u yotgani yo'q, u havoda suzyapti, endi ko'ryapman, bu umuman taxta emas, balki, ehtimol, arqon, yigit esa balandlikka sakrayapti.» — «Ana endi, — dedi beka xursand bo'lib, — u sakrayapti, rasmiy xabarchilar shunday mashq qilishadi. Siz buni ajratishingizni bilardim."
+},
+{
+"en": "Can you see his face too?' — 'I can see very little of his face,' said K. 'He's evidently straining hard; his mouth is open, his eyes screwed up, and his hair is flying.' — 'Very good,' said the landlady approvingly. 'Someone who hasn't seen him in person can't make out more than that. But he was a handsome boy; I saw him only once, fleetingly, and I shall never forget him.' — 'Who was he?' asked K. 'He was,' said the landlady, 'the messenger through whom Klamm summoned me to him for the first time.'",
+"uz": "Uning yuzini ham ko'ryapsizmi?» — «Yuzidan juda kam narsa ko'ryapman, — dedi K., — u, aftidan, juda zo'riqyapti, og'zi ochiq, ko'zlari qisilgan, sochi hilpirayapti.» — «Juda yaxshi, — dedi beka ma'qullab. — Uni shaxsan ko'rmagan odam bundan ortig'ini ajrata olmaydi. Lekin u chiroyli yigit edi; men uni faqat bir marta bir zum ko'rganman va hech qachon unutmayman.» — «U kim edi?» — so'radi K. «U, — dedi beka, — Klamm meni birinchi marta o'z oldiga chaqirgan xabarchi edi.»"
+},
+{
+"en": "K. could not listen properly; he was distracted by a clinking of glass. He found the cause of the disturbance at once. The assistants were standing outside in the yard, hopping from one foot to the other in the snow. They behaved as if they were happy to see K. again; for sheer happiness they pointed him out to each other, all the while tapping on the kitchen window. At a threatening movement from K. they stopped at once and tried to push each other back, but one always slipped away from the other, and there they were at the window again. K. hurried into the closet, where the assistants could not see him from outside and he did not have to see them. But the soft, as if pleading, clinking of the windowpane followed him there for a long time.",
+"uz": "K. diqqat bilan tinglay olmadi, uni shisha jiringlashi chalg'itdi. U xalaqitning sababini darhol topdi. Yordamchilar tashqarida, hovlida turib, qorda bir oyoqdan ikkinchisiga sakrashardi. Ular go'yo K.ni yana ko'rganlaridan baxtiyordek qilishardi; baxtdan uni bir-biriga ko'rsatishar va shu bilan birga tinimsiz oshxona derazasini chertishardi. K.ning tahdidli harakatidan keyin ular darhol to'xtashdi, bir-birini orqaga itarishga urinishdi, lekin biri doim ikkinchisidan sirg'alib chiqar va ular yana deraza oldida paydo bo'lishardi. K. yordamchilar uni tashqaridan ko'ra olmaydigan va o'zi ularni ko'rishi shart bo'lmagan xonachaga shoshildi. Lekin deraza oynasining sekin, go'yo iltijo qilayotgan jiringlashi u yerda ham uni uzoq ta'qib qildi."
+},
+{
+"en": "'The assistants again,' he said to the landlady by way of apology, pointing outside. But she paid no attention to him; she had taken the picture from him, looked at it, smoothed it and pushed it back under the pillow. Her movements had become slower, not from tiredness but under the weight of memory. She had wanted to tell K. something and had forgotten him over the telling. She played with the fringes of her shawl. Only after a little while did she look up, pass her hand over her eyes and say: 'This shawl is from Klamm too. And the cap as well. The picture, the shawl and the cap — those are the three keepsakes I have of him. I'm not young like Frieda, I'm not as ambitious as she is, nor as sensitive — she is very sensitive. In short, I know how to put up with life; but I must admit that without these three things I would not have stood it here so long — indeed, I probably wouldn't have stood it here a single day. These three keepsakes may seem little to you, but look: Frieda, who had dealings with Klamm for so long, has no keepsake at all — I asked her; she is too dreamy, and too hard to satisfy as well. Whereas I, who was with Klamm only three times — after that he didn't send for me any more, I don't know why — brought back these keepsakes, as if foreseeing how short my time would be. Of course, one has to see to it oneself; Klamm himself gives nothing, but if one sees something suitable lying about there, one can ask for it.'",
+"uz": "«Yana yordamchilar», dedi u bekaga uzr so'ragandek va tashqarini ko'rsatdi. Lekin u unga e'tibor bermadi; suratni undan olib, unga qaradi, tekisladi va yana yostiq ostiga surib qo'ydi. Uning harakatlari sekinlashgan edi, lekin charchoqdan emas, balki xotiralar og'irligi ostida. U K.ga hikoya qilmoqchi bo'lgan va hikoya ustida uni unutib qo'ygan edi. U ro'molining popuklari bilan o'ynardi. Faqat biroz o'tgachgina boshini ko'tardi, qo'lini ko'zlari ustidan yurgizdi va dedi: «Bu ro'mol ham Klammdan. Qalpoqcha ham. Surat, ro'mol va qalpoqcha — bular undan qolgan uchta yodgorlik. Men Fridadek yosh emasman, u kabi shuhratparast ham emasman, u kabi nozikta'b ham emasman — u juda nozikta'b; qisqasi, men hayotga ko'nikishni bilaman, lekin tan olishim kerakki, bu uch narsasiz men bu yerda bunchalik uzoq chiday olmagan bo'lardim, ha, ehtimol, bu yerda bir kun ham chiday olmasdim. Bu uchta yodgorlik sizga, ehtimol, arzimas tuyular, lekin qarang: Klamm bilan shunchalik uzoq muloqot qilgan Fridada hech qanday yodgorlik yo'q, men undan so'radim, u juda xayolparast va juda qanoatsiz ham; men esa Klammnikida faqat uch marta bo'lganman — keyin u meni boshqa chaqirtirmadi, nega ekanini bilmayman — go'yo vaqtimning qisqaligini oldindan sezgandek, bu yodgorliklarni olib kelganman. Albatta, bu haqda o'zing qayg'urishing kerak, Klammning o'zi hech narsa bermaydi, lekin u yerda biror mos narsa yotganini ko'rsang, uni so'rab olishing mumkin.»"
+},
+{
+"en": "K. felt uncomfortable at these stories, however much they concerned him.",
+"uz": "Bu hikoyalar unga qanchalik tegishli bo'lmasin, K. ular oldida o'zini noqulay his qildi."
+},
+{
+"en": "'How long ago was all this?' he asked with a sigh.",
+"uz": "— Bularning hammasi qancha vaqt oldin bo'lgan? — so'radi u xo'rsinib."
+},
+{
+"en": "'Over twenty years,' said the landlady. 'Well over twenty years.'",
+"uz": "— Yigirma yildan ortiq, — dedi beka. — Yigirma yildan ancha ortiq."
+},
+{
+"en": "'So that's how long one stays faithful to Klamm,' said K. 'But are you aware, Frau Landlady, that with such confessions you cause me grave worries when I think of my future marriage?'",
+"uz": "— Klammga shunchalik uzoq sodiq qolishar ekan, — dedi K. — Lekin, bekam, bunday e'tiroflaringiz bilan bo'lajak turmushim haqida o'ylaganimda menga og'ir tashvish keltirayotganingizni bilasizmi?"
+},
+{
+"en": "The landlady found it improper that K. should want to intrude his own affairs here, and gave him an angry sidelong look.",
+"uz": "Beka K.ning bu yerda o'z ishlari bilan aralashmoqchi bo'lishini nojo'ya deb topdi va unga g'azab bilan yonlama qaradi."
+},
+{
+"en": "'Don't be so angry, Frau Landlady,' said K. 'I didn't say a word against Klamm. But by the force of events I have entered into certain relations with Klamm — not even Klamm's greatest admirer can deny that. Well then. As a result, whenever Klamm is mentioned I must always think of myself too; that can't be helped. Besides, Frau Landlady' — here K. took her hesitant hand — 'remember how badly our last conversation turned out, and that this time we want to part in peace.'",
+"uz": "— Bunchalik jahl qilmang, bekam, — dedi K. — Men Klammga qarshi bir og'iz ham so'z aytmadim, lekin voqealar kuchi bilan men Klamm bilan ma'lum munosabatlarga kirishdim; buni Klammning eng katta muxlisi ham inkor eta olmaydi. Xo'sh. Natijada Klamm tilga olinganda men doim o'zim haqimda ham o'ylashim kerak, buni o'zgartirib bo'lmaydi. Aytgancha, bekam, — shu yerda K. uning ikkilanayotgan qo'lini ushladi, — oxirgi suhbatimiz qanchalik yomon tugaganini va bu safar tinch ajralishni istashimizni eslang."
+}
+],
+"gloss": [
+{
+"t": "private",
+"uz": "shaxsiy",
+"ex": "…to say it. This letter is not an official communication at all, but a private letter. That is clearly recognizable from the very salutation: \"Dear Sir\". Moreove…"
+},
+{
+"t": "official",
+"uz": "rasmiy",
+"ex": "…t I am about to tell you. At first Sordini left me out of it, but his officials came, and every day formal interrogations of respected members of the community…"
+},
+{
+"t": "telephone",
+"uz": "telefon",
+"ex": "…ne with this Schwarzer on the very day I arrived. He then enquired by telephone of the under-steward called Fritz and was told that I had been taken on as land…"
+},
+{
+"t": "singing",
+"uz": "qo'shiq",
+"ex": "…terrupted telephoning we hear in the telephones here as a rushing and singing — you will certainly have heard it too. But this rushing and this singing is the o…"
+},
+{
+"t": "keepsakes",
+"uz": "yodgorliklar",
+"ex": "…cap as well. The picture, the shawl and the cap — those are the three keepsakes I have of him. I'm not young like Frieda, I'm not as ambitious as she is, nor as…"
+},
+{
+"t": "shawl",
+"uz": "ro'mol",
+"ex": "'Please,' said Gardena then, 'land surveyor, a shawl is hanging right at the front of the cupboard; hand it to me, I want to cover myself…"
+},
+{
+"t": "photograph",
+"uz": "fotosurat",
+"ex": "She drew a photograph out from under the pillow and handed it to K. 'Look at this picture,' she said…"
+}
+],
+"quiz": [
+{
+"q": "How does the mayor interpret Klamm's letter?",
+"o": [
+"As an official appointment",
+"As a private letter with no official force",
+"As a forgery",
+"As an insult"
+],
+"a": 1,
+"why_uz": "«Bu rasmiy xat emas, balki shaxsiy maktub.»"
+},
+{
+"q": "What, according to the mayor, is the only trustworthy thing on the village telephones?",
+"o": [
+"The voices of officials",
+"The rushing and singing",
+"The ringing",
+"Nothing at all"
+],
+"a": 1,
+"why_uz": "Shovqin va qo'shiq — yagona ishonchli narsa."
+},
+{
+"q": "What three keepsakes does the landlady have from Klamm?",
+"o": [
+"A ring, a letter, a hat",
+"A photograph, a shawl and a nightcap",
+"A book, a pen, a coin",
+"A cup, a flower, a key"
+],
+"a": 1,
+"why_uz": "Surat, ro'mol va qalpoqcha."
+}
+]
+},
+{
+"part": null,
+"title": "7. The teacher",
+"title_uz": "7. O'qituvchi",
+"recap_uz": "Beka erini qanday topganini va mehmonxonani qanday olganini aytib beradi. K. bularning hammasida Klammning izi borligini isbotlamoqchi bo'ladi va Klamm bilan to'g'ridan-to'g'ri gaplashishdan qaytmaydi. Beka g'azablanib, K.ni uydan haydaydi. O'qituvchi oqsoqolning taklifini olib keladi: maktab qorovuli lavozimi. K. avval rad etadi, lekin Frida ularning ahvoli og'irligini aytib, taklifni qabul qilishga undaydi.",
+"note_uz": "",
+"paras": [
+{
+"en": "'You are right,' said the landlady, bowing her head, 'but spare me. I'm no more sensitive than others — on the contrary; everyone has sore spots, and I have only this one.'",
+"uz": "— Haqsiz, — dedi beka boshini egib, — lekin meni ayang. Men boshqalardan sezgirroq emasman, aksincha; har kimning og'riqli joylari bor, menda faqat shu bittasi."
+},
+{
+"en": "'Unfortunately it is mine as well,' said K. 'But I shall certainly control myself. Now explain to me, Frau Landlady: how am I to bear this terrible faithfulness to Klamm in marriage, assuming that Frieda resembles you in this?'",
+"uz": "— Afsuski, u ayni paytda meniki ham, — dedi K., — lekin men, albatta, o'zimni tutaman; endi esa tushuntiring, bekam, agar Frida ham bu borada sizga o'xshasa, turmushda Klammga bo'lgan bu dahshatli sodiqlikka qanday chidashim kerak?"
+},
+{
+"en": "'Terrible faithfulness?' the landlady repeated resentfully. 'Is it faithfulness, then? I am faithful to my husband — but Klamm? Klamm once made me his mistress; can I ever lose that rank? And how you are to bear it with Frieda? Oh, land surveyor, who are you to dare ask such things?'",
+"uz": "— Dahshatli sodiqlik? — g'ashlanib takrorladi beka. — Bu sodiqlikmi o'zi? Men erimga sodiqman, lekin Klammga? Klamm meni bir marta o'z ma'shuqasi qilgan, men bu martabani qachondir yo'qota olamanmi? Frida bilan bunga qanday chidashingiz kerakmish? Eh, janob yer o'lchovchi, bunday so'rashga jur'at qilgan siz kim o'zi?"
+},
+{
+"en": "'Frau Landlady,' said K. warningly.",
+"uz": "— Bekam, — dedi K. ogohlantirib."
+},
+{
+"en": "'I know,' said the landlady, giving way, 'but my husband never asked such questions. I don't know who should be called unhappy, I then or Frieda now — Frieda, who left Klamm wilfully, or I, whom he no longer sent for. Perhaps it is Frieda after all, even if she doesn't seem to know it fully yet. But my unhappiness then ruled my thoughts more exclusively, for I had to ask myself all the time — and at bottom I haven't stopped asking even today: why did this happen? Three times Klamm sent for you, and the fourth time not, and never a fourth time! What occupied me more in those days? What else could I talk about with my husband, whom I married soon afterwards? By day we had no time — we had taken over this inn in a wretched state and had to try to bring it up — but at night? For years our night-time talks turned only on Klamm and the reasons for his change of mind. And when my husband fell asleep during these conversations, I woke him, and we talked on.'",
+"uz": "— Bilaman, — dedi beka bo'ysunib, — lekin erim bunday savollar bermagan. Kimni baxtsiz deyish kerakligini bilmayman — o'shandagi menimi yoki hozirgi Fridanimi. O'z ixtiyori bilan Klammni tashlab ketgan Fridanimi yoki u boshqa chaqirtirmagan menimi? Balki baribir Fridadir, garchi u buni hali to'liq bilmayotgandek ko'rinsa ham. Lekin o'shanda mening baxtsizligim fikrlarimni ko'proq yolg'iz o'zi egallagan edi, chunki men doimo o'zimdan so'rashim kerak edi va aslida bugun ham so'rashdan to'xtamayman: nega bu sodir bo'ldi? Klamm seni uch marta chaqirtirdi, to'rtinchi marta esa yo'q, va hech qachon to'rtinchi marta emas! O'shanda meni bundan ko'ra nima ko'proq band qilardi? Ko'p o'tmay turmushga chiqqan erim bilan yana nima haqida gaplasha olardim? Kunduzi vaqtimiz yo'q edi, biz bu mehmonxonani ayanchli holatda olgan edik va uni ko'tarishga urinishimiz kerak edi, lekin kechasi-chi? Yillar davomida bizning tungi suhbatlarimiz faqat Klamm va uning fikri o'zgarishi sabablari atrofida aylanardi. Agar erim bu suhbatlar paytida uxlab qolsa, uni uyg'otardim va gaplashishda davom etardik."
+},
+{
+"en": "'Now,' said K., 'if you will allow me, I'll ask a very crude question.'",
+"uz": "— Endi, — dedi K., — agar ruxsat bersangiz, juda qo'pol bir savol beraman."
+},
+{
+"en": "The landlady was silent.",
+"uz": "Beka jim qoldi."
+},
+{
+"en": "'So I may not ask,' said K. 'That's enough for me too.'",
+"uz": "— Demak, so'rashim mumkin emas ekan, — dedi K., — bu ham menga yetarli."
+},
+{
+"en": "'Of course,' said the landlady, 'that's enough for you too, and that especially. You misinterpret everything, even silence. You simply can't help it. I allow you to ask.'",
+"uz": "— Albatta, — dedi beka, — bu ham sizga yetarli, ayniqsa bu. Siz hamma narsani noto'g'ri talqin qilasiz, hatto sukutni ham. Boshqacha qila olmaysiz. So'rashingizga ruxsat beraman."
+},
+{
+"en": "'If I misinterpret everything,' said K., 'then perhaps I misinterpret my own question too; perhaps it isn't so crude at all. I only wanted to know how you came to know your husband, and how this inn came into your possession.'",
+"uz": "— Agar men hamma narsani noto'g'ri talqin qilsam, — dedi K., — balki o'z savolimni ham noto'g'ri talqin qilayotgandirman, balki u unchalik qo'pol emasdir. Men faqat eringiz bilan qanday tanishganingizni va bu mehmonxona qanday qilib sizning mulkingizga aylanganini bilmoqchi edim."
+},
+{
+"en": "The landlady frowned, but said calmly: 'That's a very simple story. My father was a blacksmith, and Hans, my present husband, who was a stable lad for a big farmer, often came to my father. It was after my last meeting with Klamm; I was very unhappy and really shouldn't have been, for everything had happened correctly, and that I might no longer go to Klamm was simply Klamm's decision, and so correct; only the reasons were obscure — I was not allowed to inquire into them — but unhappy I should not have been. Well, I was, all the same, and couldn't work, and sat in our little front garden all day. Hans saw me there and sometimes sat down with me. I didn't complain to him, but he knew what it was about, and because he's a good lad, it happened that he wept with me. And when the landlord of that time, whose wife had died and who therefore had to give up the business — he was an old man already too — once passed our little garden and saw us sitting there, he stopped and offered us the inn on lease, then and there. Because he trusted us he wanted no money in advance, and he set the rent very low. I didn't want to be a burden to my father; everything else was indifferent to me; and so, thinking of the inn and of the new work, which might bring a little forgetting, I gave Hans my hand. That's the story.' It was quiet for a little while; then K. said: 'The landlord's way of acting was fine, but careless — or did he have special reasons for trusting you both?'",
+"uz": "Beka qovog'ini soldi, lekin xotirjam dedi: «Bu juda oddiy hikoya. Otam temirchi edi, hozirgi erim Hans esa bir katta dehqonnikida otboqar bo'lib, tez-tez otamnikiga kelib turardi. Bu Klamm bilan so'nggi uchrashuvimdan keyin edi, men juda baxtsiz edim va aslida baxtsiz bo'lmasligim kerak edi, chunki hammasi to'g'ri sodir bo'lgan, endi Klammning oldiga bora olmasligim ham Klammning qarori, demak to'g'ri edi; faqat sabablari qorong'i edi, ularni surishtirishga haqim yo'q edi, lekin baxtsiz bo'lmasligim kerak edi. Xullas, men baribir baxtsiz edim, ishlay olmasdim va butun kun bizning kichkina old bog'chamizda o'tirardim. U yerda Hans meni ko'rdi, ba'zan yonimga o'tirardi; men unga nolimasdim, lekin u nima gapligini bilardi va u yaxshi bola bo'lgani uchun men bilan birga yig'lagan paytlari ham bo'lgan. Xotini vafot etgani va shuning uchun kasbini tashlashga majbur bo'lgan — buning ustiga u allaqachon keksa edi — o'sha paytdagi mehmonxona egasi bir kuni bizning bog'chamiz yonidan o'tib, bizning u yerda o'tirganimizni ko'rganida, to'xtadi va bizga mehmonxonani ijaraga olishni shartta taklif qildi; bizga ishongani uchun oldindan pul so'ramadi va ijara haqini juda arzon belgiladi. Men otamga yuk bo'lishni istamasdim, qolgan hamma narsa menga befarq edi, shuning uchun mehmonxonani va, balki biroz unutish keltiradigan yangi ishni o'ylab, Hansga qo'limni berdim. Hikoya shu.» Bir lahza jimlik cho'kdi, keyin K. dedi: «Mehmonxona egasining harakati chiroyli, lekin ehtiyotsiz edi, yoki uning ikkovingizga ishonishi uchun alohida sabablari bormidi?»"
+},
+{
+"en": "'He knew Hans well,' said the landlady. 'He was Hans's uncle.'",
+"uz": "— U Hansni yaxshi bilardi, — dedi beka, — u Hansning amakisi edi."
+},
+{
+"en": "'Well then, of course,' said K. 'So Hans's family evidently cared a great deal about the connection with you?'",
+"uz": "— Unda, albatta, — dedi K. — Demak, Hansning oilasi siz bilan bog'lanishga, aftidan, juda manfaatdor bo'lgan?"
+},
+{
+"en": "'Perhaps,' said the landlady. 'I don't know; I never bothered about it.'",
+"uz": "— Balki, — dedi beka, — bilmayman, men bunga hech qachon qiziqmaganman."
+},
+{
+"en": "'But it must have been so,' said K., 'if the family was ready to make such sacrifices and to put the inn simply into your hands without security.'",
+"uz": "— Lekin shunday bo'lgan bo'lishi kerak, — dedi K., — agar oila shunday qurbonliklarga tayyor bo'lgan va mehmonxonani shunchaki, kafolatsiz sizning qo'lingizga topshirgan bo'lsa."
+},
+{
+"en": "'It wasn't careless, as it turned out later,' said the landlady. 'I threw myself into the work. I was strong, the blacksmith's daughter; I needed neither maid nor man; I was everywhere — in the taproom, the kitchen, the stable, the yard. I cooked so well that I even lured guests away from the Herrenhof. You haven't been in the taproom at midday yet; you don't know our midday guests. There were even more then; many have drifted away since. And the result was that not only could we pay the rent properly, but after a few years we bought the whole thing, and today it's almost free of debt. The further result, of course, was that I ruined myself doing it, got heart trouble, and have now become an old woman. You probably think I'm much older than Hans, but in reality he's only two or three years younger, and he will never age, of course, for with his work — smoking his pipe, listening to the guests, then knocking out the pipe and sometimes fetching a beer — with that kind of work one doesn't age.'",
+"uz": "— Keyin ma'lum bo'lganidek, bu ehtiyotsizlik emas edi, — dedi beka. — Men ishga sho'ng'idim, kuchli edim, temirchining qizi; menga na xizmatkor qiz, na malay kerak edi; men hamma joyda edim — umumiy zalda, oshxonada, otxonada, hovlida; shunchalik yaxshi ovqat pishirardimki, hatto «Herrenhof»dan mehmonlarni tortib olardim. Siz tushlik paytida hali umumiy zalda bo'lmagansiz, bizning tushlikdagi mehmonlarimizni bilmaysiz, o'shanda ular yana ko'proq edi, o'shandan beri ko'pchiligi tarqalib ketdi. Natijada biz nafaqat ijara haqini to'g'ri to'lay oldik, balki bir necha yildan keyin hammasini sotib oldik va bugun u deyarli qarzsiz. Keyingi natija esa, albatta, men bunda o'zimni ado qildim, yurak kasaliga chalindim va endi kampirga aylandim. Siz, ehtimol, men Hansdan ancha kattaman, deb o'ylaysiz, lekin aslida u faqat ikki-uch yosh kichik va, albatta, hech qachon qarimaydi, chunki uning ishi bilan — trubka chekish, mehmonlarni tinglash, keyin trubkani qoqib tozalash va ba'zan pivo olib kelish — bunday ish bilan odam qarimaydi."
+},
+{
+"en": "'Your achievements are admirable,' said K., 'there's no doubt of that. But we were speaking of the time before your marriage, and then it would surely have been strange if Hans's family had pressed for the marriage at a cost in money — or at least taking on so great a risk as handing over the inn — and had no other hope in doing so than your capacity for work, which nobody yet knew, and Hans's capacity for work, the absence of which they must already have discovered.'",
+"uz": "— Yutuqlaringiz hayratlanarli, — dedi K., — bunga shubha yo'q, lekin biz turmush qurishingizdan oldingi davr haqida gaplashayotgan edik, o'shanda esa Hansning oilasi pul qurbonliklari bilan yoki hech bo'lmaganda mehmonxonani topshirish kabi katta xavfni zimmasiga olib, turmushga undagan va bunda sizning hali hech kim bilmagan mehnat qobiliyatingizdan va Hansning — yo'qligini allaqachon bilib olgan bo'lishi kerak bo'lgan — mehnat qobiliyatidan boshqa umidi bo'lmagan bo'lsa, bu g'alati bo'lardi."
+},
+{
+"en": "'Well, yes,' said the landlady wearily, 'I know what you're aiming at, and how wide of the mark you are. There was no trace of Klamm in any of this. Why should he have looked after me — or rather, how could he have looked after me at all? He knew nothing more of me. That he no longer sent for me was a sign that he had forgotten me. Whom he no longer sends for, he forgets completely. I didn't want to speak of this in front of Frieda. But it is not only forgetting; it is more than that. Someone one has forgotten one can get to know again. With Klamm that is not possible. Whom he no longer sends for, he has forgotten completely not only for the past but positively for all the future too. If I take great pains, I can put myself into your thoughts — your thoughts, senseless here, perhaps valid in the foreign parts you come from. Possibly you go so far in your madness as to believe that Klamm gave me my Hans for a husband precisely so that I should have no great obstacle in going to him if he should ever send for me in the future. Well, madness can go no further than that. Where is the man who could stop me running to Klamm if Klamm gave me a sign? Nonsense, utter nonsense; one only confuses oneself by playing with such nonsense.'",
+"uz": "— Xo'sh, ha, — dedi beka charchagan holda, — nimani nishonga olayotganingizni va bunda qanchalik adashayotganingizni bilaman. Bu ishlarning hech birida Klammning izi yo'q edi. Nega u men uchun g'amxo'rlik qilishi kerak edi, aniqrog'i: umuman qanday qilib g'amxo'rlik qila olardi? U endi men haqimda hech narsa bilmasdi. Meni boshqa chaqirtirmagani uni meni unutganining belgisi edi. U kimni boshqa chaqirtirmasa, uni butunlay unutadi. Men bu haqda Fridaning oldida gapirmoqchi emas edim. Lekin bu faqat unutish emas, bu undan ham ko'proq. Unutilgan odam bilan yana tanishish mumkin-ku. Klammda bu mumkin emas. U kimni boshqa chaqirtirmasa, uni nafaqat o'tmish uchun butunlay unutgan, balki rosmana butun kelajak uchun ham. Agar ko'p harakat qilsam, sizning fikrlaringizga — bu yerda ma'nosiz, siz kelgan begona yurtda esa, balki, to'g'ri bo'lgan fikrlaringizga kirib o'ylay olaman. Balki siz hatto shunday telbalikkacha borarsizki, Klamm menga aynan mening Hansimni er qilib bergan, toki u meni kelajakda bir kun chaqirsa, uning oldiga borishimga ko'p to'siq bo'lmasin, deb ishonarsiz. Xo'sh, telbalik bundan ortiq bora olmaydi. Agar Klamm menga ishora qilsa, meni Klammning oldiga yugurishdan to'xtata oladigan erkak qayerda? Bema'nilik, mutlaq bema'nilik; bu bema'nilik bilan o'ynagan odam o'zini chalkashtirib qo'yadi."
+},
+{
+"en": "'No,' said K., 'we don't want to confuse ourselves. I wasn't nearly as far in my thoughts as you suppose — though, to tell the truth, I was on the way there. For the moment, though, I was only surprised that the relatives hoped so much from the marriage, and that these hopes were in fact fulfilled — though through the stake of your heart, your health. The thought of a connection between these facts and Klamm did force itself on me, certainly, but not, or not yet, in the crude form in which you put it — evidently only so as to be able to snap at me again, because that gives you pleasure. Enjoy it! But my thought was this. First of all, Klamm was evidently the occasion of the marriage. Without Klamm you would not have been unhappy, would not have sat idle in the little front garden; without Klamm, Hans would not have seen you there; without your sadness, shy Hans would never have dared to speak to you; without Klamm you would never have found yourselves in tears together; without Klamm the good old uncle-landlord would never have seen you and Hans sitting peacefully together there; without Klamm you would not have been indifferent to life, and so would not have married Hans. Well, I should think there's enough Klamm in all that already. But it goes further. Had you not been seeking forgetfulness, you would certainly not have worked so ruthlessly against yourself and brought the business up so high. So Klamm here too.",
+"uz": "— Yo'q, — dedi K., — biz o'zimizni chalkashtirmoqchi emasmiz; men fikrlarimda siz taxmin qilganchalik uzoqqa bormagan edim, garchi, rostini aytsam, o'sha yo'lda bo'lsam ham. Lekin hozircha meni faqat qarindoshlar turmushdan shunchalik ko'p narsa kutgani va bu umidlar haqiqatan ham ro'yobga chiqqani hayron qoldirdi — to'g'ri, yuragingiz, sog'lig'ingiz evaziga. Bunda bu faktlarning Klamm bilan aloqasi haqidagi fikr, albatta, xayolimga keldi, lekin siz uni tasvirlagan qo'pollikda emas yoki hali emas — siz buni, aftidan, faqat menga yana bir bor tashlanish uchun qildingiz, chunki bu sizga zavq beradi. Zavqlanavering! Lekin mening fikrim shunday edi: avvalo, Klamm, aftidan, turmushning sababchisi. Klammsiz siz baxtsiz bo'lmasdingiz, old bog'chada bekor o'tirmasdingiz; Klammsiz Hans sizni u yerda ko'rmasdi; qayg'ungiz bo'lmaganida tortinchoq Hans siz bilan gaplashishga hech qachon jur'at qilmasdi; Klammsiz siz Hans bilan hech qachon ko'z yoshlar ichida topishmasdingiz; Klammsiz keksa, mehribon amaki-mehmonxona egasi Hans bilan sizni u yerda tinch birga o'tirganingizni hech qachon ko'rmasdi; Klammsiz siz hayotga befarq bo'lmasdingiz, demak, Hansga turmushga chiqmasdingiz. Xo'sh, menimcha, bularning hammasida allaqachon yetarlicha Klamm bor. Lekin bu yana davom etadi. Agar unutishni izlamaganingizda, albatta, o'zingizga nisbatan bunchalik shafqatsiz ishlamagan va xo'jalikni bunchalik yuqoriga ko'tarmagan bo'lardingiz. Demak, bu yerda ham Klamm."
+},
+{
+"en": "But apart from that, Klamm is also the cause of your illness, for your heart was already exhausted by the unhappy passion before your marriage. There remains only the question of what so attracted Hans's relatives to the marriage. You yourself once mentioned that to be Klamm's mistress means a rise in rank that can never be lost; well, that may be what attracted them. But besides that, I believe, there was the hope that the lucky star which led you to Klamm — assuming it was a lucky star, but you claim it was — belonged to you, and so must stay with you, and would not leave you as quickly and suddenly as Klamm had.'",
+"uz": "Lekin bundan tashqari Klamm sizning kasalligingizning ham sababchisi, chunki yuragingiz turmushdan oldin ham baxtsiz ehtirosdan holdan toygan edi. Faqat Hansning qarindoshlarini turmushga nima shunchalik jalb qilgani degan savol qoladi. Siz o'zingiz bir marta Klammning ma'shuqasi bo'lish yo'qotib bo'lmaydigan martaba ko'tarilishi ekanini aytgan edingiz; mayli, ularni shu jalb qilgan bo'lishi mumkin. Lekin bundan tashqari, menimcha, sizni Klammga olib borgan omadli yulduz — agar u omadli yulduz bo'lsa, siz esa shunday deb da'vo qilasiz — sizga tegishli, demak, siz bilan qolishi va sizni Klamm qilganidek tez va to'satdan tashlab ketmasligi kerak, degan umid ham bo'lgan."
+},
+{
+"en": "'Do you mean all that seriously?' asked the landlady.",
+"uz": "— Bularning hammasini jiddiy aytyapsizmi? — so'radi beka."
+},
+{
+"en": "'Seriously,' said K. quickly. 'Only I think Hans's relatives were neither quite right nor quite wrong in their hopes, and I think I can also see the mistake they made. Outwardly everything seems to have succeeded: Hans is well provided for, has an imposing wife, is respected, the business is free of debt. But really not everything has succeeded. He would certainly have been much happier with a simple girl whose first great love he had been. If, as you reproach him, he sometimes stands about in the taproom as if lost, it is because he really does feel lost — without being unhappy about it, certainly, I know him that well already — but it is just as certain that this handsome, sensible lad would have become happier with another wife, by which I also mean more independent, more industrious, more manly. And you yourself are certainly not happy; as you said, without the three keepsakes you wouldn't want to go on living at all, and you have heart trouble too. So were the relatives wrong in their hopes? I don't think so. The blessing was above you, but no one knew how to bring it down.'",
+"uz": "— Jiddiy, — dedi K. tezda, — faqat menimcha, Hansning qarindoshlari o'z umidlarida na butunlay haq, na butunlay nohaq edilar, va men ular qilgan xatoni ham ko'ra olayotgandekman. Tashqi tomondan hammasi muvaffaqiyatli bo'lgandek: Hans yaxshi ta'minlangan, savlatli xotini bor, hurmatda, xo'jalik qarzsiz. Lekin aslida hammasi muvaffaqiyatli emas; u o'zi birinchi katta muhabbati bo'lgan oddiy qiz bilan, albatta, ancha baxtliroq bo'lardi; agar siz uni ayblaganingizdek, u ba'zan umumiy zalda adashib qolgandek tursa, buning sababi u o'zini haqiqatan adashgandek his qiladi — bundan baxtsiz bo'lmagan holda, albatta, uni allaqachon shunchalik bilaman — lekin xuddi shunchalik aniqki, bu kelishgan, aqlli yigit boshqa xotin bilan baxtliroq, shu bilan birga demoqchimanki, mustaqilroq, tirishqoqroq, erkakroq bo'lardi. Siz o'zingiz ham, albatta, baxtli emassiz va aytganingizdek, uchta yodgorliksiz umuman yashashni istamasdingiz, buning ustiga yurak kasalisiz. Demak, qarindoshlar o'z umidlarida nohaq edilarmi? Unday deb o'ylamayman. Baraka sizning ustingizda edi, lekin uni pastga tushirishni bilishmadi."
+},
+{
+"en": "'What was it they failed to do, then?' asked the landlady. She was now lying stretched out on her back, looking up at the ceiling.",
+"uz": "— Unda nimani qo'ldan boy berishdi? — so'radi beka. U endi chalqancha cho'zilib yotib, shiftga qarab turardi."
+},
+{
+"en": "'To ask Klamm,' said K.",
+"uz": "— Klammdan so'rashni, — dedi K."
+},
+{
+"en": "'So we're back to you again,' said the landlady.",
+"uz": "— Demak, yana sizga qaytdik, — dedi beka."
+},
+{
+"en": "'Or to you,' said K. 'Our affairs border on each other.'",
+"uz": "— Yoki sizga, — dedi K. — Bizning ishlarimiz bir-biriga chegaradosh."
+},
+{
+"en": "'So what do you want from Klamm?' asked the landlady. She had sat up and shaken the pillows so that she could lean back sitting, and she looked K. full in the eyes. 'I have told you my own case openly — you could have learned a good deal from it. Now tell me just as openly what you want to ask Klamm. It was only with difficulty that I persuaded Frieda to go up to her room and stay there; I was afraid you wouldn't speak openly enough in her presence.'",
+"uz": "— Xo'sh, Klammdan nima istaysiz? — so'radi beka. U o'tirib olgan, o'tirgan holda suyanishi uchun yostiqlarni silkitib qo'ygan va K.ning ko'zlariga tik qarab turardi. — Men sizga o'z holatimni ochiq aytib berdim, undan ko'p narsa o'rganishingiz mumkin edi. Endi siz ham xuddi shunday ochiq ayting: Klammdan nima so'ramoqchisiz? Fridani o'z xonasiga chiqib, u yerda qolishga zo'rg'a ko'ndirdim; uning huzurida yetarlicha ochiq gapirmaysiz, deb qo'rqdim."
+},
+{
+"en": "'I have nothing to hide,' said K. 'But first I want to draw your attention to something. Klamm forgets at once, you said. In the first place, that seems very improbable to me; in the second, it can't be proved — evidently it's nothing but a legend, made up by the girlish minds of those who happened to be in Klamm's favour. I'm surprised that you believe such a flat invention.'",
+"uz": "— Yashiradigan hech narsam yo'q, — dedi K. — Lekin avval sizning e'tiboringizni bir narsaga qaratmoqchiman. Klamm darhol unutadi, dedingiz. Bu, birinchidan, menga juda ishonchsiz tuyuladi, ikkinchidan, uni isbotlab bo'lmaydi, aftidan, bu Klammning marhamatida bo'lgan qizlarning aqli to'qigan afsonadan boshqa narsa emas. Siz bunday sayoz to'qimaga ishonayotganingizdan hayronman."
+},
+{
+"en": "'It is no legend,' said the landlady. 'It is drawn from general experience.'",
+"uz": "— Bu afsona emas, — dedi beka, — aksincha, umumiy tajribadan olingan."
+},
+{
+"en": "'Then it can be refuted by an invention too,' said K. 'But there is also another difference between your case and Frieda's. That Klamm no longer sent for Frieda never really happened; on the contrary, he did send for her, but she didn't obey. It is even possible that he is still waiting for her.'",
+"uz": "— Demak, uni to'qima bilan ham rad etish mumkin, — dedi K. — Lekin sizning holatingiz bilan Fridaning holati o'rtasida yana bir farq bor. Klamm Fridani boshqa chaqirtirmagani, bir ma'noda, umuman sodir bo'lmagan, aksincha, u uni chaqirdi, lekin u bormadi. Hatto u hali ham uni kutayotgan bo'lishi mumkin."
+},
+{
+"en": "The landlady was silent and only let her gaze travel watchfully up and down K. Then she said: 'I'll listen calmly to everything you have to say. Rather speak openly than spare me. I have only one request. Don't use Klamm's name. Call him \"he\" or something else, but not by his name.'",
+"uz": "Beka jim qoldi va faqat nigohini kuzatuvchan holda K. bo'ylab tepaga va pastga yurgizdi. Keyin dedi: «Aytmoqchi bo'lgan hamma narsangizni xotirjam tinglayman. Meni ayaganingizdan ko'ra ochiq gapiring. Faqat bitta iltimosim bor. Klammning ismini ishlatmang. Uni «U» yoki boshqacha atang, lekin ismi bilan emas.»"
+},
+{
+"en": "'Gladly,' said K. 'But what I want from him is hard to say. First, I want to see him close up; then I want to hear his voice; then I want to learn from him how he stands regarding our marriage. What else I may ask him for after that depends on how the conversation goes. Many things may come up, but the most important thing for me is to stand face to face with him. You see, I have not yet spoken directly to a single real official. That seems to be harder to achieve than I thought. But now I have the duty to speak to him as a private person, and in my opinion that is much easier to bring about. As an official I can speak to him only in his office, which is perhaps inaccessible — in the Castle or, which is already doubtful, at the Herrenhof. But as a private person, anywhere — in a house, in the street, wherever I happen to manage to meet him. That I shall then have the official before me as well I'll gladly accept, but it is not my first aim.'",
+"uz": "— Bajonidil, — dedi K., — lekin undan nima istashimni aytish qiyin. Avvalo, uni yaqindan ko'rmoqchiman, keyin ovozini eshitmoqchiman, keyin undan bizning turmushimizga qanday munosabatda ekanini bilmoqchiman. Keyin undan yana nima so'rashim suhbatning qanday kechishiga bog'liq. Ko'p narsa tilga olinishi mumkin, lekin men uchun eng muhimi — uning ro'parasida turish. Gap shundaki, men hali hech bir haqiqiy amaldor bilan bevosita gaplashmaganman. Bunga erishish men o'ylaganimdan qiyinroqqa o'xshaydi. Lekin endi men u bilan shaxsiy odam sifatida gaplashishga majburman va buni, menimcha, ancha osonroq amalga oshirish mumkin. Amaldor sifatida u bilan faqat uning, balki yetib bo'lmaydigan idorasida — Qasrda yoki, bu allaqachon shubhali, «Herrenhof»da gaplasha olaman. Lekin shaxsiy odam sifatida — hamma joyda: uyda, ko'chada, qayerda uni uchratishga muvaffaq bo'lsam. Bunda yo'l-yo'lakay amaldor ham ro'paramda bo'lishini bajonidil qabul qilaman, lekin bu mening birinchi maqsadim emas."
+},
+{
+"en": "'Very well,' said the landlady, pressing her face into the pillows as if she were saying something shameless. 'If I manage, through my connections, to have your request for an interview passed on to Klamm, will you promise me to do nothing on your own until the answer comes down?'",
+"uz": "— Yaxshi, — dedi beka va go'yo uyatsiz bir narsa aytayotgandek yuzini yostiqlarga bosdi. — Agar aloqalarim orqali uchrashuv haqidagi iltimosingiz Klammga yetkazilishiga erishsam, javob tushguncha o'zboshimchalik bilan hech narsa qilmaslikka va'da berasizmi?"
+},
+{
+"en": "'I can't promise that,' said K., 'however gladly I'd fulfil your request, or your whim. The matter is urgent, you see, especially after the unfavourable result of my talk with the mayor.'",
+"uz": "— Buni va'da qila olmayman, — dedi K., — iltimosingizni yoki injiqligingizni qanchalik bajarishni istamay. Gap shundaki, ish shoshilinch, ayniqsa oqsoqol bilan suhbatimning noqulay natijasidan keyin."
+},
+{
+"en": "'That objection falls away,' said the landlady. 'The mayor is a completely insignificant person. Haven't you noticed that? He couldn't stay a day in his position if it weren't for his wife, who runs everything.'",
+"uz": "— Bu e'tiroz o'z kuchini yo'qotadi, — dedi beka, — oqsoqol butunlay ahamiyatsiz odam. Buni payqamadingizmi? Agar hamma narsani boshqaradigan xotini bo'lmaganida, u o'z lavozimida bir kun ham qola olmasdi."
+},
+{
+"en": "'Mizzi?' asked K. The landlady nodded. 'She was there,' said K.",
+"uz": "— Mitsimi? — so'radi K. Beka bosh irg'adi. — U o'sha yerda edi, — dedi K."
+},
+{
+"en": "'Did she say anything?' asked the landlady.",
+"uz": "— U biror narsa dedimi? — so'radi beka."
+},
+{
+"en": "'No,' said K., 'but I didn't have the impression that she could.'",
+"uz": "— Yo'q, — dedi K., — lekin uning bunga qodirligi haqida taassurot ham olmadim."
+},
+{
+"en": "'Well, there you are,' said the landlady. 'That's how wrongly you see everything here. In any case, what the mayor has decided about you has no importance, and I'll talk to the wife some time. And if I now promise you as well that Klamm's answer will come within a week at the latest, you surely have no further reason not to give way to me.'",
+"uz": "— Mana, ko'rdingizmi, — dedi beka, — bu yerda hamma narsaga shunchalik noto'g'ri qaraysiz. Har holda, oqsoqol siz haqingizda nima qaror qilgan bo'lsa, uning ahamiyati yo'q, xotini bilan esa men fursat topib gaplashaman. Agar endi sizga Klammning javobi ko'pi bilan bir haftada kelishini ham va'da qilsam, menga yon bermaslikka endi hech qanday sababingiz qolmasa kerak."
+},
+{
+"en": "'None of that is decisive,' said K. 'My decision is fixed, and I would try to carry it out even if a refusal came. But if I have this intention from the outset, I can't have someone request the interview beforehand. What without the request remains a bold but well-meant attempt would, after a refusal, be open defiance. That would of course be much worse.'",
+"uz": "— Bularning hech biri hal qiluvchi emas, — dedi K. — Qarorim qat'iy va agar rad javobi kelsa ham, uni amalga oshirishga harakat qilardim. Lekin agar boshidanoq shunday niyatim bo'lsa, avvaldan uchrashuv so'ratishim mumkin emas-ku. Iltimossiz jasoratli, lekin baribir vijdonan qilingan urinish bo'lib qoladigan narsa rad javobidan keyin ochiq itoatsizlik bo'lardi. Bu, albatta, ancha yomonroq bo'lardi."
+},
+{
+"en": "'Worse?' said the landlady. 'It is defiance in any case. Now do as you please. Hand me my skirt.'",
+"uz": "— Yomonroqmi? — dedi beka. — Har holda bu itoatsizlik. Endi xohlaganingizni qiling. Yubkamni uzating."
+},
+{
+"en": "Without any regard for K. she put on her skirt and hurried into the kitchen. For some time already a commotion had been heard from the taproom. There had been knocking on the serving hatch. The assistants had pushed it open once and called in that they were hungry. Then other faces had appeared there too. Even soft singing in several voices could be heard.",
+"uz": "K.ga hech qanday e'tibor bermay, u yubkasini kiydi va oshxonaga shoshildi. Allaqachon ancha vaqtdan beri umumiy zal tomondan notinchlik eshitilardi. Tuynukni taqillatishgan edi. Yordamchilar uni bir marta itarib ochib, ichkariga qorinlari ochligini qichqirishgan edi. Keyin u yerda boshqa yuzlar ham paydo bo'lgan edi. Hatto sekin, lekin ko'p ovozli qo'shiq ham eshitilardi."
+},
+{
+"en": "K.'s conversation with the landlady had, of course, greatly delayed the cooking of the midday meal; it was not ready yet, but the guests had assembled. Still, nobody had dared to enter the kitchen against the landlady's prohibition. But now, when the watchers at the hatch reported that the landlady was coming, the maids at once ran into the kitchen, and as K. entered the taproom, the astonishingly numerous company — more than twenty people, men and women, dressed in a provincial but not a peasant way — streamed from the hatch, where they had gathered, to the tables to make sure of their places. Only at a small table in a corner a married couple with a few children was already sitting; the husband, a friendly, blue-eyed gentleman with tousled grey hair and beard, was bending down to the children, beating time with a knife to their singing, which he kept trying to quieten — perhaps he wanted the singing to make them forget their hunger. The landlady apologized to the company with a few indifferently spoken words; nobody reproached her. She looked round for the landlord, who had doubtless long since fled from the difficulty of the situation. Then she went slowly into the kitchen; she had not another glance for K., who was hurrying up to Frieda in his room. Upstairs K. met the teacher. The room, pleasingly, was hardly recognizable, so busy had Frieda been.",
+"uz": "Albatta, K.ning beka bilan suhbati tushlik ovqat tayyorlashni ancha kechiktirgan edi; u hali tayyor emas edi, lekin mehmonlar yig'ilib bo'lgan edi. Shunga qaramay, hech kim bekaning taqiqiga qarshi oshxonaga kirishga jur'at etmagan edi. Lekin endi tuynuk oldidagi kuzatuvchilar beka kelayotganini xabar qilishganida, xizmatkor qizlar darhol oshxonaga yugurishdi va K. umumiy zalga kirganida, hayratlanarli darajada ko'p sonli jamoa — yigirmadan ortiq odam, erkaklar va ayollar, viloyatcha, lekin dehqoncha emas kiyingan — joy egallash uchun o'zlari to'plangan tuynuk yonidan stollar tomon yopirildi. Faqat bir burchakdagi kichkina stolda bir necha bolali er-xotin allaqachon o'tirardi; er — mehribon, ko'k ko'zli, sochi va soqoli to'zg'igan kulrang janob — bolalar tomon egilib, pichoq bilan ularning qo'shig'iga usul berar va uni doim pasaytirishga urinardi; balki u qo'shiq orqali ularga ochlikni unuttirmoqchi bo'lgandir. Beka jamoadan bir-ikki befarq aytilgan so'z bilan uzr so'radi, hech kim uni ayblamadi. U mehmonxona egasini izlab atrofga qaradi, lekin u vaziyatning qiyinligidan allaqachon qochib ketgan bo'lsa kerak. Keyin u sekin oshxonaga kirdi; Fridaning oldiga, o'z xonasiga shoshilayotgan K.ga boshqa qaramadi ham. Yuqorida K. o'qituvchini uchratdi. Xonani, yoqimli tarzda, deyarli tanib bo'lmasdi — Frida shunchalik tirishqoqlik qilgan edi."
+},
+{
+"en": "It had been well aired, the stove generously stoked, the floor washed, the bed made; the maids' things, that hateful rubbish, including their pictures, had disappeared; the table, which earlier, wherever one turned, had positively stared after one with its top encrusted with dirt, was covered with a white knitted cloth. Now one could receive guests; that K.'s small stock of linen, which Frieda had evidently washed early that morning, was hung out to dry by the stove was little disturbance. The teacher and Frieda had been sitting at the table; they rose as K. came in. Frieda greeted K. with a kiss; the teacher bowed a little. K., distracted and still agitated by the conversation with the landlady, began to apologize for not yet having been able to visit the teacher — as though he assumed that the teacher, impatient at K.'s failure to come, had now made the visit himself. But the teacher, in his measured way, seemed only now to remember slowly that some sort of visit had once been arranged between him and K. 'Why, land surveyor,' he said slowly, 'you are the stranger I spoke to a few days ago in the church square.' — 'Yes,' said K. curtly; what he had put up with then, in his forlorn state, he need not put up with here in his own room.",
+"uz": "Xona yaxshilab shamollatilgan, pechka mo'l yoqilgan, pol yuvilgan, karavot yig'ishtirilgan edi; xizmatkor qizlarning narsalari — bu jirkanch axlat, ularning suratlari bilan birga — g'oyib bo'lgan edi; ilgari qayerga o'girilsang ham kir qotib qolgan yuzasi bilan go'yo ortingdan tikilib turgan stol oq to'qilgan dasturxon bilan yopilgan edi. Endi mehmon qabul qilsa bo'lardi; K.ning Frida, aftidan, erta tongda yuvgan oz-moz ichki kiyimlari pechka yonida quritish uchun osib qo'yilgani unchalik xalaqit bermasdi. O'qituvchi va Frida stol yonida o'tirishgan edi, K. kirganida o'rinlaridan turishdi. Frida K.ni o'pib kutib oldi, o'qituvchi biroz ta'zim qildi. Beka bilan suhbatdan hali ham notinch va parishon bo'lgan K. hozirgacha o'qituvchini ziyorat qila olmagani uchun uzr so'ray boshladi; go'yo u o'qituvchi K. kelmaganidan sabrsizlanib, endi o'zi ziyorat qilgan deb taxmin qilayotgandek edi. Lekin o'qituvchi o'zining vazmin uslubida faqat endigina u bilan K. o'rtasida qachondir qandaydir ziyorat kelishilganini sekin eslayotgandek tuyuldi. «Siz, janob yer o'lchovchi, — dedi u sekin, — bir necha kun oldin cherkov maydonida men gaplashgan begona odamsiz-ku.» — «Ha», dedi K. qisqagina; o'shanda tashlab qo'yilgan holatida chidagan narsaga bu yerda, o'z xonasida chidashi shart emas edi."
+},
+{
+"en": "He turned to Frieda and consulted her about an important visit he had to make at once, for which he must be dressed as well as possible. Without questioning K. further, Frieda at once called the assistants, who were busy just then examining the new tablecloth, and ordered them to clean carefully, down in the yard, K.'s clothes and boots, which he immediately began to take off. She herself took a shirt from the line and ran down to the kitchen to iron it.",
+"uz": "U Fridaga o'girilib, darhol qilishi kerak bo'lgan va unda imkon qadar yaxshi kiyingan bo'lishi lozim bo'lgan muhim bir tashrif haqida u bilan maslahatlashdi. Frida K.dan boshqa hech narsa so'ramay, darhol aynan yangi dasturxonni tekshirish bilan band bo'lgan yordamchilarni chaqirdi va ularga K. darhol yecha boshlagan kiyimlari va etiklarini pastda, hovlida yaxshilab tozalashni buyurdi. O'zi esa ipdan bir ko'ylakni olib, uni dazmollash uchun oshxonaga yugurib tushdi."
+},
+{
+"en": "Now K. was alone with the teacher, who was sitting quietly at the table again. He let him wait a little longer, took off his shirt and began to wash at the basin. Only now, with his back to the teacher, did he ask him the reason for his coming. 'I come on behalf of the mayor,' he said. K. was ready to hear the message. But since K.'s words were hard to understand amid the splashing water, the teacher had to come closer and leaned against the wall beside K. K. excused his washing and his restlessness by the urgency of the visit he intended. The teacher passed over this and said: 'You were rude to the mayor, that old, deserving, much-experienced, venerable man.' — 'I don't know that I was rude,' said K., drying himself, 'but it is true that I had other things to think of than fine manners, for it was a question of my existence, which is threatened by a shameful official mismanagement, the details of which I need not explain to you, since you yourself are an active member of this authority. Has the mayor complained about me?' — 'To whom should he have complained?' said the teacher. 'And even if he had someone, would he ever complain? I only drew up a short record of your conversation at his dictation, and from it I learned enough about the mayor's kindness and the nature of your answers.'",
+"uz": "Endi K. yana jimgina stol yonida o'tirgan o'qituvchi bilan yolg'iz qoldi; u uni yana biroz kuttirdi, ko'ylagini yechdi va tog'ora yonida yuvina boshladi. Faqat endigina, orqasini o'qituvchiga o'girib, undan kelish sababini so'radi. «Men janob qishloq oqsoqolining topshirig'i bilan keldim», dedi u. K. topshiriqni eshitishga tayyor edi. Lekin K.ning so'zlari suv shaloplashi orasida qiyin tushunilgani uchun, o'qituvchi yaqinroq kelib, K.ning yonida devorga suyanishiga to'g'ri keldi. K. yuvinishi va notinchligini rejalashtirgan tashrifining shoshilinchligi bilan oqladi. O'qituvchi bunga e'tibor bermadi va dedi: «Siz janob qishloq oqsoqoliga — bu keksa, xizmat ko'rsatgan, katta tajribali, muhtaram odamga qo'pollik qildingiz.» — «Qo'pollik qilganimni bilmayman, — dedi K. artinarkan, — lekin men nozik odob haqida emas, boshqa narsalar haqida o'ylashim kerak bo'lgani to'g'ri, chunki gap mening mavjudligim haqida edi, u esa uyatli rasmiy boshqaruv tufayli xavf ostida, uning tafsilotlarini sizga tushuntirishim shart emas, chunki siz o'zingiz bu idoraning faol a'zosisiz. Qishloq oqsoqoli mendan shikoyat qildimi?» — «Kimga shikoyat qilishi kerak edi? — dedi o'qituvchi. — Hatto kimdir bo'lganida ham, u qachondir shikoyat qilarmidi? Men faqat uning aytib turishi bilan suhbatingiz haqida kichik bayonnoma tuzdim va undan janob oqsoqolning mehribonligi va javoblaringiz tabiati haqida yetarlicha bilib oldim.»"
+},
+{
+"en": "While K. was looking for his comb, which Frieda must have put away somewhere, he said: 'What? A record? Drawn up afterwards, in my absence, by someone who wasn't even at the conversation? Not bad. And why a record at all? Was it an official act, then?' — 'No,' said the teacher, 'a semi-official one; the record too is only semi-official. It was made only because with us there must be strict order in everything. In any case, it exists now, and it does not do you credit.' K., who had at last found the comb, which had slipped into the bed, said more calmly: 'Let it exist. Did you come to tell me that?' — 'No,' said the teacher, 'but I'm no automaton and had to tell you my opinion. My message, on the other hand, is further proof of the mayor's kindness; I stress that this kindness is incomprehensible to me and that I am carrying out the message only under the compulsion of my position and out of reverence for the mayor.' K., washed and combed, was now sitting at the table waiting for the shirt and clothes. He was not very curious about what the teacher had brought him; he was also influenced by the low opinion the landlady had of the mayor.",
+"uz": "Frida qayergadir joylashtirib qo'ygan bo'lishi kerak bo'lgan taroqni izlarkan, K. dedi: «Nima? Bayonnoma? Mening yo'qligimda, keyinchalik, suhbatda umuman bo'lmagan odam tomonidan tuzilganmi? Yomon emas. Nega bayonnoma? Bu rasmiy harakatmidi?» — «Yo'q, — dedi o'qituvchi, — yarim rasmiy, bayonnoma ham faqat yarim rasmiy; u faqat bizda hamma narsada qat'iy tartib bo'lishi kerakligi uchun tuzildi. Har holda u endi mavjud va sizga sharaf keltirmaydi.» Nihoyat to'shakka sirpanib tushgan taroqni topgan K. xotirjamroq dedi: «Mavjud bo'laversin. Buni menga xabar qilish uchun keldingizmi?» — «Yo'q, — dedi o'qituvchi, — lekin men avtomat emasman va sizga fikrimni aytishim kerak edi. Mening topshirig'im esa janob oqsoqolning mehribonligining yana bir isboti; ta'kidlaymanki, bu mehribonlik menga tushunarsiz va topshiriqni faqat lavozimim majburiyati va janob oqsoqolga hurmatim tufayli bajaryapman.» Yuvingan va taralgan K. endi ko'ylak va kiyimlarni kutib stol yonida o'tirardi; o'qituvchi unga nima olib kelgani bilan unchalik qiziqmasdi; buning ustiga bekaning oqsoqol haqidagi past fikri ham unga ta'sir qilgan edi."
+},
+{
+"en": "'It's past midday already, I suppose?' he asked, thinking of the way he meant to go; then he corrected himself and said: 'You wanted to give me a message from the mayor.' — 'Well, yes,' said the teacher with a shrug, as though shaking off any responsibility of his own. 'The mayor fears that if the decision in your matter is too long in coming, you will do something rash on your own. For my part I don't know why he fears that; my view is that you may as well do whatever you like. We are not your guardian angels and have no obligation to run after you on all your paths. Very well. The mayor is of a different opinion. The decision itself, which is a matter for the Count's authorities, he cannot of course hasten. But within his own sphere he wants to make a provisional, truly generous decision; it is only up to you to accept it. For the time being he offers you the post of school caretaker.' K. hardly paid attention at first to what he was being offered; but the fact that he was being offered something did not seem to him meaningless. It suggested that, in the mayor's view, he was capable — to defend himself — of doing things against which it justified a certain expense for the community itself to protect itself. And how seriously they were taking the matter! The teacher, who had already been waiting here for some time and had drawn up the record before that, must have been positively chased here by the mayor.",
+"uz": "«Tushlik allaqachon o'tib ketgandir?» — so'radi u bormoqchi bo'lgan yo'lini o'ylab, keyin o'zini tuzatib dedi: «Siz menga oqsoqoldan nimadir yetkazmoqchi edingiz.» — «Ha, xo'sh, — dedi o'qituvchi yelka qisib, go'yo har qanday shaxsiy mas'uliyatni o'zidan silkib tashlayotgandek. — Janob oqsoqol agar sizning ishingiz bo'yicha qaror juda uzoq kechiksa, o'zboshimchalik bilan biror o'ylanmagan ish qilib qo'yasiz, deb qo'rqadi. Men o'zim uning nega bundan qo'rqishini bilmayman; mening fikrimcha, xohlaganingizni qilganingiz eng yaxshisi. Biz sizning farishta qo'riqchilaringiz emasmiz va barcha yo'llaringizda ortingizdan yugurishga majbur emasmiz. Mayli. Janob oqsoqol boshqa fikrda. Graflik idoralarining ishi bo'lgan qarorning o'zini, albatta, u tezlashtira olmaydi. Lekin o'z vakolati doirasida u vaqtinchalik, haqiqatan saxovatli qaror qabul qilmoqchi, uni qabul qilish faqat sizga bog'liq: u sizga vaqtincha maktab qorovuli lavozimini taklif qilyapti.» K. avvaliga unga nima taklif qilinayotganiga deyarli e'tibor bermadi, lekin unga biror narsa taklif qilinayotgani faktining o'zi unga ahamiyatsiz tuyulmadi. Bu oqsoqolning fikricha, u o'zini himoya qilish uchun shunday ishlar qila olishini ko'rsatardi, ulardan himoyalanish uchun jamoaning o'zi uchun ham ma'lum xarajatlar oqlanardi. Va ishga qanchalik jiddiy qarashardi! Bu yerda allaqachon bir muddat kutgan va undan oldin bayonnomani ham tuzgan o'qituvchini oqsoqol rosmana bu yerga haydab yuborgan bo'lsa kerak."
+},
+{
+"en": "When the teacher saw that he had after all made K. thoughtful, he went on: 'I made my objections. I pointed out that so far no caretaker had been needed; the sexton's wife tidies up from time to time, and Fräulein Gisa, the schoolmistress, supervises it. I have trouble enough with the children; I don't want to be annoyed by a caretaker as well. The mayor replied that the school was very dirty, though. I answered, truthfully, that it was not too bad. And, I added, will it get better if we take this man as caretaker? Certainly not. Apart from the fact that he knows nothing of such work, the schoolhouse has only two big classrooms without any side rooms, so the caretaker and his family must live, sleep, perhaps even cook, in one of the classrooms, and that naturally cannot increase cleanliness. But the mayor pointed out that this post would be a rescue for you in your need, and that you would therefore make every effort to fill it well; furthermore, the mayor said, with you we would also gain the services of your wife and your assistants, so that not only the school but also the school garden could be kept in model order. All this I refuted with ease.",
+"uz": "O'qituvchi K.ni baribir o'ylantirib qo'yganini ko'rgach, davom etdi: «Men e'tirozlarimni bildirdim. Hozirgacha maktab qorovuli kerak bo'lmaganini ta'kidladim; cherkov xizmatchisining xotini vaqti-vaqti bilan yig'ishtirib turadi, o'qituvchi Giza xonim esa buni nazorat qiladi. Bolalar bilan tashvishim yetarli, yana maktab qorovuli bilan ham asabimni buzishni istamayman. Janob oqsoqol maktab baribir juda iflos, deb e'tiroz bildirdi. Men haqiqatga muvofiq, unchalik yomon emas, deb javob berdim. Va qo'shib qo'ydim: bu odamni maktab qorovuli qilib olsak, yaxshiroq bo'ladimi? Albatta, yo'q. U bunday ishlardan hech narsa tushunmasligidan tashqari, maktab binosida faqat ikkita katta sinf xonasi bor, yordamchi xonalar yo'q, demak, qorovul oilasi bilan sinflardan birida yashashi, uxlashi, balki hatto ovqat pishirishi kerak, bu esa, albatta, tozalikni oshira olmaydi. Lekin janob oqsoqol bu lavozim siz uchun muhtojlikdan qutulish bo'lishini va shuning uchun uni yaxshi bajarish uchun bor kuchingiz bilan harakat qilishingizni ta'kidladi; yana janob oqsoqol, siz bilan birga xotiningiz va yordamchilaringizning kuchini ham qo'lga kiritamiz, shuning uchun nafaqat maktab, balki maktab bog'i ham namunali tartibda saqlanishi mumkin, deb hisobladi. Bularning hammasini men osonlik bilan rad etdim."
+},
+{
+"en": "Finally the mayor could bring forward nothing more in your favour; he laughed and only said that you were a land surveyor after all and would therefore be able to lay out the beds in the school garden especially beautifully straight. Well, there is no arguing with jokes, and so I came to you with the message.' 'You are worrying needlessly, teacher,' said K. 'It doesn't occur to me to accept the post.' — 'Excellent,' said the teacher, 'excellent; you decline quite without reservation,' and he took his hat, bowed and left.",
+"uz": "Oxir-oqibat janob oqsoqol sizning foydangizga boshqa hech narsa ayta olmadi, kuldi va faqat siz axir yer o'lchovchisiz-ku, shuning uchun maktab bog'idagi pollarni ayniqsa chiroyli tekis chiza olasiz, dedi. Xo'sh, hazillarga e'tiroz yo'q, shuning uchun men topshiriq bilan sizning oldingizga keldim.» «Siz behuda tashvishlanyapsiz, janob o'qituvchi, — dedi K. — Lavozimni qabul qilish xayolimga ham kelmaydi.» — «Ajoyib, — dedi o'qituvchi, — ajoyib, siz hech qanday shartsiz rad etyapsiz», va u shlyapasini olib, ta'zim qildi va chiqib ketdi."
+},
+{
+"en": "Immediately afterwards Frieda came up with a distraught face; she brought the shirt unironed and did not answer questions. To distract her, K. told her about the teacher and the offer; hardly had she heard it when she threw the shirt on the bed and ran off again. She soon came back, but with the teacher, who looked sullen and did not greet anyone. Frieda asked him for a little patience — evidently she had already done so several times on the way here — then drew K. through a side door he had not even known about into the neighbouring loft, and there finally told him, agitated and out of breath, what had happened to her. The landlady, indignant at having lowered herself before K. to confessions and — what was worse still — to giving way about an interview between Klamm and K., and at having gained nothing by it but, as she said, a cold and moreover insincere rebuff, was determined not to tolerate K. in her house any longer. If he had connections with the Castle, let him make use of them quickly, for today, this very moment, he must leave the house, and only at the direct order and compulsion of the authorities would she take him in again; but she hoped it would not come to that, for she too had connections with the Castle and would know how to bring them to bear.",
+"uz": "Shundan keyinoq Frida xavotirli yuz bilan yuqoriga chiqdi, ko'ylakni dazmollamagan holda olib keldi, savollarga javob bermadi; uni chalg'itish uchun K. unga o'qituvchi va taklif haqida aytib berdi; buni eshitishi bilanoq u ko'ylakni to'shakka tashladi va yana yugurib chiqib ketdi. U tez orada qaytib keldi, lekin qovog'i solingan va umuman salom bermagan o'qituvchi bilan. Frida undan biroz sabr qilishni so'radi — aftidan, bu yerga kelayotib buni bir necha marta qilgan edi — keyin K.ni u umuman bilmagan yon eshik orqali qo'shni chordoqqa tortib olib chiqdi va u yerda nihoyat hayajonlanib, nafasi qaytib, o'ziga nima bo'lganini aytib berdi. Beka K. oldida e'tiroflarga va, bundan ham yomonrog'i, Klammning K. bilan uchrashuvi borasida yon berishga o'zini past tushirgani va bundan, uning aytishicha, sovuq va buning ustiga nosamimiy raddan boshqa hech narsaga erishmaganidan g'azablanib, K.ni endi uyida saqlamaslikka qaror qilgan ekan; agar uning Qasr bilan aloqalari bo'lsa, ulardan tezroq foydalansin, chunki bugunoq, hozirning o'zida u uyni tark etishi kerak, va faqat idoraning bevosita buyrug'i va majburlashi bilan u uni yana qabul qiladi; lekin u bunga yetib bormaydi, deb umid qiladi, chunki uning ham Qasr bilan aloqalari bor va ulardan foydalanishni biladi."
+},
+{
+"en": "Besides, he had come to the inn only through the landlord's carelessness, and was in no need otherwise, for only this morning he had boasted of a bed waiting for him. Frieda, of course, was to stay; if Frieda moved out with K., she, the landlady, would be deeply unhappy — down in the kitchen she had already collapsed in tears beside the stove at the mere thought, the poor woman with her heart trouble! But how could she act otherwise, now that it was — in her mind at least — a matter of the very honour of Klamm's memory? That was how things stood with the landlady. Frieda, of course, would follow him, K., wherever he wished, through snow and ice — there was naturally no need to waste another word on that — but their situation was very bad in any case, and so she had greeted the mayor's offer with great joy. Even if it was not a suitable post for K., it was, as had been expressly stressed, only provisional; they would gain time and would easily find other possibilities, even if the final decision should turn out unfavourable. 'If need be,' cried Frieda at last, already at K.'s neck, 'we'll emigrate — what keeps us here in the village? But for now, darling, we'll accept the offer, won't we? I've brought the teacher back; you just say \"Accepted\" to him, nothing more, and we'll move into the school.'",
+"uz": "Aytgancha, u mehmonxonaga faqat mehmonxona egasining beparvoligi tufayli kelgan va boshqa jihatdan umuman muhtoj emas, chunki bugun ertalab u o'zi uchun tayyor turgan tunash joyi bilan maqtangan edi. Frida, albatta, qolishi kerak; agar Frida K. bilan ko'chib ketsa, u — beka chuqur baxtsiz bo'ladi, pastda, oshxonada u buni o'ylashning o'zidan pechka yonida yig'lab yiqilib tushgan — bechora, yurak kasali ayol! Lekin endi, hech bo'lmaganda uning tasavvurida, gap rosmana Klamm xotirasining sharafi haqida ketayotganda, u qanday boshqacha harakat qila olardi! Beka bilan ish shunday edi. Frida, albatta, uning, K.ning ortidan qayerga xohlasa — qor va muz ichiga ham boradi, bu haqda, albatta, boshqa so'z sarflashga hojat yo'q, lekin har holda ularning ahvoli juda yomon, shuning uchun u oqsoqolning taklifini katta quvonch bilan kutib olgan ekan; garchi bu K.ga mos lavozim bo'lmasa ham, u, alohida ta'kidlanganidek, faqat vaqtinchalik, vaqt yutiladi va hatto yakuniy qaror noqulay bo'lsa ham, boshqa imkoniyatlar osongina topiladi. «Kerak bo'lsa, — deb qichqirdi nihoyat Frida allaqachon K.ning bo'yniga osilib, — boshqa yurtga ketamiz, bizni bu qishloqda nima ushlab turibdi? Lekin hozircha, to'g'rimi, jonim, taklifni qabul qilamiz. Men o'qituvchini qaytarib olib keldim, sen unga faqat «Qabul qildim» deysan, boshqa hech narsa, va biz maktabga ko'chib o'tamiz.»"
+}
+],
+"gloss": [
+{
+"t": "faithfulness",
+"uz": "sodiqlik",
+"ex": "…elf. Now explain to me, Frau Landlady: how am I to bear this terrible faithfulness to Klamm in marriage, assuming that Frieda resembles you in this?'"
+},
+{
+"t": "blacksmith",
+"uz": "temirchi",
+"ex": "…rowned, but said calmly: 'That's a very simple story. My father was a blacksmith, and Hans, my present husband, who was a stable lad for a big farmer, often cam…"
+},
+{
+"t": "lease",
+"uz": "ijara",
+"ex": "…garden and saw us sitting there, he stopped and offered us the inn on lease, then and there. Because he trusted us he wanted no money in advance, and he set the…"
+},
+{
+"t": "defiance",
+"uz": "itoatsizlik",
+"ex": "…remains a bold but well-meant attempt would, after a refusal, be open defiance. That would of course be much worse.'"
+},
+{
+"t": "record",
+"uz": "bayonnoma",
+"ex": "…ven if he had someone, would he ever complain? I only drew up a short record of your conversation at his dictation, and from it I learned enough about the mayor…"
+},
+{
+"t": "caretaker",
+"uz": "qorovul",
+"ex": "…you to accept it. For the time being he offers you the post of school caretaker.' K. hardly paid attention at first to what he was being offered; but the fact t…"
+},
+{
+"t": "provisional",
+"uz": "vaqtinchalik",
+"ex": "…cannot of course hasten. But within his own sphere he wants to make a provisional, truly generous decision; it is only up to you to accept it. For the time bein…"
+}
+],
+"quiz": [
+{
+"q": "How did the landlady come to own the inn?",
+"o": [
+"She inherited it",
+"Hans's uncle leased it to them cheaply, and later they bought it",
+"Klamm gave it to her",
+"She won it at cards"
+],
+"a": 1,
+"why_uz": "Hansning amakisi uni arzon ijaraga berdi, keyin ular sotib olishdi."
+},
+{
+"q": "What does the mayor offer K. through the teacher?",
+"o": [
+"A post at the Castle",
+"The post of school caretaker",
+"Money to leave",
+"A house"
+],
+"a": 1,
+"why_uz": "Vaqtincha maktab qorovuli lavozimi."
+},
+{
+"q": "Why does Frieda want K. to accept the offer?",
+"o": [
+"She loves the school",
+"The landlady has thrown K. out and their situation is bad",
+"The teacher is her friend",
+"Klamm ordered it"
+],
+"a": 1,
+"why_uz": "Beka K.ni uydan haydagan; ularga boshpana kerak."
 }
 ]
 }
