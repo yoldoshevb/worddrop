@@ -1,0 +1,66 @@
+.dy-radio {
+  color: #f8eaf5;
+  color-scheme: dark;
+  background: radial-gradient(ellipse at 74% 0, #38214c 0, transparent 29rem), #0b1026;
+  font-family: system-ui, sans-serif;
+}
+.dy-wrap { width: min(100% - 32px, 840px); margin: auto; padding: clamp(24px, 6vw, 60px) 0 64px; }
+.dy-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); align-items: center; gap: clamp(16px, 6vw, 60px); }
+.dy-poster {
+  width: 100%; max-width: 290px; height: auto; aspect-ratio: 2/3; object-fit: cover;
+  border: 1px solid #f1a6d460; border-radius: 11px; box-shadow: 0 14px 48px #030411a0;
+}
+.dy-intro { min-width: 0; }
+.dy-eyebrow { color: #e6a0cd; font-size: .7rem; letter-spacing: .13em; font-weight: 750; }
+.dy-series { margin: clamp(12px, 4vw, 32px) 0 2px; color: #efb6d9; font-size: clamp(.9rem, 2vw, 1.2rem); }
+.dy-intro h1 { margin: 0; font: 500 clamp(1.75rem, 6.2vw, 4.6rem)/1.05 Georgia, serif; }
+.dy-blurb { max-width: 35ch; margin: 18px 0 4px; color: #e0cedf; line-height: 1.6; }
+.dy-meta { color: #e5add2; font-size: .82rem; }
+.dy-console, .dy-script { margin-top: 22px; padding: clamp(12px, 3vw, 24px); border: 1px solid #664967; border-radius: 16px; background: #151a35; }
+.dy-controls { display: grid; grid-template-columns: auto minmax(70px, 1fr) repeat(3, auto); gap: 8px; align-items: center; }
+.dy-radio button, .dy-radio select { font: inherit; cursor: pointer; }
+.dy-play { width: 50px; height: 50px; color: #230d21; background: #f2a9d4; border: 0; border-radius: 50%; font-weight: 800; }
+.dy-control, #dy-speed {
+  min-width: 38px; min-height: 36px; padding: 4px 7px; border: 1px solid #826285;
+  border-radius: 8px; background: #26213f; color: #f9e9f6; font-size: .83rem !important;
+}
+.dy-radio :is(button, select, a, input):focus-visible, .dy-file:focus-within { outline: 2px solid #f2a9d4; outline-offset: 3px; }
+#dy-progress { display: block; width: 100%; margin: 0 0 3px; accent-color: #f2a9d4; cursor: pointer; }
+.dy-time { display: flex; justify-content: space-between; color: #e4c6e0; font-size: .74rem; font-variant-numeric: tabular-nums; }
+.dy-source { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 10px; font-size: .81rem; }
+.dy-source a, .dy-file { color: #efb7d9; text-decoration: underline; text-underline-offset: 3px; }
+.dy-file { position: relative; cursor: pointer; }
+.dy-file input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
+.dy-status { margin: 8px 0 0; font-size: .87rem; color: #f4b9d8; }
+.dy-script-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.dy-script-head > div { flex: 1 1 200px; }
+.dy-script h2 { margin: 0; font: 500 1.65rem/1.15 Georgia, serif; }
+.dy-script p, .dy-follow { color: #d8c5dc; font-size: .84rem; }
+.dy-script-head p { margin: 5px 0; }
+.dy-follow input { accent-color: #f2a9d4; }
+.dy-note { margin: 10px 0; }
+.dy-lines { max-height: min(45vh, 400px); min-height: 135px; overflow: auto; overscroll-behavior: contain; padding-right: 3px; }
+.dy-lines[hidden] { display: none; }
+.dy-line {
+  display: grid; width: 100%; grid-template-columns: 3.4ch minmax(0, 1fr); gap: 15px;
+  text-align: left; padding: 10px 12px; margin: 0 0 5px; color: #f8eaf5;
+  background: #1c2445; border: 1px solid transparent; border-radius: 8px;
+}
+.dy-line:nth-child(even) { background: #2a2042; }
+.dy-line:is(:hover, [aria-current]) { border-color: #e7a3d0; background: #482747; }
+.dy-line-time { color: #f2acd7; font-size: .75rem; align-self: start; padding-top: 4px; font-variant-numeric: tabular-nums; }
+.dy-line-copy { font-size: .94rem; line-height: 1.45; white-space: pre-line; }
+.dy-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 540px) {
+  .dy-wrap { width: calc(100% - 24px); }
+  .dy-blurb { font-size: .85rem; margin-top: 9px; }
+  .dy-eyebrow { letter-spacing: .065em; }
+  .dy-controls { gap: 5px; }
+  .dy-play { width: 40px; height: 40px; }
+  .dy-control, #dy-speed { min-width: 32px; }
+  .dy-script-head { gap: 8px; }
+}
+.dy-speaker { display: block; margin-bottom: 3px; color: #bdd1ff; font-size: .72rem; letter-spacing: .045em; }
+.dy-line.dy-catherine { background: #30213d; }
+.dy-catherine .dy-speaker { color: #f6a9d3; }
+.dy-line.dy-catherine[aria-current] { background: #542a4d; }
