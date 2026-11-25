@@ -13,7 +13,6 @@
 ],
 "sort": 13,
 "free_chapters": 1,
-"published": false,
 "cover": {
 "bg": "#0E0B08",
 "ink": "#F1E3C8",
@@ -21,6 +20,7 @@
 "motif": "none",
 "img": "/lit-covers/hofstadter-godel-escher-bach.v1.webp"
 },
+"published": true,
 "meta": {
 "title_uz": "Gödel, Escher, Bach: abadiy oltin o'rim",
 "orig_title": "Gödel, Escher, Bach: an Eternal Golden Braid",
