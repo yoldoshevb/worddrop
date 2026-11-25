@@ -20,60 +20,72 @@
 },
 "meta": {
 "title_uz": "Qasr",
-"blurb": "Yer o'lchovchi K. qorli qishloqqa keladi — tepalikdagi Qasr uni chaqirgan, lekin u yerga yetib borishning iloji yo'q. Kafkaning so'nggi, tugallanmagan romani: byurokratiya, yolg'izlik va «qabul qilinish» uchun cheksiz kurash.",
-"why_uz": "«Metamorfoza» va «Jarayon»dan keyin Kafkaning eng muhim asari. Kamyu «Sizif afsonasi»da aynan «Qasr»ni tahlil qilgan — javondagi Kamyu asarlari bilan birga o'qish juda qiziq. Gaplari uzun, lekin tili tushunarli: B2–C1 darajasi uchun yaxshi mashq.",
-"author_uz": "Frans Kafka (1883–1924) — Pragada tug'ilgan nemis tilli yozuvchi. Hayotligida juda kam asar nashr etgan; vasiyatida qo'lyozmalarini yoqib yuborishni so'ragan, lekin do'sti Maks Brod ularni nashr qildi. «Qasr» 1922-yilda yozilgan va 1926-yilda, Kafka vafotidan keyin chop etilgan.",
-"edition_uz": "WordDrop nashri nemischa «Das Schloß»ning Maks Brod nashri asosidagi matniga tayangan. Inglizcha va o'zbekcha tarjimalar shu nemischa matndan. Kafka romanni yakunlashga ulgurmagan. Boblarning bo'linishi va sarlavhalari WordDrop'niki, uzun xatboshilar o'qish qulayligi uchun bo'lingan. Muqova — foydalanuvchi bergan rasm.",
+"orig_title": "Das Schloss",
+"blurb_uz": "K. qorli tunda Qasrga qarashli qishloqqa keladi. U o'zini ishga chaqirilgan yer o'lchovchi deb tanishtiradi. Qasrdan kelgan javoblar esa bir-biriga zid. K. o'z vazifasini aniqlashtirish va Qasr amaldorlari bilan uchrashish uchun qishloqning yozilmagan qoidalarini tushunishga urinadi.",
+"why_uz": "Qasr yaqin ko'rinadi, ammo unga olib boradigan yo'l ham, uning amaldorlariga murojaat qilish tartibi ham K. uchun mavhum. Kafka shu noaniqlik orqali begona odamning jamoada o'rin topishi qanchalik qiyinligini ko'rsatadi. Inglizcha o'qishda (B2–C1) uzun gaplardagi shartlarni va dialoglarda kim nimani nazarda tutayotganini kuzatish foydali.",
+"author_uz": "Frans Kafka (1883–1924) — Pragada tug'ilgan, nemis tilida ijod qilgan yozuvchi. «Qasr»ni 1922-yilda yozgan va romanni tugatmay qoldirgan. Uni Kafkaning vafotidan so'ng do'sti Maks Brod nashrga tayyorlagan. Birinchi nashr 1926-yilda Myunxenda chiqqan.",
+"edition_uz": "WordDropdagi inglizcha va o'zbekcha tarjimalar Maks Brod tahriridagi kengaytirilgan nemischa matnga tayangan. 1926-yilgi ilk nashrda keyingi sahnalar berilmagan. WordDropdagi matn 1935-yilgi ikkinchi nashrning so'nggi sahnasigacha davom etadi. Kafka romanni tugatmagan. WordDrop matnni o'qish uchun 22 bobga ajratib, ularga sarlavha qo'ygan.",
 "progress_uz": "22 bobning barchasi inglizcha va o'zbekcha tayyor.",
-"source_uz": "Frans Kafka 1924-yilda vafot etgan — nemischa asl matn jamoat mulki.",
+"source_uz": "Nemischa matn: Kafka_topic_modeling korpusidagi «Das Schloß» (Maks Brod tahriridagi matn).",
 "characters": [
-[
-"K.",
-"K. — yer o'lchovchi, qishloqqa kelgan begona"
-],
-[
-"Klamm",
-"Klamm — X idorasi boshlig'i, Qasr amaldori"
-],
-[
-"Frieda",
-"Frida — «Herrenhof» bufetchisi, Klammning ma'shuqasi"
-],
-[
-"Barnabas",
-"Barnabas — Qasr xabarchisi"
-],
-[
-"Olga",
-"Olga — Barnabasning singlisi"
-],
-[
-"Amalia",
-"Amaliya — Barnabasning kenja singlisi"
-],
-[
-"Artur, Jeremias",
-"Artur va Yeremiya — K.ning g'alati «yordamchilari»"
-],
-[
-"Schwarzer",
-"Shvartser — kastelyan o'rinbosarining o'g'li"
-],
-[
-"Gerstäcker",
-"Gerstekker — aravakash"
-],
-[
-"Lasemann",
-"Lazeman — ko'nchi usta"
-]
+{
+"name": "K.",
+"uz": "Qorli qishloqqa kelib, o'zini yer o'lchovchi deb tanishtirgan begona."
+},
+{
+"name": "Klamm",
+"uz": "Qasr amaldori. K. u bilan yuzma-yuz gaplashishga urinadi."
+},
+{
+"name": "Frida (Frieda)",
+"uz": "Herrenhof mehmonxonasi bufetchisi. U Klammga yaqin va K. bilan tanishadi."
+},
+{
+"name": "Barnabas",
+"uz": "K.ga Qasrdan xat olib keladigan yigit."
+},
+{
+"name": "Olga va Amaliya (Amalia)",
+"uz": "Barnabasning opa-singillari. Ularning oilasi tarixi Qasrning qishloq hayotiga ta'sirini ochadi."
+},
+{
+"name": "Artur va Yeremiya (Jeremias)",
+"uz": "K.ga yordamchi qilib yuborilgan ikki yigit."
+},
+{
+"name": "Shvartser (Schwarzer)",
+"uz": "Qasr noziri o'rinbosarining o'g'li. K.dan qishloqda tunashga ruxsati bor-yo'qligini so'raydi."
+},
+{
+"name": "Gerstekker (Gerstäcker)",
+"uz": "K. qishloqda tanishgan aravakash."
+},
+{
+"name": "Lazeman (Lasemann)",
+"uz": "K. ilk kuni uyiga kirib dam olgan ko'nchi."
+},
+{
+"name": "Pepi",
+"uz": "Herrenhofda ishlaydigan yosh xizmatchi. Bufetchilikni o'z mavqeini o'zgartirish imkoniyati deb biladi."
+}
 ],
 "themes": [
-"Byurokratiya va hokimiyat",
-"Begonalik va qabul qilinish istagi",
-"Yetib bo'lmaydigan maqsad",
-"Hokimiyat va sevgi",
-"Absurd"
+{
+"t": "Byurokratiya va hokimiyat",
+"uz": "Xatlar, telefon javoblari va vositachilar orqali buyruqlar keladi, ammo qarorni kim va qanday chiqargani mavhum qoladi."
+},
+{
+"t": "Begonalik va tegishlilik",
+"uz": "K. qishloqda yashash va ishlash uchun o'ziga joy topishga urinadi. Qishloq ahli esa Qasr bilan munosabatini xavf ostiga qo'yishdan cho'chiydi."
+},
+{
+"t": "Mavqe va munosabatlar",
+"uz": "Qasr amaldorlariga yaqinlik odamlarning obro'siga, ishiga va bir-biriga munosabatiga ta'sir qiladi."
+},
+{
+"t": "Noaniqlik va talqin",
+"uz": "Qahramonlar bir voqeani turlicha izohlaydi. O'quvchi ham kimning gapiga qay darajada ishonishni o'zi hal qiladi."
+}
 ]
 },
 "chapters": [
