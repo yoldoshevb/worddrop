@@ -1,0 +1,34 @@
+/* Access settings share the palette and typography of the profile screen. */
+#rAccessBlocks.srow{appearance:none;border:0;border-bottom:1px solid var(--line);border-radius:0;width:100%;text-align:left;font:inherit;color:var(--i9);background:var(--sur);cursor:pointer}
+#rAccessBlocks::before{content:"";flex:0 0 30px;height:30px;border-radius:8px;background-color:var(--b1);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234c87ff' stroke-width='1.8'%3E%3Cpath d='m12 3 8 3v5c0 5-4 8-8 10-4-2-8-5-8-10V6z'/%3E%3Cpath d='m9 12 2 2 4-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:21px}
+#wdBlocked{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:20px;border:0;background:var(--bg)}
+#wdBlocked[open]{display:grid;place-items:center}
+.ac-notice{width:min(100%,390px);padding:30px;border:1px solid var(--line);border-radius:var(--rl);background:var(--sur);box-shadow:var(--sh1)}
+.ac-notice h1{margin:15px 0 7px;font-size:1.55rem;letter-spacing:-.03em}.ac-notice p{line-height:1.55;color:var(--i7)}
+
+#wdBlocked,#accessAdmin{font-family:var(--font);color:var(--i9);box-sizing:border-box}
+#accessAdmin{position:fixed;inset:0;margin:0;border:0;border-radius:0;padding:0;width:100%;max-width:none;height:100%;height:100dvh;max-height:none;background:var(--bg);overflow:auto;overscroll-behavior:contain}
+#accessAdmin::backdrop{background:var(--bg)}
+.ac-shell{box-sizing:border-box;width:min(100%,720px);margin:auto;padding:calc(12px + env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) calc(36px + env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+#accessAdmin button{font:inherit;cursor:pointer}
+#accessAdmin nav button{display:flex;align-items:center;gap:7px;min-height:44px;border:0;background:transparent;color:var(--b7);font-weight:650;padding:0 8px 0 2px}
+#accessAdmin nav span{font:32px/1 sans-serif}
+#accessAdmin header{padding:20px 0 24px}
+#accessAdmin h2{font-size:clamp(26px,5vw,36px);letter-spacing:-.045em;line-height:1.1;margin:0}
+#accessAdmin header p,.ac-empty{color:var(--i7);font-size:14px;line-height:1.5;margin:9px 0 0}
+.ac-body form,.ac-body section{background:var(--sur);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,4vw,24px);box-shadow:var(--sh1)}
+.ac-body h3{font-size:18px;letter-spacing:-.025em;display:flex;align-items:center;justify-content:space-between;margin:0}
+.ac-body label{display:block;margin:20px 0 7px;font-size:14px;font-weight:650}
+.ac-entry{display:flex;gap:10px;flex-wrap:wrap}
+.ac-entry input{box-sizing:border-box;flex:1 1 160px;min-width:0;height:48px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 12px;color:var(--i9);font:inherit;font-size:16px}
+#accessAdmin .ac-add{border:0;border-radius:10px;min-height:48px;padding:0 18px;background:#2457c7;color:white;font-weight:700}
+#accessAdmin button:disabled{opacity:.65}
+.ac-count{font-size:13px;padding:3px 10px;background:var(--b1);color:var(--b7);border-radius:20px}
+.ac-body ul{list-style:none;padding:0;margin:0}
+.ac-body li{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ac-body code{font:600 15px ui-monospace,monospace;overflow-wrap:anywhere}
+#accessAdmin li button{color:var(--b7);background:var(--b1);border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:650;min-height:44px}
+.ac-status{margin:14px 4px;font-size:14px;color:var(--i7)}
+.ac-status.ac-error{color:var(--bad)}
+#accessAdmin :focus-visible,#rAccessBlocks:focus-visible{outline:2px solid var(--b5);outline-offset:2px}
+@media(max-width:440px){.ac-entry{display:grid}.ac-entry input,.ac-entry button{width:100%}}
