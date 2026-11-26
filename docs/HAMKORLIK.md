@@ -99,3 +99,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-26 | ChatGPT | Telegram Speaking: UZBMB yangi formatiga asoslangan qism bahosi, savolma-savol dalil va tuzatishlar bilan PNG. | tg-bot | shu commit |
 | 2026-11-26 | ChatGPT | Speaking: AI savollari, vaqt belgili grammatika va vazifa izohlari, Telegram ovozli parchalar, Azure Speech uchun server integratsiyasi. | tg-bot | shu commit |
 | 2026-11-27 | ChatGPT | Speaking mashqlarida Whisper so‘z vaqtlaridan pauzalar, kontekstli ovozli parchalar va PNG izohi. | tg-bot | shu commit |
+| 2026-11-27 | ChatGPT | Speaking mashq hisobotida yagona JSON shakli, to‘liqlik nazorati, qayta baholash va transkriptli zaxira javob. | tg-bot | shu commit |

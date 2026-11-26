@@ -291,8 +291,18 @@ async function sendPractice(chatId:number, idx:number, saved?:Card) {
 }
 async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, messageId:number, card:Card, fileId:string, audio:Blob, words:Word[]){
   const timing = whisperReview(words, seconds);
-  const response=await scoreSpeaking({apiKey:GROQ,groqJson,json,clip,body:{items:[{part:card.part,q:card.title,text:transcript,sec:seconds,pauses:timing.pauses,limit:card.limit}]}},{questions:card.questions,scene:card.scene||card.title});
-  if(!response.ok) return send(chat.chat_id,"Baholash tugamadi. Ovozli javobni qayta yuborishingiz mumkin.");
+  const deadline = Date.now() + 80000;
+  const gradeJson: typeof groqJson = (key, models, messages, tokens, temperature) =>
+    groqJson(key, models, messages, tokens, temperature, deadline);
+  const response=await scoreSpeaking({apiKey:GROQ,groqJson:gradeJson,json,clip,body:{items:[{part:card.part,q:card.title,text:transcript,sec:seconds,pauses:timing.pauses,limit:card.limit}]}},{questions:card.questions,scene:card.scene||card.title});
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    const incomplete = error.code === "incomplete_report";
+    console.warn("[speaking] practice grading failed", response.status, incomplete ? "incomplete_report" : "provider_or_request");
+    const reason = incomplete ? "Savollar bo‘yicha baho to‘liq shakllanmadi." : "Baholash xizmatidan hozir natija olinmadi.";
+    return send(chat.chat_id, esc("Ovozingiz matnga o‘girildi. " + reason + "\n" +
+      timing.note + "\n\nTranskript: " + transcript.slice(0,2200)), {reply_parameters:{message_id:messageId,allow_sending_without_reply:true}});
+  }
   const report=await response.json();
   const labels:Record<string,string>={missing:"Javob topilmadi",partial:"Qisman yoritilgan",sufficient:"Yetarli yoritilgan"};
   const caption=`Part ${card.part} · ${card.title}\nTaxminiy mashq bali: ${report.raw}/${report.max}\n${report.reason}`;
