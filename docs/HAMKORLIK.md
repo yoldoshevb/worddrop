@@ -93,3 +93,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-26 | ChatGPT | «Qasr»ning «Asar haqida» ma'lumotlari javon formatiga moslandi: kirish matni, qahramonlar, mavzular va nashr tarixi. | GitHub, Supabase lit-sync | shu commit |
 
 | 2026-11-26 | ChatGPT | Hisob cheklovlari: email va WordDrop ID orqali cheklash va tiklash. | GitHub, Supabase | shu commit |
+| 2026-11-26 | ChatGPT | Statistika: hisoblar va mehmonlar ro‘yxati, tekshiruv belgilari va hisob bo‘yicha saqlangan faoliyat tarixi. | GitHub, Supabase | shu commit |

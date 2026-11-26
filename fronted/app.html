@@ -2757,7 +2757,7 @@ try{
 (function(){
   let p=null;
   function load(){ if(window.WDStats) return Promise.resolve(); if(p) return p;
-    p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='stats.v101.js'; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
+    p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='stats.v102.js'; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenStats=async function(){ try{ await load(); window.WDStats.open(); }catch(e){ try{ showToast("Statistika moduli yuklanmadi",IC.info); }catch(_){} } };
   window.addEventListener('load',()=>{ if(location.hash==='#stats') setTimeout(()=>window.__wdOpenStats(),1500); });
 })();
