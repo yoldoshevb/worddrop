@@ -1,22 +1,43 @@
 import { Buffer } from "node:buffer";
 import { PNG } from "npm:pngjs@7.0.0";
-import { reportTemplate } from "./practice.ts";
+import { chars, widths, bitmap } from "./report-font.ts";
 
-let background: Uint8Array | undefined;
-export async function scoreImage(scores:number[], coverage:number[]) {
-  if (!background) {
-    const response=await fetch(reportTemplate,{signal:AbortSignal.timeout(10000)});
-    if(!response.ok) throw Error("score template unavailable");
-    background=new Uint8Array(await response.arrayBuffer());
+const font = PNG.sync.read(Buffer.from(bitmap, "base64"));
+const glyph = (c:string) => chars.includes(c) ? chars.indexOf(c) : chars.indexOf("?");
+export type Row = {text:string; style:"heading"|"label"|"body"|"quote"; gap?:number};
+const palette = {heading:[15,49,88],label:[13,97,110],body:[32,45,60],quote:[69,79,106]};
+export function scoreImage(rows:Row[]) {
+  const lines:{s:string;y:number;style:Row["style"]}[]=[];
+  let y=28;
+  for(const row of rows){
+    y+=row.gap||0;
+    let line="",width=0;
+    for(const word of row.text.trim().split(/\s+/)){
+      const w=[...word].reduce((sum,c)=>sum+widths[glyph(c)],0);
+      if(line && width+7+w>716){lines.push({s:line,y,style:row.style});y+=32;line="";width=0;}
+      if(line){line+=" ";width+=7;}
+      for(const c of word){
+        const advance=widths[glyph(c)];
+        if(width+advance>716){lines.push({s:line,y,style:row.style});y+=32;line="";width=0;}
+        line+=c;width+=advance;
+      }
+    }
+    if(line){lines.push({s:line,y,style:row.style});y+=34;}
   }
-  const png=PNG.sync.read(Buffer.from(background));
-  function fill(x:number,y:number,w:number,h:number,color:number[]){
-    for(let row=y;row<y+h;row++) for(let col=x;col<x+w;col++){
-      const i=4*(row*png.width+col);
-      for(let ch=0;ch<3;ch++) png.data[i+ch]=color[ch];
+  const png=new PNG({width:796,height:y+28});
+  png.data.fill(255);
+  for(const {s,y,style} of lines){
+    let x=40;
+    for(const c of s){
+      const k=glyph(c),gx=(k%16)*32,gy=Math.floor(k/16)*34;
+      for(let j=0;j<34;j++)for(let i=0;i<32;i++){
+        const a=font.data[((gy+j)*font.width+gx+i)*4]/255;
+        if(!a)continue;
+        const at=((y+j)*png.width+x+i)*4;
+        for(let n=0;n<3;n++)png.data[at+n]=Math.round(255+(palette[style][n]-255)*a);
+      }
+      x+=widths[k];
     }
   }
-  scores.forEach((score,i)=>{for(let j=0;j<score;j++) fill(398+69*j,228+61*i,57,20,[31,111,175]);});
-  coverage.forEach((v,i)=>fill(385+166*v,601+54*i,15,15,[[168,57,67],[174,113,26],[30,132,99]][v]));
   return new Uint8Array(PNG.sync.write(png));
 }

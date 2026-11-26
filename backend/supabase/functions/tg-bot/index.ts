@@ -1,5 +1,5 @@
 import { cards } from "./practice.ts";
-import { scoreImage } from "./score-image.ts";
+import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
 import { groqJson } from "../ml-exam/examiner.ts";
 import { readCompletion } from "./rich.ts";
@@ -230,7 +230,7 @@ async function sendPractice(chatId:number, idx:number) {
   const card=cards[idx];
   if(!card) return speakingMenu(chatId);
   const numbered=card.questions.map((q,i)=>(i+1)+". "+q);
-  const instructions="Uchala savolga tartib bilan bitta ovozli xabarda javob bering.";
+  const instructions=card.part==="3"?"Bitta nutqda har tomondan ikkita dalilni rivojlantiring va ularni solishtiring.":"Uchala savolga tartib bilan bitta ovozli xabarda javob bering.";
   const next=(idx+1)%cards.length;
   const html=`<h2>Part ${card.part} · ${esc(card.title)}</h2>${card.photo?`<img src="${card.photo}"/>`:""}<p>${card.timing}</p>${numbered.map(q=>"<p>"+esc(q)+"</p>").join("")}<details><summary>Yordam so‘zlari</summary><p>${esc(card.help)}</p></details><p>${instructions}</p><tg-button-row>${cb("sk:"+next,"Keyingi mashq")}${cb("skmenu","Qismlar")}</tg-button-row>`;
   let result=await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
@@ -250,15 +250,34 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
   const card=cards[idx];
   const response=await scoreSpeaking({apiKey:GROQ,groqJson,json,clip,body:{items:[{part:card.part,q:card.title,text:transcript,sec:seconds,pauses,limit:card.limit}]}},{questions:card.questions,scene:card.scene||card.title});
   if(!response.ok) return send(chat.chat_id,"Baholash tugamadi. Ovozli javobni qayta yuborishingiz mumkin.");
-  const report=await response.json(), part=report.parts.find((p:any)=>p.id===card.part);
-  const statuses=["missing","partial","sufficient"], labels=["Javobsiz","Qisman","Yetarli"];
-  const coverage=report.coverage.map((x:any)=>statuses.indexOf(x.status));
-  const scores=[part.flu,part.lex,part.gram,part.task];
-  const caption=`Part ${card.part} · ${card.title}\nRavonlik ${scores[0]}/6 · Lug‘at ${scores[1]}/6 · Grammatika ${scores[2]}/6 · Vazifa ${scores[3]}/6\nMashq bali: ${part.pts}/${part.max}\n\n`+
-    report.coverage.map((x:any,i:number)=>`${i+1}. ${labels[coverage[i]]} — ${clip(x.reason_uz,125)}`).join("\n")+"\n\nTavsiya: "+clip(part.fix_uz,140);
+  const report=await response.json();
+  const labels:Record<string,string>={missing:"Javob topilmadi",partial:"Qisman yoritilgan",sufficient:"Yetarli yoritilgan"};
+  const caption=`Part ${card.part} · ${card.title}\nTaxminiy mashq bali: ${report.raw}/${report.max}\n${report.reason}`;
+  const rows:Row[]=[
+    {text:"WORDDROP  /  SPEAKING",style:"label"},
+    {text:`Part ${card.part}   ·   ${card.title}`,style:"heading"},
+    {text:`Taxminiy mashq bali    ${report.raw} / ${report.max}`,style:"heading",gap:15},
+    {text:report.reason,style:"body"},
+    {text:`Yozuv: ${Math.round(seconds)} soniya   ·   Transkript: ${transcript.trim().split(/\s+/).length} so‘z`,style:"quote"},
+  ];
+  report.coverage.forEach((x:any,i:number)=>{
+    rows.push({text:`${i+1}. ${card.questions[i]}`,style:"heading",gap:22},
+      {text:labels[x.status],style:"label"});
+    if(x.quote) rows.push({text:`Transkriptdan: “${x.quote}”`,style:"quote"});
+    rows.push({text:x.reason_uz,style:"body"});
+    if(x.next_uz) rows.push({text:"Mashq: "+x.next_uz,style:"body"});
+  });
+  if(report.correction){
+    rows.push({text:"Nutqingizdan bir tuzatish",style:"heading",gap:22},
+      {text:report.correction.wrong+"  →  "+report.correction.right,style:"quote"},
+      {text:report.correction.why,style:"body"});
+  }
+  if(report.next) rows.push({text:"Keyingi urinish",style:"heading",gap:22},{text:report.next,style:"body"});
+  if(report.better) rows.push({text:"Namunaviy jumla",style:"label",gap:8},{text:report.better,style:"quote"});
+  rows.push({text:"Baho transkript va nutq vaqti asosida taxmin qilindi. Talaffuz alohida baholanmadi.",style:"quote",gap:20});
   const reply_markup={inline_keyboard:[[{text:"Qayta mashq",callback_data:"sk:"+idx},{text:"Keyingi",callback_data:"sk:"+((idx+1)%cards.length)},{text:"Qismlar",callback_data:"skmenu"}]]};
   try{
-    const bytes=await scoreImage(scores,coverage);
+    const bytes=await scoreImage(rows);
     const fd=new FormData();
     fd.append("chat_id",String(chat.chat_id));fd.append("document",new Blob([bytes],{type:"image/png"}),"WordDrop-Speaking-"+card.part+".png");
     fd.append("caption",caption);fd.append("reply_markup",JSON.stringify(reply_markup));
@@ -266,7 +285,7 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
     const res=await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,{method:"POST",body:fd});
     if(!(await res.json()).ok) throw Error("PNG delivery failed");
   }catch{
-    const result=await send(chat.chat_id,esc(caption),{reply_markup});
+    const result=await send(chat.chat_id,esc(rows.map(r=>r.text).join("\n").slice(0,4000)),{reply_markup});
     if(!result.ok) return;
   }
   await askBump(chat);
