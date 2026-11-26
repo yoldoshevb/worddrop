@@ -1,4 +1,4 @@
-import { opusClip, locate, pronounce, whisperReview, type Word, type Finding } from "./audio-review.ts";
+import { opusClip, locate, pronounce, whisperReview, type Word as TimedWord, type Finding } from "./audio-review.ts";
 import { cards, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
@@ -226,9 +226,23 @@ async function sendQuiz(chatId: number, editMsg?: number) {
 /* ───────── Webhook: xabarlar ───────── */
 const cb = (data:string,label:string)=>`<tg-button type="callback_data" style="primary" data="${data}">${label}</tg-button>`;
 const partMenu={inline_keyboard:[["1.1","1.2","2","3"].map(part=>({text:"Part "+part,callback_data:"sk:"+cards.findIndex(c=>c.part===part)}))]};
-function speakingMenu(chatId:number){return send(chatId,"🎙 <b>Multilevel Speaking</b>\nMashq uchun qismni tanlang.",{reply_markup:partMenu});}
+const sessionKey = (chatId:number) => "speaking-session:"+chatId;
+async function speakingScreen(chatId:number, message:number|undefined, html:string, plain:string, buttons:any[][]) {
+  const controls = buttons.map(row=>"<tg-button-row>"+row.map(b=>cb(b.callback_data,esc(b.text))).join("")+"</tg-button-row>").join("");
+  const payload={chat_id:chatId, rich_message:{html:html+controls}};
+  const r = message ? await tg("editMessageText",{...payload,message_id:message}) : await tg("sendRichMessage",payload);
+  if (r.ok || String(r.description).includes("not modified")) return r.result?.message_id || message;
+  const fallback = await panel(chatId,message||null,plain,buttons);
+  return fallback.result?.message_id || (fallback.ok ? message : undefined);
+}
+async function speakingMenu(chatId:number, edit?:number, hint="Qaysi qismni mashq qilasiz?"){
+  const old=await kv(sessionKey(chatId));
+  if(old?.phase==="grading" && Date.now()-old.at<180000) return;
+  const msg=await speakingScreen(chatId,edit||old?.message,"<h2>Multilevel Speaking</h2><p>"+esc(hint)+"</p>", "<b>Multilevel Speaking</b>\n"+esc(hint),partMenu.inline_keyboard);
+  if(msg) await kvSet(sessionKey(chatId),{phase:"menu",message:msg,at:Date.now()});
+}
 async function freshCard(idx:number):Promise<Card>{
-  const seed=cards[idx], topics=["neighbourhoods","learning skills","friendship","celebrations","sports","travel","food","technology","family routines","the arts","transport","nature"];
+  const seed=cards[idx], topics=["a missed bus on the way to school","borrowing a book from a neighbour","choosing a gift on a small budget","repairing a broken bicycle","finding a quiet place to study","organising a class picnic","teaching a relative a phone shortcut","saving water in a school garden","planning a trip with a paper map","paying for a shared sports ground","preserving an old cinema","limiting phones during lessons","free entry to local museums","deciding how late libraries should stay open"];
   const choice=topics[Math.floor(Math.random()*topics.length)];
   const prompt = [
     "Create one original English Multilevel speaking practice. Return JSON: title, questions (exactly 3 English strings), help (3-5 useful English expressions).",
@@ -242,7 +256,7 @@ async function freshCard(idx:number):Promise<Card>{
   if(typeof help!=="string"||!help.trim())return seed;
   return {...seed,title:clip(v.title,100),questions:v.questions.map((x:string)=>clip(x,240)),help:clip(help,320)};
 }
-async function feedbackPage(chatId:number,messageId:number,page:number){
+async function feedbackPage(chatId:number,messageId:number,page:number,screen?:number){
   const data=await kv("review:"+chatId+":"+messageId);if(!data)return send(chatId,"Tahlil topilmadi.");
   const items:Finding[]=data.items, first=page*5, visible=items.slice(first,first+5);
   if(!visible.length&&page)return;
@@ -250,10 +264,9 @@ async function feedbackPage(chatId:number,messageId:number,page:number){
   const nav=[];if(page)nav.push({text:"Oldingi",callback_data:`rp:${messageId}:${page-1}`});
   if(first+5<items.length)nav.push({text:"Davomi",callback_data:`rp:${messageId}:${page+1}`});
   const table="<table compact striped><tr><th>Mezon</th><th>Izoh</th></tr>"+visible.map((x,i)=>`<tr><td>${first+i+1}. ${esc(x.kind)}</td><td>${esc(x.note)}</td></tr>`).join("")+"</table>";
-  const all=[...buttons,...nav];
-  const html="<h2>Javob tahlili</h2><p>"+esc(data.note)+"</p>"+(visible.length?table:"<p>Qo‘shimcha tuzatish topilmadi.</p>")+all.map(b=>"<tg-button-row>"+cb(b.callback_data,b.text)+"</tg-button-row>").join("");
-  const sent=await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
-  if(!sent.ok)await send(chatId,esc([data.note,...visible.map((x,i)=>`${first+i+1}. ${x.kind}: ${x.note}`)].join("\n\n")),{reply_markup:{inline_keyboard:all.map(b=>[b])}});
+  const all=[...buttons,...nav,{text:"Yangi mashq",callback_data:"skmenu"}];
+  const html="<h2>Javob tahlili</h2><p>"+esc(data.note)+"</p>"+(visible.length?table:"<p>Qo‘shimcha tuzatish topilmadi.</p>");
+  return speakingScreen(chatId,screen,html,esc([data.note,...visible.map(x=>x.kind+" · "+x.note)].join("\n\n")),all.map(b=>[b]));
 }
 async function replayFinding(chatId:number,messageId:number,index:number){
   const data=await kv("review:"+chatId+":"+messageId), x:Finding=data?.items?.[index];
@@ -269,27 +282,29 @@ async function replayFinding(chatId:number,messageId:number,index:number){
     const sent=await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVoice`,{method:"POST",body:fd});if(!(await sent.json()).ok)throw Error();
   }catch{await send(chatId,esc(x.note)+`\nAsl yozuvda ${x.start.toFixed(1)}–${x.end.toFixed(1)} soniyani tinglang.`);}
 }
-async function sendPractice(chatId:number, idx:number, saved?:Card) {
-  if(!cards[idx]) return speakingMenu(chatId);
-  const card=saved||await freshCard(idx);
-  const numbered=card.questions.map((q,i)=>(i+1)+". "+q);
-  const instructions=card.part==="3"?"Bitta nutqda har tomondan ikkita dalilni rivojlantiring va ularni solishtiring.":"Uchala savolga tartib bilan bitta ovozli xabarda javob bering.";
-  const next=(idx+1)%cards.length;
-  const html=`<h2>Part ${card.part} · ${esc(card.title)}</h2>${card.photo?`<img src="${card.photo}"/>`:""}<p>${card.timing}</p>${numbered.map(q=>"<p>"+esc(q)+"</p>").join("")}<details><summary>Yordam so‘zlari</summary><p>${esc(card.help)}</p></details><p>${instructions}</p><tg-button-row>${cb("sk:"+next,"Keyingi mashq")}${cb("skmenu","Qismlar")}</tg-button-row>`;
-  let result=await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
-  if(!result.ok){
-    const caption=[`Part ${card.part} · ${card.title}`,card.timing,...numbered,"Yordam: "+card.help,instructions].join("\n\n");
-    const reply_markup={inline_keyboard:[[{text:"Keyingi mashq",callback_data:"sk:"+next},{text:"Qismlar",callback_data:"skmenu"}]]};
-    result=card.photo?await tg("sendPhoto",{chat_id:chatId,photo:card.photo,caption,reply_markup}):await send(chatId,esc(caption),{reply_markup});
-    if(!result.ok && card.photo) result=await send(chatId,esc(caption)+"\n"+card.photo,{reply_markup});
-  }
-  if(result.ok){
-    const state={idx,card,at:Date.now(),message:result.result.message_id};
-    await kvSet("practice39:"+chatId,state);
-    await kvSet("practice39:"+chatId+":"+state.message,state);
-  }
+async function taskScreen(chatId:number,state:any,started:boolean){
+  const c:Card=state.card;
+  const questions=c.questions.map((q,i)=>(i+1)+". "+esc(q));
+  const hint=started?"Uch savolga bitta ovozli xabarda javob bering.":"Savollarni ko‘rib chiqing, so‘ng «Boshlash»ni bosing.";
+  const buttons=started?[[{text:"Bekor qilish",callback_data:"skmenu"}]]:[
+    [{text:"▶ Boshlash",callback_data:"sgo:"+state.token}],
+    [{text:"Boshqa mavzu",callback_data:"snew:"+state.idx},{text:"Qismlar",callback_data:"skmenu"}]];
+  const title="Part "+c.part+" · "+esc(c.title);
+  const html="<h2>"+title+"</h2>"+(c.photo?'<img src="'+c.photo+'"/>':"")+"<p>"+esc(c.timing)+"</p>"+
+    questions.map(q=>"<p>"+q+"</p>").join("")+"<details><summary>Yordam so‘zlari</summary><p>"+esc(c.help)+"</p></details><p>"+hint+"</p>";
+  return speakingScreen(chatId,state.message,html,[title,c.photo,esc(c.timing),...questions,esc(c.help),hint].filter(Boolean).join("\n\n"),buttons);
 }
-async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, messageId:number, card:Card, fileId:string, audio:Blob, words:Word[]){
+async function sendPractice(chatId:number, idx:number, saved?:Card, message?:number) {
+  if(!cards[idx]) return speakingMenu(chatId,message);
+  const prior=await kv(sessionKey(chatId));
+  if(prior?.phase==="grading" && Date.now()-prior.at<180000)return;
+  const pool=cards.map((c,i)=>c.part===cards[idx].part?i:-1).filter(i=>i>=0 && i!==prior?.idx);
+  if(!saved && pool.length)idx=pool[Math.floor(Math.random()*pool.length)];
+  const state={idx,card:saved||await freshCard(idx),token:crypto.randomUUID().slice(0,12),at:Date.now(),message:message||prior?.message,phase:"ready"};
+  state.message=await taskScreen(chatId,state,false);
+  if(state.message)await kvSet(sessionKey(chatId),state);
+}
+async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, messageId:number, card:Card, fileId:string, audio:Blob, words:TimedWord[]){
   const timing = whisperReview(words, seconds);
   const deadline = Date.now() + 80000;
   const gradeJson: typeof groqJson = (key, models, messages, tokens, temperature) =>
@@ -300,8 +315,8 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
     const incomplete = error.code === "incomplete_report";
     console.warn("[speaking] practice grading failed", response.status, incomplete ? "incomplete_report" : "provider_or_request");
     const reason = incomplete ? "Savollar bo‘yicha baho to‘liq shakllanmadi." : "Baholash xizmatidan hozir natija olinmadi.";
-    return send(chat.chat_id, esc("Ovozingiz matnga o‘girildi. " + reason + "\n" +
-      timing.note + "\n\nTranskript: " + transcript.slice(0,2200)), {reply_parameters:{message_id:messageId,allow_sending_without_reply:true}});
+    const text=esc("Ovozingiz matnga o‘girildi. "+reason+"\n"+timing.note+"\n\n"+transcript.slice(0,2200));
+    return speakingScreen(chat.chat_id,(await kv(sessionKey(chat.chat_id)))?.message,"<p>"+text+"</p>",text,[[{text:"Qayta boshlash",callback_data:"skmenu"}]]);
   }
   const report=await response.json();
   const labels:Record<string,string>={missing:"Javob topilmadi",partial:"Qisman yoritilgan",sufficient:"Yetarli yoritilgan"};
@@ -316,7 +331,7 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
   const items:Finding[]=(report.corrections||[]).map((x:any)=>({kind:"Grammatika",note:x.wrong+" → "+x.right+". "+x.why,...locate(words,x.wrong)}));
   report.coverage.forEach((x:any,i:number)=>{if(x.status!=="sufficient")items.push({kind:"Vazifa "+(i+1),note:card.questions[i]+" · "+x.reason_uz+" "+x.next_uz,...locate(words,x.quote||"")});});
   items.push(...timing.items, ...acoustic.items);
-  await kvSet("review:"+chat.chat_id+":"+messageId,{fileId,items,note:audioNote,idx,card});
+  await kvSet("review:"+chat.chat_id+":"+messageId,{fileId,items,note:caption+"\n"+audioNote,idx,card});
   const rows:Row[]=[
     {text:"WORDDROP  /  SPEAKING",style:"label"},
     {text:`Part ${card.part}   ·   ${card.title}`,style:"heading"},
@@ -355,7 +370,7 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
     if(!result.ok) return;
   }
   await askBump(chat);
-  await feedbackPage(chat.chat_id,messageId,0);
+  await feedbackPage(chat.chat_id,messageId,0,(await kv(sessionKey(chat.chat_id)))?.message);
 }
 async function richWord(chatId:number) {
   const w = await wordOfDay();
@@ -426,7 +441,7 @@ async function onUpdate(u: any) {
   }
   if (text === "/menu" || text === "/help") return send(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN });
   if (text === "/word") return richWord(chat.chat_id);
-  if (text === "/speaking") return speakingMenu(chat.chat_id);
+  if (/^\/speaking(?:@WordDropUzBot)?$/i.test(text)) return speakingMenu(chat.chat_id);
   if (text === "/quiz") return sendQuiz(chat.chat_id);
   if (text === "/review") return onCallback({ data: "r", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
   if (text === "/top") return onCallback({ data: "t", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
@@ -441,9 +456,9 @@ async function onUpdate(u: any) {
   await tg("sendChatAction", { chat_id: chat.chat_id, action: "typing" });
   const s = chat.user_id ? await userSummary(chat.user_id) : null;
   const delivered = await streamTutor(m,
-    `Sen "Drop" — WordDrop ingliz tili ilovasining Telegram'dagi o'qituvchisisan. Qisqa (3-6 jumla), aniq, misol bilan javob ber; oxirida bitta amaliy topshiriq yoki savol. Faqat ingliz tili, o'qish va motivatsiya mavzusida. Uy vazifasini tayyor qilib berma. ${UZ}
+    `Sen "Drop" — WordDrop ingliz tili ilovasining Telegram'dagi o'qituvchisisan. Til, san’at, fan, texnologiya va kundalik hayot haqida erkin suhbatlash. Suhbatdosh aytgan aniq detalga e’tibor ber, dalil bilan taxminni ajrat. Javob shakli va uzunligini savolga mosla. Oddiy savolga bevosita javob ber. Kerak bo‘lsa misol, nozik hazil yoki fikrni ochadigan savol ishlat. Har safar mashq yoki savol bilan tugatma. O‘z ovozingda gapir. ${UZ}
 ${s ? `O'quvchi: ${s.name || "—"}, XP ${s.xp}, seriya ${s.streak} kun, zaif so'zlari: ${s.weak.join("; ") || "yo'q"}.` : ""}
-`,clip(text,1200));
+`,clip((m.reply_to_message?.from?.is_bot && m.reply_to_message?.text ? "Oldingi javob: "+clip(m.reply_to_message.text,650)+"\nSavol: " : "")+text,1850));
   if(delivered) await askBump(chat);
   else await send(chat.chat_id,"Hozir javob bera olmadim. Birozdan keyin qayta yozing.");
 }
@@ -465,14 +480,22 @@ async function onCallback(cq: any) {
   const review=/^(rx|rp|rr):(\d+)(?::(\d+))?$/.exec(data);
   if(review && cq.from?.id===chatId){
     const id=Number(review[2]), n=Number(review[3]||0);
-    if(review[1]==="rp")return feedbackPage(chatId,id,n);
+    if(review[1]==="rp")return feedbackPage(chatId,id,n,cq.message.message_id);
     if(review[1]==="rx")return replayFinding(chatId,id,n);
     const prior=await kv("review:"+chatId+":"+id);
-    return prior?sendPractice(chatId,prior.idx,prior.card):speakingMenu(chatId);
+    return prior?sendPractice(chatId,prior.idx,prior.card,cq.message.message_id):speakingMenu(chatId,cq.message.message_id);
   }
-  if (data === "skmenu" || data === "sp:0") return speakingMenu(chatId);
+  if(data.startsWith("sgo:")){
+    const state=await kv(sessionKey(chatId));
+    if(state?.phase!=="ready" || state.token!==data.slice(4) || state.message!==cq.message.message_id)return;
+    const {data:changed}=await db.from("wd_tg_kv").update({val:{...state,phase:"active",at:Date.now()}})
+      .eq("key",sessionKey(chatId)).eq("val->>phase","ready").eq("val->>token",state.token).select("key");
+    if(changed?.length)await taskScreen(chatId,state,true);
+    return;
+  }
+  if (data === "skmenu" || data === "sp:0") return speakingMenu(chatId,cq.message.message_id);
   if(data === "sp:1") return sendPractice(chatId,cards.findIndex(c=>c.part==="2"));
-  if(/^sk:\d{1,2}$/.test(data)) return sendPractice(chatId,Number(data.slice(3)));
+  if(/^(sk|snew):\d{1,2}$/.test(data)) return sendPractice(chatId,Number(data.split(":")[1]),undefined,cq.message.message_id);
   if (data === "q") return sendQuiz(chatId);
   if (data.startsWith("a:")) {
     const [, wid, pick, corr] = data.split(":"); const ok = pick === corr;
@@ -859,7 +882,7 @@ async function transcribe(fileId: string, timing=false) {
     const r = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", { method: "POST", headers: { Authorization: `Bearer ${GROQ}` }, body: fd });
     if (!r.ok) { console.error("[whisper]", model, r.status, (await r.text()).slice(0, 200)); continue; }
     const j = await r.json();
-    return { audio:blob,words:(Array.isArray(j.words)?j.words:[]).filter((w:any)=>typeof w.word==="string"&&Number.isFinite(w.start)&&w.end>w.start) as Word[],seconds:Number(j.duration)||0, text: String(j.text || "").trim(), lang: String(j.language || "") };
+    return { audio:blob,words:(Array.isArray(j.words)?j.words:[]).filter((w:any)=>typeof w.word==="string"&&Number.isFinite(w.start)&&w.end>w.start) as TimedWord[],seconds:Number(j.duration)||0, text: String(j.text || "").trim(), lang: String(j.language || "") };
   }
   return null;
 }
@@ -871,38 +894,29 @@ async function dmGate(chat: any): Promise<string | null> {
 }
 async function privateVoice(chat: any, m: any) {
   const gate = await dmGate(chat); if (gate) return send(chat.chat_id, gate, { reply_markup: KB_MAIN });
-  const v = m.voice || m.audio || m.video_note;
-  if ((v.duration || 0) > 120) return send(chat.chat_id, "Ovozli xabar 2 daqiqadan oshmasin 🙂");
-  const q = await askAllowed(chat);
-  if (!q.ok) return limitMsg(chat);
-  await tg("sendChatAction", { chat_id: chat.chat_id, action: "typing" });
-  const messageKey="practice39:"+chat.chat_id;
-  const replyId=m.reply_to_message?.message_id;
-  const active=await kv(replyId?messageKey+":"+replyId:messageKey);
-  const t = await transcribe(v.file_id,!!active);
-  if (!t?.text) return send(chat.chat_id, "Ovozni tushuna olmadim. Tinchroq joyda, aniqroq qilib qayta yuboring.");
-  if(active && cards[active.idx] && (replyId || Date.now()-active.at<30*60_000)) return gradePractice(chat,active.idx,t.text,t.seconds||v.duration,m.message_id,active.card||cards[active.idx],v.file_id,t.audio,t.words);
-  const s = chat.user_id ? await userSummary(chat.user_id) : null;
-  const a = await groq(
-    `Sen "Drop" — WordDrop'ning Speaking murabbiyisan. O'quvchi ovozli xabar yubordi,  quyida uning matni (Whisper, til: ${t.lang || "?"}). ${UZ}
-Agar o'quvchi inglizcha gapirgan bo'lsa: grammatika va so'z tanlovini tekshir, yumshoq tuzat, tabiiyroq variant ber, va suhbatni inglizcha davom ettir (savol bilan tugat).
-Agar o'zbekcha (yoki boshqa tilda) gapirgan bo'lsa: savoliga o'zbekcha qisqa javob ber, oxirida inglizcha gapirib ko'rishga undab, bitta oddiy inglizcha savol ber.
-${s ? `O'quvchi: ${s.name || "—"}, XP ${s.xp}.` : ""}
-JSON: {"lang":"en|uz|other","heard":"matn (tinish belgilari bilan)","fixed":"to'g'rilangan inglizcha (faqat en, xato bo'lmasa bo'sh)","better":"tabiiyroq inglizcha variant (faqat en)","notes":["o'zbekcha 1-3 qisqa izoh xatolar haqida"],"score":0-100 (faqat en: ravonlik va to'g'rilik),"reply":"suhbatni davom ettiruvchi javob"}`,
-    clip(t.text, 2000), 900, 0.5);
-  if (!a) return send(chat.chat_id, "Hozir javob bera olmadim. Birozdan keyin qayta yuboring.");
-  await askBump(chat);
-  const en = a.lang === "en";
-  const parts = [`🎙 <b>Eshitdim:</b> <i>${esc(clip(a.heard || t.text, 800))}</i>`];
-  if (en && a.fixed && clip(a.fixed, 800).toLowerCase() !== clip(a.heard, 800).toLowerCase()) parts.push(`✍️ <b>To'g'ri:</b> ${esc(clip(a.fixed, 800))}`);
-  if (en && a.better) parts.push(`✨ <b>Tabiiyroq:</b> ${esc(clip(a.better, 800))}`);
-  if (en && Number.isFinite(Number(a.score))) parts.push(`📊 <b>Ravonlik:</b> ${Math.max(0, Math.min(100, Math.round(Number(a.score))))}/100`);
-  const notes = (Array.isArray(a.notes) ? a.notes : []).slice(0, 3).map((x: unknown) => clip(x, 200)).filter(Boolean);
-  if (en && notes.length) parts.push(notes.map((x: string) => "💡 " + esc(x)).join("\n"));
-  if (a.reply) parts.push(`💬 ${esc(clip(a.reply, 1200))}`);
-  const html = "<h2>Speaking tahlili</h2>"+parts.map(x=>"<p>"+x+"</p>").join("")+'<tg-button-row>'+cb("skmenu","Speaking mashqlari")+'</tg-button-row>';
-  const card=await tg("sendRichMessage",{chat_id:chat.chat_id,rich_message:{html}});
-  if(!card.ok) return send(chat.chat_id,parts.join("\n\n"));
+  const key=sessionKey(chat.chat_id), state=await kv(key);
+  if(state?.phase==="grading" && Date.now()-state.at<180000)return;
+  if(state?.phase==="ready")return taskScreen(chat.chat_id,state,false);
+  if(state?.phase!=="active" || Date.now()-state.at>30*60000)
+    return speakingMenu(chat.chat_id,undefined,"Ovozni tekshirtirish uchun qismni tanlang va «Boshlash»ni bosing.");
+  if((m.date && m.date < Math.floor(state.at/1000)) ||
+     (m.reply_to_message && m.reply_to_message.message_id!==state.message)) return;
+  const v=m.voice||m.audio||m.video_note;
+  if((v.duration||0)>120)return send(chat.chat_id,"Javobni ikki daqiqagacha qisqartirib yuboring.");
+  if(!(await askAllowed(chat)).ok)return limitMsg(chat);
+  const {data:claim}=await db.from("wd_tg_kv").update({val:{...state,phase:"grading",at:Date.now()}})
+    .eq("key",key).eq("val->>phase","active").eq("val->>token",state.token).select("key");
+  if(!claim?.length)return;
+  try{
+    await speakingScreen(chat.chat_id,state.message,"<h2>Javob tekshirilmoqda…</h2>","Javob tekshirilmoqda…",[]);
+    const t=await transcribe(v.file_id,true);
+    if(!t?.text)throw Error("transcription");
+    await gradePractice(chat,state.idx,t.text,t.seconds||v.duration,m.message_id,state.card,v.file_id,t.audio,t.words);
+  } catch {
+    await speakingScreen(chat.chat_id,state.message,"<p>Ovozli javobni tekshirish yakunlanmadi.</p>","Ovozli javobni tekshirish yakunlanmadi.",[[{text:"Qayta boshlash",callback_data:"skmenu"}]]);
+  } finally {
+    await db.from("wd_tg_kv").update({val:{...state,phase:"finished",at:Date.now()}}).eq("key",key).eq("val->>token",state.token).eq("val->>phase","grading");
+  }
 }
 
 /* ═════════════════ BOTDAGI ADMIN PANELI (/admin) ═════════════════ */
@@ -1357,7 +1371,7 @@ async function setupBot() {
   const r1 = await tg("setWebhook", { url: FN_URL, secret_token: await kv("webhook_secret"), allowed_updates: ["message", "callback_query", "my_chat_member", "pre_checkout_query"], drop_pending_updates: false });
   if (r1.ok) {
     await tg("setMyCommands", { scope: { type: "all_private_chats" }, commands: [
-      { command: "word", description: "Kun so'zi" }, { command: "quiz", description: "Viktorina" },
+      { command: "speaking", description: "Multilevel Speaking mashqi" }, { command: "word", description: "Kun so'zi" }, { command: "quiz", description: "Viktorina" },
       { command: "review", description: "Takrorim" }, { command: "top", description: "Reyting" },
       { command: "settings", description: "Eslatmalar" }, { command: "pro", description: "WordDrop Pro (Stars)" },
       { command: "paysupport", description: "To'lov bo'yicha yordam" }, { command: "terms", description: "Pro shartlari" }, { command: "menu", description: "Menyu" } ] });
@@ -1372,6 +1386,30 @@ async function setupBot() {
     await kvSet("webhook_ok", true);
   }
   return r1;
+}
+
+const miniLessons = [
+  ["Grammar", "since va for", "I’ve lived here since May. I’ve lived here for six months.", "Since boshlanish nuqtasini, for esa muddatni bildiradi."],
+  ["Word partners", "make a decision", "We need to make a decision before Friday.", "Qaror qabul qilish uchun make a decision birikmasini ishlating."],
+  ["Everyday English", "Navbatda turganda", "Excuse me, is this the end of the queue?", "Navbat qayerdan boshlanishini muloyim so‘rash usuli."],
+  ["Speaking", "Tanlovni asoslash", "I’d rather take the train because I can read on the way.", "Tanlovingizni ayting va unga bitta aniq sabab keltiring."],
+  ["Common mix-up", "borrow va lend", "Can I borrow your pen? Can you lend me your pen?", "Borrow — vaqtincha olmoq, lend — vaqtincha bermoq."],
+  ["Grammar", "used to", "We used to play outside after school.", "O‘tmishda odat bo‘lgan, hozir o‘zgargan ish haqida gapiring."],
+  ["Writing", "Tafsilot bilan yozish", "The café was quiet enough for us to hear the rain.", "Joyni tasvirlaganda sezgi orqali anglanadigan bitta detal qo‘shing."],
+  ["Phrasal verbs", "turn down", "She turned down the offer because the hours were too long.", "Taklifni rad etish ma’nosida turn down ishlatiladi."],
+  ["Listening", "Sonlarni aniqlashtirish", "Did you say thirteen or thirty?", "Sonni tushunmagan bo‘lsangiz, ikkala variantni aytib aniqlashtiring."],
+  ["Word partners", "heavy rain", "Heavy rain delayed the match.", "Kuchli yomg‘ir uchun heavy rain birikmasi tabiiy eshitiladi."],
+  ["Grammar", "a few va a little", "We have a few apples and a little milk.", "A few sanaladigan ko‘plik bilan, a little sanalmaydigan ot bilan keladi."],
+  ["Everyday English", "Uchrashuv vaqtini ko‘chirish", "Could we move our meeting to Thursday?", "Vaqtni o‘zgartirganda muqobil kunni ham taklif qiling."],
+];
+async function channelMini(channel:string, day:string, slot:number){
+  const serial=Math.floor(Date.parse(day+"T00:00:00Z")/86400000);
+  const [kind,topic,example,why]=miniLessons[(serial*4+slot)%miniLessons.length];
+  const contexts=["at a station","in a school library","during a team project","in a café","at a concert","on a family trip","at a market"];
+  const context=contexts[(serial+slot)%contexts.length];
+  const draft=await groq("Write a short, accurate English lesson for Uzbek learners. Keep the supplied teaching point, give a new natural English example for the situation, an idiomatic Uzbek translation and one specific practice question. Return JSON {example,uz,exercise}. No markup.",JSON.stringify({kind,topic,example,why,context}),300,.7);
+  const ok=["example","uz","exercise"].every(k=>typeof draft?.[k]==="string" && draft[k].trim().length>4 && draft[k].length<=300);
+  return send(channel,"<b>"+esc(kind+" · "+topic)+"</b>\n\n"+esc(why)+"\n\n<i>"+esc(ok?draft.example:example)+"</i>"+(ok?"\n"+esc(draft.uz)+"\n\n"+esc(draft.exercise):""));
 }
 
 /* ───────── Cron (har 5 daqiqa) ───────── */
@@ -1394,6 +1432,19 @@ async function cron() {
     if (w) { const opts = [...(await distractors(w)), w.uz].sort(() => Math.random() - .5);
       await tg("sendPoll", { chat_id: await kv("channel"), question: `"${w.en}" so'zining tarjimasi qaysi?`, options: opts, type: "quiz", correct_option_id: opts.indexOf(w.uz), explanation: w.ex ? clip(w.ex, 200) : undefined }); }
     apDone.quiz = t.day; await kvSet("autopilot_done", apDone); log.ap_quiz = 1;
+  }
+  // Two additional lessons per enabled daily channel feature.
+  const slots = [
+    {on:ap.word,h:Number(ap.word_hour??9)+3}, {on:ap.word,h:Number(ap.word_hour??9)+6},
+    {on:ap.quiz,h:Number(ap.quiz_hour??18)-1}, {on:ap.quiz,h:Number(ap.quiz_hour??18)+3}
+  ];
+  for(const [i,slot] of slots.entries()){
+    if(!slot.on || (slot.h+24)%24!==t.hour)continue;
+    const key="channel-lesson:"+t.day+":"+i;
+    const {error}=await db.from("wd_tg_kv").insert({key,val:"sending"});
+    if(error)continue;
+    const sent=await channelMini(await kv("channel"),t.day,i);
+    if(!sent.ok)await db.from("wd_tg_kv").delete().eq("key",key);
   }
   // 3) Ertalabki Kun so'zi — 08:00 dan boshlab, har chatga kuniga bir marta (bir martada 200 ta)
   if (t.hour >= 8 && t.hour < 12) {
