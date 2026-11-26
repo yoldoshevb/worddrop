@@ -323,6 +323,11 @@ async function channelPhoto(body: any) {
   return { ok: !!r.ok, error: r.ok ? null : r.description, title: info.title };
 }
 
+async function blockedTelegram(id: number) {
+  const {data,error}=await db.from("wd_access_blocks").select("telegram_id").eq("telegram_id",id).maybeSingle();
+  if(error) throw error;
+  return !!data;
+}
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   try {
@@ -330,6 +335,8 @@ Deno.serve(async (req) => {
     if (tgSecret !== null) {
       if (tgSecret !== (await webhookSecret())) return new Response("forbidden", { status: 403 });
       const u = await req.json().catch(() => null);
+      const sender=u?.message?.from?.id ?? u?.callback_query?.from?.id ?? u?.pre_checkout_query?.from?.id ?? u?.my_chat_member?.from?.id;
+      if(sender && await blockedTelegram(sender)) return new Response("ok");
       if (!u) return new Response("ok");
       let done = false;
       try { done = await handle(u); } catch (e) { console.error("[v101]", e); }

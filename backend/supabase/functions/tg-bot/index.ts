@@ -874,6 +874,8 @@ async function verifyInit(init: string): Promise<any | null> {
 async function tgLogin(body: any) {
   const u = await verifyInit(String(body.init || ""));
   if (!u?.id) return json({ error: "Telegram ma'lumoti tasdiqlanmadi" }, 401);
+  if(await blockedTelegram(u.id)) return json({code:"WD_BLOCKED",error:"Siz bloklangansiz"},403);
+  if(body.action==="tg_access") return json({ok:true});
   const { data: chat } = await db.from("wd_tg_chats").select("user_id").eq("chat_id", u.id).maybeSingle();
   let uid: string | null = chat?.user_id ?? null; let email = "";
   if (uid) {
@@ -1282,6 +1284,11 @@ JSON: {"posts":[{"kind":"word|grammar|quiz|promo|motivation|tip","caption":"post
 }
 
 /* ───────── Server ───────── */
+async function blockedTelegram(id: number) {
+  const {data,error}=await db.from("wd_access_blocks").select("telegram_id").eq("telegram_id",id).maybeSingle();
+  if(error) throw error;
+  return !!data;
+}
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   try {
@@ -1290,6 +1297,8 @@ Deno.serve(async (req) => {
     if (tgSecret !== null) {
       if (tgSecret !== (await kv("webhook_secret"))) return new Response("forbidden", { status: 403 });
       const u = await req.json().catch(() => null);
+      const sender=u?.message?.from?.id ?? u?.callback_query?.from?.id ?? u?.pre_checkout_query?.from?.id ?? u?.my_chat_member?.from?.id;
+      if(sender && await blockedTelegram(sender)) return new Response("ok");
       if (u) { try { await onUpdate(u); } catch (e) { console.error("[update]", e); } }
       return new Response("ok");
     }
@@ -1300,10 +1309,13 @@ Deno.serve(async (req) => {
       if (req.headers.get("x-cron-secret") !== (await kv("cron_secret"))) return json({ error: "forbidden" }, 403);
       return json({ ok: true, ...(await cron()) });
     }
-    if (action === "tg_login") return await tgLogin(body);
+    if (action === "tg_login" || action === "tg_access") return await tgLogin(body);
     const user = await authUser(req);
     if (!user) return json({ error: "Avval WordDrop hisobingizga kiring" }, 401);
 
+    const denied=await db.from("wd_access_blocks").select("telegram_id").contains("accounts",[user.id]).limit(1);
+    if(denied.error) throw denied.error;
+    if(denied.data?.length) return json({code:"WD_BLOCKED",error:"Siz bloklangansiz"},403);
     // 3) Foydalanuvchi
     { const r = await proUserApi(action, body, user); if (r) return r; }
     if (action === "link_code") {

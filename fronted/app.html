@@ -603,7 +603,8 @@
 <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:5000;display:none"></canvas>
 
 <script src="app.svg-ikonkalar.9b160445.js"></script>
-<script src="app.kitobcha-studiyasi-v94.5078a2cd.js"></script>
+<script src="access-control.v1.js"></script>
+<script src="app.kitobcha-studiyasi-v94.157e495d.js"></script>
 <script>
 /* ==================================================================
    v96: BOT BOSHQARUVI (admin) — guruhlar, a'zolar, shaxsiy chat siyosati
@@ -2016,6 +2017,13 @@ try{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const sb = createClient(SB_URL, SB_KEY, { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } });
   window.__sb = sb;
+  async function checkAccess(){
+    const {error}=await sb.rpc('wd_access_guard');
+    if(error?.message==='WD_BLOCKED') { window.wdShowBlocked(); return false; }
+    return true;
+  }
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkAccess(); });
+  window.setInterval(()=>{ if(!document.hidden && window.__sbUser) checkAccess(); },60000);
   window.__sbStatus = 'kirish tekshirilmoqda';
   let { data:{ session } } = await sb.auth.getSession();
   /* v96: TELEGRAM MINI APP — Telegram ichida ochilsa, hisob Telegram orqali o'zi kiradi.
@@ -2032,10 +2040,12 @@ try{
       }
       let tgId=''; try{ tgId=String(JSON.parse(new URLSearchParams(tgInit).get('user')||'{}').id||''); }catch(_){}
       let bind=''; try{ bind=localStorage.getItem('wd_tg_bind')||''; }catch(_){}
-      if(tgId && !(session && bind===tgId+':'+session.user.id)){
+      if(tgId){
+        const action=session && bind===tgId+':'+session.user.id ? 'tg_access' : 'tg_login';
         window.__sbStatus='Telegram orqali kirilmoqda';
-        const r=await fetch(SB_URL+'/functions/v1/tg-bot',{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},body:JSON.stringify({action:'tg_login',init:tgInit})});
+        const r=await fetch(SB_URL+'/functions/v1/tg-bot',{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},body:JSON.stringify({action,init:tgInit})});
         const j=await r.json().catch(()=>null);
+        if(j?.code==="WD_BLOCKED"){ window.wdShowBlocked(); throw new Error("WD_BLOCKED"); }
         if(j&&j.token_hash){
           if(session){ try{ await sb.auth.signOut({scope:'local'}); }catch(_){} }
           const v=await sb.auth.verifyOtp({token_hash:j.token_hash,type:'magiclink'});
@@ -2044,7 +2054,7 @@ try{
         }
       }
     }
-  }catch(e){ console.warn('[WordDrop] Telegram kirish:',e); }
+  }catch(e){ if(e.message==='WD_BLOCKED') throw e; console.warn('[WordDrop] Telegram kirish:',e); }
   if(!session){
     const { data, error } = await sb.auth.signInAnonymously();
     if(error){
@@ -2055,6 +2065,7 @@ try{
     } else { session = data.session; }
   }
   if(session){
+    if(!await checkAccess()) throw new Error('WD_BLOCKED');
     window.__sbUser = session.user;
     window.__sbStatus = 'ulandi';
     resolveReady('ok');
