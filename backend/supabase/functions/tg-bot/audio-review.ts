@@ -9,6 +9,36 @@ export function locate(words:Word[], quote:string){
   const i=hits[0];return {start:words[i].start,end:words[i+tokens.length-1].end};
 }
 
+// Whisper estimates word boundaries. A gap can also be a natural transition
+// between questions, so it is presented for replay without an automatic penalty.
+export function whisperReview(words: Word[], duration: number) {
+  const items: Finding[] = [];
+  const valid = words.length >= 2 && words.every((w, i) =>
+    w.word.trim() && Number.isFinite(w.start) && Number.isFinite(w.end) &&
+    w.start >= 0 && w.end > w.start && (!duration || w.end <= duration + 0.25) &&
+    (i === 0 || w.start >= words[i - 1].start && w.end >= words[i - 1].end)
+  );
+  if (!valid) return {items, pauses: undefined, note: "So‘zlarning vaqt belgilari yetarli emas. Pauzalar hisoblanmadi."};
+
+  const gaps = [];
+  for (let i = 1; i < words.length; i++) {
+    const seconds = Math.round((words[i].start - words[i - 1].end) * 1000) / 1000;
+    if (seconds >= 2) gaps.push({i, seconds});
+  }
+  const longest = gaps.sort((a, b) => b.seconds - a.seconds).slice(0, 3);
+  for (const {i, seconds} of longest.sort((a, b) => a.i - b.i)) {
+    const before = words[i - 1], after = words[i];
+    items.push({
+      kind: "Pauza",
+      note: `“${before.word.trim()}” va “${after.word.trim()}” orasida taxminan ${seconds.toFixed(1)} soniya bor. Tinglang: bu fikrlar orasidagi tabiiy tanaffusmi yoki so‘z izlagan joyingizmi?`,
+      start: before.start, end: after.end
+    });
+  }
+  const note = `So‘zlar orasida 2 soniya yoki uzoqroq tanaffuslar: ${gaps.length}.` +
+    (items.length ? ` Qayta tinglash uchun ajratilgan: ${items.length}.` : "");
+  return {items, pauses: gaps.length, note};
+}
+
 // RFC 6716 section 3.1, Opus granules always use a 48 kHz clock.
 function samples(p:Uint8Array){
   const config=p[0]>>3, code=p[0]&3;

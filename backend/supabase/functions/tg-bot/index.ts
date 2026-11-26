@@ -1,4 +1,4 @@
-import { opusClip, locate, pronounce, type Word, type Finding } from "./audio-review.ts";
+import { opusClip, locate, pronounce, whisperReview, type Word, type Finding } from "./audio-review.ts";
 import { cards, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
@@ -289,17 +289,24 @@ async function sendPractice(chatId:number, idx:number, saved?:Card) {
     await kvSet("practice39:"+chatId+":"+state.message,state);
   }
 }
-async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, pauses:number, messageId:number, card:Card, fileId:string, audio:Blob, words:Word[]){
-  const response=await scoreSpeaking({apiKey:GROQ,groqJson,json,clip,body:{items:[{part:card.part,q:card.title,text:transcript,sec:seconds,pauses,limit:card.limit}]}},{questions:card.questions,scene:card.scene||card.title});
+async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, messageId:number, card:Card, fileId:string, audio:Blob, words:Word[]){
+  const timing = whisperReview(words, seconds);
+  const response=await scoreSpeaking({apiKey:GROQ,groqJson,json,clip,body:{items:[{part:card.part,q:card.title,text:transcript,sec:seconds,pauses:timing.pauses,limit:card.limit}]}},{questions:card.questions,scene:card.scene||card.title});
   if(!response.ok) return send(chat.chat_id,"Baholash tugamadi. Ovozli javobni qayta yuborishingiz mumkin.");
   const report=await response.json();
   const labels:Record<string,string>={missing:"Javob topilmadi",partial:"Qisman yoritilgan",sufficient:"Yetarli yoritilgan"};
   const caption=`Part ${card.part} · ${card.title}\nTaxminiy mashq bali: ${report.raw}/${report.max}\n${report.reason}`;
-  const acoustic=await pronounce(new Uint8Array(await audio.arrayBuffer()),words,Deno.env.get("AZURE_SPEECH_KEY")||"",Deno.env.get("AZURE_SPEECH_REGION")||"").catch(()=>({items:[],note:"Audio tahlil natijasi olinmadi."}));
+  const key = Deno.env.get("AZURE_SPEECH_KEY");
+  const region = Deno.env.get("AZURE_SPEECH_REGION");
+  const acoustic = key && region
+    ? await pronounce(new Uint8Array(await audio.arrayBuffer()), words, key, region)
+        .catch(() => ({items: [], note: "Bu yozuv uchun talaffuz bahosi olinmadi."}))
+    : {items: [], note: "Alohida tovushlar talaffuziga ball berilmadi."};
+  const audioNote = timing.note + " " + acoustic.note;
   const items:Finding[]=(report.corrections||[]).map((x:any)=>({kind:"Grammatika",note:x.wrong+" → "+x.right+". "+x.why,...locate(words,x.wrong)}));
   report.coverage.forEach((x:any,i:number)=>{if(x.status!=="sufficient")items.push({kind:"Vazifa "+(i+1),note:card.questions[i]+" · "+x.reason_uz+" "+x.next_uz,...locate(words,x.quote||"")});});
-  items.push(...acoustic.items);
-  await kvSet("review:"+chat.chat_id+":"+messageId,{fileId,items,note:acoustic.note,idx,card});
+  items.push(...timing.items, ...acoustic.items);
+  await kvSet("review:"+chat.chat_id+":"+messageId,{fileId,items,note:audioNote,idx,card});
   const rows:Row[]=[
     {text:"WORDDROP  /  SPEAKING",style:"label"},
     {text:`Part ${card.part}   ·   ${card.title}`,style:"heading"},
@@ -324,7 +331,8 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
   rows.push({text:"Qism bali transkript va nutq vaqti asosida taxmin qilindi.",style:"quote",gap:20});
   const reply_markup={inline_keyboard:[[{text:"Qayta mashq",callback_data:"rr:"+messageId},{text:"Keyingi",callback_data:"sk:"+((idx+1)%cards.length)},{text:"Qismlar",callback_data:"skmenu"}]]};
   try{
-    rows.push({text:acoustic.note,style:"body"});
+    rows.push({text:audioNote,style:"body"});
+    for (const item of timing.items) rows.push({text:item.note,style:"quote"});
     const bytes=await scoreImage(rows);
     const fd=new FormData();
     fd.append("chat_id",String(chat.chat_id));fd.append("document",new Blob([bytes],{type:"image/png"}),"WordDrop-Speaking-"+card.part+".png");
@@ -832,18 +840,16 @@ async function transcribe(fileId: string, timing=false) {
   const audio = await fetch(`https://api.telegram.org/file/bot${BOT_TOKEN}/${f.result.file_path}`);
   if (!audio.ok) return null;
   const blob = await audio.blob();
-  for (const model of ["whisper-large-v3-turbo", "whisper-large-v3"]) {
+  const models = timing ? ["whisper-large-v3", "whisper-large-v3-turbo"] : ["whisper-large-v3-turbo", "whisper-large-v3"];
+  for (const model of models) {
     const fd = new FormData();
     fd.append("file", blob, (f.result.file_path.split("/").pop() || "voice.ogg").replace(/\.oga$/, ".ogg"));
-    if(timing){fd.append("timestamp_granularities[]","word");fd.append("timestamp_granularities[]","segment");}
+    if (timing) fd.append("timestamp_granularities[]", "word");
     fd.append("model", model); fd.append("response_format", "verbose_json"); fd.append("temperature", "0");
     const r = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", { method: "POST", headers: { Authorization: `Bearer ${GROQ}` }, body: fd });
     if (!r.ok) { console.error("[whisper]", model, r.status, (await r.text()).slice(0, 200)); continue; }
     const j = await r.json();
-    const segments=Array.isArray(j.segments)?j.segments:[];
-    let pauses=0;
-    for(let i=1;i<segments.length;i++) if(segments[i].start-segments[i-1].end>=2) pauses++;
-    return { audio:blob,words:(Array.isArray(j.words)?j.words:[]).filter((w:any)=>typeof w.word==="string"&&Number.isFinite(w.start)&&w.end>w.start) as Word[],seconds:Number(j.duration)||0, pauses, text: String(j.text || "").trim(), lang: String(j.language || "") };
+    return { audio:blob,words:(Array.isArray(j.words)?j.words:[]).filter((w:any)=>typeof w.word==="string"&&Number.isFinite(w.start)&&w.end>w.start) as Word[],seconds:Number(j.duration)||0, text: String(j.text || "").trim(), lang: String(j.language || "") };
   }
   return null;
 }
@@ -865,7 +871,7 @@ async function privateVoice(chat: any, m: any) {
   const active=await kv(replyId?messageKey+":"+replyId:messageKey);
   const t = await transcribe(v.file_id,!!active);
   if (!t?.text) return send(chat.chat_id, "Ovozni tushuna olmadim. Tinchroq joyda, aniqroq qilib qayta yuboring.");
-  if(active && cards[active.idx] && (replyId || Date.now()-active.at<30*60_000)) return gradePractice(chat,active.idx,t.text,t.seconds||v.duration,t.pauses,m.message_id,active.card||cards[active.idx],v.file_id,t.audio,t.words);
+  if(active && cards[active.idx] && (replyId || Date.now()-active.at<30*60_000)) return gradePractice(chat,active.idx,t.text,t.seconds||v.duration,m.message_id,active.card||cards[active.idx],v.file_id,t.audio,t.words);
   const s = chat.user_id ? await userSummary(chat.user_id) : null;
   const a = await groq(
     `Sen "Drop" — WordDrop'ning Speaking murabbiyisan. O'quvchi ovozli xabar yubordi,  quyida uning matni (Whisper, til: ${t.lang || "?"}). ${UZ}

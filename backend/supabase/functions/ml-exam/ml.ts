@@ -409,7 +409,7 @@ export async function scoreSpeaking(c: Pick<Ctx,"body"|"clip"|"groqJson"|"apiKey
   for (const it of items) {
     const id = String(it?.part || ""); if (!["1.1", "1.2", "2", "3"].includes(id)) continue;
     const w = words(it?.text), sec = Math.max(1, Number(it?.sec) || 1);
-    (parts[id] ||= []).push(`Q: ${C(it?.q, 300)}\nSpoken ${Math.round(sec)} s (limit ${Number(it?.limit) || 0} s), ${w} words, ${Math.round((w / sec) * 60)} words/min, long pauses: ${Number(it?.pauses) || 0}\nTranscript: """${C(it?.text, 2500)}"""`);
+    (parts[id] ||= []).push(`Q: ${C(it?.q, 300)}\nSpoken ${Math.round(sec)} s (limit ${Number(it?.limit) || 0} s), ${w} words, ${Math.round((w / sec) * 60)} words/min, long pauses: ${practice && it?.pauses == null ? "unavailable" : Number(it?.pauses) || 0}\nTranscript: """${C(it?.text, 2500)}"""`);
   }
   const user = Object.entries(parts).map(([k, v]) => `PART ${k}\n${v.join("\n\n")}`).join("\n\n---\n\n");
   if (!user) return c.json({ error: "Javoblar yo'q" }, 400);
@@ -422,7 +422,7 @@ Part 3 is one debate: 6 above C1, 5 sustained balanced developed case with flexi
 4 covers both sides with competent B2 language; 3 one-sided but developed; 2 mostly repeats
 prompts; 1 reads points with little independent language; 0 below B1 or irrelevant.
 Consider grammar, vocabulary and cohesion together with coverage. Timing alone never determines a band.
-Use only available transcript evidence, never judge pronunciation, accent or acoustic clarity.
+Pauses can separate ideas or questions. Never deduct points solely for a pause count. Use only available transcript evidence, never judge pronunciation, accent or acoustic clarity.
 Return coverage in exact question order, each {status:"missing"|"partial"|"sufficient",
 quote:"short verbatim contiguous English excerpt or empty if missing",reason_uz:"specific diagnosis under 120 characters",
 next_uz:"one specific actionable improvement for this exact question under 110 characters"}.
