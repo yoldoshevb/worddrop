@@ -72,3 +72,11 @@ export function tutorMessage(source: string, streaming = false) {
   }
   return {html:html.join(""),text:text.join("\n\n")};
 }
+
+// Match direct dictionary requests only. Longer questions go to the tutor.
+export function translationTerm(input:string):string|undefined {
+  const s=input.trim().toLowerCase().replace(/[ʻʼ‘’]/g,"'").replace(/[?!.]+$/,"").trim();
+  const match=/^["“«]?([a-z]+(?:[-' ][a-z]+){0,3})["”»]?(?:\s+(?:so'zining|so'zi|iborasining|iborasi))?\s+(?:tarjimasi(?: nima)?|nima degani|degani nima|ma'nosi(?: nima)?|o'zbekchada nima)(?: ekan)?$/.exec(s);
+  if(match)return match[1].replace(/\s+(?:so'zining|so'zi|iborasining|iborasi)$/,"");
+  if(s==="stubborn")return s;
+}

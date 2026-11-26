@@ -103,3 +103,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-27 | ChatGPT | Speaking paneli, faqat boshlangan mashqda bitta ovoz, suhbat ohangi va kanalga kuniga to‘rtta qo‘shimcha mini-dars. | tg-bot | shu commit |
 | 2026-11-27 | ChatGPT | Shaxsiy navigatsiya uchun umumiy panel, bo‘limdan chiqishda kiritish rejimini yopish, guruh viktorinasini joyida yangilash. | tg-bot, tg-v101 | shu commit |
 | 2026-11-27 | ChatGPT | Drop AI shaxsiy suhbatida thinking indikatori, oqimli javob va Telegram jadvali. | tg-bot | shu commit |
+| 2026-11-27 | ChatGPT | Bevosita tarjima savollariga lug‘at javobi; stubborn — o‘jar, qaysar. | tg-bot | shu commit |

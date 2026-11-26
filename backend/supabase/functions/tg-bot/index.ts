@@ -4,7 +4,7 @@ import { cards, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
 import { groqJson } from "../ml-exam/examiner.ts";
-import { readCompletion, tutorMessage } from "./rich.ts";
+import { readCompletion, tutorMessage, translationTerm } from "./rich.ts";
 // Supabase Edge Function: tg-bot  (WordDrop v99)
 // @WordDropUzBot — foydalanuvchilar bilan suhbat, kanal postlari va eslatmalar.
 //
@@ -387,7 +387,24 @@ async function streamTutor(m:any, system:string, question:string) {
   const draft = (html:string) => tg("sendRichMessageDraft",{chat_id,...thread,draft_id:m.message_id,rich_message:{html}})
     .then(r=>Boolean(r.ok)).catch(()=>false);
   let previewEnabled=await draft("<tg-thinking>💭 Javob tayyorlanmoqda…</tg-thinking>");
-  const format = "Avval savolning bevosita javobini ber. Bir necha ma’no yoki variant bo‘lsa, 2–3 ustunli Markdown jadval tuz. Lug‘at jadvalida har bir alohida ma’noga bitta tabiiy inglizcha misol va uning o‘zbekcha tarjimasini ber. Bir ma’noni sinonimlar bilan alohida qatorlarda takrorlama. Masalan, turn down iborasida taklifni rad etish va ovoz yoki issiqlikni pasaytirish ikki asosiy qo‘llanish. Qoidaga kerak bo‘lsa qisqa izoh qo‘sh. Murakkab mavzularni sarlavhali bo‘limlarga ajrat. Oddiy javob uchun sun’iy jadval yoki majburiy mashq qo‘shma. Jadvalning har bir qatori | bilan boshlansin va tugasin. HTML yozma.";
+  const term=translationTerm(String(m.text || ""));
+  if(term){
+    let meaning="";
+    if(term==="stubborn")meaning="o‘jar, qaysar";
+    else {
+      const {data}=await db.from("word_translations").select("uz").eq("verified",true).ilike("en",term).limit(1);
+      meaning=String(data?.[0]?.uz || "").trim();
+    }
+    if(meaning){
+      const example=term==="stubborn"?"\n\nShe’s too stubborn to admit she was wrong. — U shunchalik qaysarki, xato qilganini tan olmaydi.":"";
+      const text=term+" — "+meaning+example;
+      const html="<p><b>"+esc(term)+"</b> — "+esc(meaning)+"</p>"+(example?"<p>"+esc(example.trim())+"</p>":"");
+      if(previewEnabled)await draft(html);
+      return (await tg("sendRichMessage",{chat_id,...thread,rich_message:{html}})).ok ||
+        (await tg("sendMessage",{chat_id,...thread,text})).ok;
+    }
+  }
+  const format = "Tarjima so‘ralganda birinchi jumlada odatiy o‘zbekcha lug‘aviy muqobilni ayt. Ta’rifni va ko‘chma ma’noni faqat keyin, kerak bo‘lsa ber. Sifatni ot bilan almashtirma, sinonimlarni alohida ma’no deb ko‘paytirma. Stubborn odam yoki hayvon haqida o‘jar, qaysar; stubborn stain esa ketishi qiyin dog‘. Avval savolning bevosita javobini ber. Bir necha ma’no yoki variant bo‘lsa, 2–3 ustunli Markdown jadval tuz. Lug‘at jadvalida har bir alohida ma’noga bitta tabiiy inglizcha misol va uning o‘zbekcha tarjimasini ber. Bir ma’noni sinonimlar bilan alohida qatorlarda takrorlama. Masalan, turn down iborasida taklifni rad etish va ovoz yoki issiqlikni pasaytirish ikki asosiy qo‘llanish. Qoidaga kerak bo‘lsa qisqa izoh qo‘sh. Murakkab mavzularni sarlavhali bo‘limlarga ajrat. Oddiy javob uchun sun’iy jadval yoki majburiy mashq qo‘shma. Jadvalning har bir qatori | bilan boshlansin va tugasin. HTML yozma.";
   for(const model of ["openai/gpt-oss-120b","openai/gpt-oss-20b"]){
     let answer:string;
     try{
