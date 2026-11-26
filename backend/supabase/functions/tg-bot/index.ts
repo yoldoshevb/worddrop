@@ -4,7 +4,7 @@ import { cards, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
 import { groqJson } from "../ml-exam/examiner.ts";
-import { readCompletion } from "./rich.ts";
+import { readCompletion, tutorMessage } from "./rich.ts";
 // Supabase Edge Function: tg-bot  (WordDrop v99)
 // @WordDropUzBot — foydalanuvchilar bilan suhbat, kanal postlari va eslatmalar.
 //
@@ -384,22 +384,26 @@ async function richWord(chatId:number) {
 }
 async function streamTutor(m:any, system:string, question:string) {
   const chat_id=m.chat.id, thread=m.message_thread_id?{message_thread_id:m.message_thread_id}:{};
-  let previewEnabled=true;
-  const paragraph=(s:string)=>s.split(/\n+/).filter(Boolean).map(line=>"<p>"+esc(line)+"</p>").join("");
+  const draft = (html:string) => tg("sendRichMessageDraft",{chat_id,...thread,draft_id:m.message_id,rich_message:{html}})
+    .then(r=>Boolean(r.ok)).catch(()=>false);
+  let previewEnabled=await draft("<tg-thinking>💭 Javob tayyorlanmoqda…</tg-thinking>");
+  const format = "Avval savolning bevosita javobini ber. Bir necha ma’no yoki variant bo‘lsa, 2–3 ustunli Markdown jadval tuz. Lug‘at jadvalida har bir alohida ma’noga bitta tabiiy inglizcha misol va uning o‘zbekcha tarjimasini ber. Bir ma’noni sinonimlar bilan alohida qatorlarda takrorlama. Masalan, turn down iborasida taklifni rad etish va ovoz yoki issiqlikni pasaytirish ikki asosiy qo‘llanish. Qoidaga kerak bo‘lsa qisqa izoh qo‘sh. Murakkab mavzularni sarlavhali bo‘limlarga ajrat. Oddiy javob uchun sun’iy jadval yoki majburiy mashq qo‘shma. Jadvalning har bir qatori | bilan boshlansin va tugasin. HTML yozma.";
   for(const model of ["openai/gpt-oss-120b","openai/gpt-oss-20b"]){
     let answer:string;
     try{
       const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",signal:AbortSignal.timeout(35000),
         headers:{"Content-Type":"application/json",Authorization:"Bearer "+GROQ},
         body:JSON.stringify({model,stream:true,include_reasoning:false,reasoning_effort:"low",max_completion_tokens:700,
-          messages:[{role:"system",content:system+" Oddiy matnda javob ber."},{role:"user",content:question}]})});
+          messages:[{role:"system",content:system+" "+format},{role:"user",content:question}]})});
       if(!res.ok||!res.body){await res.body?.cancel();continue;}
       answer=await readCompletion(res.body,async partial=>{
-        if(previewEnabled) previewEnabled=await tg("sendRichMessageDraft",{chat_id,...thread,draft_id:m.message_id,rich_message:{html:paragraph(partial)}}).then(r=>r.ok).catch(()=>false);
+        const html=tutorMessage(partial,true).html;
+        if(previewEnabled && html) previewEnabled=await draft(html);
       });
     }catch{continue;}
-    const r=await tg("sendRichMessage",{chat_id,...thread,rich_message:{html:paragraph(answer)}} );
-    return r.ok || (await tg("sendMessage",{chat_id,...thread,text:answer})).ok;
+    const rendered=tutorMessage(answer);
+    const r=await tg("sendRichMessage",{chat_id,...thread,rich_message:{html:rendered.html}});
+    return r.ok || (await tg("sendMessage",{chat_id,...thread,text:rendered.text.slice(0,4096)})).ok;
   }
   return false;
 }
