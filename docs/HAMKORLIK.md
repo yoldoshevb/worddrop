@@ -97,3 +97,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-26 | ChatGPT | Drop AI: shaxsiy chatda oqimli javoblar, rasmli Speaking va kun so‘zi kartochkalari, ovozli javob tahlili. | GitHub, Supabase | shu commit |
 | 2026-11-26 | ChatGPT | Telegram Speaking: 19 rasm juftligi va yugurish sahnasi, to‘rtta qism, mock Speaking baholagichi, uch savol qamrovi va PNG. | GitHub, Supabase tg-bot | shu commit |
 | 2026-11-26 | ChatGPT | Telegram Speaking: UZBMB yangi formatiga asoslangan qism bahosi, savolma-savol dalil va tuzatishlar bilan PNG. | tg-bot | shu commit |
+| 2026-11-26 | ChatGPT | Speaking: AI savollari, vaqt belgili grammatika va vazifa izohlari, Telegram ovozli parchalar, Azure Speech uchun server integratsiyasi. | tg-bot | shu commit |

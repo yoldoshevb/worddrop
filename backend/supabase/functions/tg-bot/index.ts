@@ -1,4 +1,5 @@
-import { cards } from "./practice.ts";
+import { opusClip, locate, pronounce, type Word, type Finding } from "./audio-review.ts";
+import { cards, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
 import { groqJson } from "../ml-exam/examiner.ts";
@@ -226,9 +227,51 @@ async function sendQuiz(chatId: number, editMsg?: number) {
 const cb = (data:string,label:string)=>`<tg-button type="callback_data" style="primary" data="${data}">${label}</tg-button>`;
 const partMenu={inline_keyboard:[["1.1","1.2","2","3"].map(part=>({text:"Part "+part,callback_data:"sk:"+cards.findIndex(c=>c.part===part)}))]};
 function speakingMenu(chatId:number){return send(chatId,"🎙 <b>Multilevel Speaking</b>\nMashq uchun qismni tanlang.",{reply_markup:partMenu});}
-async function sendPractice(chatId:number, idx:number) {
-  const card=cards[idx];
-  if(!card) return speakingMenu(chatId);
+async function freshCard(idx:number):Promise<Card>{
+  const seed=cards[idx], topics=["neighbourhoods","learning skills","friendship","celebrations","sports","travel","food","technology","family routines","the arts","transport","nature"];
+  const choice=topics[Math.floor(Math.random()*topics.length)];
+  const prompt = [
+    "Create one original English Multilevel speaking practice. Return JSON: title, questions (exactly 3 English strings), help (3-5 useful English expressions).",
+    "1.1: three everyday personal A1-A2 questions. 1.2: compare both pictured situations first; then two distinct B1 follow-ups requiring opinions and reasons about those pictures.",
+    "2: use the supplied picture only as a theme, ask about personal experience, its impact, then an abstract B2 question. 3: one C1 debate motion as the title; give two arguments for, two against in help, and three planning prompts for a single balanced speech.",
+    "For a pictured task stay faithful to the stated scene. Vary the questions and angle. No Markdown."
+  ].join(" ");
+  const v=await groq(prompt,JSON.stringify({part:seed.part,scene:seed.scene||null,inspiration:seed.scene?undefined:choice,variation:crypto.randomUUID().slice(0,6)}),520,.88);
+  if(!v||typeof v.title!=="string"||!Array.isArray(v.questions)||v.questions.length!==3||!v.questions.every((x:any)=>typeof x==="string"&&x.trim().length>=8))return seed;
+  const help=Array.isArray(v.help)?v.help.join(" · "):v.help;
+  if(typeof help!=="string"||!help.trim())return seed;
+  return {...seed,title:clip(v.title,100),questions:v.questions.map((x:string)=>clip(x,240)),help:clip(help,320)};
+}
+async function feedbackPage(chatId:number,messageId:number,page:number){
+  const data=await kv("review:"+chatId+":"+messageId);if(!data)return send(chatId,"Tahlil topilmadi.");
+  const items:Finding[]=data.items, first=page*5, visible=items.slice(first,first+5);
+  if(!visible.length&&page)return;
+  const buttons=visible.map((x,i)=>({text:(first+i+1)+". "+x.kind,callback_data:`rx:${messageId}:${first+i}`}));
+  const nav=[];if(page)nav.push({text:"Oldingi",callback_data:`rp:${messageId}:${page-1}`});
+  if(first+5<items.length)nav.push({text:"Davomi",callback_data:`rp:${messageId}:${page+1}`});
+  const table="<table compact striped><tr><th>Mezon</th><th>Izoh</th></tr>"+visible.map((x,i)=>`<tr><td>${first+i+1}. ${esc(x.kind)}</td><td>${esc(x.note)}</td></tr>`).join("")+"</table>";
+  const all=[...buttons,...nav];
+  const html="<h2>Javob tahlili</h2><p>"+esc(data.note)+"</p>"+(visible.length?table:"<p>Qo‘shimcha tuzatish topilmadi.</p>")+all.map(b=>"<tg-button-row>"+cb(b.callback_data,b.text)+"</tg-button-row>").join("");
+  const sent=await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
+  if(!sent.ok)await send(chatId,esc([data.note,...visible.map((x,i)=>`${first+i+1}. ${x.kind}: ${x.note}`)].join("\n\n")),{reply_markup:{inline_keyboard:all.map(b=>[b])}});
+}
+async function replayFinding(chatId:number,messageId:number,index:number){
+  const data=await kv("review:"+chatId+":"+messageId), x:Finding=data?.items?.[index];
+  if(!x)return send(chatId,"Tahlil topilmadi.");
+  if(x.start==null||x.end==null)return send(chatId,esc(x.note)+"\nBu band uchun aniq audio parcha ajratilmadi.");
+  try{
+    const f=await tg("getFile",{file_id:data.fileId});if(!f.ok)throw Error();
+    const r=await fetch(`https://api.telegram.org/file/bot${BOT_TOKEN}/${f.result.file_path}`);if(!r.ok)throw Error();
+    const start=Math.max(0,x.start-.38),end=x.end+.45;
+    const bytes=opusClip(new Uint8Array(await r.arrayBuffer()),start,end);
+    const fd=new FormData();fd.append("chat_id",String(chatId));fd.append("voice",new Blob([bytes],{type:"audio/ogg"}),"parcha.ogg");
+    fd.append("caption",`${x.kind} · ${x.start.toFixed(1)}–${x.end.toFixed(1)} s\n${x.note}`.slice(0,950));
+    const sent=await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVoice`,{method:"POST",body:fd});if(!(await sent.json()).ok)throw Error();
+  }catch{await send(chatId,esc(x.note)+`\nAsl yozuvda ${x.start.toFixed(1)}–${x.end.toFixed(1)} soniyani tinglang.`);}
+}
+async function sendPractice(chatId:number, idx:number, saved?:Card) {
+  if(!cards[idx]) return speakingMenu(chatId);
+  const card=saved||await freshCard(idx);
   const numbered=card.questions.map((q,i)=>(i+1)+". "+q);
   const instructions=card.part==="3"?"Bitta nutqda har tomondan ikkita dalilni rivojlantiring va ularni solishtiring.":"Uchala savolga tartib bilan bitta ovozli xabarda javob bering.";
   const next=(idx+1)%cards.length;
@@ -241,18 +284,22 @@ async function sendPractice(chatId:number, idx:number) {
     if(!result.ok && card.photo) result=await send(chatId,esc(caption)+"\n"+card.photo,{reply_markup});
   }
   if(result.ok){
-    const state={idx,at:Date.now(),message:result.result.message_id};
+    const state={idx,card,at:Date.now(),message:result.result.message_id};
     await kvSet("practice39:"+chatId,state);
     await kvSet("practice39:"+chatId+":"+state.message,state);
   }
 }
-async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, pauses:number, messageId:number){
-  const card=cards[idx];
+async function gradePractice(chat:any, idx:number, transcript:string, seconds:number, pauses:number, messageId:number, card:Card, fileId:string, audio:Blob, words:Word[]){
   const response=await scoreSpeaking({apiKey:GROQ,groqJson,json,clip,body:{items:[{part:card.part,q:card.title,text:transcript,sec:seconds,pauses,limit:card.limit}]}},{questions:card.questions,scene:card.scene||card.title});
   if(!response.ok) return send(chat.chat_id,"Baholash tugamadi. Ovozli javobni qayta yuborishingiz mumkin.");
   const report=await response.json();
   const labels:Record<string,string>={missing:"Javob topilmadi",partial:"Qisman yoritilgan",sufficient:"Yetarli yoritilgan"};
   const caption=`Part ${card.part} · ${card.title}\nTaxminiy mashq bali: ${report.raw}/${report.max}\n${report.reason}`;
+  const acoustic=await pronounce(new Uint8Array(await audio.arrayBuffer()),words,Deno.env.get("AZURE_SPEECH_KEY")||"",Deno.env.get("AZURE_SPEECH_REGION")||"").catch(()=>({items:[],note:"Audio tahlil natijasi olinmadi."}));
+  const items:Finding[]=(report.corrections||[]).map((x:any)=>({kind:"Grammatika",note:x.wrong+" → "+x.right+". "+x.why,...locate(words,x.wrong)}));
+  report.coverage.forEach((x:any,i:number)=>{if(x.status!=="sufficient")items.push({kind:"Vazifa "+(i+1),note:card.questions[i]+" · "+x.reason_uz+" "+x.next_uz,...locate(words,x.quote||"")});});
+  items.push(...acoustic.items);
+  await kvSet("review:"+chat.chat_id+":"+messageId,{fileId,items,note:acoustic.note,idx,card});
   const rows:Row[]=[
     {text:"WORDDROP  /  SPEAKING",style:"label"},
     {text:`Part ${card.part}   ·   ${card.title}`,style:"heading"},
@@ -274,9 +321,10 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
   }
   if(report.next) rows.push({text:"Keyingi urinish",style:"heading",gap:22},{text:report.next,style:"body"});
   if(report.better) rows.push({text:"Namunaviy jumla",style:"label",gap:8},{text:report.better,style:"quote"});
-  rows.push({text:"Baho transkript va nutq vaqti asosida taxmin qilindi. Talaffuz alohida baholanmadi.",style:"quote",gap:20});
-  const reply_markup={inline_keyboard:[[{text:"Qayta mashq",callback_data:"sk:"+idx},{text:"Keyingi",callback_data:"sk:"+((idx+1)%cards.length)},{text:"Qismlar",callback_data:"skmenu"}]]};
+  rows.push({text:"Qism bali transkript va nutq vaqti asosida taxmin qilindi.",style:"quote",gap:20});
+  const reply_markup={inline_keyboard:[[{text:"Qayta mashq",callback_data:"rr:"+messageId},{text:"Keyingi",callback_data:"sk:"+((idx+1)%cards.length)},{text:"Qismlar",callback_data:"skmenu"}]]};
   try{
+    rows.push({text:acoustic.note,style:"body"});
     const bytes=await scoreImage(rows);
     const fd=new FormData();
     fd.append("chat_id",String(chat.chat_id));fd.append("document",new Blob([bytes],{type:"image/png"}),"WordDrop-Speaking-"+card.part+".png");
@@ -289,6 +337,7 @@ async function gradePractice(chat:any, idx:number, transcript:string, seconds:nu
     if(!result.ok) return;
   }
   await askBump(chat);
+  await feedbackPage(chat.chat_id,messageId,0);
 }
 async function richWord(chatId:number) {
   const w = await wordOfDay();
@@ -395,6 +444,14 @@ async function onCallback(cq: any) {
   if (data === "Pt") return send(chatId, TERMS_TEXT);
   if (data === "Pc") { const r = chat.user_id ? await cancelSub(chat.user_id) : { ok: false, error: "Hisob ulanmagan" }; return send(chatId, r.ok ? `Obuna bekor qilindi. Pro ${fmtDay(Date.parse((r as any).until))} gacha ishlashda davom etadi.` : "Bekor qilinmadi: " + esc((r as any).error)); }
   if (data === "w") return richWord(chatId);
+  const review=/^(rx|rp|rr):(\d+)(?::(\d+))?$/.exec(data);
+  if(review && cq.from?.id===chatId){
+    const id=Number(review[2]), n=Number(review[3]||0);
+    if(review[1]==="rp")return feedbackPage(chatId,id,n);
+    if(review[1]==="rx")return replayFinding(chatId,id,n);
+    const prior=await kv("review:"+chatId+":"+id);
+    return prior?sendPractice(chatId,prior.idx,prior.card):speakingMenu(chatId);
+  }
   if (data === "skmenu" || data === "sp:0") return speakingMenu(chatId);
   if(data === "sp:1") return sendPractice(chatId,cards.findIndex(c=>c.part==="2"));
   if(/^sk:\d{1,2}$/.test(data)) return sendPractice(chatId,Number(data.slice(3)));
@@ -769,7 +826,7 @@ async function groupCb(cq: any) {
 }
 
 /* ═════════════════ OVOZ (Groq Whisper) ═════════════════ */
-async function transcribe(fileId: string): Promise<{ text: string; lang: string; seconds:number; pauses:number } | null> {
+async function transcribe(fileId: string, timing=false) {
   if (!GROQ || !BOT_TOKEN) return null;
   const f = await tg("getFile", { file_id: fileId }); if (!f.ok) return null;
   const audio = await fetch(`https://api.telegram.org/file/bot${BOT_TOKEN}/${f.result.file_path}`);
@@ -778,6 +835,7 @@ async function transcribe(fileId: string): Promise<{ text: string; lang: string;
   for (const model of ["whisper-large-v3-turbo", "whisper-large-v3"]) {
     const fd = new FormData();
     fd.append("file", blob, (f.result.file_path.split("/").pop() || "voice.ogg").replace(/\.oga$/, ".ogg"));
+    if(timing){fd.append("timestamp_granularities[]","word");fd.append("timestamp_granularities[]","segment");}
     fd.append("model", model); fd.append("response_format", "verbose_json"); fd.append("temperature", "0");
     const r = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", { method: "POST", headers: { Authorization: `Bearer ${GROQ}` }, body: fd });
     if (!r.ok) { console.error("[whisper]", model, r.status, (await r.text()).slice(0, 200)); continue; }
@@ -785,7 +843,7 @@ async function transcribe(fileId: string): Promise<{ text: string; lang: string;
     const segments=Array.isArray(j.segments)?j.segments:[];
     let pauses=0;
     for(let i=1;i<segments.length;i++) if(segments[i].start-segments[i-1].end>=2) pauses++;
-    return { seconds:Number(j.duration)||0, pauses, text: String(j.text || "").trim(), lang: String(j.language || "") };
+    return { audio:blob,words:(Array.isArray(j.words)?j.words:[]).filter((w:any)=>typeof w.word==="string"&&Number.isFinite(w.start)&&w.end>w.start) as Word[],seconds:Number(j.duration)||0, pauses, text: String(j.text || "").trim(), lang: String(j.language || "") };
   }
   return null;
 }
@@ -805,9 +863,9 @@ async function privateVoice(chat: any, m: any) {
   const messageKey="practice39:"+chat.chat_id;
   const replyId=m.reply_to_message?.message_id;
   const active=await kv(replyId?messageKey+":"+replyId:messageKey);
-  const t = await transcribe(v.file_id);
+  const t = await transcribe(v.file_id,!!active);
   if (!t?.text) return send(chat.chat_id, "Ovozni tushuna olmadim. Tinchroq joyda, aniqroq qilib qayta yuboring.");
-  if(active && cards[active.idx] && (replyId || Date.now()-active.at<30*60_000)) return gradePractice(chat,active.idx,t.text,t.seconds||v.duration,t.pauses,m.message_id);
+  if(active && cards[active.idx] && (replyId || Date.now()-active.at<30*60_000)) return gradePractice(chat,active.idx,t.text,t.seconds||v.duration,t.pauses,m.message_id,active.card||cards[active.idx],v.file_id,t.audio,t.words);
   const s = chat.user_id ? await userSummary(chat.user_id) : null;
   const a = await groq(
     `Sen "Drop" — WordDrop'ning Speaking murabbiyisan. O'quvchi ovozli xabar yubordi,  quyida uning matni (Whisper, til: ${t.lang || "?"}). ${UZ}
@@ -1401,6 +1459,7 @@ async function blockedTelegram(id: number) {
   return !!data;
 }
 Deno.serve(async (req) => {
+  if (req.method === "HEAD") return new Response(null,{headers:{"X-WordDrop-Pronunciation":Deno.env.get("AZURE_SPEECH_KEY")&&Deno.env.get("AZURE_SPEECH_REGION")?"configured":"unconfigured"}});
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   try {
     // 1) Telegram webhook
