@@ -47,6 +47,7 @@ async function webhookSecret() { return SECRET ??= String(await kv("webhook_secr
 
 /* ───────── Menyu (tg-bot dagidan kengaytirilgan) ───────── */
 const KB_MAIN = { inline_keyboard: [
+  [{ text: "🎙 Speaking mashqi", callback_data: "sp:0" }],
   [{ text: "☀️ Kun so'zi", callback_data: "w" }, { text: "🎯 Viktorina", callback_data: "q" }],
   [{ text: "🧠 Takrorim", callback_data: "r" }, { text: "🏆 Reyting", callback_data: "t" }],
   [{ text: "📊 Darajamni aniqlash", callback_data: "L" }, { text: "🎓 Multilevel", web_app: { url: APP_URL + "#ml" } }],
@@ -275,7 +276,7 @@ async function handle(u: any): Promise<boolean> {
 async function setup() {
   const r1 = await tg("setWebhook", { url: SELF_URL, secret_token: await webhookSecret(), allowed_updates: ["message", "callback_query", "my_chat_member", "pre_checkout_query"], drop_pending_updates: false });
   const r2 = await tg("setMyCommands", { scope: { type: "all_private_chats" }, commands: [
-    { command: "word", description: "Kun so'zi" }, { command: "quiz", description: "Viktorina" },
+    { command: "speaking", description: "Rasmli Speaking mashqi" }, { command: "word", description: "Kun so'zi" }, { command: "quiz", description: "Viktorina" },
     { command: "level", description: "Daraja testi" }, { command: "multilevel", description: "Multilevel sinov imtihoni" },
     { command: "review", description: "Takrorim" }, { command: "top", description: "Reyting" },
     { command: "invite", description: "3 do'st taklif qiling — 7 kun Pro" }, { command: "settings", description: "Eslatmalar" },

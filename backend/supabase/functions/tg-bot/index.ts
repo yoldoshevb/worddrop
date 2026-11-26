@@ -1,3 +1,4 @@
+import { readCompletion } from "./rich.ts";
 // Supabase Edge Function: tg-bot  (WordDrop v99)
 // @WordDropUzBot — foydalanuvchilar bilan suhbat, kanal postlari va eslatmalar.
 //
@@ -181,6 +182,7 @@ async function askBump(chat: any) {
 
 /* ───────── Klaviaturalar ───────── */
 const KB_MAIN = { inline_keyboard: [
+  [{ text: "🎙 Speaking mashqi", callback_data: "sp:0" }],
   [{ text: "☀️ Kun so'zi", callback_data: "w" }, { text: "🎯 Viktorina", callback_data: "q" }],
   [{ text: "🧠 Takrorim", callback_data: "r" }, { text: "🏆 Reyting", callback_data: "t" }],
   [{ text: "⚙️ Sozlamalar", callback_data: "s" }, { text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }],
@@ -217,6 +219,53 @@ async function sendQuiz(chatId: number, editMsg?: number) {
 }
 
 /* ───────── Webhook: xabarlar ───────── */
+const picture = "https://worddrop-app.uz/speaking-cards/shopping.v1.jpg";
+const practice = [
+  {part:"Task 1.2", question:"Compare the two ways of shopping in the pictures. Which would you choose and why?", hint:"Both pictures show … • Whereas … • I would choose … because …"},
+  {part:"Part 2", question:"Describe a time when you bought something important. What did you choose, how did you decide, and how did you feel afterwards?", hint:"Vaziyatni tasvirlang, qaroringiz sababini ayting va natija bilan yakunlang."}
+];
+const cb = (data:string, label:string)=>`<tg-button type="callback_data" style="primary" data="${data}">${label}</tg-button>`;
+async function sendPractice(chatId:number, idx:number) {
+  const p = practice[idx], next = 1-idx;
+  const html = `<h2>Speaking · ${p.part}</h2>${idx===0?`<img src="${picture}"/>`:""}<p>${p.question}</p><details><summary>Ishora</summary><p>${p.hint}</p></details><p>Javobingizni ovozli xabar qilib yuboring.</p><tg-button-row>${cb("sp:"+idx,"Qayta mashq")}${cb("sp:"+next,"Keyingi topshiriq")}</tg-button-row>`;
+  let result = await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
+  if (!result.ok) {
+    const text = `Speaking · ${p.part}\n\n${p.question}\n\nIshora: ${p.hint}\n\nOvozli javob yuboring.`;
+    const reply_markup = {inline_keyboard:[[{text:"Keyingi topshiriq",callback_data:"sp:"+next}]]};
+    result = idx===0 ? await tg("sendPhoto",{chat_id:chatId,photo:picture,caption:text,reply_markup}) : await send(chatId,text,{reply_markup});
+    if (!result.ok && idx===0) result=await send(chatId,text+"\n"+picture,{reply_markup});
+  }
+  if(result.ok) await kvSet("speaking:"+chatId,{idx,at:Date.now()});
+}
+async function richWord(chatId:number) {
+  const w = await wordOfDay();
+  if (!w) return send(chatId,"Hozircha so‘z tayyor emas.");
+  const html = `<h2>${esc(w.en)}</h2><table compact><tr><td>Tarjima</td><td>${esc(w.uz)}</td></tr>${w.ipa?`<tr><td>Talaffuz</td><td>${esc(w.ipa)}</td></tr>`:""}</table>${w.ex?`<blockquote>${esc(w.ex)}</blockquote>`:""}${w.mn_uz?`<details><summary>Eslab qolish</summary><p>${esc(w.mn_uz)}</p></details>`:""}${w.ex2?`<p>${esc(w.ex2)} — ${esc(w.ex2_uz)}</p>`:""}${w.tip_uz?`<p>${esc(w.tip_uz)}</p>`:""}<tg-button-row>${cb("q","Viktorina")}<tg-button type="web_app" url="${APP_URL}">WordDrop</tg-button></tg-button-row>`;
+  const r=await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
+  if(!r.ok) return send(chatId,wodText(w),{reply_markup:KB_MAIN});
+}
+async function streamTutor(m:any, system:string, question:string) {
+  const chat_id=m.chat.id, thread=m.message_thread_id?{message_thread_id:m.message_thread_id}:{};
+  let previewEnabled=true;
+  const paragraph=(s:string)=>s.split(/\n+/).filter(Boolean).map(line=>"<p>"+esc(line)+"</p>").join("");
+  for(const model of ["openai/gpt-oss-120b","openai/gpt-oss-20b"]){
+    let answer:string;
+    try{
+      const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",signal:AbortSignal.timeout(35000),
+        headers:{"Content-Type":"application/json",Authorization:"Bearer "+GROQ},
+        body:JSON.stringify({model,stream:true,include_reasoning:false,reasoning_effort:"low",max_completion_tokens:700,
+          messages:[{role:"system",content:system+" Oddiy matnda javob ber."},{role:"user",content:question}]})});
+      if(!res.ok||!res.body){await res.body?.cancel();continue;}
+      answer=await readCompletion(res.body,async partial=>{
+        if(previewEnabled) previewEnabled=await tg("sendRichMessageDraft",{chat_id,...thread,draft_id:m.message_id,rich_message:{html:paragraph(partial)}}).then(r=>r.ok).catch(()=>false);
+      });
+    }catch{continue;}
+    const r=await tg("sendRichMessage",{chat_id,...thread,rich_message:{html:paragraph(answer)}} );
+    return r.ok || (await tg("sendMessage",{chat_id,...thread,text:answer})).ok;
+  }
+  return false;
+}
+
 async function onUpdate(u: any) {
   if (u.my_chat_member) return onMyChatMember(u.my_chat_member);
   if (u.callback_query) return onCallback(u.callback_query);
@@ -256,7 +305,8 @@ async function onUpdate(u: any) {
     return send(chat.chat_id, `Salom${m.from?.first_name ? ", " + esc(m.from.first_name) : ""}! 💧 Men <b>Drop</b> — WordDrop yordamchisiman.\n\n• Har kuni ertalab yangi so'z yuboraman\n• Viktorina bilan bilimingizni sinaymiz\n• Inglizcha savolingizga javob beraman — shunchaki yozing\n\nIlovadagi progress bilan bog'lash uchun WordDrop'da Profil → Telegram tugmasini bosing.`, { reply_markup: KB_MAIN });
   }
   if (text === "/menu" || text === "/help") return send(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN });
-  if (text === "/word") return send(chat.chat_id, wodText(await wordOfDay() ?? {}), { reply_markup: { inline_keyboard: [[{ text: "🎯 Viktorina", callback_data: "q" }, { text: "📱 Ilovada o'rganish", url: APP_URL }]] } });
+  if (text === "/word") return richWord(chat.chat_id);
+  if (text === "/speaking") return sendPractice(chat.chat_id,0);
   if (text === "/quiz") return sendQuiz(chat.chat_id);
   if (text === "/review") return onCallback({ data: "r", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
   if (text === "/top") return onCallback({ data: "t", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
@@ -270,17 +320,12 @@ async function onUpdate(u: any) {
   if (!q.ok) return limitMsg(chat);
   await tg("sendChatAction", { chat_id: chat.chat_id, action: "typing" });
   const s = chat.user_id ? await userSummary(chat.user_id) : null;
-  const a = await groq(
+  const delivered = await streamTutor(m,
     `Sen "Drop" — WordDrop ingliz tili ilovasining Telegram'dagi o'qituvchisisan. Qisqa (3-6 jumla), aniq, misol bilan javob ber; oxirida bitta amaliy topshiriq yoki savol. Faqat ingliz tili, o'qish va motivatsiya mavzusida. Uy vazifasini tayyor qilib berma. ${UZ}
 ${s ? `O'quvchi: ${s.name || "—"}, XP ${s.xp}, seriya ${s.streak} kun, zaif so'zlari: ${s.weak.join("; ") || "yo'q"}.` : ""}
-Telegram HTML ishlatsang bo'ladi: <b>, <i> faqat. Markdown ishlatma.
-JSON qaytar: {"reply":"..."}`, clip(text, 1200), 700, 0.6);
-  const reply = clip(a?.reply, 3500);
-  if (!reply) return send(chat.chat_id, "Hozir javob bera olmadim. Birozdan keyin qayta yozing.");
-  await askBump(chat);
-  const safe = reply.replace(/<(?!\/?(b|i)>)[^>]*>/g, "");
-  const r = await send(chat.chat_id, safe);
-  if (!r.ok) await tg("sendMessage", { chat_id: chat.chat_id, text: safe.replace(/<[^>]+>/g, "") });
+`,clip(text,1200));
+  if(delivered) await askBump(chat);
+  else await send(chat.chat_id,"Hozir javob bera olmadim. Birozdan keyin qayta yozing.");
 }
 
 async function onCallback(cq: any) {
@@ -296,7 +341,8 @@ async function onCallback(cq: any) {
   if (data === "P") return proOffer(chat);
   if (data === "Pt") return send(chatId, TERMS_TEXT);
   if (data === "Pc") { const r = chat.user_id ? await cancelSub(chat.user_id) : { ok: false, error: "Hisob ulanmagan" }; return send(chatId, r.ok ? `Obuna bekor qilindi. Pro ${fmtDay(Date.parse((r as any).until))} gacha ishlashda davom etadi.` : "Bekor qilinmadi: " + esc((r as any).error)); }
-  if (data === "w") return send(chatId, wodText(await wordOfDay() ?? {}), { reply_markup: { inline_keyboard: [[{ text: "🎯 Viktorina", callback_data: "q" }]] } });
+  if (data === "w") return richWord(chatId);
+  if (data === "sp:0" || data === "sp:1") return sendPractice(chatId,Number(data.slice(3)));
   if (data === "q") return sendQuiz(chatId);
   if (data.startsWith("a:")) {
     const [, wid, pick, corr] = data.split(":"); const ok = pick === corr;
@@ -700,8 +746,10 @@ async function privateVoice(chat: any, m: any) {
   const t = await transcribe(v.file_id);
   if (!t?.text) return send(chat.chat_id, "Ovozni tushuna olmadim. Tinchroq joyda, aniqroq qilib qayta yuboring.");
   const s = chat.user_id ? await userSummary(chat.user_id) : null;
+  const active = await kv("speaking:"+chat.chat_id);
+  const task = active && Date.now()-active.at < 20*60_000 ? practice[active.idx] : null;
   const a = await groq(
-    `Sen "Drop" — WordDrop'ning Speaking murabbiyisan. O'quvchi ovozli xabar yubordi, quyida uning matni (Whisper, til: ${t.lang || "?"}). ${UZ}
+    `Sen "Drop" — WordDrop'ning Speaking murabbiyisan. O'quvchi ovozli xabar yubordi, ${task ? "Javobni shu savolga mosligi bo‘yicha ham izohla: "+task.question : ""} quyida uning matni (Whisper, til: ${t.lang || "?"}). ${UZ}
 Agar o'quvchi inglizcha gapirgan bo'lsa: grammatika va so'z tanlovini tekshir, yumshoq tuzat, tabiiyroq variant ber, va suhbatni inglizcha davom ettir (savol bilan tugat).
 Agar o'zbekcha (yoki boshqa tilda) gapirgan bo'lsa: savoliga o'zbekcha qisqa javob ber, oxirida inglizcha gapirib ko'rishga undab, bitta oddiy inglizcha savol ber.
 ${s ? `O'quvchi: ${s.name || "—"}, XP ${s.xp}.` : ""}
@@ -717,7 +765,9 @@ JSON: {"lang":"en|uz|other","heard":"matn (tinish belgilari bilan)","fixed":"to'
   const notes = (Array.isArray(a.notes) ? a.notes : []).slice(0, 3).map((x: unknown) => clip(x, 200)).filter(Boolean);
   if (en && notes.length) parts.push(notes.map((x: string) => "💡 " + esc(x)).join("\n"));
   if (a.reply) parts.push(`💬 ${esc(clip(a.reply, 1200))}`);
-  return send(chat.chat_id, parts.join("\n\n"));
+  const html = "<h2>Speaking tahlili</h2>"+parts.map(x=>"<p>"+x+"</p>").join("")+'<tg-button-row>'+cb("sp:"+ (active?.idx===1?1:0),"Qayta mashq")+cb("sp:"+ (active?.idx===1?0:1),"Keyingi topshiriq")+'</tg-button-row>';
+  const card=await tg("sendRichMessage",{chat_id:chat.chat_id,rich_message:{html}});
+  if(!card.ok) return send(chat.chat_id,parts.join("\n\n"));
 }
 
 /* ═════════════════ BOTDAGI ADMIN PANELI (/admin) ═════════════════ */
