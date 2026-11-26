@@ -1,3 +1,4 @@
+import { navigation } from "../_shared/navigation.ts";
 import { opusClip, locate, pronounce, whisperReview, type Word as TimedWord, type Finding } from "./audio-review.ts";
 import { cards, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
@@ -69,6 +70,8 @@ const send = (chat_id: number | string, text: string, extra: Record<string, unkn
 /* ───────── KV ───────── */
 async function kv(key: string): Promise<any> { const { data } = await db.from("wd_tg_kv").select("val").eq("key", key).maybeSingle(); return data?.val ?? null; }
 async function kvSet(key: string, val: unknown) { await db.from("wd_tg_kv").upsert({ key, val, updated_at: new Date().toISOString() }); }
+const nav = navigation(tg,kv,kvSet);
+const show = nav.show;
 
 /* ───────── Groq (JSON) ───────── */
 async function groq(system: string, user: string, maxTokens = 600, temp = 0.6): Promise<any | null> {
@@ -215,12 +218,12 @@ async function upsertChat(from: any, chatId: number) {
 /* ───────── Viktorina ───────── */
 async function sendQuiz(chatId: number, editMsg?: number) {
   const w = await randomWord(Math.floor(Math.random() * 1e9));
-  if (!w) return send(chatId, "Hozircha savol tayyor emas.");
+  if (!w) return show(chatId, "Hozircha savol tayyor emas.");
   const opts = [...(await distractors(w)), w.uz].sort(() => Math.random() - .5);
   const correct = opts.indexOf(w.uz);
   const kb = { inline_keyboard: opts.map((o, i) => [{ text: o, callback_data: `a:${w.id}:${i}:${correct}` }]) };
   const text = `🎯 <b>Tarjimasini toping</b>\n\n<b>${esc(w.en)}</b>${w.ipa ? ` <i>${esc(w.ipa)}</i>` : ""}`;
-  return editMsg ? tg("editMessageText", { chat_id: chatId, message_id: editMsg, text, parse_mode: "HTML", reply_markup: kb }) : send(chatId, text, { reply_markup: kb });
+  return editMsg ? tg("editMessageText", { chat_id: chatId, message_id: editMsg, text, parse_mode: "HTML", reply_markup: kb }) : show(chatId, text, { reply_markup: kb });
 }
 
 /* ───────── Webhook: xabarlar ───────── */
@@ -229,8 +232,8 @@ const partMenu={inline_keyboard:[["1.1","1.2","2","3"].map(part=>({text:"Part "+
 const sessionKey = (chatId:number) => "speaking-session:"+chatId;
 async function speakingScreen(chatId:number, message:number|undefined, html:string, plain:string, buttons:any[][]) {
   const controls = buttons.map(row=>"<tg-button-row>"+row.map(b=>cb(b.callback_data,esc(b.text))).join("")+"</tg-button-row>").join("");
-  const payload={chat_id:chatId, rich_message:{html:html+controls}};
-  const r = message ? await tg("editMessageText",{...payload,message_id:message}) : await tg("sendRichMessage",payload);
+  const home="<tg-button-row>"+cb("m","Bosh menyu")+"</tg-button-row>";
+  const r = await show(chatId,plain,{},message,html+controls+home);
   if (r.ok || String(r.description).includes("not modified")) return r.result?.message_id || message;
   const fallback = await panel(chatId,message||null,plain,buttons);
   return fallback.result?.message_id || (fallback.ok ? message : undefined);
@@ -376,8 +379,8 @@ async function richWord(chatId:number) {
   const w = await wordOfDay();
   if (!w) return send(chatId,"Hozircha so‘z tayyor emas.");
   const html = `<h2>${esc(w.en)}</h2><table compact><tr><td>Tarjima</td><td>${esc(w.uz)}</td></tr>${w.ipa?`<tr><td>Talaffuz</td><td>${esc(w.ipa)}</td></tr>`:""}</table>${w.ex?`<blockquote>${esc(w.ex)}</blockquote>`:""}${w.mn_uz?`<details><summary>Eslab qolish</summary><p>${esc(w.mn_uz)}</p></details>`:""}${w.ex2?`<p>${esc(w.ex2)} — ${esc(w.ex2_uz)}</p>`:""}${w.tip_uz?`<p>${esc(w.tip_uz)}</p>`:""}<tg-button-row>${cb("q","Viktorina")}<tg-button type="web_app" url="${APP_URL}">WordDrop</tg-button></tg-button-row>`;
-  const r=await tg("sendRichMessage",{chat_id:chatId,rich_message:{html}});
-  if(!r.ok) return send(chatId,wodText(w),{reply_markup:KB_MAIN});
+  const r=await show(chatId,"",{},undefined,html.replace("</tg-button-row>",cb("m","Bosh menyu")+"</tg-button-row>"));
+  if(!r.ok) return show(chatId,wodText(w),{reply_markup:KB_MAIN});
 }
 async function streamTutor(m:any, system:string, question:string) {
   const chat_id=m.chat.id, thread=m.message_thread_id?{message_thread_id:m.message_thread_id}:{};
@@ -418,7 +421,7 @@ async function onUpdate(u: any) {
   if (text && !text.startsWith("/") && await supportAwait(chat, m)) return;
   if (text === "/pro" || text === "/start pro") return proOffer(chat);
   if (text === "/paysupport") return paySupport(chat);
-  if (text === "/terms") return send(chat.chat_id, TERMS_TEXT, { reply_markup: { inline_keyboard: [[{ text: "To'liq shartlar", url: "https://worddrop-app.uz/terms.html#pro" }]] } });
+  if (text === "/terms") return show(chat.chat_id, TERMS_TEXT, { reply_markup: { inline_keyboard: [[{ text: "To'liq shartlar", url: "https://worddrop-app.uz/terms.html#pro" }]] } });
   const { data: person } = await db.from("wd_tg_people").select("ignore").eq("user_id", m.from.id).maybeSingle();
   if (person?.ignore) return;   // admin "javob bermasin" degan odam
   if (!text && (m.voice || m.audio || m.video_note)) { bg(privateVoice(chat, m)); return; }
@@ -439,14 +442,14 @@ async function onUpdate(u: any) {
     }
     return send(chat.chat_id, `Salom${m.from?.first_name ? ", " + esc(m.from.first_name) : ""}! 💧 Men <b>Drop</b> — WordDrop yordamchisiman.\n\n• Har kuni ertalab yangi so'z yuboraman\n• Viktorina bilan bilimingizni sinaymiz\n• Inglizcha savolingizga javob beraman — shunchaki yozing\n\nIlovadagi progress bilan bog'lash uchun WordDrop'da Profil → Telegram tugmasini bosing.`, { reply_markup: KB_MAIN });
   }
-  if (text === "/menu" || text === "/help") return send(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN });
+  if (text === "/menu" || text === "/help") return show(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN });
   if (text === "/word") return richWord(chat.chat_id);
   if (/^\/speaking(?:@WordDropUzBot)?$/i.test(text)) return speakingMenu(chat.chat_id);
   if (text === "/quiz") return sendQuiz(chat.chat_id);
   if (text === "/review") return onCallback({ data: "r", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
   if (text === "/top") return onCallback({ data: "t", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
-  if (text === "/settings") return send(chat.chat_id, "⚙️ <b>Sozlamalar</b>\nEslatmalar Toshkent vaqti bo'yicha keladi.", { reply_markup: kbSettings(chat) });
-  if (text === "/stop") { await db.from("wd_tg_chats").update({ morning: false, evening: false }).eq("chat_id", chat.chat_id); return send(chat.chat_id, "Eslatmalar o'chirildi. Qayta yoqish: /settings"); }
+  if (text === "/settings") return show(chat.chat_id, "⚙️ <b>Sozlamalar</b>\nEslatmalar Toshkent vaqti bo'yicha keladi.", { reply_markup: kbSettings(chat) });
+  if (text === "/stop") { await db.from("wd_tg_chats").update({ morning: false, evening: false }).eq("chat_id", chat.chat_id); return show(chat.chat_id, "Eslatmalar o'chirildi. Qayta yoqish: /settings"); }
   if (text.startsWith("/")) return send(chat.chat_id, "Bunday buyruq yo'q. Menyu: /menu");
 
   // Oddiy matn → Drop AI (admin sozlamasiga ko'ra)
@@ -472,10 +475,10 @@ async function onCallback(cq: any) {
   if (cq.id && data.startsWith("a:")) tg("answerCallbackQuery", { callback_query_id: cq.id });
   const { data: chat } = await db.from("wd_tg_chats").select("*").eq("chat_id", chatId).maybeSingle();
   if (!chat) return;
-  if (data === "m") return send(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN });
+  if (data === "m") return show(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN });
   if (data === "P") return proOffer(chat);
-  if (data === "Pt") return send(chatId, TERMS_TEXT);
-  if (data === "Pc") { const r = chat.user_id ? await cancelSub(chat.user_id) : { ok: false, error: "Hisob ulanmagan" }; return send(chatId, r.ok ? `Obuna bekor qilindi. Pro ${fmtDay(Date.parse((r as any).until))} gacha ishlashda davom etadi.` : "Bekor qilinmadi: " + esc((r as any).error)); }
+  if (data === "Pt") return show(chatId, TERMS_TEXT);
+  if (data === "Pc") { const r = chat.user_id ? await cancelSub(chat.user_id) : { ok: false, error: "Hisob ulanmagan" }; return show(chatId, r.ok ? `Obuna bekor qilindi. Pro ${fmtDay(Date.parse((r as any).until))} gacha ishlashda davom etadi.` : "Bekor qilinmadi: " + esc((r as any).error)); }
   if (data === "w") return richWord(chatId);
   const review=/^(rx|rp|rr):(\d+)(?::(\d+))?$/.exec(data);
   if(review && cq.from?.id===chatId){
@@ -503,21 +506,20 @@ async function onCallback(cq: any) {
     const streak = ok ? chat.quiz_streak + 1 : 0;
     await db.from("wd_tg_chats").update({ quiz_total: chat.quiz_total + 1, quiz_ok: chat.quiz_ok + (ok ? 1 : 0), quiz_streak: streak }).eq("chat_id", chatId);
     const head = ok ? `✅ <b>To'g'ri!</b>${streak >= 3 ? `  🔥 ${streak} ketma-ket` : ""}` : `❌ <b>Afsus.</b>`;
-    return tg("editMessageText", { chat_id: chatId, message_id: cq.message.message_id, parse_mode: "HTML",
-      text: `${head}\n\n<b>${esc(w?.en)}</b>${w?.ipa ? ` <i>${esc(w.ipa)}</i>` : ""} — ${esc(w?.uz)}${w?.ex ? `\n▸ ${esc(w.ex)}` : ""}\n\nNatija: ${chat.quiz_ok + (ok ? 1 : 0)}/${chat.quiz_total + 1}`,
-      reply_markup: { inline_keyboard: [[{ text: "Keyingi savol ➜", callback_data: "q" }]] } });
+    return show(chatId, `${head}\n\n<b>${esc(w?.en)}</b>${w?.ipa ? ` <i>${esc(w.ipa)}</i>` : ""} — ${esc(w?.uz)}${w?.ex ? `\n▸ ${esc(w.ex)}` : ""}\n\nNatija: ${chat.quiz_ok + (ok ? 1 : 0)}/${chat.quiz_total + 1}`,
+      {reply_markup: { inline_keyboard: [[{ text: "Keyingi savol ➜", callback_data: "q" }]] } },cq.message.message_id);
   }
   if (data === "r") {
-    if (!chat.user_id) return send(chatId, "Takrorni ko'rish uchun WordDrop hisobingizni ulang: ilovada Profil → Telegram.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop", url: APP_URL }]] } });
+    if (!chat.user_id) return show(chatId, "Takrorni ko'rish uchun WordDrop hisobingizni ulang: ilovada Profil → Telegram.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop", url: APP_URL }]] } });
     const s = await userSummary(chat.user_id);
-    return send(chatId, `🧠 <b>Takrorlash</b>\n\nBugun kutayotgan so'zlar: <b>${s.due}</b>\nLug'atingizda: ${s.words} ta so'z\n🔥 Seriya: ${s.streak} kun${s.weak.length ? `\n\n<b>Tez unutilayotganlar:</b>\n${s.weak.map((x) => "• " + esc(x)).join("\n")}` : ""}`, { reply_markup: { inline_keyboard: [[{ text: "Takrorlashni boshlash", url: APP_URL }]] } });
+    return show(chatId, `🧠 <b>Takrorlash</b>\n\nBugun kutayotgan so'zlar: <b>${s.due}</b>\nLug'atingizda: ${s.words} ta so'z\n🔥 Seriya: ${s.streak} kun${s.weak.length ? `\n\n<b>Tez unutilayotganlar:</b>\n${s.weak.map((x) => "• " + esc(x)).join("\n")}` : ""}`, { reply_markup: { inline_keyboard: [[{ text: "Takrorlashni boshlash", url: APP_URL }]] } });
   }
   if (data === "t") {
     const { data: top } = await db.rpc("wd_tg_top", { n: 10 });
     const medals = ["🥇", "🥈", "🥉"];
-    return send(chatId, `🏆 <b>WordDrop reytingi</b>\n\n${(top ?? []).map((r: any, i: number) => `${medals[i] ?? (i + 1) + "."} ${esc(r.name)} — <b>${r.xp}</b> XP`).join("\n") || "Hali ma'lumot yo'q."}`, { reply_markup: { inline_keyboard: [[{ text: "📱 Reytingga kirish", url: APP_URL }]] } });
+    return show(chatId, `🏆 <b>WordDrop reytingi</b>\n\n${(top ?? []).map((r: any, i: number) => `${medals[i] ?? (i + 1) + "."} ${esc(r.name)} — <b>${r.xp}</b> XP`).join("\n") || "Hali ma'lumot yo'q."}`, { reply_markup: { inline_keyboard: [[{ text: "📱 Reytingga kirish", url: APP_URL }]] } });
   }
-  if (data === "s") return send(chatId, "⚙️ <b>Sozlamalar</b>\nEslatmalar Toshkent vaqti bo'yicha keladi.", { reply_markup: kbSettings(chat) });
+  if (data === "s") return show(chatId, "⚙️ <b>Sozlamalar</b>\nEslatmalar Toshkent vaqti bo'yicha keladi.", { reply_markup: kbSettings(chat) });
   if (data.startsWith("s:")) {
     const p: any = {};
     if (data === "s:m") p.morning = !chat.morning;
@@ -845,17 +847,18 @@ async function promoTick(log: Record<string, unknown>) {
 }
 
 /* ───────── Guruh viktorinasi ───────── */
-async function sendGroupQuiz(chatId: number) {
+async function sendGroupQuiz(chatId: number, message?:number) {
   const w = await randomWord(Math.floor(Math.random() * 1e9));
   if (!w) return;
   const opts = [...(await distractors(w)), w.uz].sort(() => Math.random() - .5);
   const correct = opts.indexOf(w.uz);
-  return send(chatId, `🎯 <b>Kim birinchi topadi?</b>\n\n<b>${esc(w.en)}</b>${w.ipa ? ` <i>${esc(w.ipa)}</i>` : ""}`,
-    { reply_markup: { inline_keyboard: opts.map((o, i) => [{ text: o, callback_data: `a:${w.id}:${i}:${correct}` }]) } });
+  const text= `🎯 <b>Kim birinchi topadi?</b>\n\n<b>${esc(w.en)}</b>${w.ipa ? ` <i>${esc(w.ipa)}</i>` : ""}`,
+    extra={ reply_markup: { inline_keyboard: opts.map((o, i) => [{ text: o, callback_data: `a:${w.id}:${i}:${correct}` }]) } };
+  return message?tg("editMessageText",{chat_id:chatId,message_id:message,text,parse_mode:"HTML",...extra}):send(chatId,text,extra);
 }
 async function groupCb(cq: any) {
   const data = String(cq.data || ""); const chatId = cq.message.chat.id;
-  if (data === "q") { tg("answerCallbackQuery", { callback_query_id: cq.id }); return sendGroupQuiz(chatId); }
+  if (data === "q") { tg("answerCallbackQuery", { callback_query_id: cq.id }); return sendGroupQuiz(chatId,cq.message.message_id); }
   if (!data.startsWith("a:")) return tg("answerCallbackQuery", { callback_query_id: cq.id });
   const [, wid, pick, corr] = data.split(":");
   if (pick !== corr) return tg("answerCallbackQuery", { callback_query_id: cq.id, text: "❌ Yo'q, yana urinib ko'ring!" });
@@ -921,9 +924,7 @@ async function privateVoice(chat: any, m: any) {
 
 /* ═════════════════ BOTDAGI ADMIN PANELI (/admin) ═════════════════ */
 async function panel(chatId: number, msgId: number | null, text: string, rows: any[][]) {
-  const extra = { parse_mode: "HTML", disable_web_page_preview: true, reply_markup: { inline_keyboard: rows } };
-  if (msgId) { const r = await tg("editMessageText", { chat_id: chatId, message_id: msgId, text, ...extra }); if (r.ok || String(r.description || "").includes("not modified")) return r; }
-  return tg("sendMessage", { chat_id: chatId, text, ...extra });
+  return show(chatId,text,{reply_markup:{inline_keyboard:rows}},msgId||undefined);
 }
 const dot = (on: boolean) => (on ? "• " : "");
 async function adminPanel(chatId: number, fromId: number, msgId: number | null = null) {
@@ -989,7 +990,7 @@ async function adminCb(cq: any) {
   const setG = (patch: any) => db.from("wd_tg_groups").update({ ...patch, updated_at: nowIso() }).eq("chat_id", gid);
   const ask = async (kind: string, prompt: string) => {
     await kvSet("await:" + chatId, { kind, gid, uid, at: Date.now() });
-    return send(chatId, prompt + "\n\n<i>Matnni shu yerga yozing. O'chirish uchun «-» yuboring. Bekor qilish: /admin</i>");
+    return show(chatId, prompt + "\n\n<i>Matnni shu yerga yozing. O'chirish uchun «-» yuboring. Bekor qilish: /admin</i>");
   };
   switch (k) {
     case "A": return adminPanel(chatId, cq.from.id, msgId);
@@ -1050,8 +1051,8 @@ async function adminAwait(chatId: number, fromId: number, text: string): Promise
   await db.from("wd_tg_kv").delete().eq("key", "await:" + chatId);
   if (!(await tgIsAdmin(fromId))) return false;
   const val = text.trim() === "-" ? null : clip(text, 1500);
-  if (w.kind === "rules" || w.kind === "jokes") { await db.from("wd_tg_groups").update({ [w.kind]: val, updated_at: nowIso() }).eq("chat_id", w.gid); await send(chatId, val ? "✅ Saqlandi." : "🗑 O'chirildi."); await groupPanel(chatId, null, w.gid); return true; }
-  if (w.kind === "secret" || w.kind === "public") { await db.from("wd_tg_people").update({ [w.kind === "secret" ? "secret_notes" : "public_notes"]: val, updated_at: nowIso() }).eq("user_id", w.uid); await send(chatId, val ? "✅ Saqlandi." : "🗑 O'chirildi."); await personPanel(chatId, null, w.gid, w.uid); return true; }
+  if (w.kind === "rules" || w.kind === "jokes") { await db.from("wd_tg_groups").update({ [w.kind]: val, updated_at: nowIso() }).eq("chat_id", w.gid); await groupPanel(chatId, null, w.gid); return true; }
+  if (w.kind === "secret" || w.kind === "public") { await db.from("wd_tg_people").update({ [w.kind === "secret" ? "secret_notes" : "public_notes"]: val, updated_at: nowIso() }).eq("user_id", w.uid); await personPanel(chatId, null, w.gid, w.uid); return true; }
   return false;
 }
 
@@ -1203,14 +1204,14 @@ async function limitMsg(chat: any) {
   return send(chat.chat_id, "Bugungi 20 ta so'rov tugadi. Ertaga davom etamiz 🌙\n\n⭐ <b>Pro</b> bilan kuniga 100 ta — oyiga 149 Stars.", { reply_markup: { inline_keyboard: [[{ text: "⭐ Pro haqida", callback_data: "P" }]] } });
 }
 async function proOffer(chat: any) {
-  if (!chat?.user_id) return send(chat.chat_id, "⭐ <b>WordDrop Pro</b> hisobingizga yoziladi. Avval WordDrop'ni shu yerda oching — hisobingiz Telegram orqali o'zi ulanadi, keyin /pro ni qayta bosing.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  if (!chat?.user_id) return show(chat.chat_id, "⭐ <b>WordDrop Pro</b> hisobingizga yoziladi. Avval WordDrop'ni shu yerda oching — hisobingiz Telegram orqali o'zi ulanadi, keyin /pro ni qayta bosing.", { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
   const row = await proRow(chat.user_id); const active = row && Date.parse(row.until) > Date.now();
   const head = active ? `⭐ <b>Siz Pro'dasiz</b> — ${fmtDay(Date.parse(row.until))} gacha${row.sub_active ? " (oylik obuna yoqilgan)" : ""}.\nMuddatni uzaytirish mumkin:` : "⭐ <b>WordDrop Pro</b>";
   const links = await Promise.all(Object.keys(PLANS).map((k) => proInvoiceLink(k, chat.user_id)));
   const rows: any[][] = Object.keys(PLANS).map((k, i) => links[i] ? [{ text: `${PLANS[k].label} — ${PLANS[k].stars} ⭐${k === "y1" ? "  (−28%)" : k === "m3" ? "  (−11%)" : ""}`, url: links[i] }] : []).filter((r) => r.length);
   if (active && row.sub_active) rows.push([{ text: "Obunani bekor qilish", callback_data: "Pc" }]);
   rows.push([{ text: "📄 Shartlar", callback_data: "Pt" }]);
-  return send(chat.chat_id, `${head}\n\n${PRO_PERKS.map((x) => "✓ " + x).join("\n")}\n\nAsosiy darslar, so'zlar va takrorlash har doim bepul. To'lov — Telegram Stars orqali, xavfsiz.`, { reply_markup: { inline_keyboard: rows } });
+  return show(chat.chat_id, `${head}\n\n${PRO_PERKS.map((x) => "✓ " + x).join("\n")}\n\nAsosiy darslar, so'zlar va takrorlash har doim bepul. To'lov — Telegram Stars orqali, xavfsiz.`, { reply_markup: { inline_keyboard: rows } });
 }
 async function onPreCheckout(q: any) {
   const [k, plan, uid] = String(q.invoice_payload || "").split(":");
@@ -1265,7 +1266,7 @@ async function cancelSub(uid: string) {
 /* /paysupport — keyingi xabar adminlarga yetkaziladi */
 async function paySupport(chat: any) {
   await kvSet("sup:" + chat.chat_id, { at: Date.now() });
-  return send(chat.chat_id, "💬 <b>To'lov bo'yicha yordam</b>\n\nMuammoni bitta xabarda yozing (qaysi tarif, qachon to'lagansiz, nima bo'ldi). Xabaringiz WordDrop adminiga yetkaziladi va shu yerga javob keladi.\n\n<i>Eslatma: bot orqali xaridlar bo'yicha Telegram yordam xizmati yordam bera olmaydi.</i>");
+  return show(chat.chat_id, "💬 <b>To'lov bo'yicha yordam</b>\n\nMuammoni bitta xabarda yozing (qaysi tarif, qachon to'lagansiz, nima bo'ldi). Xabaringiz WordDrop adminiga yetkaziladi va shu yerga javob keladi.\n\n<i>Eslatma: bot orqali xaridlar bo'yicha Telegram yordam xizmati yordam bera olmaydi.</i>");
 }
 async function supportAwait(chat: any, m: any): Promise<boolean> {
   const w = await kv("sup:" + chat.chat_id); if (!w || Date.now() - (w.at || 0) > 30 * 60_000) return false;
@@ -1275,7 +1276,7 @@ async function supportAwait(chat: any, m: any): Promise<boolean> {
   for (const a of await adminChatIds()) {
     await send(a, `🆘 <b>/paysupport</b> — ${esc(fromName(m.from))}${m.from.username ? " @" + esc(m.from.username) : ""} (id ${m.from.id})\n${info ? "To'lovlar: " + esc(info) + "\n" : ""}\n${esc(clip(m.text, 1500))}\n\n<i>Javob: shu xabarga «reply» qilib yozing.</i>`, { reply_markup: { inline_keyboard: [[{ text: "Ilovada ko'rish", web_app: { url: APP_URL + "#bot" } }]] } });
   }
-  await send(chat.chat_id, "✅ Yuborildi. Admin tez orada shu yerga javob yozadi.");
+  await show(chat.chat_id, "✅ Yuborildi. Admin tez orada shu yerga javob yozadi.");
   return true;
 }
 /* Admin /paysupport xabariga reply qilsa — javob foydalanuvchiga boradi */
@@ -1536,7 +1537,7 @@ Deno.serve(async (req) => {
       const u = await req.json().catch(() => null);
       const sender=u?.message?.from?.id ?? u?.callback_query?.from?.id ?? u?.pre_checkout_query?.from?.id ?? u?.my_chat_member?.from?.id;
       if(sender && await blockedTelegram(sender)) return new Response("ok");
-      if (u) { try { await onUpdate(u); } catch (e) { console.error("[update]", e); } }
+      if (u) { try { await nav.run(u,()=>onUpdate(u)); } catch (e) { console.error("[update]", e); } }
       return new Response("ok");
     }
     const body = await req.json().catch(() => ({}));

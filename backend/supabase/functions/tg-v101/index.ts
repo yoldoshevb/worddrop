@@ -1,3 +1,4 @@
+import { navigation } from "../_shared/navigation.ts";
 // Supabase Edge Function: tg-v101  (WordDrop v101)
 // Telegram webhook endi shu funksiyaga keladi. Yangi imkoniyatlarni shu yerning o'zida bajaradi,
 // qolgan hamma yangilanishni (guruhlar, to'lovlar, admin, Drop AI…) o'zgartirmasdan tg-bot ga uzatadi.
@@ -42,6 +43,8 @@ async function tg(method: string, body: Record<string, unknown>): Promise<any> {
 const send = (chat_id: number, text: string, extra: Record<string, unknown> = {}) => tg("sendMessage", { chat_id, text, parse_mode: "HTML", disable_web_page_preview: true, ...extra });
 async function kv(key: string): Promise<any> { const { data } = await db.from("wd_tg_kv").select("val").eq("key", key).maybeSingle(); return data?.val ?? null; }
 async function kvSet(key: string, val: unknown) { await db.from("wd_tg_kv").upsert({ key, val, updated_at: nowIso() }); }
+const nav = navigation(tg,kv,kvSet);
+const show = nav.show;
 let SECRET: string | null = null;
 async function webhookSecret() { return SECRET ??= String(await kv("webhook_secret") ?? ""); }
 
@@ -70,10 +73,10 @@ const QUIZ_LV: Record<string, string[]> = { A1: ["A1", "A2"], A2: ["A1", "A2", "
 async function sendQuiz(chatId: number, cefr: string) {
   const levels = QUIZ_LV[cefr];
   const { count } = await db.from("word_translations").select("id", { count: "exact", head: true }).in("level", levels).eq("verified", true);
-  if (!count) return send(chatId, "Hozircha savol tayyor emas.");
+  if (!count) return show(chatId, "Hozircha savol tayyor emas.");
   const off = Math.floor(Math.random() * count);
   const { data: wa } = await db.from("word_translations").select("id,en,uz,ipa,level").in("level", levels).eq("verified", true).order("id").range(off, off);
-  const w = wa?.[0]; if (!w) return send(chatId, "Hozircha savol tayyor emas.");
+  const w = wa?.[0]; if (!w) return show(chatId, "Hozircha savol tayyor emas.");
   const { count: c2 } = await db.from("word_translations").select("id", { count: "exact", head: true }).eq("level", w.level).eq("verified", true);
   const o2 = Math.floor(Math.random() * Math.max(1, (c2 ?? 1) - 12));
   const { data: ds } = await db.from("word_translations").select("id,uz").eq("level", w.level).eq("verified", true).order("id").range(o2, o2 + 11);
@@ -82,7 +85,7 @@ async function sendQuiz(chatId: number, cefr: string) {
   opts.push(w.uz); opts.sort(() => Math.random() - .5);
   const correct = opts.indexOf(w.uz);
   // javob tugmalari "a:" formatida — tekshirishni tg-bot bajaradi
-  return send(chatId, `🎯 <b>Tarjimasini toping</b>  <i>(${esc(w.level)})</i>\n\n<b>${esc(w.en)}</b>${w.ipa ? ` <i>${esc(w.ipa)}</i>` : ""}`,
+  return show(chatId, `🎯 <b>Tarjimasini toping</b>  <i>(${esc(w.level)})</i>\n\n<b>${esc(w.en)}</b>${w.ipa ? ` <i>${esc(w.ipa)}</i>` : ""}`,
     { reply_markup: { inline_keyboard: opts.map((o, i) => [{ text: o, callback_data: `a:${w.id}:${i}:${correct}` }]) } });
 }
 
@@ -103,7 +106,7 @@ export function ptEstimate(hist: { l: string; ok: boolean }[]) {
   return PT_LV[best];
 }
 function ptIntro(chat: any) {
-  return send(chat.chat_id, `📊 <b>Daraja testi</b>\n\n${PT_N} ta savol, taxminan 5 daqiqa. Har javobingizdan keyin keyingi savol qiyinroq yoki osonroq bo'ladi. Bilmasangiz, taxmin qilmang — «Bilmayman» ni bosing.\n\nNatijaga ko'ra viktorinalar va ilovadagi darslar sizning darajangizdan boshlanadi.${chat.cefr ? `\n\nHozirgi darajangiz: <b>${esc(chat.cefr)}</b>` : ""}`,
+  return show(chat.chat_id, `📊 <b>Daraja testi</b>\n\n${PT_N} ta savol, taxminan 5 daqiqa. Har javobingizdan keyin keyingi savol qiyinroq yoki osonroq bo'ladi. Bilmasangiz, taxmin qilmang — «Bilmayman» ni bosing.\n\nNatijaga ko'ra viktorinalar va ilovadagi darslar sizning darajangizdan boshlanadi.${chat.cefr ? `\n\nHozirgi darajangiz: <b>${esc(chat.cefr)}</b>` : ""}`,
     { reply_markup: { inline_keyboard: [[{ text: "▶️ Testni boshlash", callback_data: "Lg" }], [{ text: "Keyinroq", callback_data: "m" }]] } });
 }
 async function ptAsk(chat: any, st: any, msgId?: number) {
@@ -119,7 +122,7 @@ async function ptAsk(chat: any, st: any, msgId?: number) {
   const n = st.hist.length + 1, f = Math.round(n / PT_N * 10);
   const text = `<b>${n}/${PT_N}</b>  ${"▰".repeat(f)}${"▱".repeat(10 - f)}\n<i>${PT_KIND[item.kind] ?? ""}</i>\n\n${esc(item.q).replace(/___/g, "______")}`;
   const kb = { inline_keyboard: [...(item.opts as string[]).map((o, i) => [{ text: o, callback_data: `L:${item.id}:${i}` }]), [{ text: "🤷 Bilmayman", callback_data: `L:${item.id}:-1` }]] };
-  return msgId ? tg("editMessageText", { chat_id: chat.chat_id, message_id: msgId, text, parse_mode: "HTML", reply_markup: kb }) : send(chat.chat_id, text, { reply_markup: kb });
+  return show(chat.chat_id,text,{reply_markup:kb},msgId);
 }
 function ptStart(chat: any, msgId?: number) {
   const i = Math.max(1, Math.min(2, PT_LV.indexOf(chat.cefr || "A2")));
@@ -146,7 +149,7 @@ async function ptFinish(chat: any, st: any, msgId?: number) {
   const sk = ["grammar", "vocab", "reading"].map((s) => { const h = st.hist.filter((x: any) => x.k === s); return h.length ? `${PT_KIND[s]} ${Math.round(h.filter((x: any) => x.ok).length / h.length * 100)}%` : ""; }).filter(Boolean).join("  ·  ");
   const text = `🎯 <b>Sizning darajangiz: ${level}</b>\n${PT_INFO[level]}\n\n${ladder}\n\n${sk}  (${okN}/${st.hist.length})\n\n${chat.user_id ? "✅ Ilovadagi darslar endi shu darajadan boshlanadi va siz o'sgan sari qiyinlashadi." : "WordDrop'ni shu yerdan oching — hisobingiz ulanadi va darslar ham shu darajadan boshlanadi."}`;
   const kb = { inline_keyboard: [[{ text: "📱 Darsni boshlash", web_app: { url: APP_URL } }], [{ text: "🎯 Viktorina", callback_data: "q" }, { text: "🔁 Qayta topshirish", callback_data: "Lg" }]] };
-  return msgId ? tg("editMessageText", { chat_id: chat.chat_id, message_id: msgId, text, parse_mode: "HTML", reply_markup: kb }) : send(chat.chat_id, text, { reply_markup: kb });
+  return show(chat.chat_id,text,{reply_markup:kb},msgId);
 }
 
 /* ───────── Do'st taklif qilish ───────── */
@@ -160,13 +163,13 @@ async function addProDays(uid: string, days: number, tgUser?: number | null) {
   else await db.from("wd_pro").insert({ user_id: uid, until, plan: "referral", tg_user: tgUser ?? null, updated_at: nowIso() });
 }
 async function inviteMsg(chat: any) {
-  if (!chat.user_id) return send(chat.chat_id, `🎁 <b>${REF_STEP} ta do'stingizni</b> taklif qiling — <b>${REF_DAYS} kun Pro</b> olasiz.\n\nAvval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi. Keyin «Do'st taklif qilish» ni qayta bosing.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  if (!chat.user_id) return show(chat.chat_id, `🎁 <b>${REF_STEP} ta do'stingizni</b> taklif qiling — <b>${REF_DAYS} kun Pro</b> olasiz.\n\nAvval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi. Keyin «Do'st taklif qilish» ni qayta bosing.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
   const { count } = await db.from("wd_referrals").select("id", { count: "exact", head: true }).eq("referrer", chat.user_id);
   const link = refLink(chat.user_id);
   const share = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(`WordDrop'da ingliz tilini birga o'rganamiz! Shu havola orqali qo'shil 💧`)}`;
   const n = count ?? 0, step = n % REF_STEP, got = Math.min(REF_MAX_REWARDS, Math.floor(n / REF_STEP));
   const bar = "●".repeat(step) + "○".repeat(REF_STEP - step);
-  return send(chat.chat_id, `🎁 <b>Do'st taklif qilish</b>\n\nHar <b>${REF_STEP} ta do'stingiz</b> havola orqali botga kirib, WordDrop'ni ochsa — sizga <b>${REF_DAYS} kun Pro</b> qo'shiladi.\n\nSizning havolangiz:\n<code>${link}</code>\n\nKeyingi mukofotgacha: ${bar} <b>${step}/${REF_STEP}</b>\nJami do'stlar: <b>${n}</b> · olingan mukofot: <b>${got}</b> (ko'pi bilan ${REF_MAX_REWARDS})`, { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga yuborish", url: share }]] } });
+  return show(chat.chat_id, `🎁 <b>Do'st taklif qilish</b>\n\nHar <b>${REF_STEP} ta do'stingiz</b> havola orqali botga kirib, WordDrop'ni ochsa — sizga <b>${REF_DAYS} kun Pro</b> qo'shiladi.\n\nSizning havolangiz:\n<code>${link}</code>\n\nKeyingi mukofotgacha: ${bar} <b>${step}/${REF_STEP}</b>\nJami do'stlar: <b>${n}</b> · olingan mukofot: <b>${got}</b> (ko'pi bilan ${REF_MAX_REWARDS})`, { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga yuborish", url: share }]] } });
 }
 async function onRefStart(chat: any, code: string, from: any) {
   const by = hexToUuid(code.slice(2));
@@ -204,17 +207,17 @@ const MO = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust"
 const fmtDay = (s: string) => { const d = new Date(s); return `${d.getUTCDate()}-${MO[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
 const PROMO_RE = /^[A-Za-z0-9-]{4,32}$/;
 async function promoAsk(chat: any, code = "") {
-  if (!chat.user_id) return send(chat.chat_id, `🎟 Promokodni ishlatish uchun avval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi.${code ? `\n\nKeyin shu xabarni yuboring:\n<code>/promo ${esc(code)}</code>` : " Keyin promokodni yuboring."}`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  if (!chat.user_id) return show(chat.chat_id, `🎟 Promokodni ishlatish uchun avval WordDrop'ni shu yerdan oching — hisobingiz Telegram orqali o'zi ulanadi.${code ? `\n\nKeyin shu xabarni yuboring:\n<code>/promo ${esc(code)}</code>` : " Keyin promokodni yuboring."}`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
   await kvSet("promo:" + chat.chat_id, { at: Date.now() });
-  return send(chat.chat_id, "🎟 <b>Promokodni yuboring</b>\n\nMasalan: <code>WD-AB12-CD34</code>", { reply_markup: { inline_keyboard: [[{ text: "Bekor qilish", callback_data: "m" }]] } });
+  return show(chat.chat_id, "🎟 <b>Promokodni yuboring</b>\n\nMasalan: <code>WD-AB12-CD34</code>", { reply_markup: { inline_keyboard: [[{ text: "Bekor qilish", callback_data: "m" }]] } });
 }
 async function promoRedeem(chat: any, code: string, from: any) {
   await db.from("wd_tg_kv").delete().eq("key", "promo:" + chat.chat_id);
   if (!chat.user_id) return promoAsk(chat, code);
   const { data, error } = await db.rpc("wd_promo_redeem", { uid: chat.user_id, c: code, tg: from?.id ?? chat.chat_id, via: "bot" });
-  if (error || !data) return send(chat.chat_id, "Promokodni tekshirib bo'lmadi. Birozdan keyin qayta urinib ko'ring.");
-  if (!data.ok) return send(chat.chat_id, `❌ ${esc(data.msg)}`, { reply_markup: { inline_keyboard: [[{ text: "🎟 Boshqa kod", callback_data: "PR" }, { text: "⭐ Pro tariflari", callback_data: "P" }]] } });
-  return send(chat.chat_id, `🎉 <b>Promokod faollashdi!</b>\n\nSizga <b>${data.days} kun WordDrop Pro</b> qo'shildi — ${fmtDay(data.until)} gacha.\nDrop AI 100 ta savol, Multilevel imtihonlari va chuqur tahlil endi ochiq.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
+  if (error || !data) return show(chat.chat_id, "Promokodni tekshirib bo'lmadi. Birozdan keyin qayta urinib ko'ring.");
+  if (!data.ok) return show(chat.chat_id, `❌ ${esc(data.msg)}`, { reply_markup: { inline_keyboard: [[{ text: "🎟 Boshqa kod", callback_data: "PR" }, { text: "⭐ Pro tariflari", callback_data: "P" }]] } });
+  return show(chat.chat_id, `🎉 <b>Promokod faollashdi!</b>\n\nSizga <b>${data.days} kun WordDrop Pro</b> qo'shildi — ${fmtDay(data.until)} gacha.\nDrop AI 100 ta savol, Multilevel imtihonlari va chuqur tahlil endi ochiq.`, { reply_markup: { inline_keyboard: [[{ text: "📱 WordDrop'ni ochish", web_app: { url: APP_URL } }]] } });
 }
 
 /* ───────── Eski botga uzatish ───────── */
@@ -226,6 +229,18 @@ async function forward(u: unknown) {
 /* true — shu yerda bajarildi; false — tg-bot ga uzatish kerak */
 async function handle(u: any): Promise<boolean> {
   const cq = u.callback_query;
+  const input = cq?.message || u.message;
+  const command = String(u.message?.text || "").split(/\s+/)[0].split("@")[0];
+  const action = String(cq?.data || "");
+  const navigating = command.startsWith("/") || Boolean(action);
+  if(input?.chat?.type==="private" && navigating){
+    const id=input.chat.id;
+    // A navigation action ends outstanding text prompts before a new one is set.
+    await db.from("wd_tg_kv").delete().in("key",["promo:"+id,"await:"+id,"sup:"+id]);
+    if(command!=="/speaking" && !/^(sp:|sk|sgo:|snew:|rp:|rx:|rr:)/.test(action)){
+      await db.from("wd_tg_kv").delete().eq("key","speaking-session:"+id).in("val->>phase",["ready","active"]);
+    }
+  }
   if (cq) {
     const chatId = cq.message?.chat?.id; const data = String(cq.data || "");
     if (!chatId || cq.message?.chat?.type !== "private") return false;
@@ -233,7 +248,7 @@ async function handle(u: any): Promise<boolean> {
     tg("answerCallbackQuery", { callback_query_id: cq.id });
     const { data: chat } = await db.from("wd_tg_chats").select("*").eq("chat_id", chatId).maybeSingle();
     if (!chat) return false;
-    if (data === "m") { await db.from("wd_tg_kv").delete().eq("key", "promo:" + chatId); await send(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
+    if (data === "m") { await db.from("wd_tg_kv").delete().eq("key", "promo:" + chatId); await show(chatId, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
     if (data === "PR") { await promoAsk(chat); return true; }
     if (data === "q") { if (!chat.cefr) return false; await sendQuiz(chatId, chat.cefr); return true; }
     if (data === "L") await ptIntro(chat);
@@ -260,15 +275,14 @@ async function handle(u: any): Promise<boolean> {
   const chat = await getChat(m.from, m.chat.id); if (!chat) return false;
   if (cmd === "/promo" || cmd === "/promokod") { if (arg && PROMO_RE.test(arg)) await promoRedeem(chat, arg, m.from); else await promoAsk(chat); return true; }
   if (cmd === "/quiz") { if (!chat.cefr) return false; await sendQuiz(chat.chat_id, chat.cefr); return true; }
-  if (cmd === "/menu" || cmd === "/help") { await send(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
+  if (cmd === "/menu" || cmd === "/help") { await show(chat.chat_id, "Nima qilamiz?", { reply_markup: KB_MAIN }); return true; }
   if (cmd === "/level" || cmd === "/daraja" || (cmd === "/start" && arg === "level")) { await ptIntro(chat); return true; }
   if (cmd === "/invite") { await inviteMsg(chat); return true; }
-  if (cmd === "/multilevel") { await send(chat.chat_id, "🎓 <b>Multilevel sinov imtihoni</b>\n\nListening (6 qism), Reading (5 qism), Writing va Speaking — rasmiy formatdagi tartib va vaqt bilan. Natija 75 ballik shkalada va CEFR darajasida.", { reply_markup: { inline_keyboard: [[{ text: "🎓 Imtihonni ochish", web_app: { url: APP_URL + "#ml" } }]] } }); return true; }
+  if (cmd === "/multilevel") { await show(chat.chat_id, "🎓 <b>Multilevel sinov imtihoni</b>\n\nListening (6 qism), Reading (5 qism), Writing va Speaking — rasmiy formatdagi tartib va vaqt bilan. Natija 75 ballik shkalada va CEFR darajasida.", { reply_markup: { inline_keyboard: [[{ text: "🎓 Imtihonni ochish", web_app: { url: APP_URL + "#ml" } }]] } }); return true; }
   if (arg.startsWith("r_")) { await onRefStart(chat, arg, m.from); return true; }
   if (arg.startsWith("promo_")) { await promoRedeem(chat, arg.slice(6), m.from); return true; }
   // oddiy /start
-  await send(chat.chat_id, `Salom${m.from.first_name ? ", " + esc(m.from.first_name) : ""}! 💧 Men <b>Drop</b> — WordDrop yordamchisiman.\n\n• Har kuni ertalab yangi so'z yuboraman\n• Viktorina bilan bilimingizni sinaymiz\n• Inglizcha savolingizga javob beraman — shunchaki yozing\n• 🎓 Multilevel sinov imtihonini ilovada topshirasiz`, { reply_markup: KB_MAIN });
-  if (!chat.cefr) await ptIntro(chat);
+  await show(chat.chat_id, `Salom${m.from.first_name ? ", " + esc(m.from.first_name) : ""}! 💧 Men <b>Drop</b> — WordDrop yordamchisiman.\n\n• Har kuni ertalab yangi so'z yuboraman\n• Viktorina bilan bilimingizni sinaymiz\n• Inglizcha savolingizga javob beraman — shunchaki yozing\n• 🎓 Multilevel sinov imtihonini ilovada topshirasiz`, { reply_markup: KB_MAIN });
   return true;
 }
 
@@ -340,7 +354,7 @@ Deno.serve(async (req) => {
       if(sender && await blockedTelegram(sender)) return new Response("ok");
       if (!u) return new Response("ok");
       let done = false;
-      try { done = await handle(u); } catch (e) { console.error("[v101]", e); }
+      try { done = await nav.run(u,()=>handle(u)); } catch (e) { console.error("[v101]", e); }
       if (!done) bg(forward(u));
       // Hisob ulangan bo'lsa (har qanday shaxsiy xabardan keyin) taklif bonusini beramiz
       const pc = u.message?.chat ?? u.callback_query?.message?.chat;
