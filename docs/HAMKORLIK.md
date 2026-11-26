@@ -95,3 +95,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-26 | ChatGPT | Hisob cheklovlari: email va WordDrop ID orqali cheklash va tiklash. | GitHub, Supabase | shu commit |
 | 2026-11-26 | ChatGPT | Statistika: hisoblar va mehmonlar ro‘yxati, tekshiruv belgilari va hisob bo‘yicha saqlangan faoliyat tarixi. | GitHub, Supabase | shu commit |
 | 2026-11-26 | ChatGPT | Drop AI: shaxsiy chatda oqimli javoblar, rasmli Speaking va kun so‘zi kartochkalari, ovozli javob tahlili. | GitHub, Supabase | shu commit |
+| 2026-11-26 | ChatGPT | Telegram Speaking: 19 rasm juftligi va yugurish sahnasi, to‘rtta qism, mock Speaking baholagichi, uch savol qamrovi va PNG. | GitHub, Supabase tg-bot | shu commit |
