@@ -874,7 +874,7 @@ async function verifyInit(init: string): Promise<any | null> {
 async function tgLogin(body: any) {
   const u = await verifyInit(String(body.init || ""));
   if (!u?.id) return json({ error: "Telegram ma'lumoti tasdiqlanmadi" }, 401);
-  if(await blockedTelegram(u.id)) return json({code:"WD_BLOCKED",error:"Siz bloklangansiz"},403);
+  if(await blockedTelegram(u.id)) return json({code:"WD_BLOCKED",error:"Bu hisob bilan hozir WordDrop’ga kirish imkoni yo‘q."},403);
   if(body.action==="tg_access") return json({ok:true});
   const { data: chat } = await db.from("wd_tg_chats").select("user_id").eq("chat_id", u.id).maybeSingle();
   let uid: string | null = chat?.user_id ?? null; let email = "";
@@ -1315,7 +1315,7 @@ Deno.serve(async (req) => {
 
     const denied=await db.from("wd_access_blocks").select("telegram_id").contains("accounts",[user.id]).limit(1);
     if(denied.error) throw denied.error;
-    if(denied.data?.length) return json({code:"WD_BLOCKED",error:"Siz bloklangansiz"},403);
+    if(denied.data?.length) return json({code:"WD_BLOCKED",error:"Bu hisob bilan hozir WordDrop’ga kirish imkoni yo‘q."},403);
     // 3) Foydalanuvchi
     { const r = await proUserApi(action, body, user); if (r) return r; }
     if (action === "link_code") {
