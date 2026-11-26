@@ -1087,7 +1087,7 @@ window.__wdOpenPro=openPro;
 
 </script>
 
-<script src="app.1-boshi.9ff1f062.js"></script>
+<script src="app.1-boshi.9de9e446.js"></script>
 
 <script src="app.2-shablonlar.6052af76.js"></script>
 
@@ -2740,22 +2740,6 @@ try{
     p=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='lit.v114.js'; s.async=true; s.onload=()=>res(); s.onerror=()=>{ p=null; rej(); }; document.head.appendChild(s); }); return p; }
   window.__wdOpenLit=async function(o){ try{ await load(); window.WDLit.open(o||{}); }catch(e){ try{ showToast("Adabiyot bo'limi yuklanmadi. Internetni tekshiring.",IC.info); }catch(_){} } };
   window.addEventListener('load',()=>{ if(location.hash==='#adabiyot') setTimeout(()=>window.__wdOpenLit(),1200); });
-})();
-/* Audio Dialog — only loaded when opened. */
-(function(){
-  let module;
-  window.__wdOpenAudioDialog=async function(){
-    try {
-      module ||= import('/audio-dialog/dialog.v1.js');
-      (await module).open();
-    } catch(e) {
-      module=null;
-      try{ showToast("Audio Dialog yuklanmadi. Qayta urinib ko'ring.",IC.info); }catch(_){}
-    }
-  };
-  window.addEventListener('load',()=>{
-    if(['#audio-dialog','#masquerade'].includes(location.hash)) window.__wdOpenAudioDialog();
-  });
 })();
 /* v101: Admin statistika — alohida fayl, faqat ochilganda yuklanadi */
 (function(){
