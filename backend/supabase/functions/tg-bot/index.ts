@@ -1,3 +1,4 @@
+import { searchQuery, reserveSearch, searchWeb } from "./search.ts";
 import { navigation } from "../_shared/navigation.ts";
 import { opusClip, locate, pronounce, whisperReview, type Word as TimedWord, type Finding } from "./audio-review.ts";
 import { cards, debateRows, validDebate, type Card } from "./practice.ts";
@@ -434,6 +435,35 @@ async function streamTutor(m:any, system:string, question:string) {
   return false;
 }
 
+async function handleSearch(chat:any,m:any,query:string){
+  const id=chat.chat_id;
+  if(!query)return send(id,"Misol: /search Toshkentda IELTS imtihoni narxi. Kuniga 5 ta qidiruv.");
+  const gate=await dmGate(chat);if(gate)return send(id,gate);
+  const day=tz().day;
+  let reservation;
+  try{reservation=await reserveSearch(db,m.from.id,day,m.message_id);}
+  catch{return send(id,"Qidiruv limitini tekshirib bo‘lmadi. Birozdan keyin urinib ko‘ring.");}
+  if(reservation.status==="duplicate")return;
+  if(reservation.status==="limit")return send(id,"Bugungi 5 ta qidiruv ishlatildi. Limit Toshkent vaqti bilan 00:00 da yangilanadi.");
+  try{
+    await tg("sendRichMessageDraft",{chat_id:id,draft_id:m.message_id,rich_message:{html:"<tg-thinking>🔎 Manbalarni tekshiryapman…</tg-thinking>"}}).catch(()=>{});
+    const q=query.slice(0,1400);
+    const cacheKey="search-cache:"+m.from.id;
+    const cached=await kv(cacheKey);
+    const hit=cached?.query===q && Date.now()-cached.at<300000;
+    const result=hit?cached.result:await searchWeb(GROQ,q,day);
+    if(!hit)await kvSet(cacheKey,{query:q,at:Date.now(),result});
+    const links=result.sources.map(([url,title]:string[])=>'<a href="'+esc(url).replace(/"/g,"&quot;")+'">'+esc(title)+'</a>');
+    const {html,text}=tutorMessage(result.answer);
+    const sent=await tg("sendRichMessage",{chat_id:id,rich_message:{html:html+"<h3>Manbalar</h3>"+links.map((link:string)=>"<p>"+link+"</p>").join("")}});
+    if(!sent.ok && !(await send(id,esc(text)+"\n\n<b>Manbalar</b>\n"+links.join("\n"))).ok)throw Error("delivery");
+  }catch(e){
+    console.warn("[search]",e instanceof Error?e.message:"failed");
+    const {error}=await db.from("wd_tg_kv").delete().eq("key",reservation.key).eq("val",m.message_id);
+    return send(id,"Manbali javobni yetkazib bo‘lmadi."+(!error?" Bu urinish limitdan chiqarildi.":""));
+  }
+}
+
 async function onUpdate(u: any) {
   if (u.my_chat_member) return onMyChatMember(u.my_chat_member);
   if (u.callback_query) return onCallback(u.callback_query);
@@ -480,6 +510,8 @@ async function onUpdate(u: any) {
   if (text === "/top") return onCallback({ data: "t", message: { chat: { id: chat.chat_id, type: "private" } }, id: "" });
   if (text === "/settings") return show(chat.chat_id, "⚙️ <b>Sozlamalar</b>\nEslatmalar Toshkent vaqti bo'yicha keladi.", { reply_markup: kbSettings(chat) });
   if (text === "/stop") { await db.from("wd_tg_chats").update({ morning: false, evening: false }).eq("chat_id", chat.chat_id); return show(chat.chat_id, "Eslatmalar o'chirildi. Qayta yoqish: /settings"); }
+  const web=searchQuery(text);
+  if(web!==null && (/^\/search/i.test(text) || !translationTerm(text)))return handleSearch(chat,m,web);
   if (text.startsWith("/")) return send(chat.chat_id, "Bunday buyruq yo'q. Menyu: /menu");
 
   // Oddiy matn → Drop AI (admin sozlamasiga ko'ra)

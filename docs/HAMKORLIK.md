@@ -106,3 +106,4 @@ Boshqa tomon hududida o'zgarish kerak bo'lsa — avval Bexruz orqali kelishiladi
 | 2026-11-27 | ChatGPT | Bevosita tarjima savollariga lug‘at javobi; stubborn — o‘jar, qaysar. | tg-bot | shu commit |
 | 2026-11-27 | ChatGPT | Shaxsiy buyruq yangi ko‘rinadigan panel ochadi, tugmalar o‘sha xabarni yangilaydi. | tg-v101, tg-bot | shu commit |
 | 2026-11-27 | ChatGPT | Speaking Part 3 kartasida mavzuga mos For/Against jadvali. | tg-bot | shu commit |
+| 2026-11-27 | ChatGPT | Shaxsiy Drop AI suhbatida /search va avtomatik veb-qidiruv uchun umumiy 5 ta kunlik limit. | tg-bot | shu commit |
