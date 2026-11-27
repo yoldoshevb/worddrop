@@ -1,6 +1,23 @@
 const base = "https://worddrop-app.uz/speaking-cards/practice/";
 export const reportTemplate = base+"result.v1.png";
-export type Card = {part:string;title:string;questions:string[];help:string;timing:string;limit:number;photo?:string;scene?:string};
+export type Card = {part:string;title:string;questions:string[];help:string;timing:string;limit:number;photo?:string;scene?:string;debate?:Debate};
+type Debate = {for:string[];against:string[]};
+export function validDebate(value:unknown): value is Debate {
+  const d=value as Partial<Debate>|null;
+  if(!d || !Array.isArray(d.for) || !Array.isArray(d.against))return false;
+  const points=[...d.for,...d.against];
+  return d.for.length===2 && d.against.length===2 &&
+    points.every(p=>typeof p==="string" && p.trim().length>=8 && p.length<=160) &&
+    new Set(points.map(p=>p.trim().toLowerCase())).size===4;
+}
+export function debateRows(card:Card):string[][] {
+  if(validDebate(card.debate))return card.debate.for.map((point,i)=>[point,card.debate!.against[i]]);
+  // Older sessions stored labelled arguments in one string. Keep their motion.
+  const old=/^\s*for\s*:\s*(.+?)\s*against\s*:\s*(.+)$/is.exec(card.help);
+  if(old)return [[old[1].trim(),old[2].trim()]];
+  return [["Who would benefit from this proposal, and how?","Who might be disadvantaged, and why?"],
+    ["What could improve over time?","What practical obstacle could limit its success?"]];
+}
 const pairs = [
   [1,"Learning English","studying with headphones at home and speaking in a classroom group","How can other learners help you improve?","When would you prefer to study alone?","at my own pace · exchange ideas · immediate feedback"],
   [2,"Getting to school","cycling to school and riding a bus","What are the advantages of cycling to school?","Which journey would suit a student on a rainy day, and why?","cycle lane · reliable service · rush hour"],
@@ -26,5 +43,8 @@ export const cards:Card[] = [
  {part:"1.1",title:"Your daily routine",questions:["What do you usually do after school or work?","Who do you enjoy spending your free time with?","Tell me about one thing you would like to change in your routine."],help:"usually · spend time with · I would like to … because …",timing:"Har savol uchun 30 soniya",limit:90},
  ...pairs.map(([n,title,scene,q2,q3,help])=>({part:"1.2",title,scene,questions:["Describe and compare the two pictures.",q2,q3],help,timing:"1-savol 45 soniya · 2- va 3-savol 30 soniyadan",limit:105,photo:base+String(n).padStart(2,"0")+".jpg"})),
  {part:"2",title:"Building a healthy habit",scene:"A runner stretching beside a river.",photo:base+"04.jpg",questions:["Describe a time you tried to build a healthy habit.","What made it easy or difficult to keep going?","How can other people help someone maintain a habit?"],help:"set a realistic goal · keep track of progress · encouragement",timing:"1 daqiqa tayyorgarlik · 2 daqiqa javob",limit:120},
- {part:"3",title:"Public transport should be free for everyone",questions:["Develop two reasons in favour of free public transport.","Develop two arguments against it and explain their impact.","Weigh both sides and justify your own position."],help:"FOR: equal access · fewer car journeys · simpler boarding. AGAINST: operating costs · overcrowding · service quality. On balance …",timing:"1 daqiqa tayyorgarlik · 2 daqiqa javob",limit:120}
+ {part:"3",title:"Public transport should be free for everyone",questions:["Develop two reasons in favour of free public transport.","Develop two arguments against it and explain their impact.","Weigh both sides and justify your own position."],help:"",debate:{
+   for:["Removing fares makes work and education easier to reach for people on low incomes.","Free tickets could persuade some drivers to take the bus, easing congestion."],
+   against:["Replacing fare revenue with taxes could leave less money for other public services.","Extra passengers could overcrowd buses unless cities also fund more frequent services."]
+ },timing:"1 daqiqa tayyorgarlik · 2 daqiqa javob",limit:120}
 ];

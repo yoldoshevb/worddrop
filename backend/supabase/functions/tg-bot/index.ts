@@ -1,6 +1,6 @@
 import { navigation } from "../_shared/navigation.ts";
 import { opusClip, locate, pronounce, whisperReview, type Word as TimedWord, type Finding } from "./audio-review.ts";
-import { cards, type Card } from "./practice.ts";
+import { cards, debateRows, validDebate, type Card } from "./practice.ts";
 import { scoreImage, type Row } from "./score-image.ts";
 import { scoreSpeaking } from "../ml-exam/ml.ts";
 import { groqJson } from "../ml-exam/examiner.ts";
@@ -250,11 +250,15 @@ async function freshCard(idx:number):Promise<Card>{
   const prompt = [
     "Create one original English Multilevel speaking practice. Return JSON: title, questions (exactly 3 English strings), help (3-5 useful English expressions).",
     "1.1: three everyday personal A1-A2 questions. 1.2: compare both pictured situations first; then two distinct B1 follow-ups requiring opinions and reasons about those pictures.",
-    "2: use the supplied picture only as a theme, ask about personal experience, its impact, then an abstract B2 question. 3: one C1 debate motion as the title; give two arguments for, two against in help, and three planning prompts for a single balanced speech.",
+    "2: use the supplied picture only as a theme, ask about personal experience, its impact, then an abstract B2 question. 3: one C1 debate motion as the title; give three planning prompts for a single balanced speech. For Part 3 omit help and return debate:{for:[point,point],against:[point,point]}. Each pair should consider the same issue from opposite sides of the exact motion. Use a distinct concrete reason and its consequence in each cell, in clear English under 22 words. Do not add labels or repeat points.",
     "For a pictured task stay faithful to the stated scene. Vary the questions and angle. No Markdown."
   ].join(" ");
   const v=await groq(prompt,JSON.stringify({part:seed.part,scene:seed.scene||null,inspiration:seed.scene?undefined:choice,variation:crypto.randomUUID().slice(0,6)}),520,.88);
   if(!v||typeof v.title!=="string"||!Array.isArray(v.questions)||v.questions.length!==3||!v.questions.every((x:any)=>typeof x==="string"&&x.trim().length>=8))return seed;
+  if(seed.part==="3"){
+    if(!validDebate(v.debate))return seed;
+    return {...seed,title:clip(v.title,100),questions:v.questions.map((x:string)=>clip(x,240)),debate:v.debate};
+  }
   const help=Array.isArray(v.help)?v.help.join(" · "):v.help;
   if(typeof help!=="string"||!help.trim())return seed;
   return {...seed,title:clip(v.title,100),questions:v.questions.map((x:string)=>clip(x,240)),help:clip(help,320)};
@@ -288,14 +292,19 @@ async function replayFinding(chatId:number,messageId:number,index:number){
 async function taskScreen(chatId:number,state:any,started:boolean){
   const c:Card=state.card;
   const questions=c.questions.map((q,i)=>(i+1)+". "+esc(q));
-  const hint=started?"Uch savolga bitta ovozli xabarda javob bering.":"Savollarni ko‘rib chiqing, so‘ng «Boshlash»ni bosing.";
+  const hint=started?(c.part==="3"?"Ikki tomonni solishtiring va o‘z pozitsiyangizni bitta nutqda asoslang.":"Uch savolga bitta ovozli xabarda javob bering."):"Savollarni ko‘rib chiqing, so‘ng «Boshlash»ni bosing.";
   const buttons=started?[[{text:"Bekor qilish",callback_data:"skmenu"}]]:[
     [{text:"▶ Boshlash",callback_data:"sgo:"+state.token}],
     [{text:"Boshqa mavzu",callback_data:"snew:"+state.idx},{text:"Qismlar",callback_data:"skmenu"}]];
   const title="Part "+c.part+" · "+esc(c.title);
+  const rows=c.part==="3"?debateRows(c):[];
+  const support=rows.length
+    ? "<table compact striped><tr><th>For</th><th>Against</th></tr>"+rows.map(([a,b])=>"<tr><td>"+esc(a)+"</td><td>"+esc(b)+"</td></tr>").join("")+"</table>"
+    : "<details><summary>Yordam so‘zlari</summary><p>"+esc(c.help)+"</p></details>";
+  const plainSupport=rows.length?["For","Against"].map((label,i)=>"<b>"+label+"</b>\n"+rows.map(row=>"• "+esc(row[i])).join("\n")).join("\n\n"):esc(c.help);
   const html="<h2>"+title+"</h2>"+(c.photo?'<img src="'+c.photo+'"/>':"")+"<p>"+esc(c.timing)+"</p>"+
-    questions.map(q=>"<p>"+q+"</p>").join("")+"<details><summary>Yordam so‘zlari</summary><p>"+esc(c.help)+"</p></details><p>"+hint+"</p>";
-  return speakingScreen(chatId,state.message,html,[title,c.photo,esc(c.timing),...questions,esc(c.help),hint].filter(Boolean).join("\n\n"),buttons);
+    questions.map(q=>"<p>"+q+"</p>").join("")+support+"<p>"+hint+"</p>";
+  return speakingScreen(chatId,state.message,html,[title,c.photo,esc(c.timing),...questions,plainSupport,hint].filter(Boolean).join("\n\n"),buttons);
 }
 async function sendPractice(chatId:number, idx:number, saved?:Card, message?:number) {
   if(!cards[idx]) return speakingMenu(chatId,message);
